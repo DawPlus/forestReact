@@ -1,13 +1,15 @@
 {
-  "private" : true,
+  "private": true,
   "scripts": {
     "server": "cd server && nodemon server",
     "client": "cd client && npm start",
     "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
   "dependencies": {
+    "body-parser": "^1.20.2",
     "concurrently": "^8.0.1",
     "express": "^4.18.2",
+    "mysql": "^2.18.1",
     "nodemon": "^2.0.22"
   }
 }
