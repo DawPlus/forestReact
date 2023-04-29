@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 // material-ui
@@ -31,9 +31,12 @@ import axios from 'axios';
 
 
 const FirebaseLogin = () => {
+
     const theme = useTheme();
 
-    const customization = useSelector((state) => state.customization);
+    
+    const [id , setId] = useState("");
+    const [password , setPassword] = useState("");
 
     const [checked, setChecked] = useState(true);
 
@@ -47,8 +50,36 @@ const FirebaseLogin = () => {
     };
 
 
-    const onClick =()=>{        
-        axios.post("/api/login", {userId : "test", password : "1111"}).then(r=> console.log(r))
+    const onClick =()=>{     
+        
+        console.log(id, password);
+        axios({
+            url : "/api/login", 
+            method : "POST", 
+            withCredentials : true, 
+            data : {id, password}
+
+        }).then(r=> console.log(r))
+
+    }
+
+    const onSignIn =()=>{     
+        axios.post("/api/logout").then(r=> {
+            console.log(r);
+            document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+
+        })
+
+    }
+
+    const onCheckSession =()=>{     
+        axios.post("/api/loginSuccess").then(r=> {
+            console.log(r.data);
+            
+
+
+        })
 
     }
 
@@ -92,10 +123,10 @@ const FirebaseLogin = () => {
                 <OutlinedInput
                     id="outlined-adornment-id-login"
                     type="id"
-                    value={""}
+                    value={id}
                     name="id"
                     onBlur={()=>{}}
-                    onChange={()=>{}}
+                    onChange={(e)=>setId(e.target.value)}
                     label="ID"
                 />
             </FormControl>
@@ -105,10 +136,10 @@ const FirebaseLogin = () => {
                         <OutlinedInput
                             id="outlined-adornment-password-login"
                             type={showPassword ? 'text' : 'password'}
-                            value={""}
+                            value={password}
                             name="password"
                             onBlur={()=>{}}
-                            onChange={()=>{}}
+                            onChange={(e)=>setPassword(e.target.value)}
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
@@ -163,7 +194,23 @@ const FirebaseLogin = () => {
                                     type="submit"
                                     variant="contained"
                                     color="secondary"
-                                    onClick={onClick}
+                                    onClick={onSignIn}
+                                >
+                                    Sign in
+                                </Button>
+                            </AnimateButton>
+                        </Box>
+                        <Divider style={{marginTop : "9px"}}/>
+                        <Box sx={{ mt: 1 }}>
+                            <AnimateButton>
+                                <Button
+                                    disableElevation
+                                    fullWidth
+                                    size="large"
+                                    type="submit"
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={onCheckSession}
                                 >
                                     Sign in
                                 </Button>
