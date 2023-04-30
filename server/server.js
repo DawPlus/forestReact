@@ -26,7 +26,6 @@ app.use(cors({
     method : ["GET", "POST"],
     credentials : true,
 }));
-
 app.use(session({
     name : 'healing',
     secret : process.env.SESSION_SECRET,
@@ -34,20 +33,20 @@ app.use(session({
     saveUninitialized : false, 
     store : new FileStore(),
     cookie : {
-        maxAge : 1 * 60 * 60 * 1000, // 1시간 yuji
-        //maxAge : 10 * 1000, // 30초
+        expires: new Date(Date.now() + 3600000), // 1시간 후에 만료
+        //expires: new Date(Date.now() +  1000), // 1시간 후에 만료
         httpOnly : false,
         secure : false 
     },
 }));
 
 // 모든 요청에대해 1시간으로 세션 유지시간을 추가
-app.use((req, res, next) => {
-    if(req.session){
-        req.session.cookie.maxAge = 1 * 60 * 60 * 1000; // 1시간
-    }
-    next();
-  });
+// app.use((req, res, next) => {
+//     if(req.session){
+//         req.session.cookie.maxAge = 1 * 60 * 60 * 1000; // 1시간
+//     }
+//     next();
+//   });
 
 // app.get("*", (req, res)=>{
 

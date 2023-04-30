@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const maria = require("./maria");
-
+const fs = require('fs');
+const moment = require("moment");
 
 // 로그인 하기 
 router.post("/api/login", (req,res)=>{
     const {id, password} = req.body;
     //['foresthealing' , 'tksflaglffld113*']
-    console.log(id, password)
+    
     const sql = "SELECT * FROM USER_INFO  WHERE USER_ID= ? AND USER_PWD= ?"
     maria(sql, [id, password])
     .then((rows) => {
@@ -36,14 +37,44 @@ router.post("/api/logout", (req, res)=>{
 })
 
 router.post('/api/loginCheck', (req, res)=>{
-    console.log(req.session.userInfo)
+    
     if (req.session.userInfo) {
         // 세션에 사용자 정보가 존재하면 로그인 상태로 판단
         const userInfo = req.session.userInfo;
         res.json({ message: "logged in", userInfo, isLogin : true });
       } else {
+        
+        const sessionStorePath = './sessions';
+        fs.readdir(sessionStorePath, (err, files) => {
+            if (err) {
+            console.error(err);
+            return;
+            }
+            const now = moment();
+            const sessionFiles = files.filter(file => file.endsWith('.json'));
+            
+            sessionFiles.forEach(file => {
+            const filePath = `${sessionStorePath}/${file}`;
+            const fileContent = fs.readFileSync(filePath, 'utf-8');
+            const sessionData = JSON.parse(fileContent);
+            const expires = moment(sessionData.cookie.expires);        
+            if (expires && expires.isBefore(now)) {
+                fs.unlink(filePath, (err) => {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                console.log(`${filePath} is deleted.`);
+                });
+            }
+            });
+        });
+        
         // 세션에 사용자 정보가 없으면 로그아웃 상태로 판단
         res.json({ message: "logged out", isLogin : false });
+
+
+
       }
 });
 

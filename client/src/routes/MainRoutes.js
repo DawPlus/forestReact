@@ -13,6 +13,9 @@ const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
 const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
 const UtilsMaterialIcons = Loadable(lazy(() => import('views/utilities/MaterialIcons')));
 const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons')));
+// ProGram
+const InsertOperateResult = Loadable(lazy(() => import('views/program/insertOperateResult')));
+const ProgramList = Loadable(lazy(() => import('views/program/programList')));
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
@@ -28,13 +31,12 @@ const MainRoutes = [{
             element: <DashboardDefault />
         },
         {
-            path: 'dashboard',
-            children: [
-                {
-                    path: 'default',
-                    element: <DashboardDefault />
-                }
-            ]
+            path: 'insertOperateResult',
+            element : <InsertOperateResult/>
+        },
+        {
+            path: 'programList',
+            element : <ProgramList/>
         },
         {
             path: 'utils',
