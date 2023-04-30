@@ -6,15 +6,13 @@ const session = require("express-session");
 const FileStore = require("session-file-store")(session)
 const dotenv = require("dotenv");
 // Maria DB
-const maria = require("./maria");
 const fs = require("fs");
 const cors = require("cors");
 
 const loginRouter = require("./loginRouter");
 const test = require('./Router/test');
 
-// Mapper
-maria.connect();
+
 dotenv.config();
 
 // body-parser
@@ -51,12 +49,10 @@ app.use((req, res, next) => {
     next();
   });
 
-app.get("*", (req, res)=>{
+// app.get("*", (req, res)=>{
 
-});
+// });
 app.use(loginRouter)
-
-
 
 app.post("/api/session", (req, res)=> {
     console.log(req.session.user)
@@ -71,7 +67,7 @@ app.use((req, res, next)=>{
 });
 
 app.use((err, req, res, next)=> {
-    res.send("error ")
+    res.send({status : "error"})
 })
 
 

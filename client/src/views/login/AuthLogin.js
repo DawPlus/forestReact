@@ -1,25 +1,9 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import {
-    Box,
-    Button,
-    Checkbox,
-    Divider,
-    FormControl,
-    FormControlLabel,
-    FormHelperText,
-    Grid,
-    IconButton,
-    InputAdornment,
-    InputLabel,
-    OutlinedInput,
-    Stack,
-    Typography,
-
-} from '@mui/material';
+import { Box, Button, Checkbox, Divider, FormControl, FormControlLabel, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, Stack, Typography, } from '@mui/material';
 
 
 import AnimateButton from 'ui-component/extended/AnimateButton';
@@ -28,96 +12,73 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from 'axios';
+import {setValue} from "store/commonReducer";
+import {useNavigate } from 'react-router';
 
 
 const FirebaseLogin = () => {
-
-    const theme = useTheme();
-
     
+    const theme = useTheme();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [id , setId] = useState("");
     const [password , setPassword] = useState("");
 
-    const [checked, setChecked] = useState(true);
-
+    // Remember me 
+    const [checked, setChecked] = useState(false);
+    // 패스워드 보임여부
     const [showPassword, setShowPassword] = useState(false);
-    const handleClickShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
+    // 패스워드 보여주기
+    const handleClickShowPassword = () => setShowPassword(!showPassword); 
+    const handleMouseDownPassword = (event) => event.preventDefault(); 
+    // Component Did Mount 
+    useEffect(() => {
+        const rememberedId = localStorage.getItem('rememberedId');
+        const rememberedPassword = localStorage.getItem('rememberedPassword');
+        if (rememberedId && rememberedPassword) {
+            setId(rememberedId);
+            setPassword(rememberedPassword);
+            setChecked(true);
+        }
+    }, []);
 
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
+    // 로그인 버튼 클릭 
+    const onLogin = () => {     
+    axios({ url : "/api/login", method : "POST", withCredentials : true, data : {id, password} })
+        .then(r => {
 
 
-    const onClick =()=>{     
-        
-        console.log(id, password);
-        axios({
-            url : "/api/login", 
-            method : "POST", 
-            withCredentials : true, 
-            data : {id, password}
+        if (checked) {
+            localStorage.setItem('rememberedId', id);
+            localStorage.setItem('rememberedPassword', password);
+        } else {
+            localStorage.removeItem('rememberedId');
+            localStorage.removeItem('rememberedPassword');
+        }
+    
 
-        }).then(r=> console.log(r))
-
+        if(!r.data.isLogin){
+            alert(r.data.message);
+            return; 
+        }
+        dispatch(setValue({ key : "isLogin", value : r.data.isLogin }));
+        navigate("/");
+        })
     }
-
+    // 회원가입 
     const onSignIn =()=>{     
-        axios.post("/api/logout").then(r=> {
-            console.log(r);
-            document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
-
-        })
-
-    }
-
-    const onCheckSession =()=>{     
-        axios.post("/api/loginSuccess").then(r=> {
-            console.log(r.data);
-            
-
-
-        })
-
+        navigate("/register")
     }
 
     return (
         <>
             <Grid container direction="column" justifyContent="center" spacing={2}>
-                {/* <Grid item xs={12}>
-                    <Box sx={{ alignItems: 'center', display: 'flex' }} >
-                        <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
-                        <Button
-                            variant="outlined"
-                            sx={{
-                                cursor: 'unset',
-                                m: 2,
-                                py: 0.5,
-                                px: 7,
-                                borderColor: `${theme.palette.grey[100]} !important`,
-                                color: `${theme.palette.grey[900]}!important`,
-                                fontWeight: 500,
-                                borderRadius: `${customization.borderRadius}px`
-                            }}
-                            disableRipple
-                            disabled
-                        >
-                            OR
-                        </Button>
-
-                        <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
-                    </Box>
-                </Grid> */}
                 <Grid item xs={12} container alignItems="center" justifyContent="center">
                     <Box sx={{ mb: 2 }}>
-                        <Typography variant="subtitle1">로그인 사용자만 이용가능한 서비스 입니다.</Typography>                        
+                        <Typography variant="subtitle1">인증된 사용자만 이용가능한 서비스 입니다.</Typography>                        
                     </Box>
                 </Grid>
             </Grid>
-
-         
             <FormControl fullWidth sx={{ ...theme.typography.customInput }}>
                 <InputLabel htmlFor="outlined-adornment-id-login">ID</InputLabel>
                 <OutlinedInput
@@ -177,8 +138,8 @@ const FirebaseLogin = () => {
                                     size="large"
                                     type="submit"
                                     variant="contained"
-                                    color="secondary"
-                                    onClick={onClick}
+                                    color="primary"
+                                    onClick={onLogin}
                                 >
                                     Login
                                 </Button>
@@ -193,26 +154,10 @@ const FirebaseLogin = () => {
                                     size="large"
                                     type="submit"
                                     variant="contained"
-                                    color="secondary"
+                                    color="primary"
                                     onClick={onSignIn}
                                 >
-                                    Sign in
-                                </Button>
-                            </AnimateButton>
-                        </Box>
-                        <Divider style={{marginTop : "9px"}}/>
-                        <Box sx={{ mt: 1 }}>
-                            <AnimateButton>
-                                <Button
-                                    disableElevation
-                                    fullWidth
-                                    size="large"
-                                    type="submit"
-                                    variant="contained"
-                                    color="secondary"
-                                    onClick={onCheckSession}
-                                >
-                                    Sign in
+                                    사용자 등록
                                 </Button>
                             </AnimateButton>
                         </Box>
