@@ -11,10 +11,9 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import axios from 'axios';
-import {setValue} from "store/commonReducer";
+import {actions} from "store/reducers/commonReducer";
 import {useNavigate } from 'react-router';
-
+import client from "utils/callApi";
 
 const FirebaseLogin = () => {
     
@@ -44,7 +43,7 @@ const FirebaseLogin = () => {
 
     // 로그인 버튼 클릭 
     const onLogin = () => {     
-    axios({ url : "/api/login", method : "POST", withCredentials : true, data : {id, password} })
+        client({ url : "/login", method : "POST", withCredentials : true, data : {id, password} })
         .then(r => {
 
 
@@ -61,7 +60,7 @@ const FirebaseLogin = () => {
             alert(r.data.message);
             return; 
         }
-        dispatch(setValue({ key : "isLogin", value : r.data.isLogin }));
+        dispatch(actions.setValue({ key : "isLogin", value : r.data.isLogin }));
         navigate("/");
         })
     }

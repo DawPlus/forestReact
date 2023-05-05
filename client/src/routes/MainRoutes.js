@@ -19,6 +19,7 @@ const ProgramList = Loadable(lazy(() => import('views/program/programList')));
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
+const Code = Loadable(lazy(() => import('views/management/code')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -84,8 +85,8 @@ const MainRoutes = [{
             ]
         },
         {
-            path: 'sample-page',
-            element: <SamplePage />
+            path: 'code',
+            element: <Code />
         }
     ]
 }];

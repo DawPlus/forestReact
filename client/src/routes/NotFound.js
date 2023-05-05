@@ -4,6 +4,9 @@ import { makeStyles } from '@mui/styles';
 import { useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import logo from "assets/images/healing.jpg"
+import Lottie from "lottie-react";
+import animationData from 'ui-component/lottie/404Error.json';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -33,13 +36,16 @@ const NotFound = () => {
   const classes = useStyles();
   const navigate = useNavigate();
 
+  const lottieStyle = { width: '300px', outline: 'none', backgroundColor: 'transparent', }
   return (
     <Box className={classes.root}>
       <Container maxWidth="xs">
         <Paper className={classes.paper} elevation={5}>
           <img className={classes.logo} src={logo} alt="하이힐링원"  style={{    width: "250px"}}/>
-          <Typography variant="h3" className={classes.title} color="primary">
-            404 NOT FOUND
+          <Typography variant="h3" className={classes.title} color="primary">  
+          <div style={lottieStyle}>
+              <Lottie animationData={animationData} loop={true} />
+          </div>
           </Typography>
           <Typography variant="h5" className={classes.subtitle} color="textSecondary">
             페이지를 찾을 수 없습니다.
