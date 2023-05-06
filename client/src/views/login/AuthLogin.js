@@ -13,7 +13,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {actions} from "store/reducers/commonReducer";
 import {useNavigate } from 'react-router';
-import client from "utils/callApi";
+import {client} from "utils/callApi";
 
 const FirebaseLogin = () => {
     

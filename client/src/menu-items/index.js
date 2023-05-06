@@ -90,10 +90,10 @@ const menuItems = {
                             url: '/userList',
                         },
                         {
-                            id: 'userHis',
+                            id: 'history',
                             title: '사용자이용기록',
                             type: 'item',
-                            url: '/userHis',
+                            url: '/history',
                         },
                         {
                             id: 'code',

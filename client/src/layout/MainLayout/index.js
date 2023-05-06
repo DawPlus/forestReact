@@ -101,10 +101,12 @@ const MainLayout = () => {
             <Sidebar drawerOpen={!matchDownMd ? leftDrawerOpened : !leftDrawerOpened} drawerToggle={handleLeftDrawerToggle} />
 
             {/* main content */}
-            <Main theme={theme} open={leftDrawerOpened}>
-                {/* breadcrumb */}
-                <Breadcrumbs separator={IconChevronRight} navigation={navigation} icon title rightAlign />
-                <Outlet />
+            <Main open={leftDrawerOpened}>
+                <div style={{maxWidth: "1580px", margin: "0 auto"}}>
+                    {/* breadcrumb */}
+                    <Breadcrumbs separator={IconChevronRight} navigation={navigation} icon title rightAlign />
+                    <Outlet />
+                </div>
             </Main>
         </Box>
     }

@@ -17,9 +17,11 @@ const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons
 const InsertOperateResult = Loadable(lazy(() => import('views/program/insertOperateResult')));
 const ProgramList = Loadable(lazy(() => import('views/program/programList')));
 
-// sample page routing
-const SamplePage = Loadable(lazy(() => import('views/sample-page')));
+// Management
+
 const Code = Loadable(lazy(() => import('views/management/code')));
+const History = Loadable(lazy(() => import('views/management/history')));
+const UserList = Loadable(lazy(() => import('views/management/userList')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -84,10 +86,9 @@ const MainRoutes = [{
                 }
             ]
         },
-        {
-            path: 'code',
-            element: <Code />
-        }
+        { path: 'userList', element: <UserList /> },
+        { path: 'code', element: <Code /> },
+        { path: 'history', element: <History /> }
     ]
 }];
 
