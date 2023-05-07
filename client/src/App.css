@@ -93,10 +93,12 @@
   font-size: 12px;
   background: #e1e1e1;
   border: 1px #838383 solid;
+  white-space: nowrap
 }
 .custom-table .table-cell {
   font-size: 11px;
   border: 1px #838383 solid;
+  white-space: nowrap
 }
 .custom-table .table-result {
   font-size: 11px;

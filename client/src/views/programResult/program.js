@@ -10,16 +10,17 @@ import { makeStyles } from '@material-ui/styles';
 
 import { getState} from "store/reducers/programResultReducer"
 import {  useSelector } from "react-redux";
+import { Typography } from "@mui/material";
 const useStyles = makeStyles({
     paper: {
-      borderRadius: 0
+        borderRadius: 0
     }
-  });
+    });
 
 const Program = ()=>{
     const classes = useStyles();
     
-    const programResult = useSelector(s=> getState(s).programResult)
+    const {programResult, agency} = useSelector(s=> getState(s))
     
     const [ AVG1, AVG2, AVG3, AVG4, AVG5, AVG6, AVG7, AVG8, AVG9, AVG10, AVG11, AVG12] = useMemo(()=>{
         return [ "SCORE1", "SCORE2", "SCORE3", "SCORE4", "SCORE5", "SCORE6", "SCORE7", "SCORE8", "SCORE9", "sum1","sum2","sum3"].map(k => {
@@ -27,10 +28,12 @@ const Program = ()=>{
             return (sum / programResult.length).toFixed(2);
         });
     },[programResult])
-    console.log(AVG1, AVG2, AVG3, AVG4, AVG5, AVG6, AVG7, AVG8, AVG9,AVG10, AVG11, AVG12)
-
     return <>
-
+            {programResult.length > 0 ? 
+            <>
+            <Typography variant="h5" component="h2" gutterBottom>
+                {agency}
+            </Typography>
             <TableContainer component={Paper} className={classes.paper}>
                 <Table sx={{ minWidth: 700 }} aria-label="spanning table" size="small" className="custom-table">
                     <TableHead>
@@ -105,6 +108,9 @@ const Program = ()=>{
                     </TableBody>
                 </Table>
             </TableContainer>
+            </>
+            :<></>
+        }
     </>
 
 }

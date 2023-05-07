@@ -13,34 +13,27 @@ import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
 import Swal from "sweetalert2";
 import Program from "./program"
+import Facility from "./facility"
 const AgencyList = ()=>{
     // Dispatch
     const dispatch = useDispatch();
+    const {type, agency, agencyList} = useSelector(s=> getState(s))
 
-    const agencyList = useSelector(s=> getState(s).agencyList)
+    useEffect(()=>{
+        return ()=>{
+            dispatch(actions.initState())
+        }
 
-    // 입력양식
-    const [value , setValue] = React.useState("");
-    const [agency, setAgency] = React.useState("");
-
-
-useEffect(()=>{
-
-    return ()=>{
-        dispatch(actions.initState())
-    }
-
-},[])
+    },[])
 
     const onAgencyChange = (e, value)=>{
-        setAgency(value)
+        dispatch(actions.setAgency(value));
     }
 
     const onSelectedChange = (e)=>{
-        setValue(e.target.value)
-
-        if(e.target.value === ""){
-            dispatch(actions.initKeyState("agencyList"));
+        
+        if(e.target.value ==="") {
+            dispatch(actions.initProgramAgency());
             return;
         }
 
@@ -59,11 +52,16 @@ useEffect(()=>{
             });
             return;
         }
-
-        dispatch(actions.getProgramResult({
-            type : value, 
-            agency
-        }))
+        
+        switch(type){
+            case "1" : dispatch(actions.getProgramResult({ type , agency }))
+                break;
+            case "2" : dispatch(actions.getFaciltyList({ type , agency }))
+                break;
+            default : break;
+        }
+        
+        
         
 
     }
@@ -75,7 +73,7 @@ useEffect(()=>{
                 <Grid item sm={4}>
                     <FormControl fullWidth size="small" style={{ height: 40 }}>
                         <InputLabel id="forms">입력양식</InputLabel>
-                        <Select labelId="forms" value={value} label="입력양식" onChange={onSelectedChange} >
+                        <Select labelId="forms" value={type} label="입력양식" onChange={onSelectedChange} >
                             <MenuItem value="">선택하세요</MenuItem>
                             <MenuItem value="1">프로그램 만족도</MenuItem>
                             <MenuItem value="2">시설서비스환경 만족도</MenuItem>
@@ -85,7 +83,8 @@ useEffect(()=>{
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid item sm={6}>              
+                <Grid item sm={6}>       
+                {type !== "" && <>
                     {agencyList.length === 0 && "입력된 만족도및 효과평가 가 없습니다."}
                     {agencyList.length > 0 &&
                         <Autocomplete
@@ -100,6 +99,7 @@ useEffect(()=>{
                             renderInput={(params) => <TextField {...params} label="단체선택" style={{height : "40px"}}/>}
                         />
                         }
+                </>}       
                 </Grid>
                 <Grid item sm={2}>
                     <div style={{textAlign:"right"}}>
@@ -111,8 +111,9 @@ useEffect(()=>{
         <MainCard style={{marginTop : "10px"}}>
             {
                 {
-                    1 : <Program/>
-                }[value]
+                    1 : <Program/>,
+                    2 : <Facility/>
+                }[type]
             }
         </MainCard>
     </>
