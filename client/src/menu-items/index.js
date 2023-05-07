@@ -58,16 +58,16 @@ const menuItems = {
                     icon: IconFloatLeft,
                 },
                 {
-                    id: 'test1',
+                    id: 'programResult',
                     title: '만족도및효과평가',
                     type: 'collapse',
                     icon: icons.IconKey,
                     children: [
                         {
-                            id: 'test2',
+                            id: 'agencyList',
                             title: '단체별',
                             type: 'item',
-                            url: '/pages/login/login3',
+                            url: '/agencyList',
                         },
                         {
                             id: 'test3',

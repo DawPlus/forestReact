@@ -5,7 +5,6 @@ const maria = require("../maria");
 
 // 사용자 등록
 router.post('/getProgramList', (req, res)=>{
-     
     const sql = `SELECT * FROM BASIC_INFO WHERE PROGRESS_STATE ="E"`;
 
     maria(sql).then((rows) => {

@@ -8,6 +8,9 @@ export const createCustomSlice = ({name, initialState, reducers, action})=>{
     initialState,
     reducers: {
       initState  : (state)=> initialState,
+      initKeyState : (state, {payload}) => {
+        state[payload] = initialState[payload]
+      },
       setValue : (state, {payload: {key , value}})=>{
           state[key] = value;
       },

@@ -68,7 +68,7 @@ router.post("/logout", (req, res)=>{
 // 사용자 등록
 router.post('/register', (req, res)=>{
     const {id, name, password} = req.body;
-    const sql = `INSERT INTO USER_INFO(user_id, user_name, user_pwd, value) VALUES(?,?,?,'2')`;
+    const sql = `INSERT INTO USER_INFO(user_id, user_name, user_pwd, value) VALUES(?,?,?,'1')`;
     maria(sql, [id, name, password])
         .then(() => {
             res.json({ result: true });

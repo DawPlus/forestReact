@@ -49,7 +49,7 @@ export const {getState, reducer, actions} = createCustomSlice({
 
       // 등록사용자 조회 
       getRegUser_SUCCESS : (state, {payload})=>{
-        state.regUser = payload.data
+        state.regUser = payload.data.map(i=> ({...i, chk : false}))
       },
       // 모든히스토리 조회 
       getAllHistories_SUCCESS : (state, {payload})=>{

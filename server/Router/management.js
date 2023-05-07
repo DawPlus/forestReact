@@ -42,6 +42,15 @@ const maria = require("../maria");
             res.json({result : true})
         }).catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));
     });
+ 
+    // 사용자 정보 삭제  
+    router.post('/deleteRegUser', (req, res)=>{
+        const {userId} = req.body;
+        const sql = `DELETE FROM user_info WHERE user_id = ?`;
+        maria(sql, [userId]) .then(() => {
+            res.json({result : true})
+        }).catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));
+    });
 
     // 모든 히스토리 가져오기
     router.post('/getAllHistories', (req, res)=>{

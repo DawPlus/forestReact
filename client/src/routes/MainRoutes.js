@@ -23,6 +23,10 @@ const Code = Loadable(lazy(() => import('views/management/code')));
 const History = Loadable(lazy(() => import('views/management/history')));
 const UserList = Loadable(lazy(() => import('views/management/userList')));
 
+
+// Program List 
+const AgencyList = Loadable(lazy(() => import('views/programResult/agencyList')));
+
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = [{
@@ -88,7 +92,8 @@ const MainRoutes = [{
         },
         { path: 'userList', element: <UserList /> },
         { path: 'code', element: <Code /> },
-        { path: 'history', element: <History /> }
+        { path: 'history', element: <History /> },
+        { path: 'agencyList', element: <AgencyList /> },
     ]
 }];
 
