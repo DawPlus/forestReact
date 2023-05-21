@@ -11,6 +11,9 @@ const initialState = {
     agencyList : [], 
     programResult : [], 
     facilityList : [] , 
+    preventList : [],
+    healingList : [],
+
 };
 
 const action = {
@@ -19,6 +22,8 @@ const action = {
   //  getProgramAgency : createAction(`${name}/getProgramAgency`),
     getProgramResult : createAction(`${name}/getProgramResult`),
     getFaciltyList : createAction(`${name}/getFaciltyList`),
+    getPreventList : createAction(`${name}/getPreventList`),
+    getHealingList : createAction(`${name}/getHealingList`),
 
 
 }
@@ -53,8 +58,83 @@ export const {getState, reducer, actions} = createCustomSlice({
         state.facilityList = initialState.facilityList;
       },
 
+
+      // 힐링서비스  효과평가
+      getHealingList_SUCCESS : (state, {payload})=>{
+
+        const sortedData = payload.data.sort((a, b) => {
+          if (a.NAME < b.NAME) return -1;
+          if (a.NAME > b.NAME) return 1;
+          if (a.PV === '사전' && b.PV === '사후') return -1;
+          if (a.PV === '사후' && b.PV === '사전') return 1;
+          return 0;
+      });
+
+      // 사전 사후가 없을경우는 0 으로 입력  
+      // 사전과 사후가 모두 있는 항목만 출력
+      const filteredData = sortedData.filter(data => {
+          const hasPre = sortedData.some(item => item.NAME === data.NAME && item.PV === '사전');
+          const hasPost = sortedData.some(item => item.NAME === data.NAME && item.PV === '사후');
+          return hasPre && hasPost;
+      });
+
+
+
+        state.healingList = filteredData.map(i=> {
+          const sum1List = [i.SCORE1, i.SCORE2];
+          const sum2List = [i.SCORE3, i.SCORE4, i.SCORE5];
+          const sum3List = [i.SCORE6, i.SCORE7, i.SCORE8, i.SCORE9];
+          const sum4List = [i.SCORE10, i.SCORE11, i.SCORE12];
+          const sum5List = [i.SCORE11, i.SCORE12, i.SCORE13, i.SCORE14];
+          const sum6List = [i.SCORE15, i.SCORE16, i.SCORE17];
+          const sum7List = [i.SCORE18, i.SCORE19, i.SCORE20];
+          const [ sum1, sum2, sum3, sum4, sum5, sum6, sum7] = 
+              [ calculateAverage(sum1List), calculateAverage(sum2List), calculateAverage(sum3List), calculateAverage(sum4List), calculateAverage(sum5List), calculateAverage(sum6List) , calculateAverage(sum7List)]
+          return { ...i, sum1, sum2, sum3, sum4, sum5, sum6, sum7 }
+        })
+        },
+  
+      // 예방서비스 효과평가
+      getPreventList_SUCCESS : (state, {payload})=>{
+
+        const sortedData = payload.data.sort((a, b) => {
+          if (a.NAME < b.NAME) return -1;
+          if (a.NAME > b.NAME) return 1;
+          if (a.PV === '사전' && b.PV === '사후') return -1;
+          if (a.PV === '사후' && b.PV === '사전') return 1;
+          return 0;
+      });
+
+      // 사전 사후가 없을경우는 0 으로 입력  
+      // 사전과 사후가 모두 있는 항목만 출력
+      const filteredData = sortedData.filter(data => {
+          const hasPre = sortedData.some(item => item.NAME === data.NAME && item.PV === '사전');
+          const hasPost = sortedData.some(item => item.NAME === data.NAME && item.PV === '사후');
+          return hasPre && hasPost;
+      });
+
+
+
+        state.preventList = filteredData.map(i=> {
+          const sum1List = [i.SCORE1, i.SCORE2, i.SCORE3];
+          const sum2List = [i.SCORE4, i.SCORE5, i.SCORE6];
+          const sum3List = [i.SCORE7, i.SCORE8, i.SCORE9, i.SCORE10];
+          const sum4List = [i.SCORE11, i.SCORE12];
+          const sum5List = [i.SCORE13, i.SCORE14, i.SCORE15, i.SCORE16, i.SCORE17];
+          const sum6List = [i.SCORE18, i.SCORE19, i.SCORE20];
+          const [ sum1, sum2, sum3, sum4, sum5, sum6] = 
+              [ calculateAverage(sum1List), calculateAverage(sum2List), calculateAverage(sum3List), calculateAverage(sum4List), calculateAverage(sum5List), calculateAverage(sum6List) ]
+          return { ...i, sum1, sum2, sum3, sum4, sum5, sum6 }
+        })
+      },
+
       getProgramAgency : (state, {payload : {type}})=>{
         state.type = type;
+        state.agency = initialState.agency;
+        
+        state.programResult = initialState.programResult; 
+        state.facilityList = initialState.facilityList; 
+        state.preventList = initialState.preventList;
       },
       getProgramAgency_SUCCESS : (state, {payload})=>{
         state.agencyList = payload.data.map(({agency})=> ({label : agency , value : agency}))

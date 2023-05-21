@@ -14,16 +14,18 @@ import Button from '@mui/material/Button';
 import Swal from "sweetalert2";
 import Program from "./program"
 import Facility from "./facility"
+import Prevent from "./prevent"
+import Healing from "./healing"
 const AgencyList = ()=>{
     // Dispatch
     const dispatch = useDispatch();
+    //
     const {type, agency, agencyList} = useSelector(s=> getState(s))
 
     useEffect(()=>{
         return ()=>{
             dispatch(actions.initState())
         }
-
     },[])
 
     const onAgencyChange = (e, value)=>{
@@ -31,12 +33,10 @@ const AgencyList = ()=>{
     }
 
     const onSelectedChange = (e)=>{
-        
         if(e.target.value ==="") {
             dispatch(actions.initProgramAgency());
             return;
         }
-
         dispatch(actions.getProgramAgency({type : e.target.value}))
     }
 
@@ -58,15 +58,16 @@ const AgencyList = ()=>{
                 break;
             case "2" : dispatch(actions.getFaciltyList({ type , agency }))
                 break;
+            case "4" : dispatch(actions.getPreventList({ type , agency }))
+                break;
+            case "5" : dispatch(actions.getHealingList({ type , agency }))
+                break;
             default : break;
         }
-        
-        
-        
 
     }
 
-
+    console.log(type)
     return <>
         <MainCard>
             <Grid container spacing={2}   alignItems="center">
@@ -112,7 +113,10 @@ const AgencyList = ()=>{
             {
                 {
                     1 : <Program/>,
-                    2 : <Facility/>
+                    2 : <Facility/>,
+                    3 : <Facility/>,  //?
+                    4 : <Prevent/>,
+                    5 : <Healing/>
                 }[type]
             }
         </MainCard>

@@ -42,9 +42,9 @@ router.post('/getProgramResult', (req, res)=>{
     const sql = [
         'select * FROM PROGRAM_SATISFACTION WHERE AGENCY = ? ', // 프로그램 만족도 
         'select * FROM SERVICE_ENV_SATISFACTION WHERE AGENCY = ? ',// 시설서비스환경 만족도
-        'select distinct agency FROM COUNSEL_SERVICE',// 상담&치유서비스
-        'select distinct agency FROM PREVENT_SERVICE',// 예방서비스
-        'select distinct agency FROM HEALING_SERVICE'// 힐링서비스
+        'select * FROM COUNSEL_SERVICE WHERE AGENCY = ?',// 상담&치유서비스
+        'select * FROM PREVENT_SERVICE WHERE AGENCY = ? ',// 예방서비스
+        'select * FROM HEALING_SERVICE WHERE AGENCY = ?'// 힐링서비스
     ];
 
     const selectedSql = sql[type - 1];
