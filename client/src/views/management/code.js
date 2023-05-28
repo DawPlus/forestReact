@@ -79,7 +79,7 @@ const Code = ()=>{
             </div>
             <Grid container spacing={2} style={{marginTop : "5px"}}>
                 {codeList.map((i)=>
-                    <Grid item md={3} key={i.type}>
+                    <Grid item md={4} key={i.type}>
                         <CodeList data={i} onChange={onChange}/>
                     </Grid>
                 )}

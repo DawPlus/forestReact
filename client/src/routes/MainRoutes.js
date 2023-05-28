@@ -27,49 +27,33 @@ const UserList = Loadable(lazy(() => import('views/management/userList')));
 // Program List 
 const AgencyList = Loadable(lazy(() => import('views/programResult/agencyList')));
 
+const UpdateDelete = Loadable(lazy(() => import('views/common/updateDelete')));
+
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = [{
     path: '/',
     element: <MainLayout />,
     children: [
-        {
-            path: '/',
-            element: <DashboardDefault />
-        },
-        {
-            path: 'insertOperateResult',
-            element : <InsertOperateResult/>
-        },
-        {
-            path: 'programList',
-            element : <ProgramList/>
-        },
+        { path: '/', element: <DashboardDefault /> },
+        { path: 'insertOperateResult', element : <InsertOperateResult/> },
+        { path: 'programList', element : <ProgramList/> },
         {
             path: 'utils',
             children: [
-                {
-                    path: 'util-typography',
-                    element: <UtilsTypography />
-                }
+                { path: 'util-typography', element: <UtilsTypography /> }
             ]
         },
         {
             path: 'utils',
             children: [
-                {
-                    path: 'util-color',
-                    element: <UtilsColor />
-                }
+                { path: 'util-color', element: <UtilsColor /> }
             ]
         },
         {
             path: 'utils',
             children: [
-                {
-                    path: 'util-shadow',
-                    element: <UtilsShadow />
-                }
+                { path: 'util-shadow', element: <UtilsShadow /> }
             ]
         },
         {
@@ -84,16 +68,19 @@ const MainRoutes = [{
         {
             path: 'icons',
             children: [
-                {
-                    path: 'material-icons',
-                    element: <UtilsMaterialIcons />
-                }
+                { path: 'material-icons', element: <UtilsMaterialIcons /> }
             ]
         },
+
+
         { path: 'userList', element: <UserList /> },
         { path: 'code', element: <Code /> },
         { path: 'history', element: <History /> },
         { path: 'agencyList', element: <AgencyList /> },
+
+
+        // 수정 / 삭제 
+        { path: 'updateDelete', element: <UpdateDelete /> },
     ]
 }];
 

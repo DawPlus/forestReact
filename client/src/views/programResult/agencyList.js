@@ -64,10 +64,7 @@ const AgencyList = ()=>{
                 break;
             default : break;
         }
-
     }
-
-    console.log(type)
     return <>
         <MainCard>
             <Grid container spacing={2}   alignItems="center">
@@ -104,7 +101,7 @@ const AgencyList = ()=>{
                 </Grid>
                 <Grid item sm={2}>
                     <div style={{textAlign:"right"}}>
-                        <Button variant="contained" color="primary" onClick={onSearch} >조회</Button>
+                        <Button variant="contained" size="small" color="primary" onClick={onSearch} >조회</Button>
                     </div>
                 </Grid>
             </Grid>

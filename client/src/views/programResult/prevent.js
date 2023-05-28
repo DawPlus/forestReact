@@ -10,8 +10,8 @@ import { makeStyles } from '@material-ui/styles';
 
 import { getState} from "store/reducers/programResultReducer"
 import {  useSelector } from "react-redux";
-import { Typography } from "@mui/material";
-
+import Button from '@mui/material/Button';
+import useDownloadExcel from "utils/useDownloadExcel";
 const useStyles = makeStyles({
     paper: {
         borderRadius: 0
@@ -97,12 +97,84 @@ const Program = ()=>{
         });
     },[preventList])
 
+
+    const headerInfo = [
+        [ "ID", "성명", "성별", "거주지", "직업", "참여프로그램", "과거스트레스\n해소및힐링\n서비스경험", "영역", "1.중독특징이해", "1.중독특징이해", "1.중독특징이해", "2.핵심증상이해", "2.핵심증상이해", "2.핵심증상이해", "3.문제대응방법이해", "3.문제대응방법이해", "3.문제대응방법이해", "3.문제대응방법이해", "4.활동역량", "4.활동역량", "5.심리적면역력강화법", "5.심리적면역력강화법", "5.심리적면역력강화법", "5.심리적면역력강화법", "5.심리적면역력강화법", "6.삶의길", "6.삶의길", "6.삶의길", "영역", "평균(0~6점)", "평균(0~6점)", "평균(0~6점)", "평균(0~6점)", "평균(0~6점)", "평균(0~6점)"],
+        [ "", "", "", "", "", "", "", "평가시점", "문항1", "문항2", "문항3", "문항4", "문항5", "문항6", "문항7", "문항8", "문항9", "문항10", "문항11", "문항12", "문항13", "문항14", "문항15", "문항16", "문항17", "문항18", "문항19", "문항20",  "평가시점", "중독특징이해", "핵심증상이해", "문제대응방법", "활동역량", "심리적면역력강화법", "삶의질"],
+    ];
+
+    const cellData = preventList.map((item,idx) => Object.values({
+        idx : idx % 2=== 0 ? (idx / 2) + 1  : "",
+        NAME :  idx % 2=== 0 ?  item.NAME : "",
+        SEX :  idx % 2=== 0 ? item.SEX : "",
+        RESIDENCE : idx % 2=== 0 ?  item.RESIDENCE : "",
+        JOB :  idx % 2=== 0 ? item.JOB : "",
+        PTCPROGRAM : idx % 2=== 0 ?  item.PTCPROGRAM : "",
+        PAST_STRESS_EXPERIENCE :  idx % 2=== 0 ? item.PAST_STRESS_EXPERIENCE : "",
+        PV : item.PV,
+        SCORE1 : item.SCORE1,
+        SCORE2 : item.SCORE2,
+        SCORE3 : item.SCORE3,
+        SCORE4 : item.SCORE4,
+        SCORE5 : item.SCORE5,
+        SCORE6 : item.SCORE6,
+        SCORE7 : item.SCORE7,
+        SCORE8 : item.SCORE8,
+        SCORE9 : item.SCORE9,
+        SCORE10 : item.SCORE10,
+        SCORE11 : item.SCORE11,
+        SCORE12 : item.SCORE12,
+        SCORE13 : item.SCORE13,
+        SCORE14 : item.SCORE14,
+        SCORE15 : item.SCORE15,
+        SCORE16 : item.SCORE16,
+        SCORE17 : item.SCORE17,
+        SCORE18 : item.SCORE18,
+        SCORE19 : item.SCORE19,
+        SCORE20 : item.SCORE20,
+        PVs : item.PV,
+        sum1 : item.sum1,
+        sum2 : item.sum2,
+        sum3 : item.sum3,
+        sum4 : item.sum4,
+        sum5 : item.sum5,
+        sum6 : item.sum6,
+    }));
+
+
+    const merges = [
+        { s: { r: 0, c: 0 }, e: { r: 1, c: 0 } },
+        { s: { r: 0, c: 1 }, e: { r: 1, c: 1 } },
+        { s: { r: 0, c: 2 }, e: { r: 1, c: 2 } },
+        { s: { r: 0, c: 3 }, e: { r: 1, c: 3 } },
+        { s: { r: 0, c: 4 }, e: { r: 1, c: 4 } },
+        { s: { r: 0, c: 5 }, e: { r: 1, c: 5 } },
+        { s: { r: 0, c: 6 }, e: { r: 1, c: 6 } },
+        { s: { r: 0, c: 8 }, e: { r: 0, c: 10 } },
+        { s: { r: 0, c: 11 }, e: { r: 0, c: 13 } },
+        { s: { r: 0, c: 14 }, e: { r: 0, c: 17 } },
+        { s: { r: 0, c: 18 }, e: { r: 0, c: 19 } },
+        { s: { r: 0, c: 20 }, e: { r: 0, c: 24 } },
+        { s: { r: 0, c: 25 }, e: { r: 0, c: 27 } },
+        { s: { r: 0, c: 29 }, e: { r: 0, c: 34 } }
+    ];
+    const wscols = [ {wch:8}, {wch:15}, {wch:10}, {wch:12}, {wch:12}, {wch:15}, {wch:12}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:11}, {wch:11}, {wch:11}, {wch:13}, {wch:13}, {wch:11}, {wch:13} ];
+
+    const avgData = [
+        ["","","","","","","", "사전", AVG1, AVG2, AVG3, AVG4, AVG5, AVG6, AVG7, AVG8, AVG9, AVG10, AVG11, AVG12, AVG13, AVG14, AVG15, AVG16, AVG17, AVG18, AVG19, AVG20, "사전", SUMAVG1, SUMAVG2, SUMAVG3, SUMAVG4, SUMAVG5, SUMAVG6],
+        ["","","","통계","","","평균","사후", AVG1_A, AVG2_A, AVG3_A, AVG4_A, AVG5_A, AVG6_A, AVG7_A, AVG8_A, AVG9_A, AVG10_A, AVG11_A, AVG12_A, AVG13_A, AVG14_A, AVG15_A, AVG16_A, AVG17_A, AVG18_A, AVG19_A, AVG20_A, "사후", SUMAVG1_A, SUMAVG2_A, SUMAVG3_A, SUMAVG4_A, SUMAVG5_A, SUMAVG6_A],
+        ["","","","","","","","차이값", (AVG1_A- AVG1).toFixed(2), (AVG2_A- AVG2).toFixed(2), (AVG3_A- AVG3).toFixed(2), (AVG4_A- AVG4).toFixed(2), (AVG5_A- AVG5).toFixed(2), (AVG6_A- AVG6).toFixed(2), (AVG7_A- AVG7).toFixed(2), (AVG8_A- AVG8).toFixed(2), (AVG9_A- AVG9).toFixed(2), (AVG10_A- AVG10).toFixed(2), (AVG11_A- AVG11).toFixed(2), (AVG12_A- AVG12).toFixed(2), (AVG13_A- AVG13).toFixed(2), (AVG14_A- AVG14).toFixed(2), (AVG15_A- AVG15).toFixed(2), (AVG16_A- AVG16).toFixed(2), (AVG17_A- AVG17).toFixed(2), (AVG18_A- AVG18).toFixed(2), (AVG19_A- AVG19).toFixed(2), (AVG20_A- AVG20).toFixed(2), "차이값", (SUMAVG1_A - SUMAVG1).toFixed(2), (SUMAVG2_A - SUMAVG2).toFixed(2), (SUMAVG3_A - SUMAVG3).toFixed(2), (SUMAVG4_A - SUMAVG4).toFixed(2), (SUMAVG5_A - SUMAVG5).toFixed(2), (SUMAVG6_A - SUMAVG6).toFixed(2)]
+]
+
+    const downloadExcel = useDownloadExcel({headerInfo, cellData, avgData, filename  : agency, merges, wscols, type : "type2"});
+
+
     return <>
             {preventList.length > 0 ? 
             <>
-            <Typography variant="h5" component="h2" gutterBottom>
-                {agency}
-            </Typography>
+            <div style={{padding : "10px 0px", textAlign:"right"}}>
+                <Button variant="contained" color="primary" size="small" onClick={downloadExcel} >Excel 다운로드</Button>
+            </div>
             <TableContainer component={Paper} className={classes.paper} sx={{ overflowX: 'auto' }}>
                 <Table sx={{ minWidth: 700 }} aria-label="spanning table" size="small" className="custom-table">
                     <TableHead>
@@ -161,7 +233,7 @@ const Program = ()=>{
                             const cnt = index % 2;
 
                             return cnt === 0 ? 
-                                <>
+                            
                                     <TableRow key={index}>
                                         <TableCell className="table-cell" rowSpan={2} align="center">{(index / 2) + 1}</TableCell>
                                         <TableCell className="table-cell" rowSpan={2} align="center">{row.NAME}</TableCell>
@@ -199,9 +271,9 @@ const Program = ()=>{
                                         <TableCell className="table-cell" align="center">{row.sum5}</TableCell>
                                         <TableCell className="table-cell" align="center">{row.sum6}</TableCell>                                        
                                     </TableRow>
-                                </>
+                          
                             :
-                                <>
+                          
                                 <TableRow key={index}>
                                     <TableCell className="table-cell" align="center">{row.PV}</TableCell>
                                     <TableCell className="table-cell" align="center">{row.SCORE1}</TableCell>
@@ -232,7 +304,7 @@ const Program = ()=>{
                                     <TableCell className="table-cell" align="center">{row.sum5}</TableCell>
                                     <TableCell className="table-cell" align="center">{row.sum6}</TableCell>                                        
                                 </TableRow>
-                            </>
+                          
                         })}
                         {/* 통계 */}
                         <TableRow>

@@ -10,7 +10,8 @@ import { makeStyles } from '@material-ui/styles';
 
 import { getState} from "store/reducers/programResultReducer"
 import {  useSelector } from "react-redux";
-import { Typography } from "@mui/material";
+import Button from '@mui/material/Button';
+import useDownloadExcel from "utils/useDownloadExcel";
 const useStyles = makeStyles({
     paper: {
         borderRadius: 0
@@ -75,19 +76,89 @@ const Program = ()=>{
             "sum5",
             "sum6",
             "sum7"
-
-
         ].map(k => {
             const sum = facilityList.reduce((a, c) => a + (parseFloat(c[k]) || 0), 0);
             return (sum / facilityList.length).toFixed(2);
         });
     },[facilityList])
+
+
+    const headerInfo =[
+            ["순번", "실시일자", "기관명", "참여프로그램", "성별", "연령", "거주지", "직업", "숙소","숙소", "식당","식당", "프로그램장소","프로그램장소","프로그램장소", "숲(야외)","숲(야외)","숲(야외)", "기타의견", "운영","운영","운영", "식사","식사","식사", "기타의견", "잠재적관광수요","잠재적관광수요", "평균","평균","평균","평균","평균","평균","평균"],
+            ["","","","","","","","", "문항1", "문항2", "문항3", "문항4", "문항5", "문항6", "문항7", "문항8", "문항9", "문항10","", "문항1", "문항2", "문항3", "문항4", "문항5", "문항6","", "문항7", "문항8", "숙소", "식사", "프로그램장소", "숲(야외)", "운영", "식사", "잠재적관광수요"]
+        ]
+    const merges = [
+        { s: { r: 0, c: 0 }, e: { r: 1, c: 0 } },
+        { s: { r: 0, c: 1 }, e: { r: 1, c: 1 } },
+        { s: { r: 0, c: 2 }, e: { r: 1, c: 2 } },
+        { s: { r: 0, c: 3 }, e: { r: 1, c: 3 } },
+        { s: { r: 0, c: 4 }, e: { r: 1, c: 4 } },
+        { s: { r: 0, c: 5 }, e: { r: 1, c: 5 } },
+        { s: { r: 0, c: 6 }, e: { r: 1, c: 6 } },
+        { s: { r: 0, c: 7 }, e: { r: 1, c: 7 } },
+        { s: { r: 0, c: 8 }, e: { r: 0, c: 9 } },
+        { s: { r: 0, c: 10 }, e: { r: 0, c: 11 } },
+        { s: { r: 0, c: 12 }, e: { r: 0, c: 14 } },
+        { s: { r: 0, c: 15 }, e: { r: 0, c: 17 } },
+        { s: { r: 0, c: 18 }, e: { r: 0, c: 18 } },
+        { s: { r: 0, c: 19 }, e: { r: 0, c: 21 } },
+        { s: { r: 0, c: 22 }, e: { r: 0, c: 24 } },
+        { s: { r: 0, c: 25 }, e: { r: 1, c: 25 } },
+        { s: { r: 0, c: 26 }, e: { r: 0, c: 27 } },
+        { s: { r: 0, c: 28 }, e: { r: 0, c: 34 } },
+    ];
+    
+    const cellData = facilityList.map((item,idx) => Object.values({
+        idx : idx + 1,
+        OPENDAY : item.OPENDAY,
+        AGENCY : item.AGENCY,
+        PTCPROGRAM : item.PTCPROGRAM,
+        SEX : item.SEX,
+        AGE : item.AGE,
+        RESIDENCE : item.RESIDENCE,
+        JOB : item.JOB,
+        SCORE1 : item.SCORE1,
+        SCORE2 : item.SCORE2,
+        SCORE3 : item.SCORE3,
+        SCORE4 : item.SCORE4,
+        SCORE5 : item.SCORE5,
+        SCORE6 : item.SCORE6,
+        SCORE7 : item.SCORE7,
+        SCORE8 : item.SCORE8,
+        SCORE9 : item.SCORE9,
+        SCORE10 : item.SCORE10,
+        FACILITY_OPINION : item.FACILITY_OPINION,
+        SCORE11 : item.SCORE11,
+        SCORE12 : item.SCORE12,
+        SCORE13 : item.SCORE13,
+        SCORE14 : item.SCORE14,
+        SCORE15 : item.SCORE15,
+        SCORE16 : item.SCORE16,
+        OPERATION_OPINION : item.OPERATION_OPINION,
+        SCORE17 : item.SCORE17,
+        SCORE18 : item.SCORE18,
+        sum1 : item.sum1,
+        sum2 : item.sum2,
+        sum3 : item.sum3,
+        sum4 : item.sum4,
+        sum5 : item.sum5,
+        sum6 : item.sum6,
+        sum7 : item.sum7
+    }));
+
+    const wscols = [ {wch:8}, {wch:15}, {wch:35}, {wch:17}, {wch:12}, {wch:12}, {wch:12}, {wch:15}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:25}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:15}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:13}, {wch:10}, {wch:10}, {wch:10}, {wch:15}, ];
+    
+    const avgData = ["","","통계","","","","", "평균", AVG1, AVG2, AVG3, AVG4, AVG5, AVG6, AVG7, AVG8, AVG9, AVG10, "-", AVG11, AVG12, AVG13, AVG14, AVG15, AVG16, "-", AVG17, AVG18, SUMAVG1, SUMAVG2, SUMAVG3, SUMAVG4, SUMAVG5, SUMAVG6, SUMAVG7];
+
+    const downloadExcel = useDownloadExcel({headerInfo, cellData, avgData, filename  : agency, merges, wscols});
+
+
     return <>
             {facilityList.length > 0 ? 
             <>
-            <Typography variant="h5" component="h2" gutterBottom>
-                {agency}
-            </Typography>
+            <div style={{padding : "10px 0px", textAlign:"right"}}>
+                <Button variant="contained" color="primary" size="small" onClick={downloadExcel} >Excel 다운로드</Button>
+            </div>
             <TableContainer component={Paper} className={classes.paper} sx={{ overflowX: 'auto' }}>
                 <Table sx={{ minWidth: 700 }} aria-label="spanning table" size="small" className="custom-table">
                     <TableHead>
@@ -110,7 +181,6 @@ const Program = ()=>{
                             <TableCell className="table-header" rowSpan={2} align="center">기타의견</TableCell>
                             <TableCell className="table-header" colSpan={2} align="center">잠재적관광수요</TableCell>
                             <TableCell className="table-header" colSpan={7} align="center">평균</TableCell>
-
                         </TableRow>
                         <TableRow>
                             <TableCell className="table-header" align="center">문항1</TableCell>
@@ -123,7 +193,6 @@ const Program = ()=>{
                             <TableCell className="table-header" align="center">문항8</TableCell>
                             <TableCell className="table-header" align="center">문항9</TableCell>
                             <TableCell className="table-header" align="center">문항10</TableCell>
-
                             <TableCell className="table-header" align="center">문항1</TableCell>
                             <TableCell className="table-header" align="center">문항2</TableCell>
                             <TableCell className="table-header" align="center">문항3</TableCell>
@@ -132,7 +201,6 @@ const Program = ()=>{
                             <TableCell className="table-header" align="center">문항6</TableCell>
                             <TableCell className="table-header" align="center">문항7</TableCell>
                             <TableCell className="table-header" align="center">문항8</TableCell>
-
                             <TableCell className="table-header" align="center">숙소</TableCell>
                             <TableCell className="table-header" align="center">식사</TableCell>
                             <TableCell className="table-header" align="center">프로그램장소</TableCell>

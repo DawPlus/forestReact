@@ -54,7 +54,7 @@ const DataGridComponent = (props)=>{
             title={title}
             data={data}
             columns={       
-                columns.map(i=> ({ ...i, options :  {...i.options, ...defaultColInfo}}))
+                columns.map(i=> ({ ...i, options :  {...defaultColInfo, ...i.options}}))
             }
             options={{
                 tableBodyHeight : "650px",

@@ -10,7 +10,9 @@ import { makeStyles } from '@material-ui/styles';
 
 import { getState} from "store/reducers/programResultReducer"
 import {  useSelector } from "react-redux";
-import { Typography } from "@mui/material";
+import Button from '@mui/material/Button';
+
+import useDownloadExcel from "utils/useDownloadExcel";
 const useStyles = makeStyles({
     paper: {
         borderRadius: 0
@@ -18,6 +20,7 @@ const useStyles = makeStyles({
     });
 
 const Program = ()=>{
+
     const classes = useStyles();
     
     const {programResult, agency} = useSelector(s=> getState(s))
@@ -28,12 +31,57 @@ const Program = ()=>{
             return (sum / programResult.length).toFixed(2);
         });
     },[programResult])
+
+    const headerInfo = [
+        ['ID', '프로그램명', '강사명', '장소', '강사', '강사', '강사', '구성/품질', '구성/품질', '구성/품질', '효과성', '효과성', '효과성', '기타의견', '평균', '평균', '평균'],
+        ['', '', '', '', '문항1', '문항2', '문항3', '문항4', '문항5', '문항6', '문항7', '문항8', '문항9', '', '강사', '구성품질', '효과성']
+    ]
+
+    const cellData = programResult.map((item,idx) => Object.values({
+        idx: idx + 1,
+        PROGRAM_NAME: item.PROGRAM_NAME,
+        TEACHER: item.TEACHER,
+        PLACE: item.PLACE,
+        SCORE1: item.SCORE1,
+        SCORE2: item.SCORE2,
+        SCORE3: item.SCORE3,
+        SCORE4: item.SCORE4,
+        SCORE5: item.SCORE5,
+        SCORE6: item.SCORE6,
+        SCORE7: item.SCORE7,
+        SCORE8: item.SCORE8,
+        SCORE9: item.SCORE9,
+        ETC_OPINION: item.ETC_OPINION,
+        sum1: item.sum1,
+        sum2: item.sum2,
+        sum3: item.sum3,
+    }));
+
+    const avgData = [ "", "", "", "통계", AVG1, AVG2, AVG3, AVG4, AVG5, AVG6, AVG7, AVG8, AVG9, "-", AVG10, AVG11, AVG12]
+
+    // Merge cells
+    const merges = [
+        { s: { r: 0, c: 0 }, e: { r: 1, c: 0 } }, 
+        { s: { r: 0, c: 1 }, e: { r: 1, c: 1 } }, 
+        { s: { r: 0, c: 2 }, e: { r: 1, c: 2 } }, 
+        { s: { r: 0, c: 3 }, e: { r: 1, c: 3 } }, 
+        { s: { r: 0, c: 4 }, e: { r: 0, c: 6 } }, 
+        { s: { r: 0, c: 7 }, e: { r: 0, c: 9 } }, 
+        { s: { r: 0, c: 10 }, e: { r: 0, c: 12 } }, 
+        { s: { r: 0, c: 13 }, e: { r: 1, c: 13 } }, 
+        { s: { r: 0, c: 14 }, e: { r: 0, c: 16 } }, 
+    ];
+
+    var wscols = [ {wch:8}, {wch:25}, {wch:15}, {wch:17}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:15}, {wch:10}, {wch:15}, {wch:10}];        
+    
+    const downloadExcel = useDownloadExcel({headerInfo, cellData, avgData, filename  : agency, merges, wscols});
+
     return <>
             {programResult.length > 0 ? 
             <>
-            <Typography variant="h5" component="h2" gutterBottom>
-                {agency}
-            </Typography>
+            <div style={{padding : "10px 0px", textAlign:"right"}}>
+                <Button variant="contained" color="primary" size="small" onClick={downloadExcel} >Excel 다운로드</Button>
+            </div>
             <TableContainer component={Paper} className={classes.paper}>
                 <Table sx={{ minWidth: 700 }} aria-label="spanning table" size="small" className="custom-table">
                     <TableHead>

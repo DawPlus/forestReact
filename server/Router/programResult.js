@@ -21,7 +21,7 @@ router.post('/getProgramAgency', (req, res)=>{
     ];
 
     const selectedSql = sql[type - 1];
-    console.log(selectedSql)
+    
     maria(selectedSql).then((rows) => {
         res.json(rows)
     })
@@ -33,7 +33,7 @@ router.post('/getProgramAgency', (req, res)=>{
 // 만족도 / 효과평가 조회 
 router.post('/getProgramResult', (req, res)=>{
     const {type, agency} = req.body;
-        console.log(type, agency)
+    
     // 1 : 프로그램 만족도 Program
     // 2 : 시설서비스환경 만족도
     // 3 : 상담&치유서비스 효과평가

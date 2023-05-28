@@ -5,8 +5,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const name = "common";
 const initialState = {
     isLogin : false,
-    isLoading : false
-
+    isLoading : false,
 };
 
 const common = createSlice({
@@ -22,7 +21,6 @@ const common = createSlice({
     finishLoading : (state)=>{
       state.isLoading = false;
     }
-
     
   }
 });

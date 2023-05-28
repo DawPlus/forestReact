@@ -13,6 +13,9 @@ import managementSaga from "./reducers/managementSaga";
 import {reducer as programResult} from "./reducers/programResultReducer"
 import programResultSaga from "./reducers/programResultSaga";
 
+import {reducer as updateDelete} from "./reducers/updateDeleteReducer"
+import updateDeleteSaga from "./reducers/updateDeleteSaga";
+
 
 // ==============================|| COMBINE REDUCER ||============================== //
 
@@ -21,7 +24,8 @@ const reducer = combineReducers({
     customization: customizationReducer,
     program: programReducer,
     management ,
-    programResult
+    programResult,
+    updateDelete
 });
 
 
@@ -31,6 +35,7 @@ export function* rootSaga() {
         programSaga(),
         managementSaga(),
         programResultSaga(),
+        updateDeleteSaga(),
     ]); // all은 배열안의 여러 사가를 동시에 실행시킨다.
 } 
 
