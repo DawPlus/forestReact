@@ -13,5 +13,10 @@ export default function* programResultSaga() {
     yield takeLatest(actions.getFaciltyList.type, createRequestSaga(actions.getFaciltyList.type, api.getProgramResult))
     yield takeLatest(actions.getPreventList.type, createRequestSaga(actions.getPreventList.type, api.getProgramResult))
     yield takeLatest(actions.getHealingList.type, createRequestSaga(actions.getHealingList.type, api.getProgramResult))
+
+    yield takeLatest(actions.getSearchResult.type, createRequestSaga(actions.getSearchResult.type, api.getSearchResult))
+
+
+
     
 }

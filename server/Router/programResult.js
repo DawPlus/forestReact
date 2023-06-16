@@ -57,4 +57,34 @@ router.post('/getProgramResult', (req, res)=>{
 
 
 
+// 만족도 / 효과평가 조회 
+router.post('/getSearchResult', (req, res)=>{
+    const {effect, keyword} = req.body;
+    
+    const whereText = keyword.filter(obj => obj.text !== '' && obj.type !== "X")
+                                .map(obj => `AND ${obj.type} LIKE '${obj.text}'`)
+                                .join(' ');     
+    
+    
+
+    // 1 : 프로그램 만족도 Program
+    // 2 : 시설서비스환경 만족도
+    // 3 : 상담&치유서비스 효과평가
+    // 4 : 예방서비스 효과평가
+    // 5 : 힐링서비스 효과평가
+    const sql = {
+        program : 'select * FROM PROGRAM_SATISFACTION WHERE 1=1 '+whereText, // 프로그램 만족도 
+        facility : 'SELECT * FROM SERVICE_ENV_SATISFACTION WHERE 1=1 '+ whereText // 시설서비스환경만족도
+    };
+
+    
+    maria(sql[effect]).then((rows) => {
+        res.json(rows)
+    })
+    .catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));
+});
+
+
+
+
 module.exports = router;

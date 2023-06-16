@@ -1,4 +1,4 @@
-import { createAction } from '@reduxjs/toolkit';
+import { createAction, current } from '@reduxjs/toolkit';
 import createCustomSlice from "utils/createCustomSlice";
 
 const name ="programResult";
@@ -14,6 +14,22 @@ const initialState = {
     preventList : [],
     healingList : [],
 
+  searchResult  : {
+    searchInfo : {
+        effect : "program",
+        keyword : [
+          {type : "X", text : ""},
+          {type : "X", text : ""},
+          {type : "X", text : ""},
+        ]
+    },
+
+    rows : [], 
+    facility : [], 
+
+  }
+
+
 };
 
 const action = {
@@ -24,6 +40,11 @@ const action = {
     getFaciltyList : createAction(`${name}/getFaciltyList`),
     getPreventList : createAction(`${name}/getPreventList`),
     getHealingList : createAction(`${name}/getHealingList`),
+
+
+
+
+    getSearchResult : createAction(`${name}/getSearchResult`),
 
 
 }
@@ -177,6 +198,61 @@ export const {getState, reducer, actions} = createCustomSlice({
                 [ calculateAverage(sum1List), calculateAverage(sum2List), calculateAverage(sum3List), calculateAverage(sum4List), calculateAverage(sum5List), calculateAverage(sum6List), calculateAverage(sum7List) ]
             return { ...i, sum1, sum2, sum3, sum4, sum5, sum6, sum7 }
           });
+      },
+
+
+
+
+      // 주제어별 
+      onChangeSearchResult : (state, {payload : {key, value}})=>{
+        state.searchResult[key] = value
+      },
+      //주제어 변경 
+      onChangeSearchKeyword : (state, {payload: {index, key, value}})=>{
+        state.searchResult.searchInfo.keyword[index][key] = value
+      },
+
+      getSearchResult_SUCCESS : (state, {payload})=>{
+        
+        const {searchInfo  : {keyword, effect}} = current(state).searchResult
+        const _keyword = keyword.map(i=> ({...i, text : i.type=== "X" ? "" : i.text}))
+
+        state.searchResult.rows = payload.data.map(i=> {
+
+          let avgs = {};
+
+          if(effect ==="program"){
+            avgs = {
+              avg1 : calculateAverage([i.SCORE1, i.SCORE2, i.SCORE3]),
+              avg2 : calculateAverage([i.SCORE4, i.SCORE5, i.SCORE6]),
+              avg3 : calculateAverage([i.SCORE7, i.SCORE8, i.SCORE9]),
+              avg4 : calculateAverage([i.SCORE1, i.SCORE2, i.SCORE3, i.SCORE4, i.SCORE5, i.SCORE6,i.SCORE7, i.SCORE8, i.SCORE9])
+            }
+          }else if(effect==="facility"){
+            const sum1List = [i.SCORE1, i.SCORE2];
+            const sum2List = [i.SCORE3, i.SCORE4];
+            const sum3List = [i.SCORE5, i.SCORE6, i.SCORE7];
+            const sum4List = [i.SCORE8, i.SCORE9, i.SCORE10];
+            const sum5List = [i.SCORE11, i.SCORE12, i.SCORE13];
+            const sum6List = [i.SCORE14, i.SCORE15, i.SCORE16];
+            const sum7List = [i.SCORE17, i.SCORE18];
+            const [ sum1, sum2, sum3, sum4, sum5, sum6, sum7 ] = 
+            [ calculateAverage(sum1List), calculateAverage(sum2List), calculateAverage(sum3List), calculateAverage(sum4List), calculateAverage(sum5List), calculateAverage(sum6List), calculateAverage(sum7List) ]
+            avgs = {
+              sum1, sum2, sum3, sum4, sum5, sum6, sum7
+            }
+          }
+
+
+          return {
+              ...i, 
+              keyword0  : _keyword[0].text,
+              keyword1  : _keyword[1].text,
+              keyword2  : _keyword[2].text,
+              ...avgs
+          }
+
+        })
       }
 
     }

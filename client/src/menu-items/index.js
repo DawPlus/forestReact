@@ -67,13 +67,13 @@ const menuItems = {
                             id: 'agencyList',
                             title: '단체별',
                             type: 'item',
-                            url: '/agencyList',
+                            url: '/sae/agencyList',
                         },
                         {
                             id: 'test3',
                             title: '주제어별',
                             type: 'item',
-                            url: '/pages/register/register3',
+                            url: '/sae/searchResult',
                         }
                     ]
                 },

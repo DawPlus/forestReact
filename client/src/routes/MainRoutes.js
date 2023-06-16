@@ -26,6 +26,7 @@ const UserList = Loadable(lazy(() => import('views/management/userList')));
 
 // Program List 
 const AgencyList = Loadable(lazy(() => import('views/programResult/agencyList')));
+const SearchResult = Loadable(lazy(() => import('views/programResult/searchResult')));
 
 const UpdateDelete = Loadable(lazy(() => import('views/common/updateDelete')));
 
@@ -76,7 +77,13 @@ const MainRoutes = [{
         { path: 'userList', element: <UserList /> },
         { path: 'code', element: <Code /> },
         { path: 'history', element: <History /> },
-        { path: 'agencyList', element: <AgencyList /> },
+        {
+            path: 'sae',
+            children: [
+                { path: 'agencyList', element: <AgencyList /> }, // 만족도및 효과평가 
+                { path: 'searchResult', element: <SearchResult /> }, // 주제어별 만족도 및 효과평가 
+            ]
+        },
 
 
         // 수정 / 삭제 

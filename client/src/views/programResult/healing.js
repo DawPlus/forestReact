@@ -11,6 +11,8 @@ import { getState} from "store/reducers/programResultReducer"
 import {  useSelector } from "react-redux";
 import Button from '@mui/material/Button';
 import useDownloadExcel from "utils/useDownloadExcel";
+import { generateMergeInfo } from "utils/utils";
+import DynamicTableHead from "ui-component/DynamicTableHead";
 
 const useStyles = makeStyles({
     paper: {
@@ -103,27 +105,28 @@ const Program = ()=>{
 
     const headerInfo = [
         [ "ID", "성명", "성별", "거주지", "직업", "참여프로그램", "과거스트레스\n해소및힐링\n서비스경험", "영역", "1.욕구충족", "1.욕구충족", "2.긍정정서", "2.긍정정서", "2.긍정정서", "3.자기이해", "3.자기이해", "3.자기이해", "3.자기이해", "4.마음관리기술", "4.마음관리기술", "4.마음관리기술", "5.정서능력측면", "5.정서능력측면", "5.정서능력측면", "5.정서능력측면", "6.영성측면", "6.영성측면", "6.영성측면", "7.삶의조망측면", "7.삶의조망측면", "7.삶의조망측면", "영역", "평균(0~6점)", "평균(0~6점)", "평균(0~6점)", "평균(0~6점)", "평균(0~6점)", "평균(0~6점)", "평균(0~6점)", ],
-        [ "평가시점", "", "", "", "", "", "", "평가시점", "문항1", "문항2", "문항3", "문항4", "문항5", "문항6", "문항7", "문항8", "문항9", "문항10", "문항11", "문항12", "문항1", "문항2", "문항3", "문항4", "문항5", "문항6", "문항7", "문항8", "문항9", "문항10", "평가시점", "욕구충족", "긍정정서", "자기이해", "마음관리기술", "정서능력측면", "영성측면", "삶의조망측면", ],
+        [ "", "", "", "", "", "", "", "평가시점", "문항1", "문항2", "문항3", "문항4", "문항5", "문항6", "문항7", "문항8", "문항9", "문항10", "문항11", "문항12", "문항1", "문항2", "문항3", "문항4", "문항5", "문항6", "문항7", "문항8", "문항9", "문항10", "평가시점", "욕구충족", "긍정정서", "자기이해", "마음관리기술", "정서능력측면", "영성측면", "삶의조망측면", ],
     ];
 
-    const merges = [
-        { s: { r: 0, c: 0 }, e: { r: 1, c: 0 } },
-        { s: { r: 0, c: 1 }, e: { r: 1, c: 1 } },
-        { s: { r: 0, c: 2 }, e: { r: 1, c: 2 } },
-        { s: { r: 0, c: 3 }, e: { r: 1, c: 3 } },
-        { s: { r: 0, c: 4 }, e: { r: 1, c: 4 } },
-        { s: { r: 0, c: 5 }, e: { r: 1, c: 5 } },
-        { s: { r: 0, c: 6 }, e: { r: 1, c: 6 } },
-        { s: { r: 0, c: 7 }, e: { r: 0, c: 7 } },
-        { s: { r: 0, c: 8 }, e: { r: 0, c: 9 } },
-        { s: { r: 0, c: 10 }, e: { r: 0, c: 12 } },
-        { s: { r: 0, c: 13 }, e: { r: 0, c: 16 } },
-        { s: { r: 0, c: 17 }, e: { r: 0, c: 19 } },
-        { s: { r: 0, c: 20 }, e: { r: 0, c: 23 } },
-        { s: { r: 0, c: 24 }, e: { r: 0, c: 26 } },
-        { s: { r: 0, c: 27 }, e: { r: 0, c: 29 } },
-        { s: { r: 0, c: 31 }, e: { r: 0, c: 37 } },
-    ];
+    const merges = generateMergeInfo(headerInfo);
+    // const merges2 = [
+    //     { s: { r: 0, c: 0 }, e: { r: 1, c: 0 } },
+    //     { s: { r: 0, c: 1 }, e: { r: 1, c: 1 } },
+    //     { s: { r: 0, c: 2 }, e: { r: 1, c: 2 } },
+    //     { s: { r: 0, c: 3 }, e: { r: 1, c: 3 } },
+    //     { s: { r: 0, c: 4 }, e: { r: 1, c: 4 } },
+    //     { s: { r: 0, c: 5 }, e: { r: 1, c: 5 } },
+    //     { s: { r: 0, c: 6 }, e: { r: 1, c: 6 } },
+    //     { s: { r: 0, c: 7 }, e: { r: 0, c: 7 } },
+    //     { s: { r: 0, c: 8 }, e: { r: 0, c: 9 } },
+    //     { s: { r: 0, c: 10 }, e: { r: 0, c: 12 } },
+    //     { s: { r: 0, c: 13 }, e: { r: 0, c: 16 } },
+    //     { s: { r: 0, c: 17 }, e: { r: 0, c: 19 } },
+    //     { s: { r: 0, c: 20 }, e: { r: 0, c: 23 } },
+    //     { s: { r: 0, c: 24 }, e: { r: 0, c: 26 } },
+    //     { s: { r: 0, c: 27 }, e: { r: 0, c: 29 } },
+    //     { s: { r: 0, c: 31 }, e: { r: 0, c: 37 } },
+    // ];
 
     const cellData = healingList.map((item,idx) => Object.values({
         idx : idx % 2=== 0 ? (idx / 2) + 1  : "",
@@ -184,7 +187,8 @@ const Program = ()=>{
             </div>
             <TableContainer component={Paper} className={classes.paper} sx={{ overflowX: 'auto' }}>
                 <Table sx={{ minWidth: 700 }} aria-label="spanning table" size="small" className="custom-table">
-                    <TableHead>
+                    <DynamicTableHead headerInfo={headerInfo}/>
+                    {/* <TableHead>
                         <TableRow>
                             <TableCell className="table-header" rowSpan={2} align="center">ID</TableCell>
                             <TableCell className="table-header" rowSpan={2} align="center">성명</TableCell>
@@ -237,7 +241,7 @@ const Program = ()=>{
                             <TableCell className="table-header" align="center">영성측면</TableCell>
                             <TableCell className="table-header" align="center">삶의조망측면</TableCell>
                         </TableRow>
-                    </TableHead>      
+                    </TableHead>       */}
                     <TableBody>
                         {healingList.map((row, index) => {
 
