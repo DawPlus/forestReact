@@ -74,7 +74,10 @@ router.post('/getSearchResult', (req, res)=>{
     // 5 : 힐링서비스 효과평가
     const sql = {
         program : 'select * FROM PROGRAM_SATISFACTION WHERE 1=1 '+whereText, // 프로그램 만족도 
-        facility : 'SELECT * FROM SERVICE_ENV_SATISFACTION WHERE 1=1 '+ whereText // 시설서비스환경만족도
+        facility : 'SELECT * FROM SERVICE_ENV_SATISFACTION WHERE 1=1 '+ whereText,// 시설서비스환경만족도
+        
+        prevent : 'SELECT * FROM PREVENT_SERVICE WHERE 1=1 '+ whereText, // 예방서비스
+        healing : 'SELECT * FROM HEALING_SERVICE WHERE 1=1 '+ whereText // 힐링서비스
     };
 
     

@@ -11,12 +11,15 @@ import Button from '@mui/material/Button';
 
 import ProgramResult from "./programResult"
 import FacilityResult from "./facilityResult"
+import PreventResult from "./preventResult";
+import HealingResult from "./healingResult";
+import Swal from "sweetalert2";
 
 const SearchResult = ()=>{
 
     const dispatch = useDispatch();
 
-    const {searchInfo} = useSelector(s=> getState(s).searchResult);
+    const {searchInfo, rows} = useSelector(s=> getState(s).searchResult);
 
     const {effect, keyword} = searchInfo;
 
@@ -44,13 +47,7 @@ const SearchResult = ()=>{
     ]
 
     const onChangeHandler = (e)=>{
-        dispatch(actions.onChangeSearchResult({
-            key : "searchInfo", 
-            value : { 
-                ...searchInfo, 
-                [e.target.name] : e.target.value
-            }
-        }));
+        dispatch(actions.onChangeSearchResult(e.target.value));
     }
 
     const onChangeKeyword = index => e =>{
@@ -62,8 +59,26 @@ const SearchResult = ()=>{
     }
 
     const onSearch = ()=>{
+
+        const isTextEmpty = keyword.every( i=> i.text === "");
+        if(isTextEmpty){
+            Swal.fire({
+                title: `확인`,
+                text: `하나 이상의 주제어를 입력해 주십시오` ,
+                icon: 'warning',
+            });
+            return;
+        }
+
         dispatch(actions.getSearchResult(searchInfo))
     }
+
+    React.useEffect(()=>{
+        return ()=>{
+            dispatch(actions.initState())
+        }
+
+    },[])
 
     return <>
             <MainCard>
@@ -92,8 +107,17 @@ const SearchResult = ()=>{
                 </Grid>            
             </MainCard>
             <MainCard style={{marginTop : "10px"}}>
-                {/* <ProgramResult/> */}
-                <FacilityResult/>
+
+                {rows.length > 0 && 
+                    {
+                        program : <ProgramResult/>,
+                        facility : <FacilityResult/>,
+                        prevent : <PreventResult/>,
+                        healing : <HealingResult/>
+
+                    }[effect]
+                }
+                
             </MainCard>
     </>
 

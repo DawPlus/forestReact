@@ -3,6 +3,7 @@ const router = express.Router();
 const maria = require("../maria");
 const fs = require('fs');
 const moment = require("moment");
+const CryptoJS = require("crypto-js")
 
 // 로그인 하기 
 router.post("/login", (req,res)=>{
@@ -22,7 +23,7 @@ router.post("/login", (req,res)=>{
             
             sessionFiles.forEach(file => {
             const filePath = `${sessionStorePath}/${file}`;
-            const fileContent = fs.readFileSync(filePath, 'utf-8');
+            const fileContent = fs.readFileSync(filePath, 'utf-8'); 
             const sessionData = JSON.parse(fileContent);
             const expires = moment(sessionData.cookie.expires);        
             if (expires && expires.isBefore(now)) {
@@ -37,8 +38,16 @@ router.post("/login", (req,res)=>{
             });
         });
         
+        const secretKey = CryptoJS.enc.Hex.parse(process.env.SECRET_KEY);
+        const iv = CryptoJS.enc.Hex.parse('000102030405060708090a0b0c0d0e');
+        
+        const encPassword = CryptoJS.AES.encrypt(password, secretKey, {
+            iv: iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        }).toString();
 
-    maria(sql, [id, password])
+    maria(sql, [id, encPassword])
     .then((rows) => {
         if(rows.length > 0){
             req.session.save(()=>{
@@ -68,8 +77,19 @@ router.post("/logout", (req, res)=>{
 // 사용자 등록
 router.post('/register', (req, res)=>{
     const {id, name, password} = req.body;
+  
+    const secretKey = CryptoJS.enc.Hex.parse(process.env.SECRET_KEY);
+    const iv = CryptoJS.enc.Hex.parse('000102030405060708090a0b0c0d0e');
+    
+    const encPassword = CryptoJS.AES.encrypt(password, secretKey, {
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+    }).toString();
+
+    
     const sql = `INSERT INTO USER_INFO(user_id, user_name, user_pwd, value) VALUES(?,?,?,'1')`;
-    maria(sql, [id, name, password])
+    maria(sql, [id, name, encPassword])
         .then(() => {
             res.json({ result: true });
         })

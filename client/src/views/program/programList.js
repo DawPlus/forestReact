@@ -42,8 +42,6 @@ const ProgramList = () => {
       },
     },
   ];
-   
-  
   React.useEffect(()=>{
     // 목록조회 
     dispatch(actions.getList());

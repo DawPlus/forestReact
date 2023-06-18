@@ -60,19 +60,6 @@ const Program = ()=>{
 
     const avgData = [ "", "", "", "통계", AVG1, AVG2, AVG3, AVG4, AVG5, AVG6, AVG7, AVG8, AVG9, "-", AVG10, AVG11, AVG12]
 
-    // // Merge cells
-    // const merges2 = [
-    //     { s: { r: 0, c: 0 }, e: { r: 1, c: 0 } }, 
-    //     { s: { r: 0, c: 1 }, e: { r: 1, c: 1 } }, 
-    //     { s: { r: 0, c: 2 }, e: { r: 1, c: 2 } }, 
-    //     { s: { r: 0, c: 3 }, e: { r: 1, c: 3 } }, 
-    //     { s: { r: 0, c: 4 }, e: { r: 0, c: 6 } }, 
-    //     { s: { r: 0, c: 7 }, e: { r: 0, c: 9 } }, 
-    //     { s: { r: 0, c: 10 }, e: { r: 0, c: 12 } }, 
-    //     { s: { r: 0, c: 13 }, e: { r: 1, c: 13 } }, 
-    //     { s: { r: 0, c: 14 }, e: { r: 0, c: 16 } }, 
-    // ];
-
     var wscols = [ {wch:8}, {wch:25}, {wch:15}, {wch:17}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:15}, {wch:10}, {wch:15}, {wch:10}];        
     
     const downloadExcel = useDownloadExcel({headerInfo, cellData, avgData, filename  : agency, merges, wscols});

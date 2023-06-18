@@ -21,9 +21,9 @@ const useStyles = makeStyles({
 });
 
 
-const DynamicTable = (props)=>{
+const DynamicDoubleTable = (props)=>{
     
-    const {headerInfo, dataCellInfo, avgCellInfo, rows, wscols } = props;
+    const {headerInfo, dataCellInfo, dataCellInfo2, avgCellInfo, rows, wscols } = props;
     
     const classes = useStyles();
     // Merge Info 
@@ -46,7 +46,7 @@ const DynamicTable = (props)=>{
     // Excel 다운 
     const downloadExcel = useDownloadExcel({headerInfo, cellData, avgData, merges, wscols : wscols ? wscols : defaultWsCols });
 
-
+    
     return<>
             <div style={{padding : "10px 0px", textAlign:"right"}}>
                 <Button variant="contained" color="primary" size="small" onClick={downloadExcel} >Excel 다운로드</Button>
@@ -55,15 +55,28 @@ const DynamicTable = (props)=>{
                 <Table sx={{ minWidth: 700 }} aria-label="spanning table" size="small" className="custom-table">
                     <DynamicTableHead headerInfo={headerInfo}/>
                     <TableBody>
-                        {rows.map((i, idx) =>
-                            <TableRow key={idx}>
-                                {dataCellInfo.map((cellKey) => 
-                                <TableCell className="table-cell" align="center" key={cellKey}>
-                                    {i[cellKey]}
-                                </TableCell>
-                                )}
-                            </TableRow>
-                        )}
+                        {rows.map((i, idx) =>{
+
+                            const cnt = idx % 2;
+
+                            return  cnt ===0 ? 
+                            
+                                    <TableRow key={idx}>
+                                        {dataCellInfo.map((cellKey, _idx) => 
+                                            _idx <3 ? 
+                                            <TableCell className="table-cell" align="center" key={_idx} rowSpan={2}> {i[cellKey]} </TableCell>
+                                            :
+                                            <TableCell className="table-cell" align="center" key={_idx} > {i[cellKey]} </TableCell>
+                                        )}
+                                    </TableRow> : 
+                                    
+                                    <TableRow key={idx}>
+                                        {dataCellInfo2.map((cellKey, _idx) => 
+                                            <TableCell className="table-cell" align="center" key={cellKey+_idx} > {i[cellKey]} </TableCell>
+                                        )}
+                                    </TableRow>
+
+                        })}
                         <TableRow>
                             {avgCellData.map((cell, idx) =>
                                 cell ? (
@@ -80,4 +93,4 @@ const DynamicTable = (props)=>{
 
 
 }
-export default memo(DynamicTable);
+export default memo(DynamicDoubleTable);

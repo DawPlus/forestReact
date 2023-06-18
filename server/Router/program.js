@@ -8,7 +8,7 @@ router.post('/getProgramList', (req, res)=>{
     const sql = `SELECT * FROM BASIC_INFO WHERE PROGRESS_STATE ="E"`;
 
     maria(sql).then((rows) => {
-        res.json({rows})
+        res.json(rows)
     })
     .catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));
 

@@ -19,8 +19,9 @@ export const {getState, reducer, actions} = createCustomSlice({
   initialState,
   action, 
   reducers: {
-    getList_SUCCESS : (state, {payload :{rows}})=>{
-      state.rows = rows;
+    getList_SUCCESS : (state, {payload: {data}})=>{
+      
+      state.rows = data;
     }
 
   }
