@@ -54,7 +54,7 @@ const menuItems = {
                     id: 'insert',
                     title: '만족도및 효과평가 입력',
                     type: 'item',
-                    url: '/insertOperateResult',
+                    url: '/serviceInsertForm',
                     icon: IconFloatLeft,
                 },
                 {

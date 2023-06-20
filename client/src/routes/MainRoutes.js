@@ -29,6 +29,7 @@ const AgencyList = Loadable(lazy(() => import('views/programResult/agencyList'))
 const SearchResult = Loadable(lazy(() => import('views/programResult/searchResult')));
 
 const UpdateDelete = Loadable(lazy(() => import('views/common/updateDelete')));
+const ServiceInsertForm = Loadable(lazy(() => import('views/serviceInsertForm')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -88,6 +89,7 @@ const MainRoutes = [{
 
         // 수정 / 삭제 
         { path: 'updateDelete', element: <UpdateDelete /> },
+        { path: 'serviceInsertForm', element: <ServiceInsertForm /> },
     ]
 }];
 
