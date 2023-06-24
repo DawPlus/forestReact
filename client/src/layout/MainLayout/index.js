@@ -102,7 +102,8 @@ const MainLayout = () => {
 
             {/* main content */}
             <Main open={leftDrawerOpened}>
-                <div style={{maxWidth: "1580px", margin: "0 auto"}}>
+                {/* <div style={{maxWidth: "1580px", margin: "0 auto"}}> */}
+                <div>
                     {/* breadcrumb */}
                     <Breadcrumbs separator={IconChevronRight} navigation={navigation} icon title rightAlign />
                     <Outlet />

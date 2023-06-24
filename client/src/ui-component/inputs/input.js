@@ -8,7 +8,7 @@ const InputComponent = (props) => {
     const id = useMemo(() => uuidv4(), []);
 
     return (
-        <FormControl fullWidth>
+        <FormControl fullWidth >
             <InputLabel htmlFor={id}>{label}</InputLabel>
             <OutlinedInput
                 id={id}

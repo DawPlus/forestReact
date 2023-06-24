@@ -1,6 +1,9 @@
-import { createAction } from '@reduxjs/toolkit';
+//import { createAction } from '@reduxjs/toolkit';
 import createCustomSlice from "utils/createCustomSlice";
 import { v4 } from 'uuid';
+
+
+
 const name ="serviceInsert/service";
 
 const initialState = {
@@ -10,10 +13,10 @@ const initialState = {
         chk : false, 
         OPENDAY:"",
         AGENCY:"",
-        SEX:"",
-        AGE:"",
+        SEX:"미기재", // 성별
+        AGE:"미기재", // 연령
         PTCPROGRAM:"",
-        RESIDENCE:"",
+        RESIDENCE:"미기재", // 거주지
         JOB:"",
         EVAL_DATE:"",
         SCORE1:"",
@@ -39,7 +42,12 @@ const initialState = {
       }
 
     ],
-    searchInfo : {}
+    searchInfo : {
+        AGENCY : "", // 
+        OPENDAY : "", 
+        EVAL_DATE: "", 
+        PTCPROGRAM : ""
+    }
   
 };
 
@@ -63,8 +71,18 @@ export const {getState, reducer, actions} = createCustomSlice({
     },
     changeValue : (state, {payload : {index, key , value}})=>{
       state.rows[index][key] = value;
-    }
+    }, 
+    setSearchInfo : (state, {payload : {key, value}})=>{
+      state.searchInfo[key] = value;
+    },
+    setDate : (state, {payload })=>{
+      state.searchInfo.OPENDAY = payload;
+      state.searchInfo.EVAL_DATE = payload;
+    },
 
+
+
+    
 
   }
 });

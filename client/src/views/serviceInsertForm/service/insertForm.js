@@ -9,10 +9,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+
 import Select from "ui-component/select"
 
-
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 const HeaderCell = React.memo(({ name }) => {
     return <TableCell align="center">{name}</TableCell>;
 });
@@ -212,8 +214,12 @@ const InsertForm = ()=>{
     }, [dispatch]);
     return <>   
             <div style={{padding : "15px 5px"}}>
-                <Button variant="contained" size="small" color="primary" onClick={onAdd} >추가</Button>
-                <Button variant="contained"size="small" color="primary" onClick={removeRow}  style={{margin : "0px 10px"}}>삭제</Button>
+            <IconButton color="primary" onClick={onAdd}>
+                <AddIcon color="primary" />
+            </IconButton>
+            <IconButton color="primary" onClick={removeRow} style={{margin : "0px 10px"}}>
+                <RemoveIcon color="primary" />
+            </IconButton>
             </div>
             <TableContainer style={{minHeight: "560px" , paddingBottom : "50px" }}>
                 <Table className="insertForm">

@@ -118,3 +118,10 @@
   white-space: nowrap;
   padding : 5px
 }
+/* 데이트피커 빨간줄 제거 */
+.noneRed label{
+  color : #697586 !important;
+}
+.noneRed fieldset{
+  border-color : rgba(0, 0, 0, 0.23) !important;
+}
