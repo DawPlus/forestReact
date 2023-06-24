@@ -106,3 +106,15 @@
   background: #eeffdc;
   border: 1px #838383 solid;
 }
+.insertForm fieldset{
+  border-radius: 3px;
+}
+.insertForm input{
+  min-width: 80px;
+  padding : 10px
+}
+
+.insertForm tr th, .insertForm tr td { 
+  white-space: nowrap;
+  padding : 5px
+}
