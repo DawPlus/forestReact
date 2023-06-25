@@ -50,12 +50,25 @@ router.post("/login", (req,res)=>{
     maria(sql, [id, encPassword])
     .then((rows) => {
         if(rows.length > 0){
-            req.session.save(()=>{
-                req.session.userInfo ={
-                    ...rows[0]
-                }
-                res.json({message : '로그인 되었습니다. ', isLogin : true, result : true})
+            req.session.userInfo = { ...rows[0] };
+
+            // req.session.save(()=>{
+            //     console.log(req.session.userInfo)
+            //     res.json({message : '로그인 되었습니다. ', isLogin : true, result : true})
+            // });
+
+            req.session.save((err) => {
+            if (err) {
+                console.error(err);
+                res.status(500).json({ error: "세션 저장 중 오류가 발생하였습니다." });
+                return;
+            }
+            console.log(req.session.userInfo);
+            res.json({ message: '로그인 되었습니다.', isLogin: true, result: true });
             });
+
+
+
         }else{
             res.json({message : '로그인 정보를 확인해 주세요.', isLogin : false, result : true})
         }

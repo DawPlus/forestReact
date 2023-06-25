@@ -1,7 +1,7 @@
 import React  from "react";
 
 import {Grid} from '@mui/material';
-import { DatePicker, Input, Select, CheckBox } from "ui-component/inputs";
+import {  Input, Select, CheckBox } from "ui-component/inputs";
 
 
 
@@ -20,10 +20,10 @@ const DefaultInfos = ()=>{
                 {/* 참여일 */}
                 <Grid item container xs={6} spacing={2}>
                 <Grid item  xs={6} >
-                    <DatePicker label="참여시작일"/>
+                    {/* <DatePicker label="참여시작일"/> */}
                 </Grid>
                 <Grid item  xs={6}>
-                    <DatePicker label="참여종료일"/>
+                    {/* <DatePicker label="참여종료일"/> */}
                 </Grid>
                 </Grid>
 

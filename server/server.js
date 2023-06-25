@@ -7,11 +7,7 @@ const FileStore = require("session-file-store")(session)
 const dotenv = require("dotenv");
 // Maria DB
 const cors = require("cors");
-
-
-
 const route = require('./Router'); 
-
 
 
 dotenv.config();

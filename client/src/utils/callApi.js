@@ -6,6 +6,7 @@ import { actions } from 'store/reducers/commonReducer';
 export const client = axios.create({
   method : "post",
   baseURL: process.env.REACT_APP_BASE_URL+"/api", // Base URL 설정
+  withCredentials: true,
 });
 
 client.interceptors.request.use((config) => {

@@ -72,88 +72,87 @@ const TableRowComponent = React.memo(({ row, idx, onCheckChange, onChange }) => 
 
     return (
         <TableRow key={row.id}>
-        <TableCell>
-            {idx > 0 &&
-            <Checkbox checked={row.chk} name="chk" onChange={onCheckChange(idx)}/>
-            }
-        </TableCell>
-        <TableCell>
-                <Select items={sexItem}label="성별"value={row.SEX} name="SEX" onChange={onChange(idx)} style={{minWidth: "100px"}}/>
-            {/* <TextField size="small" label="성별" value={row.SEX} name="SEX" onChange={onChange(idx)}/>  */}
-        </TableCell>
-        <TableCell>
-            <TextField size="small" label="연령" value={row.AGE} name="AGE" onChange={onChange(idx)}/> 
-        </TableCell>
-        <TableCell>
-        <Select items={locationItem}label="거주지"value={row.RESIDENCE} name="RESIDENCE" onChange={onChange(idx)} style={{minWidth: "100px"}}/>
-        </TableCell>
-        <TableCell>
-        <Select items={jobItem}label="직업"value={row.JOB} name="JOB" onChange={onChange(idx)} style={{minWidth: "100px"}}/>
-        </TableCell>
-        <TableCell>
-            <TextField size="small" label="숙소(문항1)" value={row.SCORE1} name="SCORE1" onChange={onChange(idx)}/> 
-        </TableCell>
-        <TableCell>
-            <TextField size="small" label="숙소(문항2)" value={row.SCORE2} name="SCORE2" onChange={onChange(idx)}/> 
-        </TableCell>
-        <TableCell>
-            <TextField size="small" label="식당(문항3)" value={row.SCORE3} name="SCORE3" onChange={onChange(idx)}/> 
-        </TableCell>
-        <TableCell>
-            <TextField size="small" label="식당(문항4)" value={row.SCORE4} name="SCORE4" onChange={onChange(idx)}/> 
-        </TableCell>
-        <TableCell>
-            <TextField size="small" label="프로그램장소(문항5)" value={row.SCORE5} name="SCORE5" onChange={onChange(idx)}/> 
-        </TableCell>
-        <TableCell>
-            <TextField size="small" label="프로그램장소(문항6)" value={row.SCORE6} name="SCORE6" onChange={onChange(idx)}/> 
-        </TableCell>
-        <TableCell>
-            <TextField size="small" label="프로그램장소(문항7)" value={row.SCORE7} name="SCORE7" onChange={onChange(idx)}/> 
-        </TableCell>
-        <TableCell>
-            <TextField size="small" label="야외(문항8)" value={row.SCORE8} name="SCORE8" onChange={onChange(idx)}/> 
-        </TableCell>
-        <TableCell>
-            <TextField size="small" label="야외(문항9)" value={row.SCORE9} name="SCORE9" onChange={onChange(idx)}/> 
-        </TableCell>
-        <TableCell>
-            <TextField size="small" label="야외(문항10)" value={row.SCORE10} name="SCORE10" onChange={onChange(idx)}/> 
-        </TableCell>
-        <TableCell>
-            <TextField size="small" label="기타의견" value={row.FACILITY_OPINION} name="FACILITY_OPINION" onChange={onChange(idx)}/> 
-        </TableCell>
+            <TableCell>
+                {idx > 0 ?
+                <Checkbox checked={row.chk} value="" name="chk" onChange={onCheckChange(idx)}/>
+                : <></>}
+            </TableCell>
+            <TableCell>
+                    <Select items={sexItem}label="성별"value={row.SEX} name="SEX" onChange={onChange(idx)} style={{minWidth: "100px"}}/>
+            </TableCell>
+            <TableCell>
+                <TextField size="small" label="연령" value={row.AGE} name="AGE" onChange={onChange(idx)}/> 
+            </TableCell>
+            <TableCell>
+            <Select items={locationItem}label="거주지"value={row.RESIDENCE} name="RESIDENCE" onChange={onChange(idx)} style={{minWidth: "100px"}}/>
+            </TableCell>
+            <TableCell>
+            <Select items={jobItem}label="직업"value={row.JOB} name="JOB" onChange={onChange(idx)} style={{minWidth: "100px"}}/>
+            </TableCell>
+            <TableCell>
+                <TextField size="small" label="숙소(문항1)" value={row.SCORE1} name="SCORE1" onChange={onChange(idx)}/> 
+            </TableCell>
+            <TableCell>
+                <TextField size="small" label="숙소(문항2)" value={row.SCORE2} name="SCORE2" onChange={onChange(idx)}/> 
+            </TableCell>
+            <TableCell>
+                <TextField size="small" label="식당(문항3)" value={row.SCORE3} name="SCORE3" onChange={onChange(idx)}/> 
+            </TableCell>
+            <TableCell>
+                <TextField size="small" label="식당(문항4)" value={row.SCORE4} name="SCORE4" onChange={onChange(idx)}/> 
+            </TableCell>
+            <TableCell>
+                <TextField size="small" label="프로그램장소(문항5)" value={row.SCORE5} name="SCORE5" onChange={onChange(idx)}/> 
+            </TableCell>
+            <TableCell>
+                <TextField size="small" label="프로그램장소(문항6)" value={row.SCORE6} name="SCORE6" onChange={onChange(idx)}/> 
+            </TableCell>
+            <TableCell>
+                <TextField size="small" label="프로그램장소(문항7)" value={row.SCORE7} name="SCORE7" onChange={onChange(idx)}/> 
+            </TableCell>
+            <TableCell>
+                <TextField size="small" label="야외(문항8)" value={row.SCORE8} name="SCORE8" onChange={onChange(idx)}/> 
+            </TableCell>
+            <TableCell>
+                <TextField size="small" label="야외(문항9)" value={row.SCORE9} name="SCORE9" onChange={onChange(idx)}/> 
+            </TableCell>
+            <TableCell>
+                <TextField size="small" label="야외(문항10)" value={row.SCORE10} name="SCORE10" onChange={onChange(idx)}/> 
+            </TableCell>
+            <TableCell>
+                <TextField size="small" label="기타의견" value={row.FACILITY_OPINION} name="FACILITY_OPINION" onChange={onChange(idx)}/> 
+            </TableCell>
 
-        <TableCell>
-            <TextField size="small" label="운영(문항1)" value={row.SCORE11} name="SCORE11" onChange={onChange(idx)}/> 
-        </TableCell>
-        <TableCell>
-            <TextField size="small" label="운영(문항2)" value={row.SCORE12} name="SCORE12" onChange={onChange(idx)}/> 
-        </TableCell>
-        <TableCell>
-            <TextField size="small" label="운영(문항3)" value={row.SCORE13} name="SCORE13" onChange={onChange(idx)}/> 
-        </TableCell>
+            <TableCell>
+                <TextField size="small" label="운영(문항1)" value={row.SCORE11} name="SCORE11" onChange={onChange(idx)}/> 
+            </TableCell>
+            <TableCell>
+                <TextField size="small" label="운영(문항2)" value={row.SCORE12} name="SCORE12" onChange={onChange(idx)}/> 
+            </TableCell>
+            <TableCell>
+                <TextField size="small" label="운영(문항3)" value={row.SCORE13} name="SCORE13" onChange={onChange(idx)}/> 
+            </TableCell>
 
-        <TableCell>
-            <TextField size="small" label="식사(문항4)" value={row.SCORE14} name="SCORE14" onChange={onChange(idx)}/> 
-        </TableCell>
-        <TableCell>
-            <TextField size="small" label="식사(문항5)" value={row.SCORE15} name="SCORE15" onChange={onChange(idx)}/> 
-        </TableCell>
-        <TableCell>
-            <TextField size="small" label="식사(문항6)" value={row.SCORE16} name="SCORE16" onChange={onChange(idx)}/> 
-        </TableCell>
+            <TableCell>
+                <TextField size="small" label="식사(문항4)" value={row.SCORE14} name="SCORE14" onChange={onChange(idx)}/> 
+            </TableCell>
+            <TableCell>
+                <TextField size="small" label="식사(문항5)" value={row.SCORE15} name="SCORE15" onChange={onChange(idx)}/> 
+            </TableCell>
+            <TableCell>
+                <TextField size="small" label="식사(문항6)" value={row.SCORE16} name="SCORE16" onChange={onChange(idx)}/> 
+            </TableCell>
 
-        <TableCell>
-            <TextField size="small" label="기타의견" value={row.OPERATION_OPINION} name="OPERATION_OPINION" onChange={onChange(idx)}/> 
-        </TableCell>
+            <TableCell>
+                <TextField size="small" label="기타의견" value={row.OPERATION_OPINION} name="OPERATION_OPINION" onChange={onChange(idx)}/> 
+            </TableCell>
 
-        <TableCell>
-            <TextField size="small" label="잠재적 관광수요(문항8)" value={row.SCORE17} name="SCORE17" onChange={onChange(idx)}/> 
-        </TableCell>
-        <TableCell>
-            <TextField size="small" label="잠재적 관광수요(문항9)" value={row.SCORE18} name="SCORE18" onChange={onChange(idx)}/> 
-        </TableCell>
+            <TableCell>
+                <TextField size="small" label="잠재적 관광수요(문항8)" value={row.SCORE17} name="SCORE17" onChange={onChange(idx)}/> 
+            </TableCell>
+            <TableCell>
+                <TextField size="small" label="잠재적 관광수요(문항9)" value={row.SCORE18} name="SCORE18" onChange={onChange(idx)}/> 
+            </TableCell>
     </TableRow>
     );
 });
@@ -194,7 +193,7 @@ const InsertForm = ()=>{
     ];
     
     const { rows} = useSelector(s=> getState(s));
-  
+
     const onChange = useCallback((idx) => (e) => {
         const { name, value } = e.target;
         dispatch(actions.changeValue({ index: idx, key: name, value }));
@@ -205,7 +204,7 @@ const InsertForm = ()=>{
     }, [dispatch]);
 
     const removeRow = useCallback(() => {
-        const selectedRowIds = rows.filter(i => i.chk).map(({ id }) => id);
+        const selectedRowIds = rows.filter(i => i.chk).map(({ id, SERVICE_SEQ }) => ({id, SERVICE_SEQ}));
         dispatch(actions.removeRow(selectedRowIds));
     }, [dispatch, rows]);
 

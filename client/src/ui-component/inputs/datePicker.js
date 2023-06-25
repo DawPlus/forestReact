@@ -1,30 +1,33 @@
 import React from "react";
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import 'moment/locale/ko';
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { FormControl } from "@mui/material";
-import moment from "moment/moment";
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import "dayjs/locale/ko";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import moment from "moment"
+dayjs.locale("ko");
+dayjs.extend(localizedFormat);
 
 // Date Picker
-const DatePickerComponent = (props)=>{
-    const {label, onChange, name, value} = props;
-    
+const DatePickerComponent = (props) => {
+    const { label, onChange, name, value } = props;
 
-    const onDateChange = name => value =>{
-        const _val = value.format("YYYY-MM-DD")
-        onChange(name, _val)
-    }
+    const onDateChange = (name) => (value) => {
+        const _val = value.format("YYYY-MM-DD");
+        onChange(name, _val);
+    };
 
-    const now = moment().format("YYYY-MM-DD");
-
-    return (<>
-        <FormControl fullWidth variant="outlined" required={false} className="noneRed">
-            <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="ko">
-                <DatePicker format="YYYY-MM-DD" value={value} defaultValue={now} label={label} onChange={onDateChange(name)}/>
+    return (
+        <>
+            <FormControl fullWidth variant="outlined" required={false} className="noneRed">
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker format="YYYY-MM-DD" value={moment(value)} label={label} onChange={onDateChange(name)} />
             </LocalizationProvider>
-        </FormControl>
-    </>);
+            </FormControl>
+        </>
+    );
+};
 
-}
-export default DatePickerComponent;
+export default React.memo(DatePickerComponent);

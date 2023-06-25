@@ -13,7 +13,7 @@ import TableRow from '@mui/material/TableRow';
 
 import { useDispatch, useSelector } from 'react-redux';
 import {actions, getState} from "store/reducers/managementReducer"
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from "@mui/styles";
 import Swal from 'sweetalert2';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';

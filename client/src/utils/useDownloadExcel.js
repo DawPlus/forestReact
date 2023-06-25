@@ -42,7 +42,7 @@ const avgStyle = {
 
 const useDownloadExcel = (props) =>{
 
-    const {headerInfo, cellData, avgData, filename = "data", merges, wscols, type = "type1"} = props;
+    const {headerInfo, cellData, avgData =[], filename = "data", merges, wscols, type = "type1"} = props;
     const today = moment();
 
     const downloadExcel = ()=>{
@@ -51,7 +51,7 @@ const useDownloadExcel = (props) =>{
         // data Setting 
         const _data = cellData.map(values => values.map(value => ({ v: value, t: 's', s: defaultStyle })));
         //avg 
-        const _avg = type === "type1" ? [avgData.map(value => ({ v: value, t: 's', s: avgStyle }))] : avgData.map(values => values.map(value => ({ v: value, t: 's', s: avgStyle })));
+        const _avg = avgData.length > 0 ? type === "type1" ? [avgData.map(value => ({ v: value, t: 's', s: avgStyle }))] : avgData.map(values => values.map(value => ({ v: value, t: 's', s: avgStyle }))) :[]
 
         const wb = XLSX.utils.book_new();
         // Create worksheet

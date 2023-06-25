@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Backdrop } from '@material-ui/core';
+import { Modal, Backdrop } from '@mui/material';
 import Lottie from "lottie-react";
 import animationData from './lottie/loading.json';
 

@@ -1,4 +1,3 @@
-import React from 'react';
 
 const useAverageCells = (avgCell, rows) => {
     let spanCount = 0;

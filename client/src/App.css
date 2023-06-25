@@ -125,3 +125,6 @@
 .noneRed fieldset{
   border-color : rgba(0, 0, 0, 0.23) !important;
 }
+.react-datepicker {
+  z-index: 9999;
+}

@@ -3,8 +3,13 @@ import React , {useState }from "react";
 import {Grid, Button} from '@mui/material';
 import {  Input, Select, } from "ui-component/inputs";
 import { styled } from '@mui/material/styles';
-import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
+
+// import AddIcon from '@material-ui/icons/Add';
+// import RemoveIcon from '@material-ui/icons/Remove';
+
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+
 
 import { v4 as uuidv4 } from "uuid";
 import Swal from "sweetalert2";
