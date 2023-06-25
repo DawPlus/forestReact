@@ -8,7 +8,7 @@ const dotenv = require("dotenv");
 // Maria DB
 const cors = require("cors");
 const route = require('./Router'); 
-
+const login = require("./Router/login")
 
 dotenv.config();
 
@@ -35,6 +35,26 @@ app.use(session({
         secure : false 
     },
 }));
+
+
+
+// 로그인 확인을 위한 미들웨어 함수
+function checkUserSession(req, res, next) {
+    console.log('checkUser')
+    
+    if (!req.session.userInfo) {    
+        // userInfo가 비어있는 경우 로그인하지 않았음을 알리는 응답 전송
+        res.json({invalidateSession: true});
+    } else {
+        // userInfo가 있는 경우 다음 미들웨어 함수를 실행
+        next();
+    }
+}
+
+
+app.use("/api", login);
+// 모든 라우트에 미들웨어 함수 적용
+app.use(checkUserSession);
 
 // 라우터 시작 !  
 app.use("/api", route)

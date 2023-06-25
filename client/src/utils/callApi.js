@@ -18,6 +18,21 @@ client.interceptors.request.use((config) => {
 client.interceptors.response.use(
   (response) => {
     store.dispatch(actions.finishLoading());
+    // 응답 데이터에서 invalidateSession 값을 체크
+    if (response.data.invalidateSession) {
+      // Swal을 이용해 메시지 출력
+      Swal.fire({
+        icon: 'warning',
+        title: '세션 종료',
+        text: "세션이 종료되었습니다. 다시 로그인해주세요.",
+      }).then(() => {
+        // "/login" 페이지로 이동
+        window.location.href = '/login';
+      });
+      
+      // 에러를 발생시켜 후속 요청 중단
+      return Promise.reject(new Error('세션이 종료되었습니다. 다시 로그인해주세요.'));
+    }
     return response;
   },
 
