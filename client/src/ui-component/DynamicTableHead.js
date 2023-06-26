@@ -32,19 +32,23 @@ export default function DynamicTableHead({ headerInfo }) {
         return (
         <TableHead>
             {headerInfo.map((row, rowIndex) => (
-            <TableRow key={rowIndex}>
+            <TableRow key={rowIndex} >
                 {row.map((cell, colIndex) => {
+
+
+
                 if (cell === '') return null;
                 const { rowSpan, colSpan: originalColSpan } = getSpanInfo(rowIndex, colIndex);
                 const colSpan = rowIndex === 0 ? getColSpanForFirstRow(rowIndex, colIndex) : originalColSpan;
                 if (rowIndex === 0 && colIndex > 0 && headerInfo[0][colIndex] === headerInfo[0][colIndex - 1]) return null;
+
                 return (
                     <TableCell
-                    className="table-header"
-                    key={colIndex}
-                    rowSpan={rowSpan}
-                    colSpan={colSpan}
-                    align="center"
+                        className="table-header"
+                        key={colIndex}
+                        rowSpan={rowSpan}
+                        colSpan={colSpan}
+                        align="center"
                     >
                     {cell}
                     </TableCell>

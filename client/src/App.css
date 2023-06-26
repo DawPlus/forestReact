@@ -113,10 +113,15 @@
   min-width: 80px;
   padding : 10px
 }
-
+.insertForm .table-header{
+  width : 100px
+}
+.insertForm .table-header:first-child {
+  width: 60px; /* 너비 값에 맞게 조정 */
+}
 .insertForm tr th, .insertForm tr td { 
   white-space: nowrap;
-  padding : 5px
+  padding : 10px 5px
 }
 /* 데이트피커 빨간줄 제거 */
 .noneRed label{
