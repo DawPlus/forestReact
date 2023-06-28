@@ -114,7 +114,9 @@
   padding : 10px
 }
 .insertForm .table-header{
-  width : 100px
+  width : 100px;
+  font-size: 13px;
+  font-weight: bold;
 }
 .insertForm .table-header:first-child {
   width: 60px; /* 너비 값에 맞게 조정 */

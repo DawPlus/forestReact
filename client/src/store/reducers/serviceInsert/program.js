@@ -13,10 +13,10 @@ const initialState = {
         id : "1", 
         chk : false, 
         PROGRAM_SEQ : "",
-        SEX : "", // 성별
+        SEX : "미기재", // 성별
         AGE : "", // 연령
-        RESIDENCE : "", // 거주지
-        JOB : "", // 직업
+        RESIDENCE : "미기재", // 거주지
+        JOB : "미기재", // 직업
         SCORE1 : "",
         SCORE2 : "",
         SCORE3 : "",
@@ -27,8 +27,7 @@ const initialState = {
         SCORE8 : "",
         SCORE9 : "",
         ETC_OPINION : "",
-        TYPE : "", // 참여구분
-       
+        TYPE : "미기재", // 참여구분
     }
 
     ],

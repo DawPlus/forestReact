@@ -15,147 +15,9 @@ import Select from "ui-component/select"
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-const HeaderCell = React.memo(({ name }) => {
-    return <TableCell align="center">{name}</TableCell>;
-});
+import DynamicTableHead from "ui-component/DynamicTableHead";
+import DynamicTableRow from "../component/dynamicTableRow";
 
-
-const TableRowComponent = React.memo(({ row, idx, onCheckChange, onChange }) => {
-
-    const sexItem=[
-        {label  :"남", value : "남"},
-        {label  :"여", value : "여"},
-        {label  :"미기재", value : "미기재"},
-    ]
-
-    const locationItem=[
-        {label : "서울", value : "서울"},
-        {label : "부산", value : "부산"},
-        {label : "대구", value : "대구"},
-        {label : "인천", value : "인천"},
-        {label : "광주", value : "광주"},
-        {label : "대전", value : "대전"},
-        {label : "울산", value : "울산"},
-        {label : "세종", value : "세종"},
-        {label : "경기", value : "경기"},
-        {label : "강원", value : "강원"},
-        {label : "충북", value : "충북"},
-        {label : "충남", value : "충남"},
-        {label : "전북", value : "전북"},
-        {label : "전남", value : "전남"},
-        {label : "경북", value : "경북"},
-        {label : "경남", value : "경남"},
-        {label : "제주", value : "제주"},
-        {label : "미기재", value : "미기재"}
-    ]
-
-    const jobItem=[
-        {label : "학생", value : "학생"},
-        {label : "자영업", value : "자영업"},
-        {label : "서비스직", value : "서비스직"},
-        {label : "판매영업직", value : "판매영업직"},
-        {label : "기능", value : "기능"},
-        {label : "단순노무직", value : "단순노무직"},
-        {label : "고위공직/임직원", value : "고위공직/임직원"},
-        {label : "임직원", value : "임직원"},
-        {label : "전문직", value : "전문직"},
-        {label : "일반사무직", value : "일반사무직"},
-        {label : "농림어업축산직", value : "농림어업축산직"},
-        {label : "주부", value : "주부"},
-        {label : "무직", value : "무직"},
-        {label : "기타", value : "기타"},
-        {label : "미기재", value : "미기재"},
-        
-        
-    ]
-
-
-    return (
-        <TableRow key={row.id}>
-            <TableCell>
-                {idx > 0 ?
-                <Checkbox checked={row.chk} value="" name="chk" onChange={onCheckChange(idx)}/>
-                : <></>}
-            </TableCell>
-            <TableCell>
-                    <Select items={sexItem}label="성별"value={row.SEX} name="SEX" onChange={onChange(idx)} style={{minWidth: "100px"}}/>
-            </TableCell>
-            <TableCell>
-                <TextField size="small" label="연령" value={row.AGE} name="AGE" onChange={onChange(idx)}/> 
-            </TableCell>
-            <TableCell>
-            <Select items={locationItem}label="거주지"value={row.RESIDENCE} name="RESIDENCE" onChange={onChange(idx)} style={{minWidth: "100px"}}/>
-            </TableCell>
-            <TableCell>
-            <Select items={jobItem}label="직업"value={row.JOB} name="JOB" onChange={onChange(idx)} style={{minWidth: "100px"}}/>
-            </TableCell>
-            <TableCell>
-                <TextField size="small" label="숙소(문항1)" value={row.SCORE1} name="SCORE1" onChange={onChange(idx)}/> 
-            </TableCell>
-            <TableCell>
-                <TextField size="small" label="숙소(문항2)" value={row.SCORE2} name="SCORE2" onChange={onChange(idx)}/> 
-            </TableCell>
-            <TableCell>
-                <TextField size="small" label="식당(문항3)" value={row.SCORE3} name="SCORE3" onChange={onChange(idx)}/> 
-            </TableCell>
-            <TableCell>
-                <TextField size="small" label="식당(문항4)" value={row.SCORE4} name="SCORE4" onChange={onChange(idx)}/> 
-            </TableCell>
-            <TableCell>
-                <TextField size="small" label="프로그램장소(문항5)" value={row.SCORE5} name="SCORE5" onChange={onChange(idx)}/> 
-            </TableCell>
-            <TableCell>
-                <TextField size="small" label="프로그램장소(문항6)" value={row.SCORE6} name="SCORE6" onChange={onChange(idx)}/> 
-            </TableCell>
-            <TableCell>
-                <TextField size="small" label="프로그램장소(문항7)" value={row.SCORE7} name="SCORE7" onChange={onChange(idx)}/> 
-            </TableCell>
-            <TableCell>
-                <TextField size="small" label="야외(문항8)" value={row.SCORE8} name="SCORE8" onChange={onChange(idx)}/> 
-            </TableCell>
-            <TableCell>
-                <TextField size="small" label="야외(문항9)" value={row.SCORE9} name="SCORE9" onChange={onChange(idx)}/> 
-            </TableCell>
-            <TableCell>
-                <TextField size="small" label="야외(문항10)" value={row.SCORE10} name="SCORE10" onChange={onChange(idx)}/> 
-            </TableCell>
-            <TableCell>
-                <TextField size="small" label="기타의견" value={row.FACILITY_OPINION} name="FACILITY_OPINION" onChange={onChange(idx)}/> 
-            </TableCell>
-
-            <TableCell>
-                <TextField size="small" label="운영(문항1)" value={row.SCORE11} name="SCORE11" onChange={onChange(idx)}/> 
-            </TableCell>
-            <TableCell>
-                <TextField size="small" label="운영(문항2)" value={row.SCORE12} name="SCORE12" onChange={onChange(idx)}/> 
-            </TableCell>
-            <TableCell>
-                <TextField size="small" label="운영(문항3)" value={row.SCORE13} name="SCORE13" onChange={onChange(idx)}/> 
-            </TableCell>
-
-            <TableCell>
-                <TextField size="small" label="식사(문항4)" value={row.SCORE14} name="SCORE14" onChange={onChange(idx)}/> 
-            </TableCell>
-            <TableCell>
-                <TextField size="small" label="식사(문항5)" value={row.SCORE15} name="SCORE15" onChange={onChange(idx)}/> 
-            </TableCell>
-            <TableCell>
-                <TextField size="small" label="식사(문항6)" value={row.SCORE16} name="SCORE16" onChange={onChange(idx)}/> 
-            </TableCell>
-
-            <TableCell>
-                <TextField size="small" label="기타의견" value={row.OPERATION_OPINION} name="OPERATION_OPINION" onChange={onChange(idx)}/> 
-            </TableCell>
-
-            <TableCell>
-                <TextField size="small" label="잠재적 관광수요(문항8)" value={row.SCORE17} name="SCORE17" onChange={onChange(idx)}/> 
-            </TableCell>
-            <TableCell>
-                <TextField size="small" label="잠재적 관광수요(문항9)" value={row.SCORE18} name="SCORE18" onChange={onChange(idx)}/> 
-            </TableCell>
-    </TableRow>
-    );
-});
 
 
 
@@ -163,35 +25,38 @@ const InsertForm = ()=>{
 
     const dispatch = useDispatch();
 
-
-    const headers = [
-        { name  : '선택', width : 50},
-        { name  : '성별', width : 50},
-        { name  : '연령', width : 50},
-        { name  : '거주지', width : 50},
-        { name  : '직업', width : 50},
-        { name  : '숙소 (문항1)', width : 100},
-        { name  : '숙소 (문항2)', width : 100},
-        { name  : '식당 (문항3)', width : 100},
-        { name  : '식당 (문항4)', width : 100},
-        { name  : '프로그램 장소 (문항5)', width : 100},
-        { name  : '프로그램 장소 (문항6)', width : 100},
-        { name  : '프로그램 장소 (문항7)', width : 100},
-        { name  : '야외 (문항8)', width : 100},
-        { name  : '야외 (문항9)', width : 100},
-        { name  : '야외 (문항10)', width : 100},
-        { name  : '기타의견', width : 100},
-        { name  : '운영 (문항1)', width : 100},
-        { name  : '운영 (문항2)', width : 100},
-        { name  : '운영 (문항3)', width : 100},
-        { name  : '식사 (문항4)', width : 100},
-        { name  : '식사 (문항5)', width : 100},
-        { name  : '식사 (문항6)', width : 100},
-        { name  : '기타의견', width : 100},
-        { name  : '잠재적 관광수요 (문항8)', width : 100},
-        { name  : '잠재적 관광수요 (문항9)', width : 100},
+    const fields =[
+        {name : 'SEX', label:"성별", type : "select"},
+        {name : 'AGE', label:"연령" },
+        {name : 'RESIDENCE', label:"거주지", type : "select"},
+        {name : 'JOB', label:"직업", type : "select"},
+        {name : 'SCORE1', label:"숙소(문항1)" },
+        {name : 'SCORE2', label:"숙소(문항2)" },
+        {name : 'SCORE3', label:"식당(문항3)" },
+        {name : 'SCORE4', label:"식당(문항4)" },
+        {name : 'SCORE5', label:"프로그램장소(문항5)" },
+        {name : 'SCORE6', label:"프로그램장소(문항6)" },
+        {name : 'SCORE7', label:"프로그램장소(문항7)" },
+        {name : 'SCORE8', label:"야외(문항8)" },
+        {name : 'SCORE9', label:"야외(문항9)" },
+        {name : 'SCORE10', label:"야외(문항10)" },
+        {name : 'FACILITY_OPINION', label:"기타의견" },
+        {name : 'SCORE11', label:"운영(문항1)" },
+        {name : 'SCORE12', label:"운영(문항2)" },
+        {name : 'SCORE13', label:"운영(문항3)" },
+        {name : 'SCORE14', label:"식사(문항4)" },
+        {name : 'SCORE15', label:"식사(문항5)" },
+        {name : 'SCORE16', label:"식사(문항6)" },
+        {name : 'OPERATION_OPINION', label:"기타의견" },
+        {name : 'SCORE17', label:"잠재적 관광수요(문항8)" },
+        {name : 'SCORE18', label:"잠재적 관광수요(문항9)" }
     ];
+
     
+    const headerInfo = [
+        ['선택', '성별', '연령', '거주지', '직업', '숙소', '숙소', '식당', '식당', '프로그램 장소', '프로그램 장소', '프로그램 장소', '야외', '야외', '야외', '기타의견', '운영', '운영', '운영', '식사', '식사', '식사', '기타의견', '잠재적 관광수요','잠재적 관광수요'],
+        ['', '', '', '', '', '문항1', '문항2', '문항3', '문항4', '문항5', '문항6', '문항7', '문항8', '문항9', '문항10', '', '문항1', '문항2', '문항3', '문항4', '문항5', '문항6', '', '문항8','문항9']        
+    ]
     const { rows} = useSelector(s=> getState(s));
 
     const onChange = useCallback((idx) => (e) => {
@@ -221,25 +86,9 @@ const InsertForm = ()=>{
             </IconButton>
             </div>
             <TableContainer style={{minHeight: "560px" , paddingBottom : "50px" }}>
-                <Table className="insertForm">
-                    <TableHead>
-                        <TableRow>
-                            {headers.map((header, idx) => (
-                                <HeaderCell key={idx} name={header.name} />
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody style={{minHeight:"500px"}}>
-                    {rows.map((row, idx) => (
-                        <TableRowComponent
-                            key={row.id}
-                            row={row}
-                            idx={idx}
-                            onCheckChange={onCheckChange}
-                            onChange={onChange}
-                        />
-                        ))}
-                    </TableBody>
+                <Table className="insertForm custom-table">
+                    <DynamicTableHead headerInfo={headerInfo} />
+                    <DynamicTableRow rows={rows} fields={fields} onCheckChange={onCheckChange} onChange={onChange} />
                 </Table>
             </TableContainer>
     </>
