@@ -1,18 +1,13 @@
 import React ,{useCallback}from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {getState, actions} from"store/reducers/serviceInsert/service"
+import {getState, actions} from"store/reducers/serviceInsert/program"
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
-
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import DynamicTableHead from "ui-component/DynamicTableHead";
 import DynamicTableRow from "../component/dynamicTableRow";
-
-
-
-
 
 const InsertForm = ()=>{
 
@@ -53,13 +48,17 @@ const InsertForm = ()=>{
     }, [dispatch]);
 
     const removeRow = useCallback(() => {
-        const selectedRowIds = rows.filter(i => i.chk).map(({ id, SERVICE_SEQ }) => ({id, SERVICE_SEQ}));
+        const selectedRowIds = rows.filter(i => i.chk).map(({ id, PROGRAM_SEQ }) => ({id, PROGRAM_SEQ}));
         dispatch(actions.removeRow(selectedRowIds));
     }, [dispatch, rows]);
 
     const onCheckChange = useCallback((idx) => (e) => {
         dispatch(actions.changeValue({ index: idx, key: "chk", value: e.target.checked }));
     }, [dispatch]);
+
+
+
+
     return <>   
             <div style={{padding : "15px 5px"}}>
                 <IconButton color="primary" onClick={onAdd}>

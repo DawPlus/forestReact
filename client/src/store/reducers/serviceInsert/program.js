@@ -32,11 +32,11 @@ const initialState = {
 
     ],
     searchInfo : {
-        OPENDAY : "", //시작일자
-        AGENCY : "", // 기관명
-        EVAL_DATE : "", // 실시일자
+        OPENDAY : "2021-10-16", //시작일자
+        AGENCY : "태백시장애인복지관", // 기관명
+        EVAL_DATE : "2021-10-16", // 실시일자
         PTCPROGRAM : "", // 참여프로그램
-        PROGRAM_NAME : "", // 프로그램명
+        PROGRAM_NAME : "우드버닝", // 프로그램명
         TEACHER : "", // 강사명
         PLACE : "", // 장소 
         BUNYA : "", // 분야 
@@ -45,7 +45,7 @@ const initialState = {
 };
 
 const action = {
-  getPreviousServiceList : createAction(`${name}/getPreviousServiceList`, (data) => ({payload : data})),
+  getPreviousProgramList : createAction(`${name}/getPreviousProgramList`, (data) => ({payload : data})),
   getPreviousServiceListAfterSave : createAction(`${name}/getPreviousServiceListAfterSave`, (data) => ({payload : data}))
 }
 
@@ -62,7 +62,7 @@ export const {getState, reducer, actions} = createCustomSlice({
     removeRow : (state, {payload})=>{
 
         const filteredList = payload.map(i=> i.id);
-        const deleteSeq = payload.map(i=> i.SERVICE_SEQ);
+        const deleteSeq = payload.map(i=> i.PROGRAM_SEQ); // seq
 
         state.deleteRow = [...new Set([...state.deleteRow, ...deleteSeq])];
         state.rows = state.rows.filter((i)=> !filteredList.includes(i.id))
@@ -79,7 +79,7 @@ export const {getState, reducer, actions} = createCustomSlice({
     },
 
 
-    getPreviousServiceList_SUCCESS : (state, {payload  : {data}})=>{
+    getPreviousProgramList_SUCCESS : (state, {payload  : {data}})=>{
       if(data.length === 0 ){
         Swal.fire({ icon: 'warning', title: '확인', text: "기존 입력된 데이터가 없습니다.", })
       }else{

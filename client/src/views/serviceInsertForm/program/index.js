@@ -23,8 +23,6 @@ const Service = ()=>{
 
     const {rows, deleteRow, searchInfo} = useSelector(s=> getState(s));
     
-
-
     const headerInfo = [
         [ '성별', '연령', '거주지', '직업', '참여구분', '강사', '강사', '강사', '구성/품질', '구성/품질', '구성/품질', '효과성', '효과성', '효과성(문항9)', '기타의견'],
         [ '', '', '', '', '', '문항1', '문항2', '문항3', '문항4', '문항5', '문항6', '문항7', '문항8', '문항9', '' ]
@@ -32,65 +30,62 @@ const Service = ()=>{
 
 
     const cellData = rows.map((i,idx) => Object.values({
-        idx : idx + 1, 
+        idx : idx + 1,  
         SEX : i.SEX,
-        AGE : i.AGE, 
-        RESIDENCE : i.RESIDENCE, 
-        JOB : i.JOB, 
-        SCORE1 : i.SCORE1, 
-        SCORE2 : i.SCORE2, 
-        SCORE3 : i.SCORE3, 
-        SCORE4 : i.SCORE4, 
-        SCORE5 : i.SCORE5, 
-        SCORE6 : i.SCORE6, 
-        SCORE7 : i.SCORE7, 
-        SCORE8 : i.SCORE8, 
-        SCORE9 : i.SCORE9, 
-        SCORE10 : i.SCORE10, 
-        FACILITY_OPINION : i.FACILITY_OPINION, 
-        SCORE11 : i.SCORE11, 
-        SCORE12 : i.SCORE12, 
-        SCORE13 : i.SCORE13, 
-        SCORE14 : i.SCORE14, 
-        SCORE15 : i.SCORE15, 
-        SCORE16 : i.SCORE16, 
-        OPERATION_OPINION : i.OPERATION_OPINION, 
-        SCORE17 : i.SCORE17, 
-        SCORE18 : i.SCORE18, 
+        AGE : i.AGE,
+        RESIDENCE : i.RESIDENCE,
+        JOB : i.JOB,
+        SCORE1 : i.SCORE1,
+        SCORE2 : i.SCORE2,
+        SCORE3 : i.SCORE3,
+        SCORE4 : i.SCORE4,
+        SCORE5 : i.SCORE5,
+        SCORE6 : i.SCORE6,
+        SCORE7 : i.SCORE7,
+        SCORE8 : i.SCORE8,
+        SCORE9 : i.SCORE9,
+        ETC_OPINION : i.ETC_OPINION,
+        TYPE : i.TYPE,
+        OPENDAY : i.OPENDAY,
+        AGENCY : i.AGENCY,
+        EVAL_DATE : i.EVAL_DATE,
+        PTCPROGRAM : i.PTCPROGRAM,
+        PROGRAM_NAME : i.PROGRAM_NAME,
+        TEACHER : i.TEACHER,
+        PLACE : i.PLACE,
+        BUNYA : i.BUNYA,
     }));
+
+    const wscols = [ 
+        {wch:15},
+        {wch:15},
+        {wch:15},
+        {wch:15},
+        {wch:15},
+        {wch:15},
+        {wch:15},
+        {wch:15},
+        {wch:15},
+        {wch:20},
+        {wch:20},
+        {wch:20},
+        {wch:15},
+        {wch:15},
+        {wch:15},
+        {wch:15},
+        {wch:15},
+        {wch:15},
+        {wch:15},
+        {wch:15},
+        {wch:15},
+        {wch:15},
+        {wch:15},
+        {wch:25},
+        {wch:25},
+    ];
+
     
-        const wscols = [ 
-            {wch:15},
-            {wch:15},
-            {wch:15},
-            {wch:15},
-            {wch:15},
-            {wch:15},
-            {wch:15},
-            {wch:15},
-            {wch:15},
-            {wch:20},
-            {wch:20},
-            {wch:20},
-            {wch:15},
-            {wch:15},
-            {wch:15},
-            {wch:15},
-            {wch:15},
-            {wch:15},
-            {wch:15},
-            {wch:15},
-            {wch:15},
-            {wch:15},
-            {wch:15},
-            {wch:25},
-            {wch:25},
-        ];
-    
-
-    const downloadExcel = useDownloadExcel({headerInfo, cellData, wscols, filename  : "서비스환경만족도"});
-
-
+    const downloadExcel = useDownloadExcel({headerInfo, cellData, wscols, filename  : "프로그램 만족도 "});
 
     const array = [ "SEX", "AGE", "RESIDENCE", "JOB", "SCORE1", "SCORE2", "SCORE3", "SCORE4", "SCORE5", "SCORE6", "SCORE7", "SCORE8", "SCORE9", "SCORE10", "FACILITY_OPINION", "SCORE11", "SCORE12", "SCORE13", "SCORE14", "SCORE15", "SCORE16", "OPERATION_OPINION", "SCORE17", "SCORE18", ];
     
@@ -157,11 +152,11 @@ const Service = ()=>{
 
     const onSearch = ()=>{
         const {   AGENCY , OPENDAY , EVAL_DATE } = searchInfo;
-        if([AGENCY , OPENDAY , EVAL_DATE ].includes("")){
-            Swal.fire({ icon: 'warning', title: '확인', text: '필수 조회조건(기관명, 시작일자, 실시일자)을 입력해 주십시오', });
-            return;
-        }
-        dispatch(actions.getPreviousServiceList({data : searchInfo}))
+        // if([AGENCY , OPENDAY , EVAL_DATE ].includes("")){
+        //     Swal.fire({ icon: 'warning', title: '확인', text: '필수 조회조건(기관명, 시작일자, 실시일자)을 입력해 주십시오', });
+        //     return;
+        // }
+        dispatch(actions.getPreviousProgramList({data : searchInfo}))
     }
 
     return <>
