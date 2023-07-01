@@ -5,7 +5,7 @@ import SearchInfo from "./searchInfo"
 import Button from '@mui/material/Button';
 import callApi from "utils/callApi";
 import { useDispatch, useSelector } from "react-redux";
-import { actions, getState } from "store/reducers/serviceInsert/program";
+import { actions, getState } from "store/reducers/serviceInsert/healing";
 import Swal from "sweetalert2";
 import useDownloadExcel from "utils/useDownloadExcel";
 import { generateMergeInfo } from "utils/utils";
@@ -24,27 +24,68 @@ const Service = ()=>{
 
     const {rows, deleteRow, searchInfo, type} = useSelector(s=> getState(s));
     
+   
+   
+    
     const headerInfo = [
-        [ '성별', '연령', '거주지', '직업', '참여구분', '강사', '강사', '강사', '구성/품질', '구성/품질', '구성/품질', '효과성', '효과성', '효과성', '기타의견'
-        , '시작일자' 
-        , '기관명' 
-        , '실시일자' 
-        , '참여프로그램' 
-        , '프로그램명' 
-        , '강사명'         
-        , '장소' 
-        , '분야' 
+        [ '이름', '성별', '연령', '거주지', '직업', '과거상담/치유서비스 경험', 
+            '욕구충족',
+            '욕구충족',
+            '긍정정서',
+            '긍정정서',
+            '긍정정서',
+            '자기이해',
+            '자기이해',
+            '자기이해',
+            '자기이해',
+            '마음관리기술',
+            '마음관리기술',
+            '마음관리기술',
+            '정서능력측면',
+            '정서능력측면',
+            '정서능력측면',
+            '정서능력측면',
+            '영성측면',
+            '영성측면',
+            '영성측면',
+            '삶의조망측면',
+            '삶의조망측면',
+            '삶의조망측면',
         ],
-        [ '', '', '', '', '', '문항1', '문항2', '문항3', '문항4', '문항5', '문항6', '문항7', '문항8', '문항9', '',
-            '' , '' , '' , '' , '' , '' , '' , '' ]
+        [ '', '', '', '', '', '',
+            '문항1',
+            '문항2',
+            '문항3',
+            '문항4',
+            '문항5',
+            '문항6',
+            '문항7',
+            '문항8',
+            '문항9',
+            '문항10',
+            '문항11',
+            '문항12',
+            '문항1',
+            '문항2',
+            '문항3',
+            '문항4',
+            '문항5',
+            '문항6',
+            '문항7',
+            '문항8',
+            '문항9',
+            '문항10'
+        ],
     ]
 
+    
     const cellData = rows.map((i,idx) => Object.values({
-        SEX : i.SEX,
-        AGE : i.AGE,
-        RESIDENCE : i.RESIDENCE,
-        JOB : i.JOB,
-        TYPE : i.TYPE,
+        NAME  : i.NAME,
+        SEX  : i.SEX,
+        AGE  : i.AGE,
+        RESIDENCE  : i.RESIDENCE,
+        JOB  : i.JOB,
+        PAST_STRESS_EXPERIENCE  : i.PAST_STRESS_EXPERIENCE,
         SCORE1 : i.SCORE1,
         SCORE2 : i.SCORE2,
         SCORE3 : i.SCORE3,
@@ -54,22 +95,27 @@ const Service = ()=>{
         SCORE7 : i.SCORE7,
         SCORE8 : i.SCORE8,
         SCORE9 : i.SCORE9,
-        ETC_OPINION : i.ETC_OPINION,
-        OPENDAY : i.OPENDAY,
-        AGENCY : i.AGENCY,
-        EVAL_DATE : i.EVAL_DATE,
-        PTCPROGRAM : i.PTCPROGRAM,
-        PROGRAM_NAME : i.PROGRAM_NAME,
-        TEACHER : i.TEACHER,
-        PLACE : i.PLACE,
-        BUNYA : i.BUNYA,
+        SCORE10 : i.SCORE10,
+        SCORE11 : i.SCORE11,
+        SCORE12 : i.SCORE12,
+        SCORE13 : i.SCORE13,
+        SCORE14 : i.SCORE14,
+        SCORE15 : i.SCORE15,
+        SCORE16 : i.SCORE16,
+        SCORE17 : i.SCORE17,
+        SCORE18 : i.SCORE18,
+        SCORE19 : i.SCORE19,
+        SCORE20 : i.SCORE20,
+        SCORE21 : i.SCORE21,
+        SCORE22 : i.SCORE22,
     }));
+    const title = "힐링서비스 효과평가 ";
 
     const wscols = [ {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:20}, {wch:20}, {wch:20}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:25}, {wch:25}, ];
     
     // Merge Info 
     const merges = generateMergeInfo(headerInfo);
-    const downloadExcel = useDownloadExcel({headerInfo, cellData, wscols,merges,  filename  : "프로그램 만족도 "});
+    const downloadExcel = useDownloadExcel({headerInfo, cellData, wscols,merges,  filename  : title});
 
     const onSave = ()=>{
         const hasEmptyValues = Object.values(searchInfo).some(value => !value);
@@ -81,13 +127,14 @@ const Service = ()=>{
                 })
             return;
         } 
-        const excludeValues = ['PROGRAM_SEQ', 'chk']; // 비어있는지 체크에서 제외하고 싶은 값들
+        const excludeValues = ['HEALING_SEQ', 'chk']; // 비어있는지 체크에서 제외하고 싶은 값들
 
         
     const isCheck = rows.some((row) => {
         return Object.entries(row).some(([key, value]) => {
         if (!excludeValues.includes(key)) {
-            return !value || value.trim() === "";
+            console.log(value)
+            return !value || (value+"").trim() === "";
         }
         return false;
         });
@@ -108,9 +155,8 @@ const Service = ()=>{
             return { ...rest, ...searchInfo };
         });
 
-
         Swal.fire({
-            title: '프로그램 만족도 등록',
+            title,
             text: `${data.length}개의 항목을 등록 하시겠습니까?`,
             icon: 'warning',
             showCancelButton: true,
@@ -129,7 +175,10 @@ const Service = ()=>{
                             text: "정상등록 되었습니다.",
                             }).then(()=>{
                                 downloadExcel()
-                                dispatch(actions.getPreviousProgramListAfterSave({data : searchInfo, type}))
+                                dispatch(actions.getListAfterSave({data : {
+                                    AGENCY  : searchInfo.AGENCY,
+                                    OPENDAY : searchInfo.OPENDAY,
+                                }, type}))
                             });  
                     }
                 })
@@ -140,9 +189,15 @@ const Service = ()=>{
 
 
     const onSearch = ()=>{
-        const {   AGENCY , OPENDAY , EVAL_DATE, PROGRAM_NAME} = searchInfo;
-        dispatch(actions.getPreviousProgramList({data : {
-            AGENCY , OPENDAY , EVAL_DATE, PROGRAM_NAME
+        const {   AGENCY , OPENDAY , EVAL_DATE, PROGRAM_NAME, PV} = searchInfo;
+
+        if([AGENCY , OPENDAY , EVAL_DATE, PROGRAM_NAME, PV].includes("")){
+            alert("조회조건을 선택하세요 ");
+            return; 
+        }
+
+        dispatch(actions.getList({data : {
+            AGENCY , OPENDAY , EVAL_DATE, PROGRAM_NAME , PV
         }, type }))
     }
 

@@ -5,6 +5,11 @@ import Select from "ui-component/select";
 
 import Program from "./program"
 import Service from "./service"
+import Counsel from "./counsel"
+import Prevent from "./prevent"
+import Healing from "./healing"
+import Hrv from "./hrv"
+import Vibra from "./vibra"
 
 const ServiceInsertForm = ()=>{
 
@@ -31,7 +36,12 @@ const ServiceInsertForm = ()=>{
             {
                 {
                     "serviceInsertForm" : <Service/>,
-                    "programInsertForm" : <Program/>
+                    "programInsertForm" : <Program/>,
+                    "counselInsertForm" : <Counsel/>,
+                    "preventInsertForm" : <Prevent/>,
+                    "healingInsertForm" : <Healing/>,
+                    "hrvInsertForm" : <Hrv/>,
+                    "vibraInsertForm" : <Vibra/>,
                 }[type]
             }
         </>);

@@ -5,7 +5,7 @@ import SearchInfo from "./searchInfo"
 import Button from '@mui/material/Button';
 import callApi from "utils/callApi";
 import { useDispatch, useSelector } from "react-redux";
-import { actions, getState } from "store/reducers/serviceInsert/program";
+import { actions, getState } from "store/reducers/serviceInsert/hrv";
 import Swal from "sweetalert2";
 import useDownloadExcel from "utils/useDownloadExcel";
 import { generateMergeInfo } from "utils/utils";
@@ -23,53 +23,36 @@ const Service = ()=>{
 
 
     const {rows, deleteRow, searchInfo, type} = useSelector(s=> getState(s));
-    
     const headerInfo = [
-        [ '성별', '연령', '거주지', '직업', '참여구분', '강사', '강사', '강사', '구성/품질', '구성/품질', '구성/품질', '효과성', '효과성', '효과성', '기타의견'
-        , '시작일자' 
-        , '기관명' 
-        , '실시일자' 
-        , '참여프로그램' 
-        , '프로그램명' 
-        , '강사명'         
-        , '장소' 
-        , '분야' 
-        ],
-        [ '', '', '', '', '', '문항1', '문항2', '문항3', '문항4', '문항5', '문항6', '문항7', '문항8', '문항9', '',
-            '' , '' , '' , '' , '' , '' , '' , '' ]
+        ['ID', '이름', '주민등록번호', '성별', '연령', '자율신경활성도', '자율신경균형도', '스트레스저항도', '스트레스지수', '피로도지수', '평균심박동수', '심장안정도', '이상심박동수'],
+        ['', '', '', '', '', '', '', '', '', '', '', '', '', ]
     ]
 
+    
     const cellData = rows.map((i,idx) => Object.values({
+        ID : i.ID,
+        DATE : i.DATE,
+        NAME : i.NAME,
+        JUMIN : i.JUMIN,
         SEX : i.SEX,
         AGE : i.AGE,
-        RESIDENCE : i.RESIDENCE,
-        JOB : i.JOB,
-        TYPE : i.TYPE,
-        SCORE1 : i.SCORE1,
-        SCORE2 : i.SCORE2,
-        SCORE3 : i.SCORE3,
-        SCORE4 : i.SCORE4,
-        SCORE5 : i.SCORE5,
-        SCORE6 : i.SCORE6,
-        SCORE7 : i.SCORE7,
-        SCORE8 : i.SCORE8,
-        SCORE9 : i.SCORE9,
-        ETC_OPINION : i.ETC_OPINION,
-        OPENDAY : i.OPENDAY,
-        AGENCY : i.AGENCY,
-        EVAL_DATE : i.EVAL_DATE,
-        PTCPROGRAM : i.PTCPROGRAM,
-        PROGRAM_NAME : i.PROGRAM_NAME,
-        TEACHER : i.TEACHER,
-        PLACE : i.PLACE,
-        BUNYA : i.BUNYA,
+        NUM1 : i.NUM1,
+        NUM2 : i.NUM2,
+        NUM3 : i.NUM3,
+        NUM4 : i.NUM4,
+        NUM5 : i.NUM5,
+        NUM6 : i.NUM6,
+        NUM7 : i.NUM7,
+        NUM8 : i.NUM8,
     }));
+
+    const title = "HRV 측정검사";
 
     const wscols = [ {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:20}, {wch:20}, {wch:20}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:25}, {wch:25}, ];
     
     // Merge Info 
     const merges = generateMergeInfo(headerInfo);
-    const downloadExcel = useDownloadExcel({headerInfo, cellData, wscols,merges,  filename  : "프로그램 만족도 "});
+    const downloadExcel = useDownloadExcel({headerInfo, cellData, wscols,merges,  filename  : title});
 
     const onSave = ()=>{
         const hasEmptyValues = Object.values(searchInfo).some(value => !value);
@@ -81,13 +64,14 @@ const Service = ()=>{
                 })
             return;
         } 
-        const excludeValues = ['PROGRAM_SEQ', 'chk']; // 비어있는지 체크에서 제외하고 싶은 값들
+        const excludeValues = ['HRV_SEQ', 'chk']; // 비어있는지 체크에서 제외하고 싶은 값들
 
         
     const isCheck = rows.some((row) => {
         return Object.entries(row).some(([key, value]) => {
         if (!excludeValues.includes(key)) {
-            return !value || value.trim() === "";
+            console.log(value)
+            return !value || (value+"").trim() === "";
         }
         return false;
         });
@@ -101,16 +85,16 @@ const Service = ()=>{
             return;
         }
 
-
+    
         // 데이터 가공  
         const data = rows.map((row) => {
-            const { chk, id, ...rest } = row;
+            const { chk, idx, ...rest } = row;
             return { ...rest, ...searchInfo };
         });
 
-
+    
         Swal.fire({
-            title: '프로그램 만족도 등록',
+            title,
             text: `${data.length}개의 항목을 등록 하시겠습니까?`,
             icon: 'warning',
             showCancelButton: true,
@@ -129,7 +113,10 @@ const Service = ()=>{
                             text: "정상등록 되었습니다.",
                             }).then(()=>{
                                 downloadExcel()
-                                dispatch(actions.getPreviousProgramListAfterSave({data : searchInfo, type}))
+                                dispatch(actions.getListAfterSave({data : {
+                                    AGENCY  : searchInfo.AGENCY,
+                                    OPENDAY : searchInfo.OPENDAY,
+                                }, type}))
                             });  
                     }
                 })
@@ -140,9 +127,9 @@ const Service = ()=>{
 
 
     const onSearch = ()=>{
-        const {   AGENCY , OPENDAY , EVAL_DATE, PROGRAM_NAME} = searchInfo;
-        dispatch(actions.getPreviousProgramList({data : {
-            AGENCY , OPENDAY , EVAL_DATE, PROGRAM_NAME
+        const {   AGENCY } = searchInfo;
+        dispatch(actions.getList({data : {
+            AGENCY 
         }, type }))
     }
 

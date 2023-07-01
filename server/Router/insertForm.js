@@ -82,11 +82,19 @@ router.post('/getPreviousServiceList', (req, res)=>{
 
 // 프로그램 조회
 router.post('/list', (req, res)=>{
+
     const {data, type} = req.body; 
-    
-    const {AGENCY, OPENDAY, EVAL_DATE, PROGRAM_NAME} = data;
-    const sql = `SELECT * FROM program_satisfaction WHERE AGENCY =? AND OPENDAY = ? AND EVAL_DATE = ? AND PROGRAM_NAME =? `;
-    maria(sql,[AGENCY, OPENDAY, EVAL_DATE, PROGRAM_NAME]).then((rows) => {
+
+    const {table} = dbTable[type]
+    console.log(table)
+    // Where 
+    const conditions = Object.entries(data) .filter(([key, value]) => value !== '') .map(([key, value]) => { return `${key} = ?`; });
+    // Value
+    const values = Object.values(data) .filter(value => value !== '');
+    // sql
+    const sql = `SELECT * FROM ${table} WHERE ${conditions.join(' AND ')}`;
+    console.log(sql, values)
+    maria(sql, values).then((rows) => {
         res.json(rows)
     }).catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));
 });
@@ -106,6 +114,7 @@ router.post('/create', (req, res)=>{
 
 
     const mergedString = fields.join(",")
+
     const _rowDelete = data.map(i=> i[key])
     
     // 삭제 후 Insert 
@@ -125,12 +134,19 @@ router.post('/create', (req, res)=>{
     const regId = user_name;
 
 
+    const desc =  {
+        program_satisfaction  : "프로그램 만족도 입력",
+        counsel_service  : "상담/치유서비스 효과평가",
+        prevent_service  : "예방서비스 효과평가",
+        healing_service  : "힐링서비스 효과평가",
+        hrv_service  : "HRV 측정 검사",
+        vibra_service  : "바이브라 측정 검사",
+    }
 
-    const des = '서비스환경 만족도 입력';
 
     deletePromise
         .then(() =>  maria(insertQuery))
-        .then(() => createHistory(regId, des))
+        .then(() => createHistory(regId, desc[type]))
         .then(() => res.json({ result: true }))
         .catch((err) => {
             console.error(err);
