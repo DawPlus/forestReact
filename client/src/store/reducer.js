@@ -19,6 +19,9 @@ import updateDeleteSaga from "./reducers/updateDeleteSaga";
 import serviceInsert from "./reducers/serviceInsert/reducer"
 import serviceInsertSaga from "./reducers/serviceInsert/saga";
 
+import {reducer as yearMonthResult} from "./reducers/yearMonthResultReducer"
+import yearMonthResultSaga from "./reducers/yearMonthResultSaga";
+
 
 // ==============================|| COMBINE REDUCER ||============================== //
 
@@ -29,7 +32,8 @@ const reducer = combineReducers({
     management ,
     programResult,
     updateDelete,
-    serviceInsert
+    serviceInsert,
+    yearMonthResult
 });
 
 
@@ -40,7 +44,8 @@ export function* rootSaga() {
         managementSaga(),
         programResultSaga(),
         updateDeleteSaga(),
-        serviceInsertSaga()
+        serviceInsertSaga(),
+        yearMonthResultSaga(),
     ]); // all은 배열안의 여러 사가를 동시에 실행시킨다.
 } 
 

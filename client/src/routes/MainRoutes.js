@@ -30,6 +30,7 @@ const SearchResult = Loadable(lazy(() => import('views/programResult/searchResul
 
 const UpdateDelete = Loadable(lazy(() => import('views/common/updateDelete')));
 const ServiceInsertForm = Loadable(lazy(() => import('views/serviceInsertForm')));
+const YearMonthResult = Loadable(lazy(() => import('views/yearMonthResult')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -90,6 +91,8 @@ const MainRoutes = [{
         // 수정 / 삭제 
         { path: 'updateDelete', element: <UpdateDelete /> },
         { path: 'serviceInsertForm', element: <ServiceInsertForm /> },
+        // 운영통계
+        { path: 'yearMonthResult', element: <YearMonthResult /> },
     ]
 }];
 

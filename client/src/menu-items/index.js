@@ -40,7 +40,7 @@ const menuItems = {
                             id: 'year',
                             title: '연/월통계',
                             type: 'item',
-                            url: '/pages/login/login3',
+                            url: '/yearMonthResult',
                         },
                         {
                             id: 'program',
