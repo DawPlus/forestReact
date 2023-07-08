@@ -7,6 +7,9 @@ import { actions, getState } from "store/reducers/yearMonthResultReducer";
 import { Grid } from "@mui/material";
 import DatePicker from "ui-component/inputs/datePicker";
 import ParticipationType  from "./participationType";
+import ResidenceList  from "./residenceList";
+import ProgramOverview  from "./programOverview";
+import ProgramManage  from "./programManage";
 const YearMonthResult = ()=>{
 
     const dispatch = useDispatch();
@@ -20,7 +23,14 @@ const YearMonthResult = ()=>{
 
 
     const onSearch = ()=>{
+        // 참가유형
         dispatch(actions.getPartTypeList({ openday, endday }));
+        // 지역 목록
+        dispatch(actions.getResidenceList({ openday, endday }));
+        // 프로그램시행개요
+        dispatch(actions.getAllPrograms({ openday, endday }));
+        // 마족도
+        dispatch(actions.programManage({ openday, endday }));
     }
 
 
@@ -49,6 +59,10 @@ const YearMonthResult = ()=>{
         </MainCard>
         <MainCard style={{marginTop : "10px", minHeight: "400px"}}>
             <ParticipationType/>
+            <ResidenceList/>
+            <ProgramOverview/>
+            {/* 프로그램윤영 */}
+            <ProgramManage/>
         </MainCard>
     
     </>)

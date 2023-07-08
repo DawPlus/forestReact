@@ -3,11 +3,196 @@ const router = express.Router();
 const maria = require("../maria");
 
 
+// 프로그램 시행개요 
+
+
+
+
+// 프로그램운영
+router.post('/programManage', (req, res)=>{
+    const { openday, endday} = req.body;
+    let sql = `
+        SELECT 
+            PROGRAM_IN_OUT as PROGRAM_IN_OUT2
+        FROM 
+            BASIC_INFO
+        WHERE PROGRESS_STATE ="E"
+            AND OPENDAY BETWEEN ? AND ?
+    `;
+
+    let sql2 = `
+            SELECT
+                bunya,
+                ROUND(sum(SCORE1+SCORE2+SCORE3)/(count(Case WHEN SCORE1 != 0 then 1 END)+count(CASE WHEN SCORE2 !=0 then 1 END)+count(Case WHen SCORE3 !=0 then 1 END)),2)as program,
+                ROUND(sum(SCORE4+SCORE5+SCORE6)/(count(Case WHEN SCORE4 != 0 then 1 END)+count(CASE WHEN SCORE5 !=0 then 1 END)+count(Case WHen SCORE6 !=0 then 1 END)),2)as content,
+                ROUND(sum(SCORE7+SCORE8+SCORE9)/(count(Case WHEN SCORE8 != 0 then 1 END)+count(CASE WHEN SCORE7 !=0 then 1 END)+count(CASE WHEN SCORE9 !=0 then 1 END)),2)as effect
+			FROM PROGRAM_SATISFACTION
+            WHERE  OPENDAY BETWEEN ? AND ?
+			group by bunya
+    `;
+
+    Promise.all([
+        maria(sql, [openday, endday]),
+        maria(sql2, [openday, endday]),
+    
+    ])
+    .then((results) => {
+        let rows1 = results[0]; // the result from the first query
+        let rows2 = results[1]; // the result from the second query
+    
+        res.json({
+            manage: rows1,
+            bunya : rows2,
+            
+        });
+    })
+    .catch((err) => {
+        res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
+    });
+});
+
+
+//지원사항 , 서비스유형 
+router.post('/getAllPrograms', (req, res)=>{
+    const { openday, endday} = req.body;
+    let sql = `
+    SELECT
+        BIZ_PURPOSE,
+        SUM(CASE WHEN FIND_IN_SET('프로그램', REPLACE(SUPPORT, ' ', '')) > 0 THEN 1 ELSE 0 END) AS count_program,
+        SUM(CASE WHEN FIND_IN_SET('숙박', REPLACE(SUPPORT, ' ', '')) > 0 THEN 1 ELSE 0 END) AS count_accommodation,
+        SUM(CASE WHEN FIND_IN_SET('식사', REPLACE(SUPPORT, ' ', '')) > 0 THEN 1 ELSE 0 END) AS count_meal,
+        SUM(CASE WHEN FIND_IN_SET('기타', REPLACE(SUPPORT, ' ', '')) > 0 THEN 1 ELSE 0 END) AS count_etc,
+        SUM(CASE WHEN SUPPORT = '해당없음' THEN 1 ELSE 0 END) AS count_none,
+        COUNT(CASE WHEN SERVICE_TYPE = '산림교육' THEN 1 END) AS forest_edu,
+        COUNT(CASE WHEN SERVICE_TYPE = '산림치유' THEN 1 END) AS forest_healing,
+        COUNT(CASE WHEN SERVICE_TYPE = '행위중독치유' THEN 1 END) AS addict_healing,
+        COUNT(CASE WHEN SERVICE_TYPE = '행위중독예방' THEN 1 END) AS addict_prevent,
+        COUNT(CASE WHEN SERVICE_TYPE = '힐링' THEN 1 END) AS healing,
+        COUNT(CASE WHEN SERVICE_TYPE = '기타' THEN 1 END) AS ser_etc
+    FROM
+        BASIC_INFO
+    WHERE
+        (BIZ_PURPOSE = '사회공헌' OR BIZ_PURPOSE = '수익사업') AND PROGRESS_STATE = 'E'
+        AND OPENDAY BETWEEN ? AND ?
+    GROUP BY
+        BIZ_PURPOSE;
+    `;
+    
+    let sql2 = `
+        SELECT
+            BIZ_PURPOSE,
+            SUM(CASE WHEN BIZ_PURPOSE = '수익사업' THEN PART_MAN_CNT ELSE 0 END) AS part_man,
+            SUM(CASE WHEN BIZ_PURPOSE = '수익사업' THEN PART_WOMAN_CNT ELSE 0 END) AS part_woman,
+            SUM(CASE WHEN BIZ_PURPOSE = '수익사업' THEN LEAD_MAN_CNT ELSE 0 END) AS lead_man,
+            SUM(CASE WHEN BIZ_PURPOSE = '수익사업' THEN LEAD_WOMAN_CNT ELSE 0 END) AS lead_woman,
+            SUM(CASE WHEN BIZ_PURPOSE = '사회공헌' THEN PART_MAN_CNT ELSE 0 END) AS soc_part_man,
+            SUM(CASE WHEN BIZ_PURPOSE = '사회공헌' THEN PART_WOMAN_CNT ELSE 0 END) AS soc_part_woman,
+            SUM(CASE WHEN BIZ_PURPOSE = '사회공헌' THEN LEAD_MAN_CNT ELSE 0 END) AS soc_lead_man,
+            SUM(CASE WHEN BIZ_PURPOSE = '사회공헌' THEN LEAD_WOMAN_CNT ELSE 0 END) AS soc_lead_woman
+        FROM
+            BASIC_INFO
+        WHERE
+            BIZ_PURPOSE IN ('수익사업', '사회공헌') AND PROGRESS_STATE = 'E'
+            AND OPENDAY BETWEEN ? AND ?  
+        GROUP BY
+            BIZ_PURPOSE;
+    `;
+
+    let sql3 = `
+        SELECT 
+            SUM(ROOM_PART_PEOPLE) as room_part_people, SUM(ROOM_LEAD_PEOPLE) as room_lead_people, SUM(ROOM_ETC_PEOPLE) as room_etc_people,
+            SUM(ROOM_PART_ROOM) as room_part_room, SUM(ROOM_LEAD_ROOM) as room_lead_room, SUM(ROOM_ETC_PEOPLE) as room_etc_room,
+            SUM(MEAL_PART) as meal_part, SUM(MEAL_LEAD) as meal_lead, SUM(MEAL_ETC) as meal_etc
+        FROM BASIC_INFO
+        WHERE 
+            1 = 1
+            AND OPENDAY BETWEEN ? AND ?  
+            AND PROGRESS_STATE = "E"
+    `;
+    
+    let sql4 = `
+    SELECT BIZ_PURPOSE, 
+        SUM((IFNULL(PART_MAN_CNT,0) + IFNULL(PART_WOMAN_CNT,0) + IFNULL(LEAD_MAN_CNT,0) + IFNULL(LEAD_WOMAN_CNT,0)) * IFNULL(DAYS_TO_STAY,0)) as grand_total
+    FROM BASIC_INFO
+    WHERE BIZ_PURPOSE IN ('수익사업', '사회공헌') AND PROGRESS_STATE = 'E'
+        AND OPENDAY BETWEEN ? AND ?  
+    GROUP BY BIZ_PURPOSE;
+
+    `
+
+    Promise.all([
+        maria(sql, [openday, endday]),
+        maria(sql2, [openday, endday]),
+        maria(sql3, [openday, endday]),
+        maria(sql4, [openday, endday])
+    ])
+    .then((results) => {
+        let rows1 = results[0]; // the result from the first query
+        let rows2 = results[1]; // the result from the second query
+        let rows3 = results[2]; // the result from the third query
+        let rows4 = results[3]; // the result from the third query
+
+        res.json({
+            people: rows1,
+            pTotal : rows4,
+            service: rows2,
+            room : rows3
+        });
+    })
+    .catch((err) => {
+        res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
+    });
+});
+
+
+
+
+// 지역별 통계
+router.post('/getResidenceList', (req, res)=>{
+    const { openday, endday} = req.body;
+    let sql = `
+        SELECT 
+            r.RESIDENCE,
+            COUNT(b.RESIDENCE) AS count,
+            COALESCE(SUM(b.PART_MAN_CNT + b.PART_WOMAN_CNT + b.LEAD_MAN_CNT + b.LEAD_WOMAN_CNT), 0) AS total
+        FROM 
+            (SELECT "서울" AS RESIDENCE UNION ALL
+            SELECT "부산" UNION ALL
+            SELECT "대구" UNION ALL
+            SELECT "인천" UNION ALL
+            SELECT "대전" UNION ALL
+            SELECT "광주" UNION ALL
+            SELECT "울산" UNION ALL
+            SELECT "경기" UNION ALL
+            SELECT "강원" UNION ALL
+            SELECT "폐광지역" UNION ALL
+            SELECT "충북" UNION ALL
+            SELECT "충남" UNION ALL
+            SELECT "세종" UNION ALL
+            SELECT "경북" UNION ALL
+            SELECT "경남" UNION ALL
+            SELECT "전북" UNION ALL
+            SELECT "전남" UNION ALL
+            SELECT "제주") AS r
+        LEFT JOIN 
+            BASIC_INFO AS b ON b.RESIDENCE = r.RESIDENCE AND b.PROGRESS_STATE = "E"
+        WHERE 
+            1 = 1
+            AND OPENDAY BETWEEN ? AND ? 
+        GROUP BY 
+            r.RESIDENCE;
+    `;
+    maria(sql,[openday, endday]).then((rows) => {  
+        res.json(rows)
+    })
+    .catch((err) => {
+        res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
+    });
+});
 
 router.post('/getPartTypeList', (req, res)=>{
 
     const { openday , endday} = req.body;
-    console.log(openday, endday)
     let sql = `
         SELECT 
             COUNT(case when AGE_TYPE ="아동" then 1 end ) as count_kid,

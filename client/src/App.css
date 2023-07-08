@@ -135,7 +135,10 @@
 .react-datepicker {
   z-index: 9999;
 }
-
+.report-title{
+  font-weight: bold;
+  font-size: 12px;
+}
 
 .report tr th, .report tr td { 
   white-space: nowrap;

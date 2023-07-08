@@ -10,5 +10,8 @@ import { takeLatest } from "redux-saga/effects"
 export default function* yearMonthResultSaga() {
 
     yield takeLatest(actions.getPartTypeList.type, createRequestSaga(actions.getPartTypeList.type, api.getPartTypeList))
+    yield takeLatest(actions.getResidenceList.type, createRequestSaga(actions.getResidenceList.type, api.getResidenceList))
+    yield takeLatest(actions.getAllPrograms.type, createRequestSaga(actions.getAllPrograms.type, api.getAllPrograms))
+    yield takeLatest(actions.programManage.type, createRequestSaga(actions.programManage.type, api.programManage))
 
 }
