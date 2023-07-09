@@ -5,9 +5,215 @@ const maria = require("../maria");
 
 // 프로그램 시행개요 
 
+//수입 지출 분석 
+router.post('/getExIncomeList', (req, res)=>{
+    const { openday, endday} = req.body;
+    
+    let sql = `
+    SELECT ic.expense_type as type, group_concat(expense_price) as price1 
+		
+		FROM foresthealing.expense ic
+		LEFT join foresthealing.basic_info bi
+		on (ic.BASIC_INFO_SEQ =bi.BASIC_INFO_SEQ)
+    WHERE bi.OPENDAY BETWEEN ? AND ?
+		group by ic.expense_type
+		order by type asc;
+    `;
+    
+    let sql2 = `
+        SELECT ic.INCOME_TYPE as type,group_concat(INCOME_PRICE) as price1
+        
+        FROM foresthealing.income ic
+        LEFT join foresthealing.basic_info bi
+        on (ic.BASIC_INFO_SEQ =bi.BASIC_INFO_SEQ)
+        WHERE bi.OPENDAY BETWEEN ? AND ?
+        group by ic.INCOME_TYPE
+        order by type asc;
+    `;
+    
+    let sql3 = `
+        select res.income_type, Round(sum(res.sum),0) as sum
+        from (SELECT ic.income_type as income_type, (sum(ic.income_price) * 
+        (100 - (select income_price from income where basic_info_seq = b.BASIC_INFO_SEQ and income_type = "할인율" group by BASIC_INFO_SEQ) ) / 100)  as sum
+        FROM income ic, (select basic_info_seq from basic_info where openday between ? and ? and progress_state = "E" group by basic_info_seq) b
+        where ic.basic_info_seq = b.basic_info_seq
+        group by ic.income_type, b.basic_info_seq) res
+        where res.income_type != "할인율"
+        group by res.income_type;
+    `;
+
+    Promise.all([
+        maria(sql, [openday, endday]),
+        maria(sql2, [openday, endday]),
+        maria(sql3, [openday, endday]),
+
+    ])
+    .then((results) => {
+        let rows1 = results[0]; // the result from the first query
+        let rows2 = results[1]; // the result from the second query
+        let rows3 = results[2]; // the result from the second query
+
+        res.json({
+            expend: rows1,
+            income : rows2,
+            incomeTotal : rows3,
+
+        });
+    })
+    .catch((err) => {
+        console.log(err)
+        res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
+    });
+});
+
+//효과성 분석 
+router.post('/getProgramEffect', (req, res)=>{
+    const { openday, endday} = req.body;
+    console.log(openday, endday)
+    let sql = `
+        SELECT 
+            PV,
+            IFNULL(SUM(SCORE1 + SCORE2 + SCORE3 + SCORE4 + SCORE5 + SCORE6 + SCORE7 + SCORE8 + SCORE9 + SCORE10 +
+                SCORE11 + SCORE12 + SCORE13 + SCORE14 + SCORE15 + SCORE16 + SCORE17 + SCORE18 + SCORE19 + SCORE20 +
+                SCORE21 + SCORE22), 0) AS TotalSum,
+            IFNULL(ROUND(AVG((SCORE1 + SCORE2 + SCORE3 + SCORE4 + SCORE5 + SCORE6 + SCORE7 + SCORE8 + SCORE9 + SCORE10 +
+                SCORE11 + SCORE12 + SCORE13 + SCORE14 + SCORE15 + SCORE16 + SCORE17 + SCORE18 + SCORE19 + SCORE20 +
+                SCORE21 + SCORE22) / 22), 2), 0) AS AverageScore
+        FROM 
+            HEALING_SERVICE
+        WHERE PV IN ('사전', '사후')
+            AND OPENDAY BETWEEN ? AND ?
+        GROUP BY PV;
+    `;
+    
+    let sql2 = `
+        SELECT 
+            '사전' as PV,
+            IFNULL(SUM(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
+            SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE18+
+            SCORE19+ SCORE20+ SCORE21+ SCORE22+ SCORE23+ SCORE24+ SCORE25+ SCORE26+ SCORE27+
+            SCORE28+ SCORE29+ SCORE30+ SCORE31+ SCORE32+ SCORE33+ SCORE34+ SCORE35+ SCORE36+ SCORE37+
+            SCORE38+ SCORE39+ SCORE40+ SCORE41+ SCORE42+ SCORE43+ SCORE44+ SCORE45+ SCORE46+ SCORE47+
+            SCORE48+ SCORE49+ SCORE50+ SCORE51+ SCORE52+ SCORE53+ SCORE54+ SCORE55+ SCORE56+ SCORE57+
+            SCORE58+ SCORE59+ SCORE60+ SCORE61+ SCORE62),0) as sum,
+
+            IFNULL(ROUND(AVG(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
+            SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE18+
+            SCORE19+ SCORE20+ SCORE21+ SCORE22+ SCORE23+ SCORE24+ SCORE25+ SCORE26+ SCORE27+
+            SCORE28+ SCORE29+ SCORE30+ SCORE31+ SCORE32+ SCORE33+ SCORE34+ SCORE35+ SCORE36+ SCORE37+
+            SCORE38+ SCORE39+ SCORE40+ SCORE41+ SCORE42+ SCORE43+ SCORE44+ SCORE45+ SCORE46+ SCORE47+
+            SCORE48+ SCORE49+ SCORE50+ SCORE51+ SCORE52+ SCORE53+ SCORE54+ SCORE55+ SCORE56+ SCORE57+
+            SCORE58+ SCORE59+ SCORE60+ SCORE61+ SCORE62)/62,2),0) as avg
+        FROM COUNSEL_SERVICE
+        WHERE PV = '사전'
+            AND OPENDAY BETWEEN ? AND ?
+
+        UNION ALL
+
+        SELECT 
+            '사후' as PV,
+            IFNULL(SUM(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
+            SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE18+
+            SCORE19+ SCORE20+ SCORE21+ SCORE22+ SCORE23+ SCORE24+ SCORE25+ SCORE26+ SCORE27+
+            SCORE28+ SCORE29+ SCORE30+ SCORE31+ SCORE32+ SCORE33+ SCORE34+ SCORE35+ SCORE36+ SCORE37+
+            SCORE38+ SCORE39+ SCORE40+ SCORE41+ SCORE42+ SCORE43+ SCORE44+ SCORE45+ SCORE46+ SCORE47+
+            SCORE48+ SCORE49+ SCORE50+ SCORE51+ SCORE52+ SCORE53+ SCORE54+ SCORE55+ SCORE56+ SCORE57+
+            SCORE58+ SCORE59+ SCORE60+ SCORE61+ SCORE62),0) as sum,
+
+            IFNULL(ROUND(AVG(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
+            SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE18+
+            SCORE19+ SCORE20+ SCORE21+ SCORE22+ SCORE23+ SCORE24+ SCORE25+ SCORE26+ SCORE27+
+            SCORE28+ SCORE29+ SCORE30+ SCORE31+ SCORE32+ SCORE33+ SCORE34+ SCORE35+ SCORE36+ SCORE37+
+            SCORE38+ SCORE39+ SCORE40+ SCORE41+ SCORE42+ SCORE43+ SCORE44+ SCORE45+ SCORE46+ SCORE47+
+            SCORE48+ SCORE49+ SCORE50+ SCORE51+ SCORE52+ SCORE53+ SCORE54+ SCORE55+ SCORE56+ SCORE57+
+            SCORE58+ SCORE59+ SCORE60+ SCORE61+ SCORE62)/62,2),0) as avg
+        FROM COUNSEL_SERVICE
+        WHERE PV = '사후'
+        AND OPENDAY BETWEEN ? AND ?
+    `;
+
+    let sql3 = `
+        select PV,  IFNULL(SUM(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
+            SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18),0) as sum,
+        IFNULL(ROUND(AVG(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
+        SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18)/18,2),0) as avg 
+        FROM PREVENT_SERVICE
+        WHERE PV IN ("사전", "사후")
+        AND OPENDAY BETWEEN ? AND ?
+        GROUP BY PV
+    `;
+    let sql4 = `
+            SELECT 
+                '사전' as PV, 
+                IFNULL(ROUND(AVG(nullif(num1,0)),2),0) as num1, 
+                IFNULL(ROUND(AVG(nullif(num2,0)),2),0) as num2,
+                IFNULL(ROUND(AVG(nullif(num3,0)),2),0) as num3, 
+                IFNULL(ROUND(AVG(nullif(num4,0)),2),0) as num4, 
+                IFNULL(ROUND(AVG(nullif(num5,0)),2),0) as num5
+            FROM HRV_SERVICE
+            WHERE DATE BETWEEN ? AND ? AND PV = '사전'
+
+            UNION ALL
+
+            SELECT 
+                '사후' as PV, 
+                IFNULL(ROUND(AVG(nullif(num1,0)),2),0) as num1, 
+                IFNULL(ROUND(AVG(nullif(num2,0)),2),0) as num2,
+                IFNULL(ROUND(AVG(nullif(num3,0)),2),0) as num3, 
+                IFNULL(ROUND(AVG(nullif(num4,0)),2),0) as num4, 
+                IFNULL(ROUND(AVG(nullif(num5,0)),2),0) as num5
+            FROM HRV_SERVICE
+            WHERE DATE BETWEEN ? AND ? AND PV = '사후'
+
+    `;
+
+    Promise.all([
+        maria(sql, [openday, endday]),
+        maria(sql2, [openday, endday,openday, endday]),
+        maria(sql3, [openday, endday]),
+        maria(sql4, [openday, endday,openday, endday]),
+    ])
+    .then((results) => {
+        let rows1 = results[0]; // the result from the first query
+        let rows2 = results[1]; // the result from the second query
+        let rows3 = results[2]; // the result from the third query
+        let rows4 = results[3]; // the result from the third query
+
+        res.json({
+            healing: rows1,
+            counsel : rows2,
+            prevent: rows3,
+            hrv : rows4
+        });
+    })
+    .catch((err) => {
+        console.log(err)
+        res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
+    });
+});
 
 
 
+
+// 시설서비스 만족도
+router.post('/getSerList', (req, res)=>{
+    const { openday, endday} = req.body;
+    let sql = `
+        SELECT 
+            ifnull(ROUND(AVG(nullif(score1,0)),2),0) as score1,    ifnull(ROUND(AVG(nullif(score2,0)),2),0) as score2,   ifnull(ROUND(AVG(nullif(score3,0)),2),0) as score3,   ifnull(ROUND(AVG(nullif(score4,0)),2),0) as score4,   ifnull(ROUND(AVG(nullif(score5,0)),2),0) as score5,
+            ifnull(ROUND(AVG(nullif(score6,0)),2),0) as score6,    ifnull(ROUND(AVG(nullif(score7,0)),2),0) as score7,   ifnull(ROUND(AVG(nullif(score8,0)),2),0) as score8,   ifnull(ROUND(AVG(nullif(score9,0)),2),0) as score9,   ifnull(ROUND(AVG(nullif(score10,0)),2),0) as score10,
+            ifnull(ROUND(AVG(nullif(score11,0)),2),0) as score11,  ifnull(ROUND(AVG(nullif(score12,0)),2),0) as score12, ifnull(ROUND(AVG(nullif(score13,0)),2),0) as score13, ifnull(ROUND(AVG(nullif(score14,0)),2),0) as score14, ifnull(ROUND(AVG(nullif(score15,0)),2),0) as score15, 
+            ifnull(ROUND(AVG(nullif(score16,0)),2),0) as score16
+        FROM SERVICE_ENV_SATISFACTION
+        WHERE OPENDAY BETWEEN ? AND ?
+    `;
+    maria(sql,[openday, endday]).then((rows) => {  
+        res.json(rows)
+    })
+    .catch((err) => {
+        res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
+    });
+});
 // 프로그램운영
 router.post('/programManage', (req, res)=>{
     const { openday, endday} = req.body;

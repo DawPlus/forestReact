@@ -5,8 +5,8 @@ const name ="yearMonthResult";
 
 const initialState = {
   type : "serviceInsertForm",
-  openday : "",
-  endday : "",
+  openday : "2020-01-01",
+  endday : "2023-07-07",
   partTypeList : {
     count_addict :"",
     count_adult :"",
@@ -59,6 +59,54 @@ const initialState = {
   programManage: {
     manage : [],
     bunya  : [], 
+  },
+  serList : {
+    score1: 0,
+    score2: 0,
+    score3: 0,
+    score4: 0,
+    score5: 0,
+    score6: 0,
+    score7: 0,
+    score8: 0,
+    score9: 0,
+    score10: 0,
+    score11: 0,
+    score12: 0,
+    score13: 0,
+    score14: 0,
+    score15: 0,
+    score16: 0,
+    total : 0,
+  },
+  programEffect :[],
+  exIncomeList : {
+    expend :{
+      강사예정강사비: "",
+      강사예정교통비: "",
+      강사예정보조강사비: "",
+      강사예정식사비: "",
+      강사집행강사비: "",
+      강사집행교통비: "",
+      강사집행보조강사비: "",
+      강사집행식사비: "",
+      고객예정숙박비: "",
+      고객예정식사비: "",
+      고객예정예비비: "",
+      고객예정재료비: "",
+      고객집행기타비: "",
+      고객집행숙박비: "",
+      고객집행식사비: "",
+      고객집행재료비: "",
+    },
+    income : {
+      기타:  "",
+      숙박비:  "",
+      식사비:  "",
+      재료비:  "",
+      프로그램:  "",
+      할인율:  "",
+    }
   }
 };
 
@@ -67,6 +115,9 @@ const action = {
     getResidenceList : createAction(`${name}/getResidenceList`, (data) => ({payload : data})),
     getAllPrograms : createAction(`${name}/getAllPrograms`, (data) => ({payload : data})),
     programManage : createAction(`${name}/programManage`, (data) => ({payload : data})),
+    getSerList : createAction(`${name}/getSerList`, (data) => ({payload : data})), // 시설 만족도
+    getProgramEffect : createAction(`${name}/getProgramEffect`, (data) => ({payload : data})), // 프로그램 효과성 분석
+    getExIncomeList : createAction(`${name}/getExIncomeList`, (data) => ({payload : data})), // 수입지출
 
 }
 
@@ -77,8 +128,105 @@ export const {getState, reducer, actions} = createCustomSlice({
   initialState,
   action, 
   reducers: {
+    getExIncomeList_SUCCESS : (state, {payload : {data}})=>{
+
+          
+    let result = {};
+      data.expend.forEach(obj => {
+        let sum = 0;
+        let priceArray = obj.price1.split(',');
+        priceArray.forEach(price => {
+            sum += parseFloat(price);
+        });
+        // 반올림하여 소수점 자리는 표시하지 않음
+        sum = Math.round(sum);
+        // 세 번째 자리마다 쉼표 추가
+        //let formattedSum = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        result[obj.type] = sum;
+    });
+
+    let tempTotal = 0;
+    ["강사예정강사비", "강사예정교통비", "강사예정보조강사비", "강사예정식사비", "고객예정숙박비", "고객예정식사비", "고객예정예비비", "고객예정재료비"].forEach(i=>{
+          tempTotal += result[i];
+    });
+
+    result["예비비"] = tempTotal;
+
+    let total = 0;
+    ['강사예정강사비','강사예정교통비', '강사예정보조강사비', '강사예정식사비', '강사집행강사비', '강사집행교통비', '강사집행보조강사비', '강사집행식사비'].forEach(i=>{
+      total += result[i];
+    });
+    result["합계"] = total;
+
+    
+    let income = {};
+    data.income.forEach(obj => {
+        let sum = 0;
+        let priceArray = obj.price1.split(',');
+        priceArray.forEach(price => {
+          sum += parseFloat(price);
+        });
+        // 반올림하여 소수점 자리는 표시하지 않음
+        sum = Math.round(sum);
+        income[obj.type] = sum;
+      });
+
+        
+    let incomeTotal  = 0;
+    ['기타', '숙박비', '식사비', '재료비', '프로그램'].forEach(i=> incomeTotal += income[i])
+    income["합계"] = incomeTotal;
+
+      let totalSum = 0;
+      data.incomeTotal.forEach(item => {
+          totalSum += item.sum;
+      });
+
+
+      state.exIncomeList.expend = result
+      state.exIncomeList.income = income
+      state.exIncomeList.incomeTotal = totalSum;
+      
+
+
+    },
+
+
+    getProgramEffect_SUCCESS : (state, {payload : {data}})=>{
+          
+      let result = ["사전", "사후"].map(PV => {
+        let row = { PV };
+        for (let key in data) {
+            let item = data[key].find(d => d.PV === PV);
+            for (let prop in item) {
+                if (prop !== "PV") {
+                    row[`${key}${prop[0].toUpperCase()}${prop.slice(1)}`] = item[prop];
+                }
+            }
+        }
+        return row;
+      });
+      state.programEffect = result;
+
+    },
     getPartTypeList_SUCCESS : (state, {payload: {data}})=>{
       state.partTypeList = data[0];
+    },
+    // 시설 서비스 만족도
+    getSerList_SUCCESS : (state, {payload: {data}})=>{
+      const result = Object.keys(data[0]).reduce((result, key) => {
+        const score = data[0][key];
+        if (typeof score === 'number') {
+          result[key] = score.toFixed(2);
+          result.total = ((result.total || 0) + score) / 2;
+        }
+        return result;
+      }, {});
+      
+      if (typeof result.total === 'number') {
+        result.total = result.total.toFixed(2);
+      }
+
+      state.serList = data.length > 0 ? result : {...state.serList};
     },
     // 지역 목록 
     getResidenceList_SUCCESS :(state, {payload : {data}})=>{

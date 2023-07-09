@@ -10,6 +10,9 @@ import ParticipationType  from "./participationType";
 import ResidenceList  from "./residenceList";
 import ProgramOverview  from "./programOverview";
 import ProgramManage  from "./programManage";
+import SerList  from "./serList";
+import ProgramEffect  from "./programEffect";
+import ExIncomeList  from "./exIncomeList";
 const YearMonthResult = ()=>{
 
     const dispatch = useDispatch();
@@ -29,8 +32,14 @@ const YearMonthResult = ()=>{
         dispatch(actions.getResidenceList({ openday, endday }));
         // 프로그램시행개요
         dispatch(actions.getAllPrograms({ openday, endday }));
-        // 마족도
+        // 만족도
         dispatch(actions.programManage({ openday, endday }));
+        // 시설서비스 만족도
+        dispatch(actions.getSerList({ openday, endday }));
+        // 효과성 분석
+        dispatch(actions.getProgramEffect({ openday, endday }));
+        // 수입지출
+        dispatch(actions.getExIncomeList({ openday, endday }));
     }
 
 
@@ -63,6 +72,12 @@ const YearMonthResult = ()=>{
             <ProgramOverview/>
             {/* 프로그램윤영 */}
             <ProgramManage/>
+            {/* 시설만족도 */}
+            <SerList/>
+            {/* 효과성분석 */}
+            <ProgramEffect/>
+            {/* 수입지출 */}
+            <ExIncomeList/>
         </MainCard>
     
     </>)
