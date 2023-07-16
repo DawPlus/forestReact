@@ -59,7 +59,7 @@ const ProgramListContainer = ()=>{
 
     return(
         <>
-            <Grid container direction="row" justifyContent="space-between" alignItems="flex-start" style={{ marginTop: '50px' }}>
+            <Grid container direction="row" justifyContent="space-between" alignItems="flex-start" >
                 <Grid item xs={8}>
                     <Div alignItems="center">프로그램</Div>
                 </Grid>
@@ -81,7 +81,7 @@ const ProgramListContainer = ()=>{
 
             <Grid container spacing={2}>
                 {list.map((i)=> 
-                    <Grid item container xs={12} spacing={2} alignItems="center" key={i.id} >
+                    <Grid item container xs={12} spacing={1} alignItems="center" key={i.id} >
                         <Grid item  xs={4} >  
                             <Input name="title" label="프로그램명" />
                         </Grid>

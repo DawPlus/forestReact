@@ -31,6 +31,7 @@ const SearchResult = Loadable(lazy(() => import('views/programResult/searchResul
 const UpdateDelete = Loadable(lazy(() => import('views/common/updateDelete')));
 const ServiceInsertForm = Loadable(lazy(() => import('views/serviceInsertForm')));
 const YearMonthResult = Loadable(lazy(() => import('views/yearMonthResult')));
+const SearchProgramResult = Loadable(lazy(() => import('views/searchProgramResult')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -93,6 +94,8 @@ const MainRoutes = [{
         { path: 'serviceInsertForm', element: <ServiceInsertForm /> },
         // 운영통계
         { path: 'yearMonthResult', element: <YearMonthResult /> },
+        // 주제어별 프로그램통계검색
+        { path: 'searchProgramResult', element: <SearchProgramResult /> },
     ]
 }];
 

@@ -2,13 +2,18 @@ import React  from "react";
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
 import {Grid, Button,} from '@mui/material';
-import {  Input } from "ui-component/inputs";
+
 
 import ProgramList from "./containers/programList"
 import DefaultInfos from "./containers/defaultinfos"
 import PersonInfos from "./containers/personInfos"
 
 import { styled } from '@mui/material/styles';
+
+import RoomInfos from "./containers/roomInfos"
+import MealInfos from "./containers/mealInfos"
+import OpinionInfo from "./containers/opinionInfo"
+
 const Div = styled('div')(({ theme }) => ({
     ...theme.typography.button,
     backgroundColor: theme.palette.background.paper,
@@ -21,96 +26,62 @@ const InsertOperateResult = ()=>{
   
   
   return(<>
-      <MainCard title="Sample Card">
-        {/* 기본정보 */}
-        <DefaultInfos/>
-
-        {/* 참여인력 정보 */}
-        <PersonInfos/>
-        
-
-        {/* 프로그램목록 */}
-        <ProgramList/>
       
-        <Grid container spacing={2} style={{marginTop : "5px"}}>
-          <Grid item xs={12}>
-            <Div style={{  padding: "22px 0px 0px 8px"}}>객실</Div>
+        <Grid container spacing={2}>
+          <Grid item sm={6}>
+            {/* 기본정보 */}
+          <MainCard>
+            <DefaultInfos/>
+          </MainCard>
           </Grid>
-          <Grid item  xs={3} >
-            <Input name="title" label="참여자인원" type="number"/>
+          <Grid item sm={6}>
+            {/* 참여인력 정보 */}
+            <MainCard>
+            <PersonInfos/>
+            </MainCard>
           </Grid>
-          <Grid item  xs={3}>
-            <Input name="title" label="참여자객실" type="number"/>
+        </Grid>
+      
+
+      {/* 프로그램목록 */}
+      <MainCard style={{marginTop : "20px"}}>
+        <ProgramList/>
+      </MainCard>
+    
+        <Grid container spacing={2}>
+          <Grid item sm={6}>
+            <MainCard style={{marginTop : "20px"}}>
+              {/* 객실 */}
+              <RoomInfos/>
+            </MainCard>
           </Grid>
-          <Grid item  xs={3} >
-            <Input name="title" label="인솔자인원" type="number"/>
+          <Grid item sm={6}>
+            <MainCard style={{marginTop : "20px"}}>
+              {/* 식사 */}
+              <MealInfos/>    
+            </MainCard>
           </Grid>
-          <Grid item  xs={3}>
-            <Input name="title" label="인솔자객실" type="number"/>
-          </Grid>
+        </Grid>
         
-          <Grid item  xs={3} >
-            <Input name="title" label="인솔자인원" type="number"/>
-          </Grid>
-          <Grid item  xs={3}>
-            <Input name="title" label="인솔자객실" type="number"/>
-          </Grid>
+        <MainCard style={{marginTop : "20px"}}>
+          <OpinionInfo/>
+        </MainCard>
 
-          <Grid item  xs={3} >
-            <Input name="title" label="총인원-자동계산" value="123" readOnly={true}/>
-          </Grid>
-          <Grid item  xs={3}>
-            <Input name="title" label="총객실-자동계산" type="number" value="2"  readOnly={true}/>
-          </Grid>
-
-      </Grid>
-      {/* 식사 */}
-      <Grid container spacing={2} style={{marginTop : "5px"}}>
-          <Grid item xs={12}>
-            <Div style={{  padding: "22px 0px 0px 8px"}}>식사</Div>
-          </Grid>
-          <Grid item  xs={3} >
-            <Input name="title" label="식사" type="number"/>
-          </Grid>
-          <Grid item  xs={3}>
-            <Input name="title" label="참여자인원" type="number"/>
-          </Grid>
-          <Grid item  xs={3} >
-            <Input name="title" label="인솔자인원" type="number"/>
-          </Grid>
-          <Grid item  xs={3}>
-            <Input name="title" label="기타인원" type="number"/>
-          </Grid>
-      </Grid>
-
-
-
-      <Grid container spacing={2} style={{marginTop : "5px"}}>
-          <Grid item xs={12}>
-            <Input name="title" label="프로그램소감" multiline rows={4}/>
-          </Grid>
-          <Grid item xs={12}>
-            <Input name="title" label="시설서비스 소감(식사포함)" multiline rows={4}/>
-          </Grid>
-          <Grid item xs={12}>
-            <Input name="title" label="종합의견 및 불편사항" multiline rows={4}/>
-          </Grid>
-      </Grid>
+      
 
         <Grid container spacing={2} style={{marginTop : "5px"}}>
           <Grid item xs={12}>
           <Button variant="contained" color="primary" type="submit">
               임시저장
+              {/*  PROGRESS_STATE: P */}
             </Button>
             <Button variant="contained" color="primary" type="submit">
+              {/* PROGRESS_STATE : E */}
               등록
             </Button>
           </Grid>
         </Grid>
       
-            {/*  TODO  */}
-      </MainCard>
-
   </>)
 
 

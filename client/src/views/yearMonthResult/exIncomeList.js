@@ -30,7 +30,6 @@ const ExIncomeList = ()=>{
                     <TableCell>{expend["고객집행기타비"]}</TableCell>
                     <TableCell>{expend["예비비"]}</TableCell>
                     <TableCell>{expend["합계"]}</TableCell>
-
                     <TableCell>{income["프로그램"]}</TableCell>
                     <TableCell>{income["숙박비"]}</TableCell>
                     <TableCell>{income["식사비"]}</TableCell>

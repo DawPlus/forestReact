@@ -1,6 +1,7 @@
 import React from "react";
 import MainCard from 'ui-component/cards/MainCard';
 import Button from '@mui/material/Button';
+import PrintIcon from '@mui/icons-material/Print';
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { actions, getState } from "store/reducers/yearMonthResultReducer";
@@ -13,6 +14,10 @@ import ProgramManage  from "./programManage";
 import SerList  from "./serList";
 import ProgramEffect  from "./programEffect";
 import ExIncomeList  from "./exIncomeList";
+import {PrintSection } from "ui-component/printButton"
+
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+
 const YearMonthResult = ()=>{
 
     const dispatch = useDispatch();
@@ -50,6 +55,10 @@ const YearMonthResult = ()=>{
         }))
     }
 
+    const onPrint = ()=>{
+        window.print();
+    }
+
     return (<>
         <MainCard>
             <Grid container spacing={1} alignItems={"center"}  justifyContent="space-between">
@@ -61,12 +70,45 @@ const YearMonthResult = ()=>{
                         <DatePicker value={endday} label="종료일자" name="endday" onChange={onChange}/>
                     </Grid>
                 </Grid>
-                <Grid item sm={1}>
-                    <Button variant="contained" color="primary" onClick={onSearch}>조회</Button>
+                <Grid item sm={2}>
+                    <div style={{textAlign:"right"}}>
+                        <Button variant="contained" color="primary" onClick={onSearch} style={{margin : "0px 5px"}}>조회</Button>
+                        <Button variant="contained" color="primary" onClick={onPrint}><PrintIcon /></Button>
+                    </div>
                 </Grid>
             </Grid>
         </MainCard>
-        <MainCard style={{marginTop : "10px", minHeight: "400px"}}>
+    
+        <MainCard  id="print" style={{marginTop : "10px", minHeight: "400px"}}>
+        <PrintSection>
+            <div style={{textAlign :"right" , marginBottom : "15px"}}>
+                <div style={{width : "250px", display:"inline-block"}}>
+                    <TableContainer>
+                        <Table className="sighLine">
+                        <TableHead>
+                            <TableRow >
+                                <TableCell>담당</TableCell>
+                                <TableCell>팀장</TableCell>
+                                <TableCell>사무국장</TableCell>
+                            </TableRow>
+                        </TableHead>
+                            <TableBody>
+                                <TableRow>
+                                    <TableCell></TableCell>
+                                    <TableCell></TableCell>
+                                    <TableCell></TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </div>
+            </div>
+            <div style={{textAlign:"center",     margin: "60px 0px 30px 0px"}}>
+                <h1>하이힐링원 연·월 프로그램 실시 결과 보고</h1>
+            </div>
+            <div style={{textAlign: "right", fontSize: "12px"}}>
+                {`기간 : ${openday} ~ ${endday}`}
+            </div>
             <ParticipationType/>
             <ResidenceList/>
             <ProgramOverview/>
@@ -78,6 +120,7 @@ const YearMonthResult = ()=>{
             <ProgramEffect/>
             {/* 수입지출 */}
             <ExIncomeList/>
+        </PrintSection>
         </MainCard>
     
     </>)

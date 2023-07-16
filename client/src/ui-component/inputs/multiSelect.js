@@ -18,10 +18,10 @@ const MenuProps = {
         },
     },
 };
-function getStyles(name, personName, theme) {
+function getStyles(name, value, theme) {
     return {
         fontWeight:
-        personName.indexOf(name) === -1
+        value.indexOf(name) === -1
             ? theme.typography.fontWeightRegular
             : theme.typography.fontWeightMedium,
     };
@@ -29,14 +29,14 @@ function getStyles(name, personName, theme) {
 
 const MultiSelectChip = (props) => {
 
-    const {options = [],  label,} =props;
+    const {options = [],  label, onChange , value} =props;
     const id = useMemo(() => v4(), []);
     const theme = useTheme();
-    const [personName, setPersonName] = React.useState([]);
+    
 
     const handleChange = (event) => {
         const { target: { value } } = event;
-        setPersonName( typeof value === 'string' ? value.split(',') : value );
+        onChange(typeof value === 'string' ? value.split(',') : value )
     };
 
     return (
@@ -46,7 +46,7 @@ const MultiSelectChip = (props) => {
             <Select
                 labelId={id}
                 multiple
-                value={personName}
+                value={value}
                 onChange={handleChange}
                 input={<OutlinedInput id={id} label={label} />}
                 renderValue={(selected) => (
@@ -57,7 +57,7 @@ const MultiSelectChip = (props) => {
                     </Box>
                 )}  MenuProps={MenuProps} >
             {options.map((name) => (
-                <MenuItem key={name} value={name} style={getStyles(name, personName, theme)} >
+                <MenuItem key={name} value={name} style={getStyles(name, value, theme)} >
                     {name}
                 </MenuItem>
             ))}

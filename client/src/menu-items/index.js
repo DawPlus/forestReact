@@ -46,7 +46,7 @@ const menuItems = {
                             id: 'program',
                             title: '프로그램통계',
                             type: 'item',
-                            url: '/pages/register/register3',
+                            url: '/searchProgramResult',
                         }
                     ]
                 },

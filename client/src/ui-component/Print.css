@@ -1,0 +1,17 @@
+@media print {
+    body * {
+       visibility: hidden;
+    }
+    .print-section, .print-section * {
+       visibility: visible;
+    }
+    .print-section {
+      border: none !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+       position: absolute;
+       left: 0;
+       top: 0;
+    }
+ }
+ 

@@ -6,7 +6,6 @@ import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/ko";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import moment from "moment"
 dayjs.locale("ko");
 dayjs.extend(localizedFormat);
 
@@ -14,7 +13,7 @@ dayjs.extend(localizedFormat);
 const DatePickerComponent = (props) => {
     const { label, onChange, name, value } = props;
 
-    const onDateChange = (name) => (value) => {
+    const onDateChange = (value) => {
         const _val = value.format("YYYY-MM-DD");
         onChange(name, _val);
     };
@@ -23,7 +22,7 @@ const DatePickerComponent = (props) => {
         <>
             <FormControl fullWidth variant="outlined" required={false} className="noneRed">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker format="YYYY-MM-DD" value={moment(value)} label={label} onChange={onDateChange(name)} />
+                <DatePicker format="YYYY-MM-DD" defaultValue={dayjs(value)} label={label} onChange={onDateChange} />
             </LocalizationProvider>
             </FormControl>
         </>
