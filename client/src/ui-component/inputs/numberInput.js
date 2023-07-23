@@ -17,7 +17,7 @@ const PositiveNumberInput = ({ label, value, onChange,name,  ...props }) => {
   };
 
   return (
-    <FormControl fullWidth>
+    <FormControl fullWidth size="small">
       <InputLabel htmlFor={id}>{label}</InputLabel>
       <OutlinedInput
         {...props}

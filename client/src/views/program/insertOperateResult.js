@@ -13,14 +13,8 @@ import { styled } from '@mui/material/styles';
 import RoomInfos from "./containers/roomInfos"
 import MealInfos from "./containers/mealInfos"
 import OpinionInfo from "./containers/opinionInfo"
+import ExpenseAmount from "./containers/expenseAmount"
 
-const Div = styled('div')(({ theme }) => ({
-    ...theme.typography.button,
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(1),
-    fontSize: "17px",
-    marginBottom: "-10px"
-  }));
 
 const InsertOperateResult = ()=>{
   
@@ -66,6 +60,13 @@ const InsertOperateResult = ()=>{
         <MainCard style={{marginTop : "20px"}}>
           <OpinionInfo/>
         </MainCard>
+
+        {/* 지출금액 */}
+       
+          <ExpenseAmount/>
+       
+
+
 
       
 

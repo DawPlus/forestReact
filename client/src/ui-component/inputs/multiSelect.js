@@ -41,7 +41,7 @@ const MultiSelectChip = (props) => {
 
     return (
         
-        <FormControl fullWidth>
+        <FormControl fullWidth size="small">
             <InputLabel id={id}>{label}</InputLabel>
             <Select
                 labelId={id}

@@ -11,7 +11,7 @@ const SelectComponent = (props) => {
   const id = useMemo(() => uuidv4(), []);
 
   return (
-      <FormControl fullWidth  >
+      <FormControl fullWidth  size="small">
         <InputLabel id={id}>{label}</InputLabel>
         <Select labelId={id} name={name} value={value} label={label} onChange={onChange} {...res} >
           {options.map((i, idx)=><MenuItem key={idx} value={i}>{i}</MenuItem>)}
