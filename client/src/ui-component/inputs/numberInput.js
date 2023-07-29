@@ -23,9 +23,6 @@ const PositiveNumberInput = ({ label, value, onChange,name,  ...props }) => {
         {...props}
         type="text"
         value={value}
-        InputLabelProps={{
-          shrink: true,
-        }}
         onChange={handleChange}
       />
     </FormControl>

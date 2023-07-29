@@ -1,26 +1,19 @@
 import React  from "react";
 
 import {Grid} from '@mui/material';
-import {  Input, Select,  MultiSelect, NumberInput} from "ui-component/inputs";
-import { styled } from '@mui/material/styles';
+import {  Input } from "ui-component/inputs";
+
 import { useDispatch, useSelector } from "react-redux";
 import { getState , actions} from "store/reducers/programReducer";
-const Div = styled('div')(({ theme }) => ({
-    ...theme.typography.button,
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(1),
-    fontSize: "17px"
-}));
+ 
 const DefaultInfos = ()=>{
 
     const dispatch =useDispatch();
-    const {
-        PROGRAM_OPINION,
-        SERVICE_OPINION,
-        OVERALL_OPINION,
-        
-    } = useSelector(s=> getState(s));
-
+    
+    const PROGRAM_OPINION= useSelector(s=> getState(s).PROGRAM_OPINION);
+    const SERVICE_OPINION= useSelector(s=> getState(s).SERVICE_OPINION);
+    const OVERALL_OPINION= useSelector(s=> getState(s).OVERALL_OPINION);
+    
 
 
     const onChange = e=> {

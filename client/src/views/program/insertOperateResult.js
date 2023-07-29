@@ -2,23 +2,38 @@ import React  from "react";
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
 import {Grid, Button,} from '@mui/material';
-
+import { useDispatch, useSelector } from "react-redux";
+import { getState , actions} from "store/reducers/programReducer";
 
 import ProgramList from "./containers/programList"
 import DefaultInfos from "./containers/defaultinfos"
 import PersonInfos from "./containers/personInfos"
 
-import { styled } from '@mui/material/styles';
 
 import RoomInfos from "./containers/roomInfos"
 import MealInfos from "./containers/mealInfos"
 import OpinionInfo from "./containers/opinionInfo"
 import ExpenseAmount from "./containers/expenseAmount"
-
+import Income from "./containers/income"
+import BtnArea from "./containers/btnArea"
 
 const InsertOperateResult = ()=>{
+
+  const dispatch = useDispatch();
+
+
   
   
+
+
+
+  const onPreSave = ()=>{
+
+  }
+
+
+
+
   return(<>
       
         <Grid container spacing={2}>
@@ -62,27 +77,17 @@ const InsertOperateResult = ()=>{
         </MainCard>
 
         {/* 지출금액 */}
-       
-          <ExpenseAmount/>
-       
+        <ExpenseAmount/>
+
+        {/* 수입금액 */}
+        <MainCard style={{marginTop : "20px"}}>
+          <Income/>
+        </MainCard>
 
 
 
       
-
-        <Grid container spacing={2} style={{marginTop : "5px"}}>
-          <Grid item xs={12}>
-          <Button variant="contained" color="primary" type="submit">
-              임시저장
-              {/*  PROGRESS_STATE: P */}
-            </Button>
-            <Button variant="contained" color="primary" type="submit">
-              {/* PROGRESS_STATE : E */}
-              등록
-            </Button>
-          </Grid>
-        </Grid>
-      
+        <BtnArea/>
   </>)
 
 

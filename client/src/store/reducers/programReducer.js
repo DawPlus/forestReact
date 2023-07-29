@@ -4,6 +4,7 @@ import { v4 } from 'uuid';
 const name ="program";
 
 const initialState = {
+    BASIC_INFO_SEQ : 402, 
     OPENDAY : "",
     AGENCY : "",
     OM : "",
@@ -39,6 +40,10 @@ const initialState = {
     ISCLOSEMINE : false,
 
 
+    programList : [], 
+
+
+    ///예정금액 - 강사 
     // 각각 1개의 expense 테이블 Row 로 구성됨 
     expenseBasicInfo : [ // 강사비 기본 1개의 row로 구성됨... 
       { EXPENSE_TYPE : "강사예정강사비", EXPENSE_PRICE : "" },
@@ -46,51 +51,36 @@ const initialState = {
       { EXPENSE_TYPE : "강사예정교통비", EXPENSE_PRICE : "" },
       { EXPENSE_TYPE : "강사예정식사비", EXPENSE_PRICE : "" },
     ],
-    expense1 : [ // 강사비 
-        // { EXPENSE_TYPE : "강사집행강사비", EXPENSE_PRICE : "", EXPENSE_DETAIL : "", EXPENSE_NOTE : "", }
-    ],
-    expense2 : [ // 보조강사비
-      //  { EXPENSE_TYPE : "강사집행식사비", EXPENSE_PRICE : "", EXPENSE_DETAIL : "", EXPENSE_NOTE : "", }
-    ],
-    expense3 : [ // 교통비 
-        //{ EXPENSE_TYPE : "강사집행교통비", EXPENSE_PRICE : "", EXPENSE_DETAIL : "", EXPENSE_NOTE : "", }
-    ],
-    expense4 : [ // 식사비 
-        //{ EXPENSE_TYPE : "강사집행식사비", EXPENSE_PRICE : "", EXPENSE_DETAIL : "", EXPENSE_NOTE : "", }
-    ],
-    
+    // 기존 기본값 있는 상태에서 없이  추가 항목만 있도록 수정함. 
+    expenseList : [],
+    // expenseList  : [
+    //   { TITLE : "강사비",   EXPENSE_TYPE : "강사집행강사비", EXPENSE_PRICE : "", EXPENSE_DETAIL : "", EXPENSE_NOTE : "", },
+    //   { TITLE : "보조강사", EXPENSE_TYPE : "강사집행보조강사비", EXPENSE_PRICE : "", EXPENSE_DETAIL : "", EXPENSE_NOTE : "", },
+    //   { TITLE : "교통비",   EXPENSE_TYPE : "강사집행교통비", EXPENSE_PRICE : "", EXPENSE_DETAIL : "", EXPENSE_NOTE : "", },
+    //   { TITLE : "식사비",   EXPENSE_TYPE : "강사집행식사비", EXPENSE_PRICE : "", EXPENSE_DETAIL : "", EXPENSE_NOTE : "", },
+    // ],
+    // extraExpenseList  : [], 
+
 
 
     // 고객예정
-    expenseBasicInfo2 : [ // 강사비 기본 1개의 row로 구성됨... 
+    customBasicInfo : [ // 강사비 기본 1개의 row로 구성됨... 
       { EXPENSE_TYPE : "고객예정숙박비", EXPENSE_PRICE : "" },
       { EXPENSE_TYPE : "고객예정식사비", EXPENSE_PRICE : "" },
       { EXPENSE_TYPE : "고객예정재료비", EXPENSE_PRICE : "" },
       { EXPENSE_TYPE : "고객예정예비비", EXPENSE_PRICE : "" },
     ],
-    expense5 : [ // 강사비 
-        // { EXPENSE_TYPE : "강사집행강사비", EXPENSE_PRICE : "", EXPENSE_DETAIL : "", EXPENSE_NOTE : "", }
-    ],
-    expense6 : [ // 보조강사비
-      //  { EXPENSE_TYPE : "강사집행식사비", EXPENSE_PRICE : "", EXPENSE_DETAIL : "", EXPENSE_NOTE : "", }
-    ],
-    expense7 : [ // 교통비 
-        //{ EXPENSE_TYPE : "강사집행교통비", EXPENSE_PRICE : "", EXPENSE_DETAIL : "", EXPENSE_NOTE : "", }
-    ],
-    expense8 : [ // 식사비 
-        //{ EXPENSE_TYPE : "강사집행식사비", EXPENSE_PRICE : "", EXPENSE_DETAIL : "", EXPENSE_NOTE : "", }
-    ],
 
-    income : [
-      {
-        INCOME_SEQ : "",
-        INCOME_TYPE : "",
-        INCOME_PRICE : "",
-        INCOME_DETAIL : "",
-        INCOME_NOTE : "",
-        BASIC_INFO_SEQ : "",
-      }
-    ]
+    customList  : [],
+    // customList  : [
+    //   { TITLE : "숙박비",   EXPENSE_TYPE : "고객집행숙박비", EXPENSE_PRICE : "", EXPENSE_DETAIL : "", EXPENSE_NOTE : "", },
+    //   { TITLE : "식사비", EXPENSE_TYPE : "고객집행식사비", EXPENSE_PRICE : "", EXPENSE_DETAIL : "", EXPENSE_NOTE : "", },
+    //   { TITLE : "재료비",   EXPENSE_TYPE : "고객집행재료비", EXPENSE_PRICE : "", EXPENSE_DETAIL : "", EXPENSE_NOTE : "", },
+    //   { TITLE : "기타",   EXPENSE_TYPE : "고객집행기타비", EXPENSE_PRICE : "", EXPENSE_DETAIL : "", EXPENSE_NOTE : "", },
+    // ],
+    // extraCustomList  : [], 
+
+    income : []
 };
 
 const action = {
@@ -111,6 +101,7 @@ export const {getState, reducer, actions} = createCustomSlice({
     
     // 배열의 값을 바꾼다 .
     setArrTargetChange  : (state, {payload : {target, index, name, value}})=>{
+    
       state[target][index][name] = value;
     },
     // Row 추가 

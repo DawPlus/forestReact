@@ -8,6 +8,7 @@ const updateDelete = require("./updateDelete")
 const insertForm = require("./insertForm")
 const yearMonthResult = require("./yearMonthResult")
 const searchProgramResult = require("./searchProgramResult")
+const insertOperation = require("./insertOperation")
 
 //router.use(login);
 router.use("/program", program);
@@ -20,6 +21,7 @@ router.use("/updateDelete", updateDelete);
 router.use("/insertForm", insertForm);
 router.use("/yearMonthResult", yearMonthResult);
 router.use("/searchProgram", searchProgramResult);
+router.use("/insertOperation", insertOperation);
 
 
 module.exports = router;

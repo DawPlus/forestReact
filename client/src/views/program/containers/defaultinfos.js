@@ -26,34 +26,6 @@ const DefaultInfos = ()=>{
         AGENCY,
         OM,
         ENDDAY,
-        DAYS_TO_STAY,
-        RESIDENCE,
-        PART_MAN_CNT,
-        PART_WOMAN_CNT,
-        LEAD_MAN_CNT,
-        LEAD_WOMAN_CNT,
-        SUPPORT,
-        INCOME_TYPE,
-        PART_TYPE,
-        AGE_TYPE,
-        BIZ_PURPOSE,
-        PROGRAM_IN_OUT,
-        SERVICE_TYPE,
-        ROOM_PART_PEOPLE,
-        ROOM_PART_ROOM,
-        ROOM_LEAD_PEOPLE,
-        ROOM_LEAD_ROOM,
-        ROOM_ETC_PEOPLE,
-        ROOM_ETC_ROOM,
-        MEAL_TYPE,
-        MEAL_PART,
-        MEAL_LEAD,
-        MEAL_ETC,
-        PROGRAM_OPINION,
-        SERVICE_OPINION,
-        OVERALL_OPINION,
-        PROGRESS_STATE,
-        REG_ID,
         ISCLOSEMINE,
     } = useSelector(s=> getState(s));
 
@@ -123,7 +95,7 @@ const DefaultInfos = ()=>{
                         <Select label="거주지역" name="RESIDENCE" options={items} onChange={onChange}/>
                     </Grid>
                     <Grid item  xs={6}>
-                        <CheckBox label="폐광지역" style={{ alignItems: 'center' }}value={ISCLOSEMINE} onChange={onCheckChange} name="isCloseMine"/>
+                        <CheckBox label="폐광지역" style={{ alignItems: 'center' }}value={ISCLOSEMINE} onChange={onCheckChange} name="ISCLOSEMINE"/>
                     </Grid>          
                 </Grid>
             </Grid>
