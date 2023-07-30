@@ -1,4 +1,4 @@
-import React  from "react";
+import React  ,{useState} from "react";
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
 import {Grid, Button,} from '@mui/material';
@@ -16,32 +16,52 @@ import OpinionInfo from "./containers/opinionInfo"
 import ExpenseAmount from "./containers/expenseAmount"
 import Income from "./containers/income"
 import BtnArea from "./containers/btnArea"
+import Select from "ui-component/inputs/selectItems";
 
 const InsertOperateResult = ()=>{
 
-  const dispatch = useDispatch();
+  const dispatch= useDispatch();
+
+  const tempList = useSelector(s=> getState(s).tempList);
+
+  const [tempValue, setTempValue] = useState("");
+
+  React.useEffect(()=>{
+    dispatch(actions.getTempList())
+
+    return ()=>{
+      dispatch(actions.initState())
+    }
+  },[])
 
 
-  
-  
-
-
-
-  const onPreSave = ()=>{
-
+  // 임시저장 불러오기 
+  const getTempData = () =>{
+    dispatch(actions.getTempData({seq : tempValue}))
   }
 
 
 
-
   return(<>
+        <Grid   container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
+          <Grid item md={2}>
+            <Select items={tempList} onChange={e=>{ setTempValue(e.target.value) }} value={tempValue}/>
+          </Grid>
+          <Grid item md={4}>
+            <Button variant="contained" color="secondary"  onClick={getTempData}>
+              임시저장불러오기
+            </Button>
+          </Grid>
+          <Grid item md={8}></Grid>
+        </Grid>
       
+        
         <Grid container spacing={2}>
           <Grid item sm={6}>
             {/* 기본정보 */}
-          <MainCard>
-            <DefaultInfos/>
-          </MainCard>
+            <MainCard>
+              <DefaultInfos/>
+            </MainCard>
           </Grid>
           <Grid item sm={6}>
             {/* 참여인력 정보 */}

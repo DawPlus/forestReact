@@ -1,7 +1,7 @@
 import React  from "react";
 
 import {Grid} from '@mui/material';
-import {  Input, Select,  MultiSelect, NumberInput} from "ui-component/inputs";
+import {   NumberInput} from "ui-component/inputs";
 import { styled } from '@mui/material/styles';
 import { useDispatch, useSelector } from "react-redux";
 import { getState , actions} from "store/reducers/programReducer";
@@ -21,30 +21,14 @@ const DefaultInfos = ()=>{
         ROOM_LEAD_ROOM,
         ROOM_ETC_PEOPLE,
         ROOM_ETC_ROOM,
-        SERVICE_TYPE,
-    } = useSelector(s=> getState(s));
-
-
-
-    const onChange = e=> {
         
-        dispatch(actions.setValue({
-            key : e.target.name,
-            value : e.target.value
-        }))
-    }
+    } = useSelector(s=> getState(s).basicInfo);
 
-    const onSupportChange = (e)=>{
-        dispatch(actions.setValue({
-            key :"SUPPORT",
-            value : e.join(",")
-        }))
-    }
 
 
     const onNumberChange = (key ,value)=>{
         
-        dispatch(actions.setValue({
+        dispatch(actions.setBasicInfo({
             key,
             value
         }))

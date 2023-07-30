@@ -10,15 +10,15 @@ const DefaultInfos = ()=>{
 
     const dispatch =useDispatch();
     
-    const PROGRAM_OPINION= useSelector(s=> getState(s).PROGRAM_OPINION);
-    const SERVICE_OPINION= useSelector(s=> getState(s).SERVICE_OPINION);
-    const OVERALL_OPINION= useSelector(s=> getState(s).OVERALL_OPINION);
+    const PROGRAM_OPINION= useSelector(s=> getState(s).basicInfo.PROGRAM_OPINION);
+    const SERVICE_OPINION= useSelector(s=> getState(s).basicInfo.SERVICE_OPINION);
+    const OVERALL_OPINION= useSelector(s=> getState(s).basicInfo.OVERALL_OPINION);
     
 
 
     const onChange = e=> {
         
-        dispatch(actions.setValue({
+        dispatch(actions.setBasicInfo({
             key : e.target.name,
             value : e.target.value
         }))

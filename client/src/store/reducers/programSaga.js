@@ -9,6 +9,7 @@ import { takeLatest } from "redux-saga/effects"
 
 export default function* programSaga() {
 
-    yield takeLatest(actions.getList.type, createRequestSaga(actions.getList.type, api.getProgramList))
+    yield takeLatest(actions.getTempList.type, createRequestSaga(actions.getTempList.type, api.getTempList))
+    yield takeLatest(actions.getTempData.type, createRequestSaga(actions.getTempData.type, api.getTempData))
 
 }

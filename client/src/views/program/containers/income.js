@@ -9,6 +9,7 @@ import Input from "ui-component/inputs/input";
 import { makeStyles } from '@mui/styles';
 import Swal from "sweetalert2";
 import Select from "ui-component/inputs/selectItems";
+import { styled } from '@mui/material/styles';
 
 const items = [
     {value : "프로그램",      label : "프로그램"},
@@ -16,9 +17,15 @@ const items = [
     {value : "식사비",      label : "식사비"},
     {value : "재료비",      label : "재료비"},
     {value : "기타",      label : "기타"},
-    {value : "할인율",      label : "할인율"},
+    
 ]
 
+const Div = styled('div')(({ theme }) => ({
+    ...theme.typography.button,
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(1),
+    fontSize: "17px"
+}));
 
 const useStyles = makeStyles({
     tableContainer: {
@@ -41,6 +48,7 @@ const Incomes =memo(()=>{
     const dispatch = useDispatch();
     // selector
     const income = useSelector(s=> getState(s).income);
+    const incomeExtraList = useSelector(s=> getState(s).incomeExtraList);
     // page State
     const [pageInfo, setPageInfo] = useState({
         INCOME_TYPE : "",
@@ -67,21 +75,14 @@ const Incomes =memo(()=>{
     }
 
     const onAddClick = ()=>{
-        
-        
-
         const isEmpty =pageInfo.INCOME_TYPE === "할인율" ?  [pageInfo.INCOME_TYPE, pageInfo.INCOME_PRICE, pageInfo.INCOME_NOTE].includes(""):  Object.values(pageInfo).some(value => value === "");
-        
-
-        
-
         if(isEmpty){
             Swal.fire({ title : "확인", text : "비어있는값이 있습니다."})
             return;
         }
 
         dispatch(actions.addArrTarget({
-            target : "income",
+            target : "incomeExtraList",
             value : pageInfo
         }))
         setPageInfo({
@@ -95,18 +96,59 @@ const Incomes =memo(()=>{
 
     const onDeleteHandler= (id) => ()=>{
         dispatch(actions.removeArrTarget({
-            target : "income", 
+            target : "incomeExtraList", 
             id
         }));
     }
     
+    const onChangeHandler = id => e=>{
+        const {name, value} = e.target;
+        dispatch(actions.setArrTargetIdChange({
+            target : "income", 
+            id , 
+            name, 
+            value
+        }))
+    }
 
-    return (<>
 
-            <div style={{padding : "10px", width : "100%"}}>
-                {/* <div style={{padding: "0px 0px 10px 8px" ,"fontSize": "15px"}}></div> */}
-                <div style={{padding : "10px 0px "}}>
-                <Grid container spacing={2}alignItems="center">
+    const onNumberChange= id=>  (name, value)=>{
+        dispatch(actions.setArrTargetIdChange({
+            target : "income", 
+            id , 
+            name, 
+            value
+        }))
+    }
+
+
+    return (<>   
+                <Grid container spacing={2} alignItems="center" style={{padding :"10px 0px"}}>
+                        <Grid item xs={12}>
+                            <Div style={{  padding: "22px 0px 0px 8px"}}>수입금액</Div>
+                        </Grid>
+
+                    {income.map((i, idx)=>
+                        <Grid container item spacing={1} alignItems="center" sm={12} style={{marginTop : "1px"}} key={i.id}>
+                            <Grid item sm={2}>
+                                <div style={{textAlign:"center"}}>
+                                    {i.TITLE}
+                                </div>
+                            </Grid>
+                            <Grid item sm={3}>
+                                <NumberInput name="INCOME_PRICE"  value={i.INCOME_PRICE} label="금액" size="small" onChange={onNumberChange(i.id)}/>
+                            </Grid>
+                            {i.INCOME_TYPE !=="할인율" &&
+                            <Grid item sm={4}>
+                                <Input name="INCOME_DETAIL"  value={i.INCOME_DETAIL} label="세부내역" size="small" onChange={onChangeHandler(i.id)}/>
+                            </Grid>
+                            }
+                            <Grid item sm={i.INCOME_TYPE !=="할인율"  ? 3 : 7}>
+                                <Input name="INCOME_NOTE"  value={i.INCOME_NOTE} label="비고" size="small" onChange={onChangeHandler(i.id)}/>
+                            </Grid>
+                        </Grid>
+                    )}
+
                     <Grid item sm={2}>
                         <Select name="INCOME_TYPE"  value={pageInfo.INCOME_TYPE} label="분류" items={items}size="small" onChange={onChange}/>
                     </Grid>
@@ -134,7 +176,7 @@ const Incomes =memo(()=>{
                     </Button>
                     </Grid>
                 </Grid>
-                </div>
+                
                 <TableContainer component={Paper}  className={classes.tableContainer}>
                     <Table aria-label="simple table" size="small">
                     <TableHead className={classes.tableHeader}>
@@ -148,12 +190,12 @@ const Incomes =memo(()=>{
                         </TableRow>
                         </TableHead>
                         <TableBody>
-                            {income.length === 0 && 
+                            {incomeExtraList.length === 0 && 
                             <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
                                 <TableCell colSpan={5} align="center">등록된 항목이 없습니다.</TableCell>
                             </TableRow>
                             }
-                            {income.map((i, idx) => 
+                            {incomeExtraList.map((i, idx) => 
                                 <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} key={idx} >
                                     <TableCell align="center">{idx +1}</TableCell>
                                     <TableCell align="center">{i.INCOME_TYPE}</TableCell>
@@ -170,7 +212,7 @@ const Incomes =memo(()=>{
                         </TableBody>
                     </Table>
                     </TableContainer>
-            </div>
+            
     </>);
 
 })

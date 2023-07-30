@@ -18,7 +18,6 @@ router.post('/create', (req, res)=>{
         DAYS_TO_STAY,
         ENDDAY,
         INCOME_TYPE,
-        ISCLOSEMINE,
         LEAD_MAN_CNT,
         LEAD_WOMAN_CNT,
         MEAL_ETC,
@@ -34,7 +33,7 @@ router.post('/create', (req, res)=>{
         PROGRAM_IN_OUT,
         PROGRAM_OPINION,
         PROGRESS_STATE,
-        REG_ID,
+        
         RESIDENCE,
         ROOM_ETC_PEOPLE,
         ROOM_ETC_ROOM,
@@ -45,6 +44,8 @@ router.post('/create', (req, res)=>{
         SERVICE_OPINION,
         SERVICE_TYPE,
         SUPPORT,
+        expenseList, 
+        incomeList,
     } = data;
 
     const values = [
@@ -84,9 +85,6 @@ router.post('/create', (req, res)=>{
         PROGRAM_IN_OUT
     ]
 
-
-    console.log(values);
-    
 
     let sql = `
         INSERT INTO basic_info
@@ -131,29 +129,40 @@ router.post('/create', (req, res)=>{
             OVERALL_OPINION = VALUES(OVERALL_OPINION),
             PROGRESS_STATE = VALUES(PROGRESS_STATE),
             REG_ID = VALUES(REG_ID)
-    `;
-
+    `;  
+    console.log(maria)
+    
     maria(sql, values).then((rows) => {
-        const pk = BASIC_INFO_SEQ ? BASIC_INFO_SEQ : rows.insertId
-        // 기본 끝낫고 그다음것들 입력 필요 
+        const pk = BASIC_INFO_SEQ ? BASIC_INFO_SEQ : rows.insertId;
+        return maria(`DELETE FROM expense WHERE BASIC_INFO_SEQ = ?`, [pk]).then(() => pk);
+    })
+    .then((pk) => {
+        // JSON 데이터를 2차원 배열로 변환
+        let expenseRows = expenseList.map(obj => [obj.EXPENSE_TYPE, obj.EXPENSE_PRICE || 0, obj.EXPENSE_DETAIL, obj.EXPENSE_NOTE, pk]);
+        const expenseInsert = `INSERT INTO expense (EXPENSE_TYPE, EXPENSE_PRICE, EXPENSE_DETAIL, EXPENSE_NOTE, BASIC_INFO_SEQ) VALUES ?`;
+        return maria(expenseInsert, [expenseRows]).then(()=>pk);
+    })
+    .then((pk) => {
+        return maria(`DELETE FROM income WHERE BASIC_INFO_SEQ = ?`, [pk]).then(() => pk);
+    })
+    .then((pk) => {
+        let incomeRows = incomeList.map(obj => [obj.INCOME_TYPE, obj.INCOME_PRICE || 0, obj.INCOME_DETAIL, obj.INCOME_NOTE, pk]);
+        const incomeInsert = `INSERT INTO income (INCOME_TYPE, INCOME_PRICE, INCOME_DETAIL, INCOME_NOTE, BASIC_INFO_SEQ) VALUES ?`;
+        return maria(incomeInsert, [incomeRows]);
+    })
+    .then(() => {
+        res.json({result: true});
+    })
 
-        // TODO ( 집행 예정 금액들 기본값은 필요함,,,, 시불)
-        res.json({result : true})
-    } )
-    .catch((err) =>{
-        console.log(err)    
-        res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
-    });
 
 });
 
 
-// 서비스 조회
-router.post('/getPreviousServiceList', (req, res)=>{
-    const {data} = req.body; 
-    const {AGENCY, OPENDAY, EVAL_DATE } = data;
-    const sql = `SELECT * FROM service_env_satisfaction WHERE AGENCY =? AND OPENDAY = ? AND EVAL_DATE = ?`;
-    maria(sql,[AGENCY, OPENDAY, EVAL_DATE]).then((rows) =>  res.json(rows) )
+// 임시저장 조회
+router.post('/getTempList', (req, res)=>{
+    
+    const sql = `SELECT AGENCY, BASIC_INFO_SEQ, OPENDAY FROM basic_info WHERE PROGRESS_STATE='P'`;
+    maria(sql).then((rows) =>  res.json(rows) )
     .catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));
 
 });
@@ -161,23 +170,30 @@ router.post('/getPreviousServiceList', (req, res)=>{
 
 
 
-// 프로그램 조회
-router.post('/list', (req, res)=>{
+// 임시저장 정보 조회
+router.post('/getTempData', (req, res)=>{
+    const {seq} = req.body; 
 
-    const {data, type} = req.body; 
+    const basicInfoSql = `SELECT * FROM basic_info WHERE BASIC_INFO_SEQ = ?`;
+    const expenseSql = `SELECT * FROM expense WHERE BASIC_INFO_SEQ = ?`;
+    const incomeSql = `SELECT * FROM income WHERE BASIC_INFO_SEQ = ?`;
 
-    const {table} = dbTable[type]
-    console.log(table)
-    // Where 
-    const conditions = Object.entries(data) .filter(([key, value]) => value !== '') .map(([key, value]) => { return `${key} = ?`; });
-    // Value
-    const values = Object.values(data) .filter(value => value !== '');
-    // sql
-    const sql = `SELECT * FROM ${table} WHERE ${conditions.join(' AND ')}`;
-    console.log(sql, values)
-    maria(sql, values).then((rows) => {
-        res.json(rows)
-    }).catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));
+    Promise.all([
+        maria(basicInfoSql, [seq]),
+        maria(expenseSql, [seq]),
+        maria(incomeSql, [seq])
+    ])
+    .then(([basicInfoRows, expenseRows, incomeRows]) => {
+        res.json({
+            basicInfo: basicInfoRows,
+            expense: expenseRows,
+            income: incomeRows
+        })
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요." });
+    });
 });
 
 

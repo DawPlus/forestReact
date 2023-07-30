@@ -23,12 +23,12 @@ const DefaultInfos = ()=>{
         MEAL_PART,
         MEAL_LEAD,       
         MEAL_ETC 
-    } = useSelector(s=> getState(s));
+    } = useSelector(s=> getState(s).basicInfo);
 
 
     const onNumberChange = (key ,value)=>{
-            console.log(key ,value)
-        dispatch(actions.setValue({
+            
+        dispatch(actions.setBasicInfo({
             key,
             value
         }))

@@ -25,12 +25,11 @@ const DefaultInfos = ()=>{
         AGE_TYPE,
         BIZ_PURPOSE,
         SERVICE_TYPE,
-    } = useSelector(s=> getState(s));
+    } = useSelector(s=> getState(s).basicInfo);
 
 
     const onNumberChange = (key ,value)=>{
-            console.log(key ,value)
-        dispatch(actions.setValue({
+        dispatch(actions.setBasicInfo({
             key,
             value
         }))
@@ -38,14 +37,14 @@ const DefaultInfos = ()=>{
 
     const onChange = e=> {
         
-        dispatch(actions.setValue({
+        dispatch(actions.setBasicInfo({
             key : e.target.name,
             value : e.target.value
         }))
     }
 
     const onSupportChange = (e)=>{
-        dispatch(actions.setValue({
+        dispatch(actions.setBasicInfo({
             key :"SUPPORT",
             value : e.join(",")
         }))

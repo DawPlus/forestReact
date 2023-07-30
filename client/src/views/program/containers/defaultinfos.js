@@ -27,7 +27,24 @@ const DefaultInfos = ()=>{
         OM,
         ENDDAY,
         ISCLOSEMINE,
-    } = useSelector(s=> getState(s));
+    } = useSelector(s=> getState(s).basicInfo);
+
+
+    React.useEffect(()=>{
+        if (!OPENDAY || !ENDDAY) {
+            return;
+        }
+    
+        const startDate = moment(OPENDAY);
+        const endDate = moment(ENDDAY);
+        
+        const isValidDates = endDate.isSameOrAfter(startDate);
+        const diffInDays = isValidDates ? endDate.diff(startDate, 'days') + 1 : null;
+        
+        dispatch(actions.setBasicInfo({ key : "DAYS_TO_STAY", value : diffInDays }));
+
+    },[OPENDAY, ENDDAY, dispatch])
+
 
     const diffDays = React.useMemo(() => {
         if (!OPENDAY || !ENDDAY) {
@@ -40,25 +57,24 @@ const DefaultInfos = ()=>{
         const isValidDates = endDate.isSameOrAfter(startDate);
         const diffInDays = isValidDates ? endDate.diff(startDate, 'days') + 1 : null;
         const errorMessage = !isValidDates ? '잘못된 선택입니다. 종료일은 시작일 이후여야 합니다.' : null;
-    
         return errorMessage ? errorMessage : `${diffInDays} 일`;
     }, [OPENDAY, ENDDAY]);
 
     const onChange = e=> {
-        dispatch(actions.setValue({
+        dispatch(actions.setBasicInfo({
             key : e.target.name,
             value : e.target.value
         }))
     }
 
     const onDateChange = (key, value)=>{
-        dispatch(actions.setValue({ key, value }))
+        dispatch(actions.setBasicInfo({ key, value }))
     }
 
 
     const items = ['서울', '부산', '대구', '인천', '광주', '대전', '울산', '세종', '경기', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주', '미기재', '폐광지역'];
     const onCheckChange = e=>{
-        dispatch(actions.setValue({
+        dispatch(actions.setBasicInfo({
             key : e.target.name,
             value : e.target.checked
         }))

@@ -22,7 +22,7 @@ const DatePickerComponent = (props) => {
         <>
             <FormControl fullWidth variant="outlined" required={false} className="noneRed" size="small">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker format="YYYY-MM-DD" defaultValue={dayjs(value)} label={label} onChange={onDateChange} />
+                <DatePicker format="YYYY-MM-DD" value={dayjs(value)} label={label} onChange={onDateChange} />
             </LocalizationProvider>
             </FormControl>
         </>
