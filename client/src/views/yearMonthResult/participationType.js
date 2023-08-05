@@ -17,7 +17,7 @@ const ParticipationType = ()=>{
         count_income_etc,
         count_income_green,
         count_income_voucher,
-        count_kid,
+        count_kidboy,
         count_lowincome,
         count_old,
         count_society,
@@ -32,7 +32,7 @@ const ParticipationType = ()=>{
         part_income_etc,
         part_income_green,
         part_income_voucher,
-        part_kid,
+        part_kidboy,
         part_lowincome,
         part_old,
         part_society,
@@ -42,8 +42,8 @@ const ParticipationType = ()=>{
     } = useSelector(s=> getState(s).partTypeList)
 
     const headerInfo = [
-        ["참가유형", "연령대", "연령대", "연령대", "연령대", "연령대", "참가자유형", "참가자유형", "참가자유형", "참가자유형", "참가자유형", "참가자유형", "참가자유형", "수입구분", "수입구분", "수입구분", "수입구분", "사업목적", "사업목적", "사업목적"],
-        ["", "아동", "청소년", "성인", "노인", "계", "장애인", "저소득층", "가족", "중독", "교직원", "기타", "계", "녹색자금", "바우처", "기타", "계", "사회공헌", "수입사업", "계"],
+        ["참가유형", "연령대",  "연령대", "연령대", "연령대", "참가자유형", "참가자유형", "참가자유형", "참가자유형", "참가자유형", "참가자유형", "참가자유형", "수입구분", "수입구분", "수입구분", "수입구분", "사업구분", "사업구분", "사업구분"],
+        ["", "아동ㆍ청소년",  "성인", "노인", "계", "장애인", "저소득층", "가족", "중독", "교직원", "기타", "계", "녹색자금", "바우처", "기타", "계", "사회공헌", "수입사업", "계"],
     ]
 
     
@@ -54,11 +54,10 @@ const ParticipationType = ()=>{
             <TableBody>
                 <TableRow>
                     <TableCell>유형(건)</TableCell>
-                    <TableCell>{count_kid}</TableCell>
-                    <TableCell>{count_boy}</TableCell>
+                    <TableCell>{count_kidboy}</TableCell>
                     <TableCell>{count_adult}</TableCell>
                     <TableCell>{count_old}</TableCell>
-                    <TableCell>{count_kid+count_old+count_boy +count_adult}</TableCell>
+                    <TableCell>{count_kidboy+count_old+count_boy +count_adult}</TableCell>
                     <TableCell>{count_handicap}</TableCell>
                     <TableCell>{count_lowincome}</TableCell>
                     <TableCell>{count_family}</TableCell>
@@ -76,11 +75,10 @@ const ParticipationType = ()=>{
                 </TableRow>
                 <TableRow>
                     <TableCell>인원(수)</TableCell>
-                    <TableCell>{part_kid}</TableCell>
-                    <TableCell>{part_boy}</TableCell>
+                    <TableCell>{part_kidboy}</TableCell>
                     <TableCell>{part_adult}</TableCell>
                     <TableCell>{part_old}</TableCell>
-                    <TableCell>{part_kid+part_old+part_boy +part_adult}</TableCell>
+                    <TableCell>{part_kidboy+part_old+part_boy +part_adult}</TableCell>
                     <TableCell>{part_handicap}</TableCell>
                     <TableCell>{part_lowincome}</TableCell>
                     <TableCell>{part_family}</TableCell>

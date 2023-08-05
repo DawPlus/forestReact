@@ -2,8 +2,8 @@ import React  from "react";
 // project imports
 import callApi from "utils/callApi";
 import {Grid, Button,} from '@mui/material';
-import { useDispatch, useSelector } from "react-redux";
-import { getState , actions} from "store/reducers/programReducer";
+import {  useSelector } from "react-redux";
+import { getState } from "store/reducers/programReducer";
 import Swal from "sweetalert2";
 
 const columnNames = {
@@ -20,7 +20,7 @@ const columnNames = {
     INCOME_TYPE : "수입구분",
     PART_TYPE : "참가자유형",
     AGE_TYPE : "연령대",
-    BIZ_PURPOSE : "사업목적",
+    BIZ_PURPOSE : "사업구분",
     SERVICE_TYPE : "서비스유형",
     ROOM_PART_PEOPLE : "객실(참여자-인원)",
     ROOM_PART_ROOM : "객실(참여자-객실)",
@@ -39,9 +39,16 @@ const columnNames = {
 
 const InsertOperateResult = ()=>{
 
-    const dispatch = useDispatch();
+
 
     const data = useSelector(s=> getState(s).basicInfo);
+    const programList = useSelector(s=> getState(s).programList);
+    const teacherList = useSelector(s=> getState(s).teacherList);
+    const teacherExtraList = useSelector(s=> getState(s).teacherExtraList);
+    const customList = useSelector(s=> getState(s).customList);
+    const customExtraList = useSelector(s=> getState(s).customExtraList);
+    const income = useSelector(s=> getState(s).income);
+    const incomeExtraList = useSelector(s=> getState(s).incomeExtraList);
 
 
     const checkEmptyColumns = (data, excludeList = [], columnNames = {}) => {
@@ -67,8 +74,8 @@ const InsertOperateResult = ()=>{
     
 
 
-    // 데이터 생성 및 임시저장
-    const onPreSave = ()=>{
+    //저장
+    const onSave = ()=>{
 
 
 
@@ -80,21 +87,66 @@ const InsertOperateResult = ()=>{
             return
         }
         // 프로그램 등록여부 체크 
-        if(data.programList.length === 0){
+        if(programList.length === 0){
             Swal.fire(`프로그램을 입력해 주십시오.`);
             return;
         }
 
-        const expenseList = [...data.teacherList, ...data.teacherExtraList, ...data.customList , ...data.customExtraList].map(({TITLE, id, ...rest})=> ({...rest}));
-        const incomeList = [...data.income, ...data.incomeExtraList].map(({TITLE, id, ...rest})=> ({...rest}));
+        const expenseList = [...teacherList, ...teacherExtraList, ...customList , ...customExtraList].map(({TITLE, id, ...rest})=> ({...rest}));
+        const incomeList = [...income, ...incomeExtraList].map(({TITLE, id, ...rest})=> ({...rest}));
         
 
             
         
 
         const params = {
-            ...data.basicInfo, 
-            PROGRAM_IN_OUT : data.programList.map(obj => {
+            ...data, 
+            PROGRAM_IN_OUT : programList.map(obj => {
+                return Object.entries(obj)
+                    .filter(([key, value]) => key !== 'id')
+                    .map(([key, value]) => value)
+                    .join(',');
+            }).join(','),
+            PROGRESS_STATE : "E",
+            expenseList,
+            incomeList,
+        }
+
+
+        callApi("/insertOperation/create", {data: params}).then(r=> {
+            if(r.data.result){
+                Swal.fire({
+                    icon: 'success',
+                    title: '확인',
+                    text: "정상등록 되었습니다.",
+                    }).then(()=>{
+
+
+
+
+                    });  
+            }
+        })
+    }
+
+
+    // 데이터 생성 및 임시저장
+    const onPreSave = ()=>{
+
+        if(data.AGENCY === ""){
+            Swal.fire(`단체명을 입력해 주십시오(필수)`);
+            return;
+        }
+        if(data.OPENDAY === "" ||data.ENDDAY === "" ){
+            Swal.fire(`참여일(시작/종료)을 입력해 주십시오(필수)`);
+            return;
+        }
+        const expenseList = [...teacherList, ...teacherExtraList, ...customList , ...customExtraList].map(({TITLE, id, ...rest})=> ({...rest}));
+        const incomeList = [...income, ...incomeExtraList].map(({TITLE, id, ...rest})=> ({...rest}));
+
+        const params = {
+            ...data, 
+            PROGRAM_IN_OUT : programList.map(obj => {
                 return Object.entries(obj)
                     .filter(([key, value]) => key !== 'id')
                     .map(([key, value]) => value)
@@ -136,7 +188,7 @@ return(<>
                         {/*  PROGRESS_STATE: P */}
                         </Button>
 
-                        <Button variant="contained" color="primary" type="submit">
+                        <Button variant="contained" color="primary" type="submit" onClick={onSave}>
                         {/* PROGRESS_STATE : E */}
                         등록
                         </Button>

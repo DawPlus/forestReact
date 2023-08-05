@@ -38,6 +38,10 @@ const initialState = {
       OVERALL_OPINION : "",
       PROGRESS_STATE : "",
       REG_ID : "",
+
+      ORG_NATURE : "",// 단체성격
+      PART_FORM : "", // 참여형태
+
       ISCLOSEMINE : false,
     },
 

@@ -6,7 +6,7 @@ import DynamicTableHead from "ui-component/DynamicTableHead";
 
 
 const headerInfo =     [
-    ["참여일자 및 기간","참여일자 및 기간","지역","참여자(명)","참여자(명)","참여자(명)","인솔자(명)","인솔자(명)","인솔자(명)","실인원","연인원","지원사항","수입구분","연령대","참가자유형","사업구분"],
+    ["참여일자 및 기간","참여일자 및 기간","지역","참여자(명)","참여자(명)","참여자(명)","인솔자(명)","인솔자(명)","인솔자(명)","실인원","연인원","연령대","참가자유형","사업구분","단체성격","참여형태"],
     ["참여일자","체유일자","","남","여","계","남","여","계","","","","","","",""],
     
     
@@ -23,11 +23,12 @@ const ParticipationType = ()=>{
         PART_WOMAN_CNT, // 참여자(여)
         LEAD_MAN_CNT, // 인솔자(남)
         LEAD_WOMAN_CNT, // 인솔자(여)
-        SUPPORT, //지원사항
-        INCOME_TYPE, // 수입구분
         PART_TYPE, // 참가자유형
         AGE_TYPE, // 연령대
         BIZ_PURPOSE, // 사업구분
+        ORG_NATURE, // 단체 성격
+        PART_FORM, // 참여형태
+
 
     }  = useSelector(s=> getState(s).detailInfo)
     
@@ -52,11 +53,11 @@ const ParticipationType = ()=>{
                         <TableCell>{sum2}</TableCell>       
                         <TableCell>{sum1 + sum2}</TableCell>       
                         <TableCell>{(sum1 + sum2)* DAYS_TO_STAY}</TableCell>       
-                        <TableCell>{SUPPORT}</TableCell>       
-                        <TableCell>{INCOME_TYPE}</TableCell>       
                         <TableCell>{AGE_TYPE}</TableCell>       
                         <TableCell>{PART_TYPE}</TableCell>       
                         <TableCell>{BIZ_PURPOSE}</TableCell>
+                        <TableCell>{ORG_NATURE}</TableCell>
+                        <TableCell>{PART_FORM}</TableCell>
                     </TableRow>
                 </TableBody>
             </Table>

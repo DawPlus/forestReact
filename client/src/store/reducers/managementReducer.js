@@ -7,6 +7,26 @@ const initialState = {
     codeList : [],
     regUser : [],  // 등록된 사용자 목록
     history : [],   // 히스토리 
+
+
+    programMng : {
+
+      rows : [], 
+      newInfo : {
+        name : "", 
+        bunya : "", 
+        teacher : "", 
+      },
+      updateInfo : {
+        program_seq : "", 
+        name : "", 
+        bunya : "", 
+        teacher : "", 
+      }
+    }, 
+
+
+
 };
 
 const action = {
@@ -14,14 +34,15 @@ const action = {
     getRegUser : createAction(`${name}/getRegUser`),
     getAllHistories : createAction(`${name}/getAllHistories`),
     getHistory : createAction(`${name}/getHistory`),
+    getProgramMngList : createAction(`${name}/getProgramMngList`),
 
 }
 
 const codNameList  =[
-  {type : "SUPPORT", name : "지원사항"},
-  {type : "INCOME_TYPE", name : "수입구분"},
+  // {type : "SUPPORT", name : "지원사항"},
+  // {type : "INCOME_TYPE", name : "수입구분"},
   {type : "PART_TYPE", name : "참가자유형"},
-  {type : "BIZ_PURPOSE", name : "사업목적"},
+  {type : "BIZ_PURPOSE", name : "사업구분"},
   {type : "PROGRAM_IN_OUT", name : "프로그램"},
   {type : "SERVICE_TYPE", name : "서비스유형"},
   {type : "AGE_TYPE", name : "연령대"},
@@ -58,6 +79,22 @@ export const {getState, reducer, actions} = createCustomSlice({
       // 사용자 히스토리  조회 
       getHistory_SUCCESS : (state, {payload})=>{
         state.history = payload.data
+      },
+
+
+      // 프로그램 관리
+      // 조회
+      getProgramMngList_SUCCESS  : (state, {payload : {data}})=>{
+        state.programMng.rows = data;
+        state.programMng.newInfo = initialState.programMng.newInfo
+        state.programMng.updateInfo = initialState.programMng.updateInfo
+      },
+      onChangeProgramMngInfo : (state, {payload : {target, key, value}})=>{
+        state.programMng[target][key] = value;
+      }, 
+      setProgramUpdateInfo : (state, {payload})=>{
+        state.programMng.updateInfo = payload;
       }
+
     }
 });

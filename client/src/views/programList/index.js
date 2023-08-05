@@ -23,7 +23,7 @@ const ProgramList = () => {
 
 
   const onClick = (data)=>{
-    dispatch(actions.getDetail({seq : data[0] , agency : data[1], openday : data[2]}))
+    dispatch(actions.getDetail({seq : data[0] , agency : data[2], openday : data[3]}))
   }
 
   const columns = [

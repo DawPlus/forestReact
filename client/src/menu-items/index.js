@@ -100,6 +100,18 @@ const menuItems = {
                             title: '운영결과항목수정',
                             type: 'item',
                             url: '/code',   
+                        },
+                        {
+                            id: 'programMng',
+                            title: '프로그램관리',
+                            type: 'item',
+                            url: '/programMng',   
+                        },
+                        {
+                            id: 'teacherMng',
+                            title: '강사관리',
+                            type: 'item',
+                            url: '/teacherMng',   
                         }
                     ]
                 },

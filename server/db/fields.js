@@ -5,7 +5,7 @@ const dbTable= {
     basic_info : {
         table : "basic_info" , 
         key : "basic_info",
-        fields: [ 'OPENDAY', 'AGENCY', 'OM', 'ENDDAY', 'DAYS_TO_STAY', 'RESIDENCE', 'PART_MAN_CNT', 'PART_WOMAN_CNT', 'LEAD_MAN_CNT', 'LEAD_WOMAN_CNT', 'SUPPORT', 'INCOME_TYPE', 'PART_TYPE', 'AGE_TYPE', 'BIZ_PURPOSE', 'PROGRAM_IN_OUT', 'SERVICE_TYPE', 'ROOM_PART_PEOPLE', 'ROOM_PART_ROOM', 'ROOM_LEAD_PEOPLE', 'ROOM_LEAD_ROOM', 'ROOM_ETC_PEOPLE', 'ROOM_ETC_ROOM', 'MEAL_TYPE', 'MEAL_PART', 'MEAL_LEAD', 'MEAL_ETC', 'PROGRAM_OPINION', 'SERVICE_OPINION', 'OVERALL_OPINION', 'PROGRESS_STATE', 'REG_ID', ],
+        fields: [ 'OPENDAY', 'AGENCY', 'OM', 'ENDDAY', 'DAYS_TO_STAY', 'RESIDENCE', 'PART_MAN_CNT', 'PART_WOMAN_CNT', 'LEAD_MAN_CNT', 'LEAD_WOMAN_CNT', 'SUPPORT', 'INCOME_TYPE', 'PART_TYPE', 'AGE_TYPE', 'BIZ_PURPOSE', 'PROGRAM_IN_OUT', 'SERVICE_TYPE', 'ROOM_PART_PEOPLE', 'ROOM_PART_ROOM', 'ROOM_LEAD_PEOPLE', 'ROOM_LEAD_ROOM', 'ROOM_ETC_PEOPLE', 'ROOM_ETC_ROOM', 'MEAL_TYPE', 'MEAL_PART', 'MEAL_LEAD', 'MEAL_ETC', 'PROGRAM_OPINION', 'SERVICE_OPINION', 'OVERALL_OPINION', 'PROGRESS_STATE', 'REG_ID', 'PART_FORM', 'ORG_NATURE'],
     },
     basic_info_page : {
         table : "basic_info_page" , 
@@ -81,6 +81,11 @@ const dbTable= {
         table : "vibra_service" , 
         key : "VIBRA_SEQ",
         fields: [ 'DATE', 'AGENCY', 'PV', 'NAME', 'AGE', 'SEX', 'EQUIPMENT', 'ID', 'JUMIN', 'NUM1', 'NUM2', 'NUM3', 'NUM4', 'NUM5', 'NUM6', 'NUM7', 'NUM8', 'NUM9', 'NUM10'],
+    },
+    program_mng : {
+        table : "program_mng" , 
+        key : "program_seq",
+        fields: ['name', 'bunya', 'teacher', 'create_dtm', 'create_user', 'update_dtm', 'update_user'],
     },
 }
 

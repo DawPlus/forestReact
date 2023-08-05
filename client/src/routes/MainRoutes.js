@@ -22,6 +22,8 @@ const ProgramList = Loadable(lazy(() => import('views/programList')));
 const Code = Loadable(lazy(() => import('views/management/code')));
 const History = Loadable(lazy(() => import('views/management/history')));
 const UserList = Loadable(lazy(() => import('views/management/userList')));
+const TeacherMng = Loadable(lazy(() => import('views/management/teacherMng')));
+const ProgramMng = Loadable(lazy(() => import('views/management/programMng')));
 
 
 // Program List 
@@ -32,6 +34,8 @@ const UpdateDelete = Loadable(lazy(() => import('views/common/updateDelete')));
 const ServiceInsertForm = Loadable(lazy(() => import('views/serviceInsertForm')));
 const YearMonthResult = Loadable(lazy(() => import('views/yearMonthResult')));
 const SearchProgramResult = Loadable(lazy(() => import('views/searchProgramResult')));
+
+
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -80,6 +84,8 @@ const MainRoutes = [{
         { path: 'userList', element: <UserList /> },
         { path: 'code', element: <Code /> },
         { path: 'history', element: <History /> },
+        { path: 'teacherMng', element: <TeacherMng /> },
+        { path: 'programMng', element: <ProgramMng /> },
         {
             path: 'sae',
             children: [

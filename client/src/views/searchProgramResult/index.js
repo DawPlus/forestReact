@@ -25,7 +25,7 @@ const keywordItem = [
     { value : "DAYS_TO_STAY" , label : "체류기간"},
     { value : "REGIDENCE" , label : "거주지역"},
     { value : "SUPPORT" , label : "지원사항"},
-    { value : "BIZ_PURPOSE" , label : "사업목적"},
+    { value : "BIZ_PURPOSE" , label : "사업구분"},
     { value : "PART_TYPE" , label : "참가자유형"},
     { value : "AGE_TYPE" , label : "연령대"},
     { value : "INCOME_TYPE" , label : "수입구분"},

@@ -44,9 +44,12 @@ router.post('/create', (req, res)=>{
         SERVICE_OPINION,
         SERVICE_TYPE,
         SUPPORT,
+        PART_FORM,
+        ORG_NATURE, 
         expenseList, 
         incomeList,
     } = data;
+    
 
     const values = [
         BASIC_INFO_SEQ,
@@ -82,7 +85,8 @@ router.post('/create', (req, res)=>{
         OVERALL_OPINION,
         PROGRESS_STATE,
         user_name,
-        PROGRAM_IN_OUT
+        PART_FORM,
+        ORG_NATURE, 
     ]
 
 
@@ -93,9 +97,9 @@ router.post('/create', (req, res)=>{
             INCOME_TYPE, PART_TYPE, AGE_TYPE, BIZ_PURPOSE, PROGRAM_IN_OUT, SERVICE_TYPE,
             ROOM_PART_PEOPLE, ROOM_PART_ROOM, ROOM_LEAD_PEOPLE, ROOM_LEAD_ROOM,
             ROOM_ETC_PEOPLE, ROOM_ETC_ROOM, MEAL_TYPE, MEAL_PART, MEAL_LEAD, MEAL_ETC,
-            PROGRAM_OPINION, SERVICE_OPINION, OVERALL_OPINION, PROGRESS_STATE, REG_ID)
+            PROGRAM_OPINION, SERVICE_OPINION, OVERALL_OPINION, PROGRESS_STATE, REG_ID, PART_FORM, ORG_NATURE)
         VALUES 
-            (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON DUPLICATE KEY UPDATE 
             OPENDAY = VALUES(OPENDAY),
             AGENCY = VALUES(AGENCY),
@@ -128,9 +132,12 @@ router.post('/create', (req, res)=>{
             SERVICE_OPINION = VALUES(SERVICE_OPINION),
             OVERALL_OPINION = VALUES(OVERALL_OPINION),
             PROGRESS_STATE = VALUES(PROGRESS_STATE),
-            REG_ID = VALUES(REG_ID)
+            REG_ID = VALUES(REG_ID),
+            PART_FORM = VALUES(PART_FORM),
+            ORG_NATURE = VALUES(ORG_NATURE)
+        
     `;  
-    console.log(maria)
+    console.log(sql, values)
     
     maria(sql, values).then((rows) => {
         const pk = BASIC_INFO_SEQ ? BASIC_INFO_SEQ : rows.insertId;

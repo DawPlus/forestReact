@@ -95,9 +95,14 @@ export const {getState, reducer, actions} = createCustomSlice({
     },
     getPreviousProgramListAfterSave_SUCCESS : (state, {payload  : {data}})=>{
         state.rows = data.map(i=> ({...i, id : v4(), chk : false}));
+    },
+
+    
+    setAllData  : (state, {payload : {type, value}})=>{
+      state.rows = state.rows.map(i=> ({...i, 
+          [type] : value      
+      }))
     }
-
-
   }
 });
 

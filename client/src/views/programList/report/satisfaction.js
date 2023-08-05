@@ -10,7 +10,19 @@ const ProgramSatisfaction = ()=>{
     
     
     const programSaf  = useSelector(s=> getState(s).programSaf)
+    const {PROGRAM_IN_OUT}  = useSelector(s=> getState(s).detailInfo)
+    
+    const _programList =  PROGRAM_IN_OUT.split(',').reduce((acc, curr, idx) => {                
+        const rowNumber = Math.floor(idx / 5);
+        if (!acc[rowNumber]) {
+            acc[rowNumber] = { id: rowNumber + 1 };
+        }
+        const colName = ["programName","col1","col2","col3","col4"][idx % 5];
+        acc[rowNumber][colName] = curr;
+        return acc;
+    }, []);
 
+    
 
     const calculateAverage = (inputObject) => {
         const values = Object.values(inputObject);
@@ -56,16 +68,43 @@ const ProgramSatisfaction = ()=>{
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {programSaf.length ===0 ?   <TableRow><TableCell colSpan={17}>조회된 정보가 없습니다.</TableCell></TableRow>: null}
+                    {programSaf.length ===0 ?   
+                        _programList.length === 0 ? 
+                        <TableRow>
+                            <TableCell colSpan={17}>조회된 정보가 없습니다.</TableCell>
+                        </TableRow>  : 
+                        
+                        _programList.map((item, index) =>
+                        <TableRow key={index}>
+                            <TableCell >{item.programName}</TableCell>
+                            <TableCell >{item.col1}</TableCell>
+                            <TableCell >{item.col2}</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                        </TableRow>
+                        )
+                    : null}
                     {programSaf.map((i, key)=>
                     <TableRow key={key}>
-                        {key %2 === 0 ? <TableCell rowSpan={2}>{i.PROGRAM_NAME}</TableCell> :null}
+                        {/* {key %2 === 0 ? <TableCell rowSpan={2}>{i.PROGRAM_NAME}</TableCell> :null}
                         {key %2 === 0 ? <TableCell rowSpan={2}>{i.BUNYA}</TableCell> :null}
-                        {key %2 === 0 ? <TableCell rowSpan={2}>{i.TEACHER}</TableCell> :null}                        
-                        {/* <TableCell >{i.PROGRAM_NAME}</TableCell> 
+                        {key %2 === 0 ? <TableCell rowSpan={2}>{i.TEACHER}</TableCell> :null}                         */}
+                        <TableCell >{i.PROGRAM_NAME}</TableCell> 
                         <TableCell >{i.BUNYA}</TableCell> 
                         <TableCell >{i.TEACHER}</TableCell> 
-                         */}
+                        
                         <TableCell>{i.type}</TableCell>
                         <TableCell>{i.score1}</TableCell>
                         <TableCell>{i.score2}</TableCell>

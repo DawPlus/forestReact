@@ -18,7 +18,7 @@ function* getDetail(action) {
         // const res1 = yield call(api.getProgramListDetail, action.payload);
         // const res2 = yield call(api.getProgramListDetailEffect, action.payload);
         // const res3 = yield call(api.getProgramListDetailInEx, action.payload);
-        yield put({ type: actions.getDetail_SUCCESS, payload: {
+        yield put({ type: actions.getDetail_SUCCESS.type, payload: {
             data : res1.data, 
             effect: res2.data, 
             inExpense : res3.data,

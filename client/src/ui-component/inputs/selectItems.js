@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 // SELECT COMPONENT 
 const SelectComponent = (props) => {
 
-  const { label, name, value, onChange, items=[],  ...res} = props;
+  const { label, name, value, onChange, items=[],   ...res } = props;
 
   const id = useMemo(() => uuidv4(), []);
 

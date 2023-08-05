@@ -13,4 +13,9 @@ export default function* managementSaga() {
     yield takeLatest(actions.getAllHistories.type, createRequestSaga(actions.getAllHistories.type, api.getAllHistories))
     yield takeLatest(actions.getHistory.type, createRequestSaga(actions.getHistory.type, api.getHistory))
 
+
+    
+    yield takeLatest(actions.getProgramMngList.type, createRequestSaga(actions.getProgramMngList.type, api.getProgramMngList))
+    
+
 }

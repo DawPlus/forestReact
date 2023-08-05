@@ -17,8 +17,8 @@ import ExpenseAmount from "./containers/expenseAmount"
 import Income from "./containers/income"
 import BtnArea from "./containers/btnArea"
 import Select from "ui-component/inputs/selectItems";
-import { makeStyles } from '@mui/styles';
 import Typography from '@mui/material/Typography';
+import Swal from "sweetalert2";
 
 const InsertOperateResult = ()=>{
 
@@ -41,15 +41,19 @@ const InsertOperateResult = ()=>{
 
   // 임시저장 불러오기 
   const getTempData = () =>{
+    if(tempValue === ""){
+      Swal.fire({ icon: 'warning', title: '확인', text: "불러올 임시저장을 선택해주세요 ", })
+      return   
+    }
     dispatch(actions.getTempData({seq : tempValue}))
   }
 
 
 
   return(<>
-        <Grid   container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
+        <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
           <Grid item md={2}>
-            <Select items={tempList} onChange={e=>{ setTempValue(e.target.value) }} value={tempValue}/>
+            <Select label="임시저장" items={tempList} onChange={e=>{ setTempValue(e.target.value) }} value={tempValue}/>
           </Grid>
           <Grid item md={4}>
             <Button variant="contained" color="secondary"  onClick={getTempData}>

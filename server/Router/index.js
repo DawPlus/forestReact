@@ -9,6 +9,7 @@ const insertForm = require("./insertForm")
 const yearMonthResult = require("./yearMonthResult")
 const searchProgramResult = require("./searchProgramResult")
 const insertOperation = require("./insertOperation")
+const programMng = require("./programMng")
 
 //router.use(login);
 router.use("/program", program);
@@ -22,6 +23,7 @@ router.use("/insertForm", insertForm);
 router.use("/yearMonthResult", yearMonthResult);
 router.use("/searchProgram", searchProgramResult);
 router.use("/insertOperation", insertOperation);
+router.use("/programMng", programMng);
 
 
 module.exports = router;

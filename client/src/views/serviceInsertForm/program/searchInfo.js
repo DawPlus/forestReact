@@ -37,15 +37,17 @@ const SearchInfo = ()=>{
 
 
     return <>
-        <Grid container spacing={2} alignItems={"center"}>
-            <Grid item sm={2}>
-                <Input  label="기관명" value={AGENCY} name="AGENCY" onChange={onChange}/> 
-            </Grid>
+        <Grid container spacing={2} alignItems={"center"} style={{marginBottom : "15px"}}>
             <Grid item sm={2}>
                 <DatePicker  value={OPENDAY} onChange={onDateChange} label="시작일자" name="OPENDAY" />
             </Grid>
             <Grid item sm={2}>
                 <DatePicker label="실시일자" value={EVAL_DATE} onChange={onDateChange} name="EVAL_DATE"/>
+            </Grid>
+        </Grid>
+        <Grid container spacing={2} alignItems={"center"}>
+            <Grid item sm={2}>
+                <Input  label="기관명" value={AGENCY} name="AGENCY" onChange={onChange}/> 
             </Grid>
             <Grid item sm={2}>
                 <Input  label="프로그램명" value={PROGRAM_NAME} name="PROGRAM_NAME" onChange={onChange}/> 

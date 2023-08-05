@@ -5,7 +5,7 @@ const maria = require("../maria");
 
 // 프로그램 리스트 조회
 router.post('/getProgramList', (req, res)=>{
-    const sql = `SELECT * FROM BASIC_INFO WHERE PROGRESS_STATE ="E"`;
+    const sql = `SELECT * FROM BASIC_INFO WHERE PROGRESS_STATE ="E" ORDER BY OPENDAY DESC` ;
 
     maria(sql).then((rows) => {
         res.json(rows)
@@ -73,8 +73,7 @@ router.post('/getProgramListDetail', (req, res)=>{
         let rows1 = results[0]; // the result from the first query
         let rows2 = results[1]; // the result from the second query
         let rows3 = results[2]; // the result from the second query
-        console.log(rows1)
-
+        
         res.json({
             basicInfo: rows1[0],
             serviceList : rows2,

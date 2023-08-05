@@ -441,11 +441,11 @@ router.post('/getPartTypeList', (req, res)=>{
                                 .join(' ');     
     let sql = `
         SELECT 
-            COUNT(case when AGE_TYPE ="아동" then 1 end ) as count_kid,
+            COUNT(case when AGE_TYPE ="아동" then 1 end ) as count_kidboy,
             COUNT(case when AGE_TYPE ="청소년" then 1 end ) as count_boy,
             COUNT(case when AGE_TYPE ="성인" then 1 end ) as count_adult,
             COUNT(case when AGE_TYPE ="노인" then 1 end ) as count_old,
-            IFNULL(SUM(case when AGE_TYPE ="아동" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_kid,
+            IFNULL(SUM(case when AGE_TYPE ="아동" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_kidboy,
             IFNULL(SUM(case when AGE_TYPE ="청소년" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_boy,
             IFNULL(SUM(case when AGE_TYPE ="성인" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_adult,
             IFNULL(SUM(case when AGE_TYPE ="노인" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_old,
