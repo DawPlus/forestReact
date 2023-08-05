@@ -265,9 +265,6 @@ router.post('/programManage', (req, res)=>{
                 ${whereText}
 			group by bunya
     `;
-
-
-    console.log(sql, sql2)
     Promise.all([
         maria(sql),
         maria(sql2),

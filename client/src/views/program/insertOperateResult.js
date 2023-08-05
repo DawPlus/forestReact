@@ -17,8 +17,12 @@ import ExpenseAmount from "./containers/expenseAmount"
 import Income from "./containers/income"
 import BtnArea from "./containers/btnArea"
 import Select from "ui-component/inputs/selectItems";
+import { makeStyles } from '@mui/styles';
+import Typography from '@mui/material/Typography';
 
 const InsertOperateResult = ()=>{
+
+  
 
   const dispatch= useDispatch();
 
@@ -55,8 +59,14 @@ const InsertOperateResult = ()=>{
           <Grid item md={8}></Grid>
         </Grid>
       
+        <MainCard style={{marginBottom : "5px"}}>
+            <Typography variant="body1">
+              ※ 기본정보 및 프로그램정보 객실 식사 정보는 필수 입력값 입니다.
+            </Typography>
+        </MainCard>
         
         <Grid container spacing={2}>
+
           <Grid item sm={6}>
             {/* 기본정보 */}
             <MainCard>
@@ -92,10 +102,16 @@ const InsertOperateResult = ()=>{
           </Grid>
         </Grid>
         
+        
         <MainCard style={{marginTop : "20px"}}>
           <OpinionInfo/>
         </MainCard>
 
+        <MainCard style={{marginTop : "20px"}}>
+            <Typography variant="body1">
+              ※ 금액정보는 기본값 0원이 입력됩니다.
+            </Typography>
+        </MainCard>
         {/* 지출금액 */}
         <ExpenseAmount/>
 

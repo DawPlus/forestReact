@@ -105,7 +105,7 @@ const DefaultInfos = ()=>{
                 <Grid item container xs={12} spacing={2} alignItems="center">
                     
                     <Grid item  xs={6} >  
-                        <Select label="수입구분" name="INCOME_TYPE"  value={INCOME_TYPE}options={["녹색자금", "산림복지", "기타", "해당없음 "]} onChange={onChange}/>
+                        <Select label="수입구분" name="INCOME_TYPE"  value={INCOME_TYPE}options={["녹색자금", "산림복지", "기타", "해당없음"]} onChange={onChange}/>
                     </Grid>
                     <Grid item  xs={6} >  
                         <Select label="서비스유형" name="SERVICE_TYPE" value={SERVICE_TYPE}options={["산림교육", "산림치유", "행위중독치유", "행위중독예방", "힐링"]} onChange={onChange}/>

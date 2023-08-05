@@ -15,7 +15,7 @@ const UtilsMaterialIcons = Loadable(lazy(() => import('views/utilities/MaterialI
 const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons')));
 // ProGram
 const InsertOperateResult = Loadable(lazy(() => import('views/program/insertOperateResult')));
-const ProgramList = Loadable(lazy(() => import('views/program/programList')));
+const ProgramList = Loadable(lazy(() => import('views/programList')));
 
 // Management
 

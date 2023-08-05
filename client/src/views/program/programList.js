@@ -4,6 +4,10 @@ import DataGrid from "ui-component/dataGrid"
 import { useDispatch, useSelector } from "react-redux";
 import { actions, getState } from "store/reducers/programReducer";
 
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
 
 const ProgramList = () => {
   // Dispatch
@@ -13,21 +17,12 @@ const ProgramList = () => {
 
 
   const onClick = (data)=>{
+    setValue("2")
     console.log(data)
   }
 
   const columns = [
-    {
-      name: "index",
-      label: "번호",
-      options: {
-        customBodyRender: (_, tableMeta, _updateValue) => {
-          return (
-            <span>{tableMeta.rowIndex + 1}</span>
-          );
-        }
-      }
-    },
+    { name: "index", label: "번호", },
     { name: "AGENCY", label: "단체명"},
     { name: "OPENDAY", label: "시작일"},
     { name: "ENDDAY", label: "종료일"},
@@ -48,9 +43,28 @@ const ProgramList = () => {
   },[])
   
 
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    console.log(newValue)
+    setValue(newValue);
+  };
+
   return (
+
+
+    
     <MainCard>
-      <DataGrid title="운영결과 보고검색" data={rows} columns={columns} />
+
+      <TabContext value={value}>
+        <TabList onChange={handleChange} aria-label="lab API tabs example">
+            <Tab label="운영결과보고검색" value="1" />
+            <Tab label="결과보고서" value="2" />
+          </TabList>
+        <TabPanel value="1"><DataGrid  data={rows} columns={columns} /></TabPanel>
+        <TabPanel value="2">Item Two</TabPanel>
+      </TabContext>
+      
     </MainCard>
   );
 };

@@ -6,9 +6,9 @@ const name ="program";
 const initialState = {
     basicInfo : {
       BASIC_INFO_SEQ : null, 
-      OPENDAY : "",
       AGENCY : "",
       OM : "",
+      OPENDAY : "",
       ENDDAY : "",
       DAYS_TO_STAY : "",
       RESIDENCE : "",
@@ -81,6 +81,8 @@ const initialState = {
 
 
     tempList : [], 
+
+    rows : [] , 
 };
 
 const order = [
@@ -125,6 +127,9 @@ export const {getState, reducer, actions} = createCustomSlice({
   initialState,
   action, 
   reducers: {
+    getList_SUCCESS : (state, {payload})=>{
+      state.rows = payload.data.map((i, idx)=>({...i, index : idx +1}));
+    },
     //임시저장항목조회
     getTempData_SUCCESS : (state, {payload : {data }})=>{
       const {basicInfo , expense, income} = data;

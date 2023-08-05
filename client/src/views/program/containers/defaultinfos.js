@@ -25,6 +25,7 @@ const DefaultInfos = ()=>{
         OPENDAY,
         AGENCY,
         OM,
+        RESIDENCE,
         ENDDAY,
         ISCLOSEMINE,
     } = useSelector(s=> getState(s).basicInfo);
@@ -108,7 +109,7 @@ const DefaultInfos = ()=>{
 
                 <Grid item container xs={12} spacing={2} alignItems="center">
                     <Grid item  xs={6} >
-                        <Select label="거주지역" name="RESIDENCE" options={items} onChange={onChange}/>
+                        <Select label="거주지역" name="RESIDENCE" options={items} value={RESIDENCE} onChange={onChange}/>
                     </Grid>
                     <Grid item  xs={6}>
                         <CheckBox label="폐광지역" style={{ alignItems: 'center' }}value={ISCLOSEMINE} onChange={onCheckChange} name="ISCLOSEMINE"/>

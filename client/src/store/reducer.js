@@ -6,6 +6,8 @@ import customizationReducer from './customizationReducer';
 import commonReducer from  "./reducers/commonReducer"
 import {reducer as programReducer} from "./reducers/programReducer"
 import programSaga from "./reducers/programSaga";
+import {reducer as programList} from "./reducers/programListReducer"
+import programListSaga from "./reducers/programListSaga";
 
 import {reducer as management } from "./reducers/managementReducer"
 import managementSaga from "./reducers/managementSaga";
@@ -36,7 +38,8 @@ const reducer = combineReducers({
     updateDelete,
     serviceInsert,
     yearMonthResult,
-    searchProgram
+    searchProgram,
+    programList
 });
 
 
@@ -50,6 +53,7 @@ export function* rootSaga() {
         serviceInsertSaga(),
         yearMonthResultSaga(),
         searchProgramSaga(),
+        programListSaga()
     ]); // all은 배열안의 여러 사가를 동시에 실행시킨다.
 } 
 

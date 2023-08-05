@@ -41,7 +41,7 @@ const InsertOperateResult = ()=>{
 
     const dispatch = useDispatch();
 
-    const data = useSelector(s=> getState(s));
+    const data = useSelector(s=> getState(s).basicInfo);
 
 
     const checkEmptyColumns = (data, excludeList = [], columnNames = {}) => {
@@ -70,18 +70,20 @@ const InsertOperateResult = ()=>{
     // 데이터 생성 및 임시저장
     const onPreSave = ()=>{
 
-        // const excludeList = ["BASIC_INFO_SEQ", "REG_ID", "DAYS_TO_STAY", "PROGRESS_STATE", "PROGRAM_IN_OUT", "ISCLOSEMINE"];
-        // // 기본값 체크 
-        // const result = checkEmptyColumns(data, excludeList, columnNames);
+
+
+        const excludeList = ["BASIC_INFO_SEQ", "REG_ID", "DAYS_TO_STAY", "PROGRESS_STATE", "PROGRAM_IN_OUT", "ISCLOSEMINE"];
+        // 기본값 체크 
+        const result = checkEmptyColumns(data, excludeList, columnNames);
         
-        // if (!result) {
-        //     return
-        // }
-        // // 프로그램 등록여부 체크 
-        // if(data.programList.length === 0){
-        //     Swal.fire(`프로그램을 입력해 주십시오.`);
-        //     return;
-        // }
+        if (!result) {
+            return
+        }
+        // 프로그램 등록여부 체크 
+        if(data.programList.length === 0){
+            Swal.fire(`프로그램을 입력해 주십시오.`);
+            return;
+        }
 
         const expenseList = [...data.teacherList, ...data.teacherExtraList, ...data.customList , ...data.customExtraList].map(({TITLE, id, ...rest})=> ({...rest}));
         const incomeList = [...data.income, ...data.incomeExtraList].map(({TITLE, id, ...rest})=> ({...rest}));

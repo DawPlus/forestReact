@@ -60,7 +60,7 @@ const ExpenseAmount = ()=>{
 
     return (<>
     
-                <MainCard style={{marginTop : "20px"}}>
+                <MainCard style={{marginTop : "10px"}}>
                     <Grid container spacing={1} alignItems="center"> 
                         <Grid item xs={12}>
                             <Div style={{  padding: "22px 0px 0px 8px"}}>예정금액-강사(단위:천원)</Div>
@@ -85,7 +85,7 @@ const ExpenseAmount = ()=>{
                 </MainCard>
 
         
-                <MainCard style={{marginTop : "20px"}}>
+                <MainCard style={{marginTop : "10px"}}>
                     <Grid container spacing={1} alignItems="center"> 
                         <Grid item xs={12}>
                             <Div style={{  padding: "22px 0px 0px 8px"}}>예정금액-참가자(단위:천원)</Div>

@@ -39,3 +39,34 @@ export function generateMergeInfo(headerInfo) {
 
     return mergeInfo;
 }
+
+
+export function  decodeSpecialCharacters(inputString){
+    if (!inputString) {
+      return ""; // 입력 문자열이 비어있을 경우 빈 문자열 반환
+    }
+  
+    const decodeMap = {
+      "& #40;": "(", // `& #40;`을 `(`로 변경
+      "& #41;": ")", // `& #41;`을 `)`로 변경
+      "& #44;": ",", // `& #44;`를 `,`로 변경
+      "& #60;": "<", // `& #60;`을 `<`로 변경
+      "& #62;": ">", // `& #62;`을 `>`로 변경
+      "& #94;": "^", // `& #94;`을 `^`로 변경
+      "& #38;": "&", // `& #38;`을 `&`로 변경
+      "& #36;": "$", // `& #36;`을 `$`로 변경
+      "& #47;": "/", // `& #47;`를 `/`로 변경
+      // 추가적인 변환 매핑은 이곳에 추가
+    };
+  
+    // 디스트럭처링을 활용하여 간단한 변환 매핑 정의
+    const regexMap = Object.entries(decodeMap).map(([encoded, decoded]) => [new RegExp(encoded, "g"), decoded]);
+  
+    // 입력 문자열에서 변환 매핑에 따라 모든 매칭 변경
+    let resultString = inputString;
+    for (const [regex, decoded] of regexMap) {
+      resultString = resultString.replaceAll(regex, decoded);
+    }
+  
+    return resultString;
+  }
