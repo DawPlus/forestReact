@@ -61,7 +61,7 @@ const FirebaseLogin = () => {
             return; 
         }
         dispatch(actions.setValue({ key : "isLogin", value : r.data.isLogin }));
-        navigate("/");
+        navigate("/main");
         })
     }
     // 회원가입 

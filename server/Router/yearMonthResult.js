@@ -12,8 +12,8 @@ router.post('/getExIncomeList', (req, res)=>{
     let sql = `
     SELECT ic.expense_type as type, group_concat(expense_price) as price1 
 		
-		FROM foresthealing.expense ic
-		LEFT join foresthealing.basic_info bi
+		FROM dbstatistics.expense ic
+		LEFT join dbstatistics.basic_info bi
 		on (ic.BASIC_INFO_SEQ =bi.BASIC_INFO_SEQ)
     WHERE bi.OPENDAY BETWEEN ? AND ?
 		group by ic.expense_type
@@ -23,8 +23,8 @@ router.post('/getExIncomeList', (req, res)=>{
     let sql2 = `
         SELECT ic.INCOME_TYPE as type,group_concat(INCOME_PRICE) as price1
         
-        FROM foresthealing.income ic
-        LEFT join foresthealing.basic_info bi
+        FROM dbstatistics.income ic
+        LEFT join dbstatistics.basic_info bi
         on (ic.BASIC_INFO_SEQ =bi.BASIC_INFO_SEQ)
         WHERE bi.OPENDAY BETWEEN ? AND ?
         group by ic.INCOME_TYPE
@@ -80,7 +80,7 @@ router.post('/getProgramEffect', (req, res)=>{
                 SCORE11 + SCORE12 + SCORE13 + SCORE14 + SCORE15 + SCORE16 + SCORE17 + SCORE18 + SCORE19 + SCORE20 +
                 SCORE21 + SCORE22) / 22), 2), 0) AS AverageScore
         FROM 
-            HEALING_SERVICE
+            healing_service
         WHERE PV IN ('사전', '사후')
             AND OPENDAY BETWEEN ? AND ?
         GROUP BY PV;
@@ -104,7 +104,7 @@ router.post('/getProgramEffect', (req, res)=>{
             SCORE38+ SCORE39+ SCORE40+ SCORE41+ SCORE42+ SCORE43+ SCORE44+ SCORE45+ SCORE46+ SCORE47+
             SCORE48+ SCORE49+ SCORE50+ SCORE51+ SCORE52+ SCORE53+ SCORE54+ SCORE55+ SCORE56+ SCORE57+
             SCORE58+ SCORE59+ SCORE60+ SCORE61+ SCORE62)/62,2),0) as avg
-        FROM COUNSEL_SERVICE
+        FROM counsel_service
         WHERE PV = '사전'
             AND OPENDAY BETWEEN ? AND ?
 
@@ -127,7 +127,7 @@ router.post('/getProgramEffect', (req, res)=>{
             SCORE38+ SCORE39+ SCORE40+ SCORE41+ SCORE42+ SCORE43+ SCORE44+ SCORE45+ SCORE46+ SCORE47+
             SCORE48+ SCORE49+ SCORE50+ SCORE51+ SCORE52+ SCORE53+ SCORE54+ SCORE55+ SCORE56+ SCORE57+
             SCORE58+ SCORE59+ SCORE60+ SCORE61+ SCORE62)/62,2),0) as avg
-        FROM COUNSEL_SERVICE
+        FROM counsel_service
         WHERE PV = '사후'
         AND OPENDAY BETWEEN ? AND ?
     `;
@@ -137,7 +137,7 @@ router.post('/getProgramEffect', (req, res)=>{
             SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18),0) as sum,
         IFNULL(ROUND(AVG(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
         SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18)/18,2),0) as avg 
-        FROM PREVENT_SERVICE
+        FROM prevent_service
         WHERE PV IN ("사전", "사후")
         AND OPENDAY BETWEEN ? AND ?
         GROUP BY PV
@@ -150,7 +150,7 @@ router.post('/getProgramEffect', (req, res)=>{
                 IFNULL(ROUND(AVG(nullif(num3,0)),2),0) as num3, 
                 IFNULL(ROUND(AVG(nullif(num4,0)),2),0) as num4, 
                 IFNULL(ROUND(AVG(nullif(num5,0)),2),0) as num5
-            FROM HRV_SERVICE
+            FROM hrv_service
             WHERE DATE BETWEEN ? AND ? AND PV = '사전'
 
             UNION ALL
@@ -162,7 +162,7 @@ router.post('/getProgramEffect', (req, res)=>{
                 IFNULL(ROUND(AVG(nullif(num3,0)),2),0) as num3, 
                 IFNULL(ROUND(AVG(nullif(num4,0)),2),0) as num4, 
                 IFNULL(ROUND(AVG(nullif(num5,0)),2),0) as num5
-            FROM HRV_SERVICE
+            FROM hrv_service
             WHERE DATE BETWEEN ? AND ? AND PV = '사후'
 
     `;
@@ -204,7 +204,7 @@ router.post('/getSerList', (req, res)=>{
             ifnull(ROUND(AVG(nullif(score6,0)),2),0) as score6,    ifnull(ROUND(AVG(nullif(score7,0)),2),0) as score7,   ifnull(ROUND(AVG(nullif(score8,0)),2),0) as score8,   ifnull(ROUND(AVG(nullif(score9,0)),2),0) as score9,   ifnull(ROUND(AVG(nullif(score10,0)),2),0) as score10,
             ifnull(ROUND(AVG(nullif(score11,0)),2),0) as score11,  ifnull(ROUND(AVG(nullif(score12,0)),2),0) as score12, ifnull(ROUND(AVG(nullif(score13,0)),2),0) as score13, ifnull(ROUND(AVG(nullif(score14,0)),2),0) as score14, ifnull(ROUND(AVG(nullif(score15,0)),2),0) as score15, 
             ifnull(ROUND(AVG(nullif(score16,0)),2),0) as score16
-        FROM SERVICE_ENV_SATISFACTION
+        FROM service_env_satisfaction
         WHERE OPENDAY BETWEEN ? AND ?
     `;
     maria(sql,[openday, endday]).then((rows) => {  
@@ -221,7 +221,7 @@ router.post('/programManage', (req, res)=>{
         SELECT 
             PROGRAM_IN_OUT as PROGRAM_IN_OUT2
         FROM 
-            BASIC_INFO
+            basic_info
         WHERE PROGRESS_STATE ="E"
             AND OPENDAY BETWEEN ? AND ?
     `;
@@ -232,7 +232,7 @@ router.post('/programManage', (req, res)=>{
                 ROUND(sum(SCORE1+SCORE2+SCORE3)/(count(Case WHEN SCORE1 != 0 then 1 END)+count(CASE WHEN SCORE2 !=0 then 1 END)+count(Case WHen SCORE3 !=0 then 1 END)),2)as program,
                 ROUND(sum(SCORE4+SCORE5+SCORE6)/(count(Case WHEN SCORE4 != 0 then 1 END)+count(CASE WHEN SCORE5 !=0 then 1 END)+count(Case WHen SCORE6 !=0 then 1 END)),2)as content,
                 ROUND(sum(SCORE7+SCORE8+SCORE9)/(count(Case WHEN SCORE8 != 0 then 1 END)+count(CASE WHEN SCORE7 !=0 then 1 END)+count(CASE WHEN SCORE9 !=0 then 1 END)),2)as effect
-			FROM PROGRAM_SATISFACTION
+			FROM program_satisfaction
             WHERE  OPENDAY BETWEEN ? AND ?
 			group by bunya
     `;
@@ -276,7 +276,7 @@ router.post('/getAllPrograms', (req, res)=>{
         COUNT(CASE WHEN SERVICE_TYPE = '힐링' THEN 1 END) AS healing,
         COUNT(CASE WHEN SERVICE_TYPE = '기타' THEN 1 END) AS ser_etc
     FROM
-        BASIC_INFO
+        basic_info
     WHERE
         (BIZ_PURPOSE = '사회공헌' OR BIZ_PURPOSE = '수익사업') AND PROGRESS_STATE = 'E'
         AND OPENDAY BETWEEN ? AND ?
@@ -296,7 +296,7 @@ router.post('/getAllPrograms', (req, res)=>{
             SUM(CASE WHEN BIZ_PURPOSE = '사회공헌' THEN LEAD_MAN_CNT ELSE 0 END) AS soc_lead_man,
             SUM(CASE WHEN BIZ_PURPOSE = '사회공헌' THEN LEAD_WOMAN_CNT ELSE 0 END) AS soc_lead_woman
         FROM
-            BASIC_INFO
+            basic_info
         WHERE
             BIZ_PURPOSE IN ('수익사업', '사회공헌') AND PROGRESS_STATE = 'E'
             AND OPENDAY BETWEEN ? AND ?  
@@ -309,7 +309,7 @@ router.post('/getAllPrograms', (req, res)=>{
             SUM(ROOM_PART_PEOPLE) as room_part_people, SUM(ROOM_LEAD_PEOPLE) as room_lead_people, SUM(ROOM_ETC_PEOPLE) as room_etc_people,
             SUM(ROOM_PART_ROOM) as room_part_room, SUM(ROOM_LEAD_ROOM) as room_lead_room, SUM(ROOM_ETC_PEOPLE) as room_etc_room,
             SUM(MEAL_PART) as meal_part, SUM(MEAL_LEAD) as meal_lead, SUM(MEAL_ETC) as meal_etc
-        FROM BASIC_INFO
+        FROM basic_info
         WHERE 
             1 = 1
             AND OPENDAY BETWEEN ? AND ?  
@@ -319,7 +319,7 @@ router.post('/getAllPrograms', (req, res)=>{
     let sql4 = `
     SELECT BIZ_PURPOSE, 
         SUM((IFNULL(PART_MAN_CNT,0) + IFNULL(PART_WOMAN_CNT,0) + IFNULL(LEAD_MAN_CNT,0) + IFNULL(LEAD_WOMAN_CNT,0)) * IFNULL(DAYS_TO_STAY,0)) as grand_total
-    FROM BASIC_INFO
+    FROM basic_info
     WHERE BIZ_PURPOSE IN ('수익사업', '사회공헌') AND PROGRESS_STATE = 'E'
         AND OPENDAY BETWEEN ? AND ?  
     GROUP BY BIZ_PURPOSE;
@@ -381,7 +381,7 @@ router.post('/getResidenceList', (req, res)=>{
             SELECT "전남" UNION ALL
             SELECT "제주") AS r
         LEFT JOIN 
-            BASIC_INFO AS b ON b.RESIDENCE = r.RESIDENCE AND b.PROGRESS_STATE = "E"
+            basic_info AS b ON b.RESIDENCE = r.RESIDENCE AND b.PROGRESS_STATE = "E"
         WHERE 
             1 = 1
             AND OPENDAY BETWEEN ? AND ? 
@@ -431,7 +431,7 @@ router.post('/getPartTypeList', (req, res)=>{
             COUNT(case when BIZ_PURPOSE ="사회공헌" then 1 end ) as count_society,
             IFNULL(SUM(case when BIZ_PURPOSE ="수익사업" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_benefit,
             IFNULL(SUM(case when BIZ_PURPOSE ="사회공헌" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_society
-        FROM BASIC_INFO
+        FROM basic_info
         WHERE OPENDAY BETWEEN ? AND ? AND PROGRESS_STATE ="E"
     `;
 

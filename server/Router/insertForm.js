@@ -30,9 +30,9 @@ router.post('/serviceInsert', (req, res)=>{
     // 삭제 후 Insert 
     const delRows = [...deleteRow, ..._rowDelete].filter(i=> i !== "");
 
-    const insertQuery = `INSERT INTO SERVICE_ENV_SATISFACTION (OPENDAY, SEX, AGE, RESIDENCE, JOB, PTCPROGRAM, AGENCY, EVAL_DATE, SCORE1, SCORE2, SCORE3, SCORE4, SCORE5, SCORE6, SCORE7, SCORE8, SCORE9, SCORE10, FACILITY_OPINION, SCORE11, SCORE12, SCORE13, SCORE14, SCORE15, SCORE16, OPERATION_OPINION, SCORE17, SCORE18) VALUES ${rows}`;
+    const insertQuery = `INSERT INTO service_env_satisfaction (OPENDAY, SEX, AGE, RESIDENCE, JOB, PTCPROGRAM, AGENCY, EVAL_DATE, SCORE1, SCORE2, SCORE3, SCORE4, SCORE5, SCORE6, SCORE7, SCORE8, SCORE9, SCORE10, FACILITY_OPINION, SCORE11, SCORE12, SCORE13, SCORE14, SCORE15, SCORE16, OPERATION_OPINION, SCORE17, SCORE18) VALUES ${rows}`;
    // deleteRows가 있는 경우에만 deleteQuery 실행
-    const deleteQuery = delRows.length > 0 ? `DELETE FROM SERVICE_ENV_SATISFACTION WHERE SERVICE_SEQ IN (${delRows.join(", ")})` : "";
+    const deleteQuery = delRows.length > 0 ? `DELETE FROM service_env_satisfaction WHERE SERVICE_SEQ IN (${delRows.join(", ")})` : "";
 
     let deletePromise;
     
@@ -86,7 +86,6 @@ router.post('/list', (req, res)=>{
     const {data, type} = req.body; 
 
     const {table} = dbTable[type]
-    console.log(table)
     // Where 
     const conditions = Object.entries(data) .filter(([key, value]) => value !== '') .map(([key, value]) => { return `${key} = ?`; });
     // Value

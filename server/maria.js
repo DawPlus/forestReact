@@ -2,11 +2,11 @@ const maria = require("mysql");
 
 // DB 연결 정보
 const dbConfig = {
-    host : "localhost",
+    host : "db.statistics.gabia.io",
     port : 3306, 
-    user : 'root',
-    password : "1111", 
-    database : "foresthealing"
+    user : 'statistics',
+    password : "forest113*", 
+    database : "dbstatistics"
 
   };
   

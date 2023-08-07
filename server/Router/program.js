@@ -5,7 +5,7 @@ const maria = require("../maria");
 
 // 프로그램 리스트 조회
 router.post('/getProgramList', (req, res)=>{
-    const sql = `SELECT * FROM BASIC_INFO WHERE PROGRESS_STATE ="E" ORDER BY OPENDAY DESC` ;
+    const sql = `SELECT * FROM basic_info WHERE PROGRESS_STATE ="E" ORDER BY OPENDAY DESC` ;
 
     maria(sql).then((rows) => {
         res.json(rows)
@@ -18,7 +18,7 @@ router.post('/getProgramList', (req, res)=>{
 router.post('/getProgramListDetail', (req, res)=>{
     const {seq, agency, openday} = req.body;
     
-    const sql = `SELECT * FROM BASIC_INFO WHERE PROGRESS_STATE ="E" and BASIC_INFO_SEQ = ?`;
+    const sql = `SELECT * FROM basic_info WHERE PROGRESS_STATE ="E" and BASIC_INFO_SEQ = ?`;
 
     const sql2 = `SELECT 
                             IFNULL(ROUND(AVG(score1), 2), 0) as score1,
@@ -39,7 +39,7 @@ router.post('/getProgramListDetail', (req, res)=>{
                             IFNULL(ROUND(AVG(score16), 2), 0) as score16,
                             IFNULL(ROUND(AVG(score17), 2), 0) as score17,
                             IFNULL(ROUND(AVG(score18), 2), 0) as score18
-                        FROM SERVICE_ENV_SATISFACTION
+                        FROM service_env_satisfaction
                         WHERE AGENCY = ? AND OPENDAY = ?`
 
     const sql3 = `SELECT PROGRAM_NAME, TEACHER, BUNYA, type, 
@@ -52,7 +52,7 @@ router.post('/getProgramListDetail', (req, res)=>{
                     IFNULL(ROUND(AVG(nullif(score7, 0)), 2), 0) as score7,
                     IFNULL(ROUND(AVG(nullif(score8, 0)), 2), 0) as score8,
                     IFNULL(ROUND(AVG(nullif(score9, 0)), 2), 0) as score9
-                FROM PROGRAM_SATISFACTION
+                FROM program_satisfaction
                 WHERE 1=1 
                     AND AGENCY = ?
                     AND OPENDAY = ? AND AGE != 0 
@@ -96,7 +96,7 @@ router.post('/getProgramListDetailEffect', (req, res)=>{
                         SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+SCORE19+SCORE20), 0) AS sum1,
                     IFNULL(ROUND(AVG(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
                     SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+SCORE19+SCORE20)/20, 2), 0) AS avg1
-                FROM PREVENT_SERVICE 
+                FROM prevent_service 
                 WHERE AGENCY = ? AND OPENDAY = ? AND AGE != 0 and PV= "사전"
 
                 UNION
@@ -107,7 +107,7 @@ router.post('/getProgramListDetailEffect', (req, res)=>{
                         SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+SCORE19+SCORE20), 0) AS sum2,
                     IFNULL(ROUND(AVG(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
                     SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+SCORE19+SCORE20)/20, 2), 0) AS avg2
-                FROM PREVENT_SERVICE
+                FROM prevent_service
                 WHERE AGENCY = ? AND OPENDAY = ? AND AGE != 0 and PV= "사후"
                 `
     const sql2 = `SELECT
@@ -126,7 +126,7 @@ router.post('/getProgramListDetailEffect', (req, res)=>{
                         + SCORE38+ SCORE39+ SCORE40+ SCORE41+ SCORE42+ SCORE43+ SCORE44+ SCORE45+ SCORE46+ SCORE47
                         + SCORE48+ SCORE49+ SCORE50+ SCORE51+ SCORE52+ SCORE53+ SCORE54+ SCORE55+ SCORE56+ SCORE57
                         + SCORE58+ SCORE59+ SCORE60+ SCORE61+ SCORE62)/62,2),0) AS avg1 
-                FROM COUNSEL_SERVICE
+                FROM counsel_service
 
                         WHERE AGENCY = ? AND OPENDAY = ? AND PV ="사전" AND AGE !=0
 
@@ -148,7 +148,7 @@ router.post('/getProgramListDetailEffect', (req, res)=>{
                         + SCORE38+ SCORE39+ SCORE40+ SCORE41+ SCORE42+ SCORE43+ SCORE44+ SCORE45+ SCORE46+ SCORE47
                         + SCORE48+ SCORE49+ SCORE50+ SCORE51+ SCORE52+ SCORE53+ SCORE54+ SCORE55+ SCORE56+ SCORE57
                         + SCORE58+ SCORE59+ SCORE60+ SCORE61+ SCORE62)/62,2),0) AS avg2 
-                FROM COUNSEL_SERVICE
+                FROM counsel_service
                 WHERE AGENCY = ? AND OPENDAY = ? AND PV ="사후" AND AGE !=0
                 `
     const sql3 = `
@@ -160,7 +160,7 @@ router.post('/getProgramListDetailEffect', (req, res)=>{
                     IFNULL(ROUND(AVG(SCORE1 + SCORE2 + SCORE3 + SCORE4 + SCORE5 + SCORE6 + SCORE7 + SCORE8 + SCORE9 + SCORE10 +
                         SCORE11 + SCORE12 + SCORE13 + SCORE14 + SCORE15 + SCORE16 + SCORE17 + SCORE18 + SCORE19 + SCORE20 +
                         SCORE21 + SCORE22) / 22, 2), 0) AS avg1
-                FROM HEALING_SERVICE
+                FROM healing_service
                 WHERE AGENCY = ? AND OPENDAY = ? AND PV = "사전" AND AGE != 0
 
             UNION ALL
@@ -173,7 +173,7 @@ router.post('/getProgramListDetailEffect', (req, res)=>{
                     IFNULL(ROUND(AVG(SCORE1 + SCORE2 + SCORE3 + SCORE4 + SCORE5 + SCORE6 + SCORE7 + SCORE8 + SCORE9 + SCORE10 +
                         SCORE11 + SCORE12 + SCORE13 + SCORE14 + SCORE15 + SCORE16 + SCORE17 + SCORE18 + SCORE19 + SCORE20 +
                         SCORE21 + SCORE22) / 22, 2), 0) AS avg2
-                FROM HEALING_SERVICE
+                FROM healing_service
                 WHERE AGENCY = ? AND OPENDAY = ? AND PV = "사후" AND AGE != 0;
                 `
     const sql4 = `
@@ -184,7 +184,7 @@ router.post('/getProgramListDetailEffect', (req, res)=>{
                     IFNULL(ROUND(AVG(nullif(num3,0)),2),0) as num3,
                     IFNULL(ROUND(AVG(nullif(num4,0)),2),0) as num4,
                     IFNULL(ROUND(AVG(nullif(num5,0)),2),0) as num5
-                FROM HRV_SERVICE
+                FROM hrv_service
                 WHERE AGENCY = ? AND DATE = ? AND PV = "사전"
 
                 UNION ALL
@@ -196,7 +196,7 @@ router.post('/getProgramListDetailEffect', (req, res)=>{
                     IFNULL(ROUND(AVG(nullif(num3,0)),2),0) as num3,
                     IFNULL(ROUND(AVG(nullif(num4,0)),2),0) as num4,
                     IFNULL(ROUND(AVG(nullif(num5,0)),2),0) as num5
-                FROM HRV_SERVICE
+                FROM hrv_service
                 WHERE AGENCY = ? AND DATE = ? AND PV = "사후";
 
                 `

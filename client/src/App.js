@@ -44,7 +44,7 @@ const App = () => {
         if (previousPath) {
           navigate(previousPath);
         } else {
-          navigate("/");
+          navigate("/main");
         }
       } else {
         navigate("/login")

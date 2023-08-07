@@ -9,10 +9,9 @@ const CryptoJS = require("crypto-js")
 router.post("/login", (req,res)=>{
     const {id, password} = req.body;
     //['foresthealing' , 'tksflaglffld113*']
-    
-    const sql = "SELECT * FROM USER_INFO  WHERE USER_ID= ? AND USER_PWD= ?"
-
-    const sessionStorePath = './sessions';
+    try{
+    const sql = "SELECT * FROM user_info  WHERE USER_ID= ? AND USER_PWD= ?"
+    const sessionStorePath = '/sessions';
         fs.readdir(sessionStorePath, (err, files) => {
             if (err) {
                 console.error(err);
@@ -38,7 +37,7 @@ router.post("/login", (req,res)=>{
             });
         });
         
-        const secretKey = CryptoJS.enc.Hex.parse(process.env.SECRET_KEY);
+        const secretKey = CryptoJS.enc.Hex.parse("forestHealing");
         const iv = CryptoJS.enc.Hex.parse('000102030405060708090a0b0c0d0e');
         
         const encPassword = CryptoJS.AES.encrypt(password, secretKey, {
@@ -46,6 +45,8 @@ router.post("/login", (req,res)=>{
             mode: CryptoJS.mode.CBC,
             padding: CryptoJS.pad.Pkcs7
         }).toString();
+    
+
 
     maria(sql, [id, encPassword])
     .then((rows) => {
@@ -73,8 +74,13 @@ router.post("/login", (req,res)=>{
             res.json({message : '로그인 정보를 확인해 주세요.', isLogin : false, result : true})
         }
     })
-    .catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));
-
+    .catch((err) =>{
+        console.log(err)
+         res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
+        });
+    }catch(e){
+        console.log(e)
+    }
 
 });
 
@@ -91,7 +97,7 @@ router.post("/logout", (req, res)=>{
 router.post('/register', (req, res)=>{
     const {id, name, password} = req.body;
   
-    const secretKey = CryptoJS.enc.Hex.parse(process.env.SECRET_KEY);
+    const secretKey = CryptoJS.enc.Hex.parse("forestHealing");
     const iv = CryptoJS.enc.Hex.parse('000102030405060708090a0b0c0d0e');
     
     const encPassword = CryptoJS.AES.encrypt(password, secretKey, {
@@ -101,7 +107,7 @@ router.post('/register', (req, res)=>{
     }).toString();
 
     
-    const sql = `INSERT INTO USER_INFO(user_id, user_name, user_pwd, value) VALUES(?,?,?,'1')`;
+    const sql = `INSERT INTO user_info(user_id, user_name, user_pwd, value) VALUES(?,?,?,'1')`;
     maria(sql, [id, name, encPassword])
         .then(() => {
             res.json({ result: true });
@@ -117,10 +123,10 @@ router.post('/loginCheck', (req, res)=>{
         // 세션에 사용자 정보가 존재하면 로그인 상태로 판단
         const userInfo = req.session.userInfo;
         res.json({ message: "logged in", userInfo, isLogin : true });
-      } else {
+    } else {
         // 세션에 사용자 정보가 없으면 로그아웃 상태로 판단
         res.json({ message: "logged out", isLogin : false });
-      }
+    }
 });
 
 

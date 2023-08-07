@@ -9,7 +9,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const route = require('./Router'); 
 const login = require("./Router/login")
-
+const path = require('path');
 dotenv.config();
 
 // body-parser
@@ -19,13 +19,14 @@ app.use(cookieParser('foresthealing'))
 app.use(express.urlencoded({extended : true}))  // true ? qs : querystring
 
 app.use(cors({
-    origin : "http://localhost:3000",
+    origin : "http://statistics.gabia.io/",
+    //origin : "http://localhost:3000/",
     method : ["GET", "POST"],
     credentials : true,
 }));
 app.use(session({
     name : 'healing',
-    secret : process.env.SESSION_SECRET,
+    secret : "forestHealing",
     resave : false, 
     saveUninitialized : false, 
     store : new FileStore(),
@@ -49,14 +50,19 @@ function checkUserSession(req, res, next) {
     }
 }
 
+// app.use('/', express.static(path.resolve(__dirname, './build')));
+// app.get('*', (req, res, next) => {
+//     if(req.path.split('/')[1] === 'static') return next();
+//     res.sendFile(path.resolve(__dirname, './build/index.html'));
+// });
 
 app.use("/api", login);
+
 // 모든 라우트에 미들웨어 함수 적용
-app.use(checkUserSession);
+//app.use(checkUserSession);
 
 // 라우터 시작 !  
 app.use("/api", route)
-
 
 
 app.use((req, res, next)=>{
@@ -69,5 +75,5 @@ app.use((err, req, res, next)=> {
 
 
 
-const port=process.env.PORT; //React가 3000번 포트를 사용하기 때문에 node 서버가 사용할 포트넘버는 다른 넘버로 지정해준다.
-app.listen(port, ()=>{console.log(`Listening on port ${port}`)});
+
+app.listen(8080, ()=>{console.log(`Listening on port ${8080}`)});

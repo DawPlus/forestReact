@@ -14,9 +14,8 @@ router.post('/getExIncomeList', (req, res)=>{
     
     let sql = `
     SELECT ic.expense_type as type, group_concat(expense_price) as price1 
-		
-		FROM foresthealing.expense ic
-		LEFT join foresthealing.basic_info bi
+		FROM dbstatistics.expense ic
+		LEFT join dbstatistics.basic_info bi
 		on (ic.BASIC_INFO_SEQ =bi.BASIC_INFO_SEQ)
     WHERE 1=1
         ${whereText}
@@ -27,8 +26,8 @@ router.post('/getExIncomeList', (req, res)=>{
     let sql2 = `
         SELECT ic.INCOME_TYPE as type,group_concat(INCOME_PRICE) as price1
         
-        FROM foresthealing.income ic
-        LEFT join foresthealing.basic_info bi
+        FROM dbstatistics.income ic
+        LEFT join dbstatistics.basic_info bi
         on (ic.BASIC_INFO_SEQ =bi.BASIC_INFO_SEQ)
         WHERE 1=1
             ${whereText}
@@ -90,8 +89,8 @@ router.post('/getProgramEffect', (req, res)=>{
                 ps.SCORE11 + ps.SCORE12 + ps.SCORE13 + ps.SCORE14 + ps.SCORE15 + ps.SCORE16 + ps.SCORE17 + ps.SCORE18 + ps.SCORE19 + ps.SCORE20 +
                 ps.SCORE21 + ps.SCORE22) / 22), 2), 0) AS AverageScore
         FROM 
-            HEALING_SERVICE ps
-        LEFT JOIN BASIC_INFO bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
+            healing_service ps
+        LEFT JOIN basic_info bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
         WHERE ps.PV IN ('사전', '사후')
             ${whereText}
         GROUP BY ps.PV;
@@ -115,8 +114,8 @@ router.post('/getProgramEffect', (req, res)=>{
             ps.SCORE38+ ps.SCORE39+ ps.SCORE40+ ps.SCORE41+ ps.SCORE42+ ps.SCORE43+ ps.SCORE44+ ps.SCORE45+ ps.SCORE46+ ps.SCORE47+
             ps.SCORE48+ ps.SCORE49+ ps.SCORE50+ ps.SCORE51+ ps.SCORE52+ ps.SCORE53+ ps.SCORE54+ ps.SCORE55+ ps.SCORE56+ ps.SCORE57+
             ps.SCORE58+ ps.SCORE59+ ps.SCORE60+ ps.SCORE61+ ps.SCORE62)/62,2),0) as avg
-        FROM COUNSEL_SERVICE ps
-        LEFT JOIN BASIC_INFO bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
+        FROM counsel_service ps
+        LEFT JOIN basic_info bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
         WHERE ps.PV = '사전'
             ${whereText}
 
@@ -139,8 +138,8 @@ router.post('/getProgramEffect', (req, res)=>{
             ps.SCORE38+ ps.SCORE39+ ps.SCORE40+ ps.SCORE41+ ps.SCORE42+ ps.SCORE43+ ps.SCORE44+ ps.SCORE45+ ps.SCORE46+ ps.SCORE47+
             ps.SCORE48+ ps.SCORE49+ ps.SCORE50+ ps.SCORE51+ ps.SCORE52+ ps.SCORE53+ ps.SCORE54+ ps.SCORE55+ ps.SCORE56+ ps.SCORE57+
             ps.SCORE58+ ps.SCORE59+ ps.SCORE60+ ps.SCORE61+ ps.SCORE62)/62,2),0) as avg
-        FROM COUNSEL_SERVICE ps
-        LEFT JOIN BASIC_INFO bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
+        FROM counsel_service ps
+        LEFT JOIN basic_info bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
         WHERE ps.PV = '사후'
         ${whereText}
     `;
@@ -150,8 +149,8 @@ router.post('/getProgramEffect', (req, res)=>{
             ps.SCORE11+ ps.SCORE12+ ps.SCORE13+ ps.SCORE14+ ps.SCORE15+ ps.SCORE16+ ps.SCORE17+ ps.SCORE18),0) as sum,
         IFNULL(ROUND(AVG(ps.SCORE1+ ps.SCORE2+ ps.SCORE3+ ps.SCORE4+ ps.SCORE5+ ps.SCORE6+ ps.SCORE7+ ps.SCORE8+ ps.SCORE9+ ps.SCORE10+
         ps.SCORE11+ ps.SCORE12+ ps.SCORE13+ ps.SCORE14+ ps.SCORE15+ ps.SCORE16+ ps.SCORE17+ ps.SCORE18)/18,2),0) as avg 
-        FROM PREVENT_SERVICE ps
-        LEFT JOIN BASIC_INFO bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
+        FROM prevent_service ps
+        LEFT JOIN basic_info bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
         WHERE ps.PV IN ("사전", "사후")
         ${whereText}
         GROUP BY ps.PV
@@ -164,8 +163,8 @@ router.post('/getProgramEffect', (req, res)=>{
                 IFNULL(ROUND(AVG(nullif(ps.num3,0)),2),0) as num3, 
                 IFNULL(ROUND(AVG(nullif(ps.num4,0)),2),0) as num4, 
                 IFNULL(ROUND(AVG(nullif(ps.num5,0)),2),0) as num5
-            FROM HRV_SERVICE ps
-            LEFT JOIN BASIC_INFO bi on(ps.DATE = bi.OPENDAY AND ps.AGENCY = bi.AGENCY AND PV ="사전")
+            FROM hrv_service ps
+            LEFT JOIN basic_info bi on(ps.DATE = bi.OPENDAY AND ps.AGENCY = bi.AGENCY AND PV ="사전")
             WHERE 1=1
             ${whereText}
 
@@ -178,8 +177,8 @@ router.post('/getProgramEffect', (req, res)=>{
                 IFNULL(ROUND(AVG(nullif(ps.num3,0)),2),0) as num3, 
                 IFNULL(ROUND(AVG(nullif(ps.num4,0)),2),0) as num4, 
                 IFNULL(ROUND(AVG(nullif(ps.num5,0)),2),0) as num5
-            FROM HRV_SERVICE ps
-            LEFT JOIN BASIC_INFO bi on(ps.DATE = bi.OPENDAY AND ps.AGENCY = bi.AGENCY AND PV ="사후")
+            FROM hrv_service ps
+            LEFT JOIN basic_info bi on(ps.DATE = bi.OPENDAY AND ps.AGENCY = bi.AGENCY AND PV ="사후")
             WHERE 1=1
             ${whereText}
 
@@ -225,8 +224,8 @@ router.post('/getSerList', (req, res)=>{
             ifnull(ROUND(AVG(nullif(ps.score6,0)),2),0) as score6,    ifnull(ROUND(AVG(nullif(ps.score7,0)),2),0) as score7,   ifnull(ROUND(AVG(nullif(ps.score8,0)),2),0) as score8,   ifnull(ROUND(AVG(nullif(ps.score9,0)),2),0) as score9,   ifnull(ROUND(AVG(nullif(ps.score10,0)),2),0) as score10,
             ifnull(ROUND(AVG(nullif(ps.score11,0)),2),0) as score11,  ifnull(ROUND(AVG(nullif(ps.score12,0)),2),0) as score12, ifnull(ROUND(AVG(nullif(ps.score13,0)),2),0) as score13, ifnull(ROUND(AVG(nullif(ps.score14,0)),2),0) as score14, ifnull(ROUND(AVG(nullif(ps.score15,0)),2),0) as score15, 
             ifnull(ROUND(AVG(nullif(ps.score16,0)),2),0) as score16
-        FROM SERVICE_ENV_SATISFACTION ps
-        LEFT JOIN BASIC_INFO bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
+        FROM service_env_satisfaction ps
+        LEFT JOIN basic_info bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
         WHERE 1=1
             ${whereText}
     `;
@@ -248,7 +247,7 @@ router.post('/programManage', (req, res)=>{
         SELECT 
             PROGRAM_IN_OUT as PROGRAM_IN_OUT2
         FROM 
-            BASIC_INFO bi
+            basic_info bi
         WHERE bi.PROGRESS_STATE ="E"
             ${whereText}
     `;
@@ -259,8 +258,8 @@ router.post('/programManage', (req, res)=>{
                 ROUND(sum(ps.SCORE1+ps.SCORE2+ps.SCORE3)/(count(Case WHEN ps.SCORE1 != 0 then 1 END)+count(CASE WHEN ps.SCORE2 !=0 then 1 END)+count(Case WHen ps.SCORE3 !=0 then 1 END)),2)as program,
                 ROUND(sum(ps.SCORE4+ps.SCORE5+ps.SCORE6)/(count(Case WHEN ps.SCORE4 != 0 then 1 END)+count(CASE WHEN ps.SCORE5 !=0 then 1 END)+count(Case WHen ps.SCORE6 !=0 then 1 END)),2)as content,
                 ROUND(sum(ps.SCORE7+ps.SCORE8+ps.SCORE9)/(count(Case WHEN ps.SCORE8 != 0 then 1 END)+count(CASE WHEN ps.SCORE7 !=0 then 1 END)+count(CASE WHEN ps.SCORE9 !=0 then 1 END)),2)as effect
-			FROM PROGRAM_SATISFACTION ps
-            LEFT JOIN BASIC_INFO bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
+			FROM program_satisfaction ps
+            LEFT JOIN basic_info bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
             WHERE  1=1
                 ${whereText}
 			group by bunya
@@ -307,7 +306,7 @@ router.post('/getAllPrograms', (req, res)=>{
         COUNT(CASE WHEN SERVICE_TYPE = '힐링' THEN 1 END) AS healing,
         COUNT(CASE WHEN SERVICE_TYPE = '기타' THEN 1 END) AS ser_etc
     FROM
-        BASIC_INFO
+        basic_info
     WHERE
         (BIZ_PURPOSE = '사회공헌' OR BIZ_PURPOSE = '수익사업') AND PROGRESS_STATE = 'E'
         ${whereText}
@@ -327,7 +326,7 @@ router.post('/getAllPrograms', (req, res)=>{
             SUM(CASE WHEN BIZ_PURPOSE = '사회공헌' THEN LEAD_MAN_CNT ELSE 0 END) AS soc_lead_man,
             SUM(CASE WHEN BIZ_PURPOSE = '사회공헌' THEN LEAD_WOMAN_CNT ELSE 0 END) AS soc_lead_woman
         FROM
-            BASIC_INFO
+            basic_info
         WHERE
             BIZ_PURPOSE IN ('수익사업', '사회공헌') AND PROGRESS_STATE = 'E'
             ${whereText}
@@ -340,7 +339,7 @@ router.post('/getAllPrograms', (req, res)=>{
             SUM(ROOM_PART_PEOPLE) as room_part_people, SUM(ROOM_LEAD_PEOPLE) as room_lead_people, SUM(ROOM_ETC_PEOPLE) as room_etc_people,
             SUM(ROOM_PART_ROOM) as room_part_room, SUM(ROOM_LEAD_ROOM) as room_lead_room, SUM(ROOM_ETC_PEOPLE) as room_etc_room,
             SUM(MEAL_PART) as meal_part, SUM(MEAL_LEAD) as meal_lead, SUM(MEAL_ETC) as meal_etc
-        FROM BASIC_INFO
+        FROM basic_info
         WHERE 
             1 = 1
             AND PROGRESS_STATE = "E"
@@ -350,7 +349,7 @@ router.post('/getAllPrograms', (req, res)=>{
     let sql4 = `
     SELECT BIZ_PURPOSE, 
         SUM((IFNULL(PART_MAN_CNT,0) + IFNULL(PART_WOMAN_CNT,0) + IFNULL(LEAD_MAN_CNT,0) + IFNULL(LEAD_WOMAN_CNT,0)) * IFNULL(DAYS_TO_STAY,0)) as grand_total
-    FROM BASIC_INFO
+    FROM basic_info
     WHERE BIZ_PURPOSE IN ('수익사업', '사회공헌') 
         AND PROGRESS_STATE = 'E'
         ${whereText}
@@ -416,7 +415,7 @@ router.post('/getResidenceList', (req, res)=>{
             SELECT "전남" UNION ALL
             SELECT "제주") AS r
         LEFT JOIN 
-            BASIC_INFO AS b ON b.RESIDENCE = r.RESIDENCE AND b.PROGRESS_STATE = "E"
+            basic_info AS b ON b.RESIDENCE = r.RESIDENCE AND b.PROGRESS_STATE = "E"
         WHERE 
             1 = 1
             ${whereText}
@@ -471,7 +470,7 @@ router.post('/getPartTypeList', (req, res)=>{
             COUNT(case when BIZ_PURPOSE ="사회공헌" then 1 end ) as count_society,
             IFNULL(SUM(case when BIZ_PURPOSE ="수익사업" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_benefit,
             IFNULL(SUM(case when BIZ_PURPOSE ="사회공헌" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_society
-        FROM BASIC_INFO
+        FROM basic_info
         WHERE PROGRESS_STATE ="E"
         ${whereText}
     `;
