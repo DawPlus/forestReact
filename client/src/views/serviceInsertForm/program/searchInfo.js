@@ -53,7 +53,7 @@ const SearchInfo = ()=>{
                 <Input  label="프로그램명" value={PROGRAM_NAME} name="PROGRAM_NAME" onChange={onChange}/> 
             </Grid>
             <Grid item sm={2}>
-                <Select options={item}label="참여프로그램"value={PTCPROGRAM} name="PTCPROGRAM" onChange={onChange} />
+                <Select options={item}label="참여일정"value={PTCPROGRAM} name="PTCPROGRAM" onChange={onChange} />
             </Grid>
             <Grid item sm={2}>
                 <Input  label="강사명" value={TEACHER} name="TEACHER" onChange={onChange}/> 

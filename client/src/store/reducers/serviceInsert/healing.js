@@ -51,7 +51,7 @@ const initialState = {
         OPENDAY : "", //시작일자
         AGENCY : "", // 기관명
         EVAL_DATE : "", // 실시일자
-        PTCPROGRAM  : "", // 참여프로그램
+        PTCPROGRAM  : "", // 참여일정
         PV : "", // 시점 (사전은 시작으로 변경됨)
     }
   

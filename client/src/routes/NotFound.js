@@ -58,7 +58,7 @@ const NotFound = () => {
               </IconButton>
             </Grid>
             <Grid item>
-              <Button variant="contained" color="primary" onClick={() => navigate('/')}>
+              <Button variant="contained" color="primary" onClick={() => navigate('/main')}>
                 홈페이지로 돌아가기
               </Button>
             </Grid>

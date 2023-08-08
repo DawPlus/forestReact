@@ -5,7 +5,14 @@ const maria = require("../maria");
 
 // 프로그램 리스트 조회
 router.post('/getProgramList', (req, res)=>{
-    const sql = `SELECT * FROM basic_info WHERE PROGRESS_STATE ="E" ORDER BY OPENDAY DESC` ;
+    const { openDay, endDay } = req.body;
+    let sql = `SELECT * FROM basic_info WHERE PROGRESS_STATE = "E"`;
+
+    if (openDay && endDay) {
+        sql += ` AND OPENDAY BETWEEN '${openDay}' AND '${endDay}'`;
+    }
+
+    sql += ` ORDER BY OPENDAY DESC`;
 
     maria(sql).then((rows) => {
         res.json(rows)

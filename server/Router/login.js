@@ -3,15 +3,15 @@ const router = express.Router();
 const maria = require("../maria");
 const fs = require('fs');
 const moment = require("moment");
-const CryptoJS = require("crypto-js")
 
+const { encrypt, decrypt } = require('../util');
 // 로그인 하기 
 router.post("/login", (req,res)=>{
     const {id, password} = req.body;
     //['foresthealing' , 'tksflaglffld113*']
     try{
     const sql = "SELECT * FROM user_info  WHERE USER_ID= ? AND USER_PWD= ?"
-    const sessionStorePath = '/sessions';
+    const sessionStorePath = './sessions';
         fs.readdir(sessionStorePath, (err, files) => {
             if (err) {
                 console.error(err);
@@ -37,26 +37,13 @@ router.post("/login", (req,res)=>{
             });
         });
         
-        const secretKey = CryptoJS.enc.Hex.parse("forestHealing");
-        const iv = CryptoJS.enc.Hex.parse('000102030405060708090a0b0c0d0e');
         
-        const encPassword = CryptoJS.AES.encrypt(password, secretKey, {
-            iv: iv,
-            mode: CryptoJS.mode.CBC,
-            padding: CryptoJS.pad.Pkcs7
-        }).toString();
-    
-
+    const encPassword = encrypt(password);
 
     maria(sql, [id, encPassword])
     .then((rows) => {
         if(rows.length > 0){
             req.session.userInfo = { ...rows[0] };
-
-            // req.session.save(()=>{
-            //     console.log(req.session.userInfo)
-            //     res.json({message : '로그인 되었습니다. ', isLogin : true, result : true})
-            // });
 
             req.session.save((err) => {
             if (err) {
@@ -76,7 +63,7 @@ router.post("/login", (req,res)=>{
     })
     .catch((err) =>{
         console.log(err)
-         res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
+            res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
         });
     }catch(e){
         console.log(e)
@@ -96,16 +83,8 @@ router.post("/logout", (req, res)=>{
 // 사용자 등록
 router.post('/register', (req, res)=>{
     const {id, name, password} = req.body;
-  
-    const secretKey = CryptoJS.enc.Hex.parse("forestHealing");
-    const iv = CryptoJS.enc.Hex.parse('000102030405060708090a0b0c0d0e');
     
-    const encPassword = CryptoJS.AES.encrypt(password, secretKey, {
-        iv: iv,
-        mode: CryptoJS.mode.CBC,
-        padding: CryptoJS.pad.Pkcs7
-    }).toString();
-
+    const encPassword = encrypt(password)
     
     const sql = `INSERT INTO user_info(user_id, user_name, user_pwd, value) VALUES(?,?,?,'1')`;
     maria(sql, [id, name, encPassword])

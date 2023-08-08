@@ -27,16 +27,24 @@ const ProfileSection = () => {
     const anchorRef = useRef(null);
     const handleLogout = async () => 
     {
+             
         Swal.fire({
-            title: '로그아웃 하시겠습니까?',
+            title: '로그아웃',
+            text: '로그아웃 하시겠습니까?',
+            icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'OK',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#767676',
+            confirmButtonText: '확인',
+            cancelButtonText: '취소'
           }).then((result) => {    
             if (result.isConfirmed) {
                 axios.post("/api/logout").then(r=> {
            
                     Swal.fire({
-                        title: '로그아웃 되었습니다.',
+                        title: '로그아웃',
+                        text: '로그아웃되었습니다. 메인으로 이동합니다. ',
+                        icon: 'success',
                         confirmButtonText: 'OK',
                       }).then((result) => {    
                         if (result.isConfirmed) {

@@ -19,8 +19,12 @@ app.use(cookieParser('foresthealing'))
 app.use(express.urlencoded({extended : true}))  // true ? qs : querystring
 
 app.use(cors({
-    origin : "http://statistics.gabia.io/",
-    //origin : "http://localhost:3000/",
+    //origin : "http://statistics.gabia.io/",
+    origin : [
+        // 여기에 허용할 도메인을 추가합니다.
+        "http://localhost:3000",
+        "http://statistics.gabia.io"
+    ],
     method : ["GET", "POST"],
     credentials : true,
 }));
@@ -50,16 +54,16 @@ function checkUserSession(req, res, next) {
     }
 }
 
-// app.use('/', express.static(path.resolve(__dirname, './build')));
-// app.get('*', (req, res, next) => {
-//     if(req.path.split('/')[1] === 'static') return next();
-//     res.sendFile(path.resolve(__dirname, './build/index.html'));
-// });
+app.use('/', express.static(path.resolve(__dirname, './build')));
+app.get('*', (req, res, next) => {
+    if(req.path.split('/')[1] === 'static') return next();
+    res.sendFile(path.resolve(__dirname, './build/index.html'));
+});
 
 app.use("/api", login);
 
 // 모든 라우트에 미들웨어 함수 적용
-//app.use(checkUserSession);
+app.use(checkUserSession);
 
 // 라우터 시작 !  
 app.use("/api", route)

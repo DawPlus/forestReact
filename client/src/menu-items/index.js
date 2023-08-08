@@ -59,19 +59,19 @@ const menuItems = {
                 },
                 {
                     id: 'programResult',
-                    title: '만족도및효과평가',
+                    title: '만족도및효과평가결과검색',
                     type: 'collapse',
                     icon: icons.IconKey,
                     children: [
                         {
                             id: 'agencyList',
-                            title: '단체별',
+                            title: '단체별 만족도 및 효과평가',
                             type: 'item',
                             url: '/sae/agencyList',
                         },
                         {
                             id: 'test3',
-                            title: '주제어별',
+                            title: '주제어별 만족도 및 효과평가',
                             type: 'item',
                             url: '/sae/searchResult',
                         }

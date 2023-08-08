@@ -48,21 +48,46 @@ const InsertOperateResult = ()=>{
     dispatch(actions.getTempData({seq : tempValue}))
   }
 
+  // 초기화
+  const onReset = () =>{
+      Swal.fire({
+        title: `초기화`,
+        text: `입력내용을 초기화 하시겠습니까?` ,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#767676',
+        confirmButtonText: '확인',
+        cancelButtonText: '취소'
+    }).then((result) => {
+    
+        if(result.isConfirmed){
+          dispatch(actions.onReset())
+          setTempValue(s=>"")
+        }
+    })
+
+  }
+
 
 
   return(<>
+      {tempList.length >0 ? 
         <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
           <Grid item md={2}>
             <Select label="임시저장" items={tempList} onChange={e=>{ setTempValue(e.target.value) }} value={tempValue}/>
           </Grid>
           <Grid item md={4}>
-            <Button variant="contained" color="secondary"  onClick={getTempData}>
+            <Button variant="contained" color="primary"  onClick={getTempData} style={{marginRight:"10px"}}>
               임시저장불러오기
+            </Button>
+            <Button variant="contained" color="warning"  onClick={onReset}>
+              초기화
             </Button>
           </Grid>
           <Grid item md={8}></Grid>
-        </Grid>
-      
+        </Grid> : null
+      }
         <MainCard style={{marginBottom : "5px"}}>
             <Typography variant="body1">
               ※ 기본정보 및 프로그램정보 객실 식사 정보는 필수 입력값 입니다.

@@ -13,7 +13,7 @@ const SearchInfo = ()=>{
         OPENDAY, //시작일자
         AGENCY, // 기관명
         EVAL_DATE, // 실시일자
-        PTCPROGRAM, //참여프로그램
+        PTCPROGRAM, //참여일정
         PV, // 시점 (사전은 시작으로 변경됨)
     
     } = useSelector(s=> getState(s).searchInfo);
@@ -48,7 +48,7 @@ const SearchInfo = ()=>{
                 <DatePicker label="실시일자" value={EVAL_DATE} onChange={onDateChange} name="EVAL_DATE"/>
             </Grid>
             <Grid item sm={2}>
-                <Select options={item}label="참여프로그램"value={PTCPROGRAM} name="PTCPROGRAM" onChange={onChange} />
+                <Select options={item}label="참여일정"value={PTCPROGRAM} name="PTCPROGRAM" onChange={onChange} />
             </Grid>
             <Grid item sm={2}>
                 <Select options={item2}label="시점"value={PV} name="PV" onChange={onChange} />

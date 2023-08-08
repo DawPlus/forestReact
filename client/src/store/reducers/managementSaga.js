@@ -16,6 +16,7 @@ export default function* managementSaga() {
 
     
     yield takeLatest(actions.getProgramMngList.type, createRequestSaga(actions.getProgramMngList.type, api.getProgramMngList))
+    yield takeLatest(actions.getTeacherMngList.type, createRequestSaga(actions.getTeacherMngList.type, api.getTeacherMngList))
     
 
 }

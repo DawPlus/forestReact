@@ -41,7 +41,7 @@ const initialState = {
         AGENCY : "", // 기관명
         EVAL_DATE : "", // 실시일자
         PROGRAM_NAME : "", // 프로그램명
-        PTCPROGRAM : "", // 참여프로그램
+        PTCPROGRAM : "", // 참여일정
         TEACHER : "", // 강사명
         PLACE : "", // 장소 
         BUNYA : "", // 분야 

@@ -8,10 +8,12 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-
+import DatePicker from "ui-component/inputs/datePicker";
 
 import Report from "./report"
 import Swal from "sweetalert2";
+import {Grid, Button,} from '@mui/material';
+import { useState } from "react";
 
 const ProgramList = () => {
   // Dispatch
@@ -70,24 +72,73 @@ const ProgramList = () => {
     dispatch(actions.setValue({key : "tabIndex", value : newValue}))
   };
 
-  return (
 
-    <MainCard>
-      <TabContext value={tabIndex}>
-        <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="운영결과보고검색" value="1" />
-            <Tab label="결과보고서" value="2" />
-          </TabList>
-        <TabPanel value="1">
-            {rows.length >0 && <div>조회된 단체수 : {rows.length}</div>}
-            <DataGrid  data={rows} columns={columns} />
-        </TabPanel>
-        <TabPanel value="2">
-          <Report/>
-        </TabPanel>
-      </TabContext>
+  const [openDay , setOpenDay] = useState("");
+  const [endDay , setEndDay] = useState("");
+
+  const onSearch = ()=>{
+    // 목록조회 
+    dispatch(actions.getList({openDay, endDay}));
+  }
+  const onReset = ()=>{
+    
+      Swal.fire({
+        icon: 'warning',
+        title: '조회조건 초기화',
+        text: `조회조건을 초기화 하시겠습니까? ` ,
+        showCancelButton: true,
+        confirmButtonText: '확인',
+        cancelButtonText : "취소"
+    }).then((result) => {    
+        if (result.isConfirmed) {
+          setOpenDay(s=> "")
+          setEndDay(s=> "")
+          dispatch(actions.getList());
+        } 
+    })
       
-    </MainCard>
+  }
+
+
+  return (
+    <>
+      <MainCard>
+          <Grid item container xs={12} spacing={2} direction="row" justifyContent="flex-start" alignItems="center">
+              <Grid item  xs={3} >
+                  <DatePicker label="시작일"name="OPENDAY" value={openDay} onChange={(_, value)=>setOpenDay(value)}/>
+              </Grid>
+              <Grid item  xs={3}>
+                  <DatePicker label="종료일" name="ENDDAY" value={endDay} onChange={(_, value)=> setEndDay(value)}/>
+              </Grid>
+              <Grid item  xs={6}>
+                <div style={{textAlign:"right"}}>
+                  <Button variant="contained" color="primary" type="submit" onClick={onSearch} style={{marginRight : "10px"}}>
+                      조회        
+                  </Button>
+                  <Button variant="contained" color="warning" type="submit" onClick={onReset} >
+                      초기화        
+                  </Button>
+                </div>
+              </Grid>
+          </Grid>
+      </MainCard>
+      <MainCard style={{marginTop : "10px"}}>
+        <TabContext value={tabIndex}>
+          <TabList onChange={handleChange} aria-label="lab API tabs example">
+              <Tab label="운영결과보고검색" value="1" />
+              <Tab label="결과보고서" value="2" />
+            </TabList>
+          <TabPanel value="1">
+              {rows.length >0 && <div>조회된 단체수 : {rows.length}</div>}
+              <DataGrid  data={rows} columns={columns} />
+          </TabPanel>
+          <TabPanel value="2">
+            <Report/>
+          </TabPanel>
+        </TabContext>
+        
+      </MainCard>
+    </>
   );
 };
 

@@ -5,6 +5,7 @@ import {Grid, Button,} from '@mui/material';
 import {  useSelector } from "react-redux";
 import { getState } from "store/reducers/programReducer";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
 
 const columnNames = {
     OPENDAY : "참여시작일",
@@ -16,8 +17,8 @@ const columnNames = {
     PART_WOMAN_CNT : "참여인원(참여자-여자)",
     LEAD_MAN_CNT : "참여인원(인솔자-남자)",
     LEAD_WOMAN_CNT : "참여인원(인솔자-여자)",
-    SUPPORT : "지원사항",
-    INCOME_TYPE : "수입구분",
+    // SUPPORT : "지원사항",
+    // INCOME_TYPE : "수입구분",
     PART_TYPE : "참가자유형",
     AGE_TYPE : "연령대",
     BIZ_PURPOSE : "사업구분",
@@ -35,11 +36,13 @@ const columnNames = {
     PROGRAM_OPINION : "프로그램소감",
     SERVICE_OPINION : "시설서비스소감",
     OVERALL_OPINION : "종합의견 및 불편사항",
+    ORG_NATURE : "단체성격",
+    PART_FORM : "참여형태",
 };
 
 const InsertOperateResult = ()=>{
 
-
+    const navigate = useNavigate();
 
     const data = useSelector(s=> getState(s).basicInfo);
     const programList = useSelector(s=> getState(s).programList);
@@ -49,7 +52,6 @@ const InsertOperateResult = ()=>{
     const customExtraList = useSelector(s=> getState(s).customExtraList);
     const income = useSelector(s=> getState(s).income);
     const incomeExtraList = useSelector(s=> getState(s).incomeExtraList);
-
 
     const checkEmptyColumns = (data, excludeList = [], columnNames = {}) => {
         const emptyColumn = Object.entries(data).find(([column, value]) => {
@@ -64,8 +66,9 @@ const InsertOperateResult = ()=>{
     
         if (emptyColumn) {
             const columnName = columnNames[emptyColumn[0]] || emptyColumn[0];
-            Swal.fire(`[${columnName}] 항목이 비어있습니다.`);
-        return false;
+            
+            Swal.fire({ icon: 'warning', title: '확인', text:`[${columnName}] 항목이 비어있습니다.` })
+            return false;
         }
     
         return true;
@@ -79,7 +82,7 @@ const InsertOperateResult = ()=>{
 
 
 
-        const excludeList = ["BASIC_INFO_SEQ", "REG_ID", "DAYS_TO_STAY", "PROGRESS_STATE", "PROGRAM_IN_OUT", "ISCLOSEMINE"];
+        const excludeList = ["BASIC_INFO_SEQ", "SUPPORT", "INCOME_TYPE", "REG_ID", "DAYS_TO_STAY", "PROGRESS_STATE", "PROGRAM_IN_OUT", "ISCLOSEMINE"];
         // 기본값 체크 
         const result = checkEmptyColumns(data, excludeList, columnNames);
         
@@ -96,9 +99,6 @@ const InsertOperateResult = ()=>{
         const incomeList = [...income, ...incomeExtraList].map(({TITLE, id, ...rest})=> ({...rest}));
         
 
-            
-        
-
         const params = {
             ...data, 
             PROGRAM_IN_OUT : programList.map(obj => {
@@ -112,17 +112,16 @@ const InsertOperateResult = ()=>{
             incomeList,
         }
 
-
         callApi("/insertOperation/create", {data: params}).then(r=> {
             if(r.data.result){
                 Swal.fire({
                     icon: 'success',
                     title: '확인',
-                    text: "정상등록 되었습니다.",
+                    text: "정상등록 되었습니다. 만족도효과평가 입력으로 이동합니다.",
                     }).then(()=>{
 
 
-
+                        navigate("/serviceInsertForm")
 
                     });  
             }
@@ -132,6 +131,7 @@ const InsertOperateResult = ()=>{
 
     // 데이터 생성 및 임시저장
     const onPreSave = ()=>{
+        
 
         if(data.AGENCY === ""){
             Swal.fire(`단체명을 입력해 주십시오(필수)`);
@@ -163,11 +163,9 @@ const InsertOperateResult = ()=>{
                 Swal.fire({
                     icon: 'success',
                     title: '확인',
-                    text: "정상등록 되었습니다.",
+                    text: "정상등록 되었습니다. 만족도효과평가 입력으로 이동합니다.",
                     }).then(()=>{
-
-
-
+                        navigate("/serviceInsertForm")
 
                     });  
             }

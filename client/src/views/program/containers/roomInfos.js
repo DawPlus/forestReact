@@ -33,13 +33,13 @@ const DefaultInfos = ()=>{
             value
         }))
     }
-    const totalPeople = (ROOM_PART_PEOPLE || 0) + (ROOM_LEAD_PEOPLE || 0) + (ROOM_ETC_PEOPLE || 0);
-    const totalRoom = (ROOM_PART_ROOM || 0) + (ROOM_LEAD_ROOM || 0) + (ROOM_ETC_ROOM || 0);
+    const totalPeople = (+ROOM_PART_PEOPLE || 0) + (+ROOM_LEAD_PEOPLE || 0) + (+ROOM_ETC_PEOPLE || 0);
+    const totalRoom = (+ROOM_PART_ROOM || 0) + (+ROOM_LEAD_ROOM || 0) + (+ROOM_ETC_ROOM || 0);
     return(
         <> 
             <Grid container spacing={2} alignItems={"center"}>
                 <Grid item xs={12}>
-                    <Div style={{  padding: "22px 0px 0px 8px"}}>{`객실 (총인원 : ${totalPeople} / 총객실 : ${totalRoom})`}</Div>
+                    <Div style={{  padding: "22px 0px 0px 8px"}}>{`객실 (총인원 : ${totalPeople}명/ 총객실 : ${totalRoom}호)`}</Div>
                 </Grid>
                 <Grid container item alignItems={"center"} spacing={2}>
                         <Grid item  xs={2}>

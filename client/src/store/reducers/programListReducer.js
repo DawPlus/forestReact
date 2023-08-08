@@ -71,6 +71,7 @@ const initialState = {
 
 const action = {
     getList : createAction(`${name}/getList`),
+    getListDate : createAction(`${name}/getListDate`),
     getDetail : createAction(`${name}/getDetail`),
     
     
@@ -90,6 +91,7 @@ export const {getState, reducer, actions} = createCustomSlice({
   reducers: {
     getList_SUCCESS : (state, {payload})=>{
       state.rows = payload.data.map((i, idx)=>({...i, index : idx +1 , totalPeople : getTotalPeople(i)}));
+      state.tabIndex = initialState.tabIndex;
     },
     getDetail_SUCCESS : (state, {payload  : {data  : {basicInfo, serviceList, programSaf}, effect, inExpense} })=>{
       state.tabIndex = "2";

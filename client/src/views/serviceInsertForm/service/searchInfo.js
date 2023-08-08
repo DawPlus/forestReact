@@ -34,7 +34,7 @@ const item = [ "당일형", "1박2일형", "2박3일형", ]
                 <Input  label="기관명" value={AGENCY} name="AGENCY" onChange={onChange}/> 
             </Grid>
             <Grid item sm={2}>
-                <Select options={item}label="참여프로그램"value={PTCPROGRAM} name="PTCPROGRAM" onChange={onChange} />
+                <Select options={item}label="참여일정"value={PTCPROGRAM} name="PTCPROGRAM" onChange={onChange} />
             </Grid>
             <Grid item sm={2} style={{zIndex:2}}>
                 <DatePicker  value={OPENDAY} onChange={onDateChange} label="시작일자" name="OPENDAY" />

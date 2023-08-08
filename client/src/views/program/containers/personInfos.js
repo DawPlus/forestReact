@@ -19,6 +19,7 @@ const DefaultInfos = ()=>{
         PART_WOMAN_CNT,
         LEAD_MAN_CNT,
         LEAD_WOMAN_CNT,
+        DAYS_TO_STAY,
         SUPPORT,
       //  INCOME_TYPE,
         PART_TYPE,
@@ -44,21 +45,23 @@ const DefaultInfos = ()=>{
             value : e.target.value
         }))
     }
+    
 
-    const onSupportChange = (e)=>{
-        dispatch(actions.setBasicInfo({
-            key :"SUPPORT",
-            value : e.join(",")
-        }))
+    function getTotal(arr, multiplier = 1) {
+        const totalSum = arr.reduce((sum, currentValue) => {
+            const num = parseFloat(currentValue);
+            return !isNaN(num) ? sum + num : sum;
+        }, 0);
+    
+        return totalSum * multiplier;
     }
-
-    const supportValue = React.useMemo(()=>SUPPORT ?SUPPORT.split(",") : [],[SUPPORT])
+    
 
     return(
         <>  
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <Div style={{  padding: "22px 0px 0px 8px"}}>참여인원  (실인원  : 1명 / 실인원  : 1명)</Div>
+                    <Div style={{  padding: "22px 0px 0px 8px"}}>{`참여인원  (실인원  : ${getTotal([PART_MAN_CNT, PART_WOMAN_CNT, LEAD_MAN_CNT, LEAD_WOMAN_CNT])}명 / 실인원  : ${getTotal([PART_MAN_CNT, PART_WOMAN_CNT, LEAD_MAN_CNT, LEAD_WOMAN_CNT], DAYS_TO_STAY)}명)`}</Div>
                 </Grid>
                 <Grid item container xs={12} spacing={2} alignItems="center">
                     <Grid item  xs={2} justifyItems={'center'}>

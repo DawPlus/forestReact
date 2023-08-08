@@ -5,7 +5,17 @@ const name ="management";
 
 const initialState = {
     codeList : [],
-    regUser : [],  // 등록된 사용자 목록
+    userMng : {
+      rows : [], 
+      detail : {
+        displayName : "", 
+        user_id : "", 
+        user_name : "", 
+        user_pwd : "",
+        value : "", 
+      }
+    },
+    // regUser : [],  // 등록된 사용자 목록
     history : [],   // 히스토리 
 
 
@@ -15,13 +25,23 @@ const initialState = {
       newInfo : {
         name : "", 
         bunya : "", 
-        teacher : "", 
       },
       updateInfo : {
         program_seq : "", 
         name : "", 
         bunya : "", 
-        teacher : "", 
+      }
+    }, 
+    teacherMng : {
+      rows : [], 
+      newInfo : {
+        name : "", 
+        phone : "", 
+      },
+      updateInfo : {
+        teacher_seq : "", 
+        name : "", 
+        phone : "", 
       }
     }, 
 
@@ -35,6 +55,7 @@ const action = {
     getAllHistories : createAction(`${name}/getAllHistories`),
     getHistory : createAction(`${name}/getHistory`),
     getProgramMngList : createAction(`${name}/getProgramMngList`),
+    getTeacherMngList : createAction(`${name}/getTeacherMngList`),
 
 }
 
@@ -47,7 +68,8 @@ const codNameList  =[
   {type : "SERVICE_TYPE", name : "서비스유형"},
   {type : "AGE_TYPE", name : "연령대"},
 ]
-
+// 핸드폰번호양식생성
+  const formatPhoneNumber = inputNumber => /^(\d{3})(\d{4})(\d{4})$/.test(inputNumber) ? `${RegExp.$1}-${RegExp.$2}-${RegExp.$3}` : inputNumber;
 
 export const {getState, reducer, actions} = createCustomSlice({
     name,
@@ -70,7 +92,11 @@ export const {getState, reducer, actions} = createCustomSlice({
 
       // 등록사용자 조회 
       getRegUser_SUCCESS : (state, {payload})=>{
-        state.regUser = payload.data.map(i=> ({...i, chk : false}))
+        state.userMng.rows = payload.data.map(i=> ({...i, chk : false}))
+      },
+      onChangeUserDetailInfo : (state, {payload :{key, value}})=>{
+        state.userMng.detail[key] = value;
+
       },
       // 모든히스토리 조회 
       getAllHistories_SUCCESS : (state, {payload})=>{
@@ -85,7 +111,7 @@ export const {getState, reducer, actions} = createCustomSlice({
       // 프로그램 관리
       // 조회
       getProgramMngList_SUCCESS  : (state, {payload : {data}})=>{
-        state.programMng.rows = data;
+        state.programMng.rows = data.map((i, index)=> ({...i, index : index +1}));
         state.programMng.newInfo = initialState.programMng.newInfo
         state.programMng.updateInfo = initialState.programMng.updateInfo
       },
@@ -94,7 +120,26 @@ export const {getState, reducer, actions} = createCustomSlice({
       }, 
       setProgramUpdateInfo : (state, {payload})=>{
         state.programMng.updateInfo = payload;
-      }
+      },
+
+      // 프로그램 관리
+      // 조회
+      getTeacherMngList_SUCCESS  : (state, {payload : {data}})=>{
+        state.teacherMng.rows = data.map((i,index)=> 
+        ({...i
+          , index : index +1
+          , phoneDisplay : formatPhoneNumber(i.phone)
+        })
+        );
+        state.teacherMng.newInfo = initialState.teacherMng.newInfo
+        state.teacherMng.updateInfo = initialState.teacherMng.updateInfo
+      },
+      onChangeTeacherMngInfo : (state, {payload : {target, key, value}})=>{
+        state.teacherMng[target][key] = value;
+      }, 
+      setTeacherUpdateInfo : (state, {payload})=>{
+        state.teacherMng.updateInfo = payload;
+      },
 
     }
 });

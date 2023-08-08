@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const maria = require("../maria");
+const CryptoJS = require("crypto-js")
 
+const secretKey = CryptoJS.enc.Hex.parse("forestHealing");
+const iv = CryptoJS.enc.Hex.parse('000102030405060708090a0b0c0d0e');
 
     // 코드 조회 
     router.post('/getBasicInfoPage', (req, res)=>{
@@ -27,8 +30,10 @@ const maria = require("../maria");
 
     // 등록된 사용자 조회 
     router.post('/getRegUser', (req, res)=>{
+
         const sql = `SELECT user_id, value, user_pwd, user_name FROM user_info`;
         maria(sql).then((rows) => {
+
             res.json(rows)
         })
         .catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));
@@ -36,13 +41,31 @@ const maria = require("../maria");
     
     // 사용자 정보 수정  
     router.post('/updateRegUser', (req, res)=>{
-        const {value, userId} = req.body;
-        const sql = `UPDATE user_info SET value = ? WHERE user_id = ?`;
-        maria(sql, [value, userId]) .then(() => {
+        const {data} = req.body;
+        const { user_id, user_name, value } = data;
+
+        // const encPassword = CryptoJS.AES.encrypt(user_pwd, secretKey, {
+        //     iv: iv,
+        //     mode: CryptoJS.mode.CBC,
+        //     padding: CryptoJS.pad.Pkcs7
+        // }).toString();
+        // console.log(encPassword)
+
+        const values = [ user_id, user_name,  value ]
+
+        const sqls = `
+                INSERT INTO user_info
+                    (user_id, user_name, value)
+                VALUES
+                    (?, ?, ?)
+                ON DUPLICATE KEY UPDATE
+                    user_name = VALUES(user_name),
+                    value = VALUES(value);
+        ` 
+        maria(sqls, values).then(() => {
             res.json({result : true})
-        }).catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));
+        }).catch((err) => {console.log(err); res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })});
     });
- 
     // 사용자 정보 삭제  
     router.post('/deleteRegUser', (req, res)=>{
         const {userId} = req.body;

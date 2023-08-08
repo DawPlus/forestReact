@@ -84,7 +84,7 @@ const Program = ()=>{
 
 
     const headerInfo =[
-            ["순번", "실시일자", "기관명", "참여프로그램", "성별", "연령", "거주지", "직업", "숙소","숙소", "식당","식당", "프로그램장소","프로그램장소","프로그램장소", "숲(야외)","숲(야외)","숲(야외)", "기타의견", "운영","운영","운영", "식사","식사","식사", "기타의견", "잠재적관광수요","잠재적관광수요", "평균","평균","평균","평균","평균","평균","평균"],
+            ["순번", "실시일자", "기관명", "참여일정", "성별", "연령", "거주지", "직업", "숙소","숙소", "식당","식당", "프로그램장소","프로그램장소","프로그램장소", "숲(야외)","숲(야외)","숲(야외)", "기타의견", "운영","운영","운영", "식사","식사","식사", "기타의견", "잠재적관광수요","잠재적관광수요", "평균","평균","평균","평균","평균","평균","평균"],
             ["","","","","","","","", "문항1", "문항2", "문항3", "문항4", "문항5", "문항6", "문항7", "문항8", "문항9", "문항10","", "문항1", "문항2", "문항3", "문항4", "문항5", "문항6","", "문항7", "문항8", "숙소", "식사", "프로그램장소", "숲(야외)", "운영", "식사", "잠재적관광수요"]
         ]
     const merges = [
@@ -166,7 +166,7 @@ const Program = ()=>{
                             <TableCell className="table-header" rowSpan={2} align="center">순번</TableCell>
                             <TableCell className="table-header" rowSpan={2} align="center">실시일자</TableCell>
                             <TableCell className="table-header" rowSpan={2} align="center">기관명</TableCell>
-                            <TableCell className="table-header" rowSpan={2} align="center">참여프로그램</TableCell>
+                            <TableCell className="table-header" rowSpan={2} align="center">참여일정</TableCell>
                             <TableCell className="table-header" rowSpan={3} align="center">성별</TableCell>
                             <TableCell className="table-header" rowSpan={3} align="center">연령</TableCell>
                             <TableCell className="table-header" rowSpan={3} align="center">거주지</TableCell>

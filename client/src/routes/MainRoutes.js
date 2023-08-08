@@ -43,6 +43,7 @@ const MainRoutes = [{
     path: '/',
     element: <MainLayout />,
     children: [
+        { path: '/', element: <InsertOperateResult /> },
         { path: '/main', element: <InsertOperateResult /> },
         { path: 'insertOperateResult', element : <InsertOperateResult/> },
         { path: 'programList', element : <ProgramList/> },

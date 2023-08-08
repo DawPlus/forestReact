@@ -21,7 +21,6 @@ const ProgramMng = ()=>{
     const {
         name, 
         bunya, 
-        teacher,
     } = newInfo;
     useEffect(()=>{
         dispatch(actions.getProgramMngList());
@@ -32,26 +31,26 @@ const ProgramMng = ()=>{
 
 
     const onDetail = (data)=>{
-        const program_seq = data[0] 
-        const name = data[1] 
-        const bunya = data[2] 
-        const teacher = data[3];
+        const program_seq = data[1] 
+        const name = data[2] 
+        const bunya = data[3] 
+        
         
         dispatch(actions.setProgramUpdateInfo({
-            program_seq, name, bunya, teacher
+            program_seq, name, bunya
         }))
     }
 
     
     const columns = [
+        { name: "index", label: "번호", options : {  filter : false} },
         { name : "program_seq", label : "" , options:{filter: false, display: false}},
         { name : "name", label : "프로그램명"},
         { name : "bunya", label : "분야"},
-        { name : "teacher", label : "강사"},
-        { name : "create_user", label : "생성자"},
-        { name : "create_dtm", label : "생성일자", options:{filter: false}},
-        { name : "update_dtm", label : "수정일자", options:{filter: false}},
-        { name : "update_user", label : "수정자" ,options:{filter: false, display: false}},
+        // { name : "create_user", label : "생성자"},
+        // { name : "create_dtm", label : "생성일자", options:{filter: false, display: false}},
+        // { name : "update_dtm", label : "수정일자", options:{filter: false, display: false}},
+        // { name : "update_user", label : "수정자" ,options:{filter: false, display: false}},
         { name: "수정", label: "선택", 
             options: {
             filter : false,
@@ -82,7 +81,7 @@ const ProgramMng = ()=>{
     }   
 
     const onSave = ()=>{
-        if([name, bunya, teacher].includes("")){
+        if([name, bunya].includes("")){
             Swal.fire({ icon: 'warning', title: '확인', text: "입력값을 확인해 주십시오", })
             return;
         }
@@ -108,7 +107,7 @@ const ProgramMng = ()=>{
     }
 
     const onUpdate = ()=>{
-        if([updateInfo.name, updateInfo.bunya, updateInfo.teacher].includes("")){
+        if([updateInfo.name, updateInfo.bunya].includes("")){
             Swal.fire({ icon: 'warning', title: '확인', text: "입력값을 확인해 주십시오", })
             return;
         }
@@ -162,14 +161,11 @@ const ProgramMng = ()=>{
                     <MainCard>
                         <h3 className="tableTitle" style={{paddingLeft : "5px"}}>신규등록</h3>
                         <Grid container spacing={2} direction="row" justifyContent="flex-start" alignItems="center">
-                            <Grid item md={4}>
+                            <Grid item md={3}>
                                 <Input name="name" label="프로그램명"  value={name} onChange={onChange}/>  
                             </Grid>
-                            <Grid item md={2}>
+                            <Grid item md={3}>
                                 <Select label="분야" name="bunya" options={items} value={bunya} onChange={onChange}/>
-                            </Grid>
-                            <Grid item md={2}>
-                                <Input name="teacher" label="강사"  value={teacher} onChange={onChange}/>  
                             </Grid>
                             <Grid item md={4}>
                                 <Button variant="contained" color="primary" type="submit" onClick={onSave} style={{marginRight : "10px"}}>
@@ -193,11 +189,8 @@ const ProgramMng = ()=>{
                                         <Grid item md={12}>
                                             <Input name="name" label="프로그램명"  value={updateInfo.name} onChange={onUpdateChange}/>  
                                         </Grid>
-                                        <Grid item md={6}>
+                                        <Grid item md={12}>
                                             <Select name="bunya" label="분야" options={items} value={updateInfo.bunya} onChange={onUpdateChange}/>
-                                        </Grid>
-                                        <Grid item md={6}>
-                                            <Input name="teacher" label="강사"  value={updateInfo.teacher} onChange={onUpdateChange}/>  
                                         </Grid>
                                         <Grid item md={12}>
                                             <Button variant="contained" color="primary" type="submit" onClick={onUpdate} style={{marginRight : "10px"}}>

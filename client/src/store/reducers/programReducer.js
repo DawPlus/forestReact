@@ -16,8 +16,8 @@ const initialState = {
       PART_WOMAN_CNT : "",
       LEAD_MAN_CNT : "",
       LEAD_WOMAN_CNT : "",
-      SUPPORT : "",
-      INCOME_TYPE : "",
+      // SUPPORT : "",
+      // INCOME_TYPE : "",
       PART_TYPE : "",
       AGE_TYPE : "",
       BIZ_PURPOSE : "",
@@ -131,6 +131,16 @@ export const {getState, reducer, actions} = createCustomSlice({
   initialState,
   action, 
   reducers: {
+    onReset : (state)=>{
+      state.basicInfo = initialState.basicInfo;
+      state.programList = initialState.programList;
+      state.teacherList = initialState.teacherList;
+      state.teacherExtraList = initialState.teacherExtraList;
+      state.customList = initialState.customList;
+      state.customExtraList = initialState.customExtraList;
+      state.income = initialState.income;
+      state.incomeExtraList = initialState.incomeExtraList;
+    },
     getList_SUCCESS : (state, {payload})=>{
       state.rows = payload.data.map((i, idx)=>({...i, index : idx +1}));
     },
