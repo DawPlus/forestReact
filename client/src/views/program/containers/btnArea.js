@@ -61,7 +61,7 @@ const InsertOperateResult = ()=>{
             return false;
         }
         
-        return !excludeList.includes(column) && !value;
+        return !excludeList.includes(column) && (value === undefined || value === null || value === '');
         });
     
         if (emptyColumn) {
@@ -119,10 +119,7 @@ const InsertOperateResult = ()=>{
                     title: '확인',
                     text: "정상등록 되었습니다. 만족도효과평가 입력으로 이동합니다.",
                     }).then(()=>{
-
-
-                        navigate("/serviceInsertForm")
-
+                        navigate("/serviceInsertForm");
                     });  
             }
         })
@@ -181,10 +178,12 @@ return(<>
             <Grid container spacing={2} style={{marginTop : "5px"}}>
                 <Grid item xs={12}>
                     <div style={{textAlign:"right"}}>
+                        {data.PROGRESS_STATE !== "E" ?
                         <Button variant="contained" color="primary" type="submit" onClick={onPreSave} style={{marginRight : "10px"}}>
                         임시저장
                         {/*  PROGRESS_STATE: P */}
-                        </Button>
+                        </Button> : null
+                        }
 
                         <Button variant="contained" color="primary" type="submit" onClick={onSave}>
                         {/* PROGRESS_STATE : E */}

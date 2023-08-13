@@ -1,6 +1,6 @@
 import React , {useState }from "react";
 import { IconButton, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button} from '@mui/material';
-import {  Input, Select, } from "ui-component/inputs";
+import {  SelectItems } from "ui-component/inputs";
 import { styled } from '@mui/material/styles';
 import NumberInput from "ui-component/inputs/numberInput";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -11,6 +11,7 @@ import { getState , actions} from "store/reducers/programReducer";
 import { makeStyles } from '@mui/styles';
 
 import Swal from "sweetalert2";
+import { useMemo } from "react";
 
 
 const useStyles = makeStyles({
@@ -41,30 +42,13 @@ const ProgramListContainer = ()=>{
     const dispatch = useDispatch();
 
     const programList = useSelector(s=> getState(s).programList);
-
-    // const listData  = useMemo( () => {
-    //     if (programList.trim() === '') {
-    //         return [];
-    //     }    
-    //     const dataArray = programList.split(',');
-    //     return dataArray.reduce((acc, curr, idx) => {
-    //         const rowNumber = Math.floor(idx / 5);
-    //         if (!acc[rowNumber]) {
-    //             acc[rowNumber] = { id: rowNumber + 1 };
-    //         }
-    //         const colName = ["programName","col1","col2","col3","col4"][idx % 5];
-    //         acc[rowNumber][colName] = curr;
-    //         return acc;
-    //     }, []);
-    // },[programList]);
-
-
+    const programMngList = useSelector(s=> getState(s).programMngList);
+    const teacherMngList = useSelector(s=> getState(s).teacherMngList);
+    
+    
     const [pageInfo , setPageInfo] = useState(
         { programName : "", col1 : "", col2 : "", col3 : "", col4 : ""  }
     );
-
-    const items = ["예방교육", "산림교육", "산림치유", "아트", "릴렉싱", "에너제틱", "쿠킹", "이벤트"];
-
 
     const onAdd = ()=>{
         const isEmpty = Object.values(pageInfo).some(value => value === "");
@@ -81,11 +65,6 @@ const ProgramListContainer = ()=>{
                 });
             return;
         }
-
-
-
-
-
         dispatch(actions.addArrTarget({
             target : "programList", 
             value : pageInfo,
@@ -98,17 +77,8 @@ const ProgramListContainer = ()=>{
             target : 'programList', 
             id
         }))
-
     }
 
-    const onChange = (e)=>{
-        const name = e.target.name;
-        const value = e.target.value;
-        setPageInfo(s=> ({
-            ...s, 
-            [name] : value  
-        }));
-    }
     const onNumberChange = (name, value)=>{
         setPageInfo(s=> ({
             ...s, 
@@ -116,21 +86,32 @@ const ProgramListContainer = ()=>{
         }));
     }
 
+    const programItems = useMemo(()=> programMngList.map(i=> ({label : `${i.name} [${i.bunya}]`, value : i.name})),[programMngList]);
+    const teacherItems = useMemo(()=> teacherMngList.map(i=> ({label : i.name , value : i.name})),[teacherMngList]);
 
-
+    const onChangeProgram = (e)=>{
+        setPageInfo(s=> ({
+            ...s, 
+            programName : e.target.value, 
+            col1 : programMngList.find(i=> i.name === e.target.value).bunya
+        }))
+    }
+    const onChangeTeacher= (e)=>{
+        setPageInfo(s=> ({
+            ...s, 
+            col2 : e.target.value
+        }))
+    }
     
     return(
         <>
             <Div alignItems="center">프로그램</Div>
             <Grid  container spacing={1} alignItems="center" justifyContent="flex-end">
-                <Grid item  xs={2} >  
-                    <Input name="programName" label="프로그램명" value={pageInfo.programName} onChange={onChange} />
+                <Grid item  xs={4} >  
+                    <SelectItems label="프로그램명" value={pageInfo.programName} items={programItems} onChange={onChangeProgram}/>
                 </Grid>
                 <Grid item  xs={2} >  
-                    <Select label="분야" name="col1" options={items} value={pageInfo.col1} onChange={onChange}/>
-                </Grid>
-                <Grid item  xs={2} >  
-                    <Input name="col2" label="강사명" value={pageInfo.col2} onChange={onChange}/>
+                    <SelectItems label="강사명" value={pageInfo.col2} items={teacherItems} onChange={onChangeTeacher}/>
                 </Grid>
                 <Grid item  xs={2} >  
                     <NumberInput name="col3" label="내부강사" value={pageInfo.col3} onChange={onNumberChange}/>
@@ -172,13 +153,13 @@ const ProgramListContainer = ()=>{
                                 <TableCell align="center">{i.col2}</TableCell>
                                 <TableCell align="center">{i.col3}</TableCell>
                                 <TableCell align="center">{i.col4}</TableCell>
-                                <TableCell align="center"><IconButton aria-label="delete" onClick={onRemove(i.id)}>
-                                    <DeleteIcon />
-                                        </IconButton>
+                                <TableCell align="center">
+                                    <IconButton aria-label="delete" onClick={onRemove(i.id)}>
+                                        <DeleteIcon />
+                                    </IconButton>
                                 </TableCell>
                             </TableRow>
                         )}
-                        
                     </TableBody>
                 </Table>
             </TableContainer>

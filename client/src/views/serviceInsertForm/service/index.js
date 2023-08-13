@@ -9,12 +9,28 @@ import { actions, getState } from "store/reducers/serviceInsert/service";
 import Swal from "sweetalert2";
 import useDownloadExcel from "utils/useDownloadExcel";
 
-
-const Service = ()=>{
+import { useLocation } from 'react-router-dom';
+const Service = (props)=>{
+    // 1. useLocation 훅 취득
+    const location = useLocation();
 
     const dispatch  = useDispatch();
 
     React.useEffect(()=>{
+
+        if(!location.state) return;
+
+        const {type, name, openday, evalDate}= location.state;
+
+        if(type === "serviceInsertForm"){
+            dispatch(actions.getPreviousServiceList({data : {
+                AGENCY : name, 
+                OPENDAY : openday, 
+                EVAL_DATE : evalDate
+            }}))
+        }
+
+
         return ()=>{
             dispatch(actions.initState())
         }

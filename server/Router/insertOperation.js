@@ -46,6 +46,7 @@ router.post('/create', (req, res)=>{
         SUPPORT,
         PART_FORM,
         ORG_NATURE, 
+        ISCLOSEMINE,
         expenseList, 
         incomeList,
     } = data;
@@ -87,6 +88,7 @@ router.post('/create', (req, res)=>{
         user_name,
         PART_FORM,
         ORG_NATURE, 
+        ISCLOSEMINE
     ]
 
 
@@ -97,9 +99,9 @@ router.post('/create', (req, res)=>{
             INCOME_TYPE, PART_TYPE, AGE_TYPE, BIZ_PURPOSE, PROGRAM_IN_OUT, SERVICE_TYPE,
             ROOM_PART_PEOPLE, ROOM_PART_ROOM, ROOM_LEAD_PEOPLE, ROOM_LEAD_ROOM,
             ROOM_ETC_PEOPLE, ROOM_ETC_ROOM, MEAL_TYPE, MEAL_PART, MEAL_LEAD, MEAL_ETC,
-            PROGRAM_OPINION, SERVICE_OPINION, OVERALL_OPINION, PROGRESS_STATE, REG_ID, PART_FORM, ORG_NATURE)
+            PROGRAM_OPINION, SERVICE_OPINION, OVERALL_OPINION, PROGRESS_STATE, REG_ID, PART_FORM, ORG_NATURE, ISCLOSEMINE)
         VALUES 
-            (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON DUPLICATE KEY UPDATE 
             OPENDAY = VALUES(OPENDAY),
             AGENCY = VALUES(AGENCY),
@@ -134,7 +136,8 @@ router.post('/create', (req, res)=>{
             PROGRESS_STATE = VALUES(PROGRESS_STATE),
             REG_ID = VALUES(REG_ID),
             PART_FORM = VALUES(PART_FORM),
-            ORG_NATURE = VALUES(ORG_NATURE)
+            ORG_NATURE = VALUES(ORG_NATURE),
+            ISCLOSEMINE = VALUES(ISCLOSEMINE)
         
     `;  
     console.log(sql, values)

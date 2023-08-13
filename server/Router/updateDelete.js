@@ -18,16 +18,16 @@ router.post('/getList', (req, res)=>{
         // 프로그램 만족도 
         'SELECT BASIC_INFO_SEQ AS SEQ, AGENCY, OPENDAY FROM basic_info WHERE PROGRESS_STATE = "E" GROUP BY AGENCY, OPENDAY',
         'SELECT SERVICE_SEQ AS SEQ, AGENCY, OPENDAY, EVAL_DATE FROM service_env_satisfaction GROUP BY AGENCY, EVAL_DATE',
-        'SELECT PROGRAM_SEQ AS SEQ, CONCAT(AGENCY, \'(\', PROGRAM_NAME, \')\') AS AGENCY, OPENDAY, EVAL_DATE  FROM program_satisfaction GROUP BY AGENCY, EVAL_DATE, PROGRAM_NAME',
-        'SELECT COUNSEL_SEQ AS SEQ, CONCAT(AGENCY, \'(\', PV, \')\') AS AGENCY, OPENDAY FROM counsel_service GROUP BY AGENCY, PV, EVAL_DATE',
-        'SELECT PREVENT_SEQ AS SEQ, CONCAT(AGENCY, \'(\', PV, \')\') AS AGENCY, OPENDAY FROM prevent_service GROUP BY AGENCY, PV, OPENDAY',
-        'SELECT HEALING_SEQ  as SEQ, AGENCY , OPENDAY  FROM healing_service GROUP BY AGENCY, OPENDAY',
-        'SELECT HRV_SEQ AS SEQ, CONCAT(AGENCY, \'(\', PV, \')\') AS AGENCY, DATE AS OPENDAY FROM hrv_service GROUP BY AGENCY, PV, DATE',
-        'SELECT VIBRA_SEQ AS SEQ, CONCAT(AGENCY, \'(\', PV, \')\') AS AGENCY, DATE AS OPENDAY FROM vibra_service GROUP BY AGENCY, PV, DATE',  
+        'SELECT PROGRAM_SEQ AS SEQ, CONCAT(AGENCY, \'(\', PROGRAM_NAME, \')\') AS AGENCY_DISPLAY, AGENCY, OPENDAY, EVAL_DATE, PROGRAM_NAME FROM program_satisfaction GROUP BY AGENCY, EVAL_DATE, PROGRAM_NAME',
+        'SELECT COUNSEL_SEQ AS SEQ, CONCAT(AGENCY, \'(\', PV, \')\') AS AGENCY_DISPLAY, OPENDAY, AGENCY,PV FROM counsel_service GROUP BY AGENCY_DISPLAY, PV, EVAL_DATE',
+        'SELECT PREVENT_SEQ AS SEQ, CONCAT(AGENCY, \'(\', PV, \')\') AS AGENCY_DISPLAY, OPENDAY, AGENCY,PV FROM prevent_service GROUP BY AGENCY, PV, OPENDAY',
+        'SELECT HEALING_SEQ AS SEQ, AGENCY , OPENDAY, PV FROM healing_service GROUP BY AGENCY, OPENDAY',
+        'SELECT HRV_SEQ AS SEQ, CONCAT(AGENCY, \'(\', PV, \')\') AS AGENCY_DISPLAY, PV,  AGENCY, DATE AS OPENDAY FROM hrv_service GROUP BY AGENCY, PV, DATE',
+        'SELECT VIBRA_SEQ AS SEQ, CONCAT(AGENCY, \'(\', PV, \')\') AS AGENCY_DISPLAY, PV,  AGENCY, DATE AS OPENDAY FROM vibra_service GROUP BY AGENCY, PV, DATE',  
     ];
 
     const selectedSql = sql[type -1];
-    
+    console.log(selectedSql)
     maria(selectedSql).then((rows) => {
         res.json({rows})
     })
@@ -35,24 +35,36 @@ router.post('/getList', (req, res)=>{
 });
 
 // 삭제
-router.post('/delete', (req, res)=>{
-    const {seq,type}  = req.body;
+router.post('/deleteBasicInfo', (req, res)=>{
+    const {seq}  = req.body;
+//  삭제도 seq로 삭제 안됨 , 모두 agency 와  openday , eval_date 로 삭제 해야함 
+    const sql = 'DELETE FROM basic_info WHERE BASIC_INFO_SEQ = ? ';
+        console.log(sql)
+    maria(sql, [seq]).then((rows) => {
+        res.json({result : true})
+    })
+    .catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));
+});
 
+// 삭제
+router.post('/delete', (req, res)=>{
+    const {type, agency,openday, eval_date , pv, program_name}  = req.body;
     const sql = [
-        'DELETE FROM basic_info WHERE BASIC_INFO_SEQ = ? ',
-        'DELETE FROM service_env_satisfaction WHERE SERVICE_SEQ = ? ',
-        'DELETE FROM program_satisfaction WHERE PROGRAM_SEQ = ? ',
-        'DELETE FROM counsel_service WHERE COUNSEL_SEQ = ? ',
-        'DELETE FROM prevent_service WHERE PREVENT_SEQ = ? ',
-        'DELETE FROM healing_service WHERE HEALING_SEQ = ? ',
-        'DELETE FROM hrv_service WHERE HRV_SEQ = ? ',
-        'DELETE FROM vibra_service WHERE VIBRA_SEQ = ? ' 
-        
+       'DELETE FROM basic_info WHERE BASIC_INFO_SEQ = ?', // 안씀
+        'DELETE FROM service_env_satisfaction WHERE AGENCY = ? and OPENDAY = ? AND EVAL_DATE = ? ',
+        'DELETE FROM program_satisfaction WHERE AGENCY = ? and OPENDAY = ? AND EVAL_DATE = ? AND PROGRAM_NAME = ? ',  // agency, openday , program_name
+
+        // 여기까진 확인함
+        'DELETE FROM counsel_service WHERE AGENCY = ? and OPENDAY = ? AND PV = ? ', // gency, openday , pv 
+        'DELETE FROM prevent_service WHERE AGENCY = ? and OPENDAY = ? AND PV = ?',
+        'DELETE FROM healing_service WHERE AGENCY = ? and OPENDAY = ? AND PV = ?',
+        'DELETE FROM hrv_service WHERE AGENCY = ? and PV = ?',   // agency, pv
+        'DELETE FROM vibra_service WHERE AGENCY = ? and PV = ?'  // agency, pv
     ];
-    
     const selectedSql = sql[type-1];
-    
-    maria(selectedSql, [seq]).then((rows) => {
+    const value = [agency, openday, eval_date, pv, program_name].filter(i => i !== undefined);
+
+    maria(selectedSql,value).then((rows) => {
         res.json({result : true})
     })
     .catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));

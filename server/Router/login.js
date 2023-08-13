@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const maria = require("../maria");
-const fs = require('fs');
-const moment = require("moment");
-
+// const fs = require('fs');
+// const moment = require("moment");
+// const path = require('path');
 const { encrypt, decrypt } = require('../util');
 // 로그인 하기 
 router.post("/login", (req,res)=>{
@@ -11,31 +11,32 @@ router.post("/login", (req,res)=>{
     //['foresthealing' , 'tksflaglffld113*']
     try{
     const sql = "SELECT * FROM user_info  WHERE USER_ID= ? AND USER_PWD= ?"
-    const sessionStorePath = './sessions';
-        fs.readdir(sessionStorePath, (err, files) => {
-            if (err) {
-                console.error(err);
-            return;
-            }
-            const now = moment();
-            const sessionFiles = files.filter(file => file.endsWith('.json'));
+  //  const sessionStorePath = '/web/foresthealing/sessions'; // 원하는 세션 파일 저장 경로
+
+        // fs.readdir(sessionStorePath, (err, files) => {
+        //     if (err) {
+        //         console.error(err);
+        //     return;
+        //     }
+        //     const now = moment();
+        //     const sessionFiles = files.filter(file => file.endsWith('.json'));
             
-            sessionFiles.forEach(file => {
-            const filePath = `${sessionStorePath}/${file}`;
-            const fileContent = fs.readFileSync(filePath, 'utf-8'); 
-            const sessionData = JSON.parse(fileContent);
-            const expires = moment(sessionData.cookie.expires);        
-            if (expires && expires.isBefore(now)) {
-                fs.unlink(filePath, (err) => {
-                if (err) {
-                    console.error(err);
-                    return;
-                }
-                console.log(`${filePath} is deleted.`);
-                });
-            }
-            });
-        });
+        //     sessionFiles.forEach(file => {
+        //     const filePath = path.join(sessionStorePath, file); // 경로 생성 방식 변경
+        //     const fileContent = fs.readFileSync(filePath, 'utf-8'); 
+        //     const sessionData = JSON.parse(fileContent);
+        //     const expires = moment(sessionData.cookie.expires);        
+        //     if (expires && expires.isBefore(now)) {
+        //         fs.unlink(filePath, (err) => {
+        //         if (err) {
+        //             console.error(err);
+        //             return;
+        //         }
+        //         console.log(`${filePath} is deleted.`);
+        //         });
+        //     }
+        //     });
+        // });
         
         
     const encPassword = encrypt(password);
@@ -43,20 +44,10 @@ router.post("/login", (req,res)=>{
     maria(sql, [id, encPassword])
     .then((rows) => {
         if(rows.length > 0){
+
             req.session.userInfo = { ...rows[0] };
 
-            req.session.save((err) => {
-            if (err) {
-                console.error(err);
-                res.status(500).json({ error: "세션 저장 중 오류가 발생하였습니다." });
-                return;
-            }
-            console.log(req.session.userInfo);
             res.json({ message: '로그인 되었습니다.', isLogin: true, result: true });
-            });
-
-
-
         }else{
             res.json({message : '로그인 정보를 확인해 주세요.', isLogin : false, result : true})
         }
@@ -72,11 +63,13 @@ router.post("/login", (req,res)=>{
 });
 
 router.post("/logout", (req, res)=>{
-    req.session.destroy(()=>{
-        req.session=null;
-        res.clearCookie('healing'); // 세션 쿠키 삭제
-        res.json({message : "logout success"})
-    });
+    console.log(req.session)
+    if(req.session){
+        req.session.destroy(()=>{
+            res.json({message : "logout success"})
+        });
+    }
+    
 })
 
 

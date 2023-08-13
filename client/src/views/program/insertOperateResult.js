@@ -31,7 +31,11 @@ const InsertOperateResult = ()=>{
   const [tempValue, setTempValue] = useState("");
 
   React.useEffect(()=>{
-    dispatch(actions.getTempList())
+    dispatch(actions.getTempList());
+    dispatch(actions.getProgramMngList());
+    dispatch(actions.getTeacherMngList());
+
+    
 
     return ()=>{
       dispatch(actions.initState())
@@ -105,7 +109,7 @@ const InsertOperateResult = ()=>{
           <Grid item sm={6}>
             {/* 참여인력 정보 */}
             <MainCard>
-            <PersonInfos/>
+            < PersonInfos/>
             </MainCard>
           </Grid>
         </Grid>

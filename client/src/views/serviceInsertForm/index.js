@@ -10,8 +10,20 @@ import Prevent from "./prevent"
 import Healing from "./healing"
 import Hrv from "./hrv"
 import Vibra from "./vibra"
+import { useLocation } from 'react-router-dom';
+
 
 const ServiceInsertForm = ()=>{
+    // 1. useLocation 훅 취득
+    const location = useLocation();
+
+    
+    React.useEffect(()=>{
+        
+        if(!location.state) return; 
+        const {type}= location.state;
+        setType(s=> type);
+    },[location.state])
 
     const [type  , setType] = useState("serviceInsertForm")
 

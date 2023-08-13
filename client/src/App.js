@@ -9,9 +9,9 @@ import Routes from 'routes';
 import themes from 'themes';
 // project imports
 import NavigationScroll from 'layout/NavigationScroll';
-import axios from "axios";
 import { actions } from "store/reducers/commonReducer";
 import Loading from"ui-component/Lodings"
+import callApi from "utils/callApi";
 const noAuthURL = [
   '/login',
   '/register'
@@ -33,7 +33,7 @@ const App = () => {
       return;
     }
 
-    axios.post("/api/loginCheck").then(r => {
+    callApi("/loginCheck").then(r => {
 
       if (r.data.isLogin) {
         

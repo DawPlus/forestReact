@@ -77,7 +77,7 @@ const DefaultInfos = ()=>{
     const onCheckChange = e=>{
         dispatch(actions.setBasicInfo({
             key : e.target.name,
-            value : e.target.checked
+            value : e.target.checked ? 1 : 0
         }))
     }
     return(
@@ -112,7 +112,7 @@ const DefaultInfos = ()=>{
                         <Select label="거주지역" name="RESIDENCE" options={items} value={RESIDENCE} onChange={onChange}/>
                     </Grid>
                     <Grid item  xs={6}>
-                        <CheckBox label="폐광지역" style={{ alignItems: 'center' }}value={ISCLOSEMINE} onChange={onCheckChange} name="ISCLOSEMINE"/>
+                        <CheckBox label="폐광지역" style={{ alignItems: 'center' }}checked={ISCLOSEMINE === 1 } onChange={onCheckChange} name="ISCLOSEMINE"/>
                     </Grid>          
                 </Grid>
             </Grid>

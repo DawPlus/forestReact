@@ -42,7 +42,7 @@ const initialState = {
       ORG_NATURE : "",// 단체성격
       PART_FORM : "", // 참여형태
 
-      ISCLOSEMINE : false,
+      ISCLOSEMINE : 0,
     },
 
     programList : [], 
@@ -85,8 +85,12 @@ const initialState = {
 
 
     tempList : [], 
+    programMngList : [],
+    teacherMngList : [],
+    rows : [], 
 
-    rows : [] , 
+    
+
 };
 
 const order = [
@@ -123,6 +127,8 @@ const action = {
     getList : createAction(`${name}/getList`),
     getTempList : createAction(`${name}/getTempList`),
     getTempData : createAction(`${name}/getTempData`),
+    getProgramMngList : createAction(`${name}/getProgramMngList`),
+    getTeacherMngList : createAction(`${name}/getTeacherMngList`),
     
   }
 
@@ -250,7 +256,17 @@ export const {getState, reducer, actions} = createCustomSlice({
     },
     removeArrTarget : (state, {payload : {target, id}})=>{
       state[target] = state[target].filter(i=> i.id !== id)
-    }
+    },
+
+
+
+    getProgramMngList_SUCCESS :(state, {payload : {data}})=>{
+      state.programMngList = data;
+    },
+    
+    getTeacherMngList_SUCCESS :(state, {payload : {data}})=>{
+      state.teacherMngList = data;
+    },
 
 
 

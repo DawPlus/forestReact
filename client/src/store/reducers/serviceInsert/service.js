@@ -48,7 +48,7 @@ const initialState = {
         AGENCY : "",  
         OPENDAY : "", 
         EVAL_DATE: "", 
-        PTCPROGRAM : ""
+        PTCPROGRAM  : ""
     }
   
 };
@@ -64,7 +64,12 @@ export const {getState, reducer, actions} = createCustomSlice({
   initialState,
   action, 
   reducers: {
-
+    getPreviousServiceList :(state, {payload : {data}})=>{
+      state.searchInfo = {
+        ...state.searchInfo, 
+        ...data
+      }
+    },
     addRow  : (state)=>{
       state.rows = state.rows.concat({...initialState.rows[0], id: v4()})
     }, 
@@ -94,7 +99,10 @@ export const {getState, reducer, actions} = createCustomSlice({
       }else{
         Swal.fire({ icon: 'warning', title: '확인', text: "이전에 작성했던 데이터를 불러옵니다."});
         state.rows = data.map(i=> ({...i, id : v4(), chk : false}));
-        
+        state.searchInfo = {
+          ...state.searchInfo, 
+          PTCPROGRAM : data[0].PTCPROGRAM
+        }
       }
     },
     getPreviousServiceListAfterSave_SUCCESS : (state, {payload  : {data}})=>{

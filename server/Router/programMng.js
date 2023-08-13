@@ -6,7 +6,10 @@ const { createHistory } = require('../util');
 
 // 입력
 router.post('/create', (req, res)=>{
-    const {user_name} = req.session?.userInfo;
+    console.log(req.session)
+    const {user_name = "admin"} = req.session?.userInfo || "admin";
+
+    console.log(user_name)
     const {data} = req.body; 
     const { program_seq, name, bunya } = data;
     const values = [ program_seq, name, bunya,  user_name, user_name ]
@@ -27,6 +30,8 @@ router.post('/create', (req, res)=>{
     })
     .then(() => {
         res.json({ result: true });
+    }).catch(e=>{
+        console.log(e)
     })
 });
 
