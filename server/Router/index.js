@@ -11,7 +11,8 @@ const searchProgramResult = require("./searchProgramResult")
 const insertOperation = require("./insertOperation")
 const programMng = require("./programMng")
 const teacherMng = require("./teacherMng")
-//const test = require("./test")
+const userTemp = require("./userTemp")
+const programTable = require("./programTable")
 
 //router.use(login);
 router.use("/program", program);
@@ -27,6 +28,8 @@ router.use("/searchProgram", searchProgramResult);
 router.use("/insertOperation", insertOperation);
 router.use("/teacherMng", teacherMng);
 router.use("/programMng", programMng);
+router.use("/userTemp", userTemp);
+router.use("/programTable", programTable);
 
 
 //router.use("/test", test);

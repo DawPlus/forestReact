@@ -1,7 +1,7 @@
 import React from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 import DynamicTableHead from "ui-component/DynamicTableHead";
-import { actions, getState } from "store/reducers/yearMonthResultReducer";
+import {  getState } from "store/reducers/yearMonthResultReducer";
 import { useSelector } from "react-redux";
 
 const ParticipationType = ()=>{

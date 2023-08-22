@@ -86,14 +86,26 @@ const ProgramListContainer = ()=>{
         }));
     }
 
-    const programItems = useMemo(()=> programMngList.map(i=> ({label : `${i.name} [${i.bunya}]`, value : i.name})),[programMngList]);
+    const programItems = useMemo(()=> {
+        
+        const list = programMngList.map(i=> i.bunya === pageInfo.col1 ? ({label : `${i.name} [${i.bunya}]`, value : i.name}) : null);
+        return list.filter(i=> i);
+
+    },[programMngList, pageInfo.col1]);
+    const bunyaItem = useMemo(()=> programMngList.map(i=> ({label : `${i.bunya}`, value : i.bunya})),[programMngList]);
     const teacherItems = useMemo(()=> teacherMngList.map(i=> ({label : i.name , value : i.name})),[teacherMngList]);
 
     const onChangeProgram = (e)=>{
         setPageInfo(s=> ({
             ...s, 
             programName : e.target.value, 
-            col1 : programMngList.find(i=> i.name === e.target.value).bunya
+        }))
+    }
+
+    const onChangeBunya = (e)=>{
+        setPageInfo(s=> ({
+            ...s, 
+            col1 : e.target.value, 
         }))
     }
     const onChangeTeacher= (e)=>{
@@ -107,7 +119,10 @@ const ProgramListContainer = ()=>{
         <>
             <Div alignItems="center">프로그램</Div>
             <Grid  container spacing={1} alignItems="center" justifyContent="flex-end">
-                <Grid item  xs={4} >  
+                <Grid item  xs={2} >  
+                    <SelectItems label="분야" value={pageInfo.col1} items={bunyaItem} onChange={onChangeBunya}/>
+                </Grid>
+                <Grid item  xs={2} >  
                     <SelectItems label="프로그램명" value={pageInfo.programName} items={programItems} onChange={onChangeProgram}/>
                 </Grid>
                 <Grid item  xs={2} >  

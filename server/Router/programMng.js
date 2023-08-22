@@ -43,6 +43,16 @@ router.post('/list', (req, res)=>{
     .catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));
 });
 
+
+// 조회
+router.post('/detail', (req, res)=>{ 
+    const {bunya} = req.data;
+    const sql = `SELECT * FROM program_mng where bunya = ?`;
+    maria(sql,[bunya]).then((rows) =>  res.json(rows) )
+    .catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));
+});
+
+
 // 조회
 router.post('/delete', (req, res)=>{ 
     const {seq} = req.body;

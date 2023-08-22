@@ -52,6 +52,9 @@ const ServiceInsertForm = ()=>{
                     "counselInsertForm" : <Counsel/>,
                     "preventInsertForm" : <Prevent/>,
                     "healingInsertForm" : <Healing/>,
+
+
+                    
                     "hrvInsertForm" : <Hrv/>,
                     "vibraInsertForm" : <Vibra/>,
                 }[type]

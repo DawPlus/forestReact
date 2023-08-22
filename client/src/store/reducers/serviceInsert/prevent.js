@@ -55,6 +55,7 @@ const initialState = {
 };
 
 const action = {
+  getUserTemp : createAction(`${name}/getUserTemp`),
   getList : createAction(`${name}/getList`, (data) => ({payload : data})),
   getListAfterSave : createAction(`${name}/getListAfterSave`, (data) => ({payload : data}))
 }
@@ -114,7 +115,25 @@ export const {getState, reducer, actions} = createCustomSlice({
     },
     getListAfterSave_SUCCESS : (state, {payload  : {data}})=>{
         state.rows = data.map(i=> ({...i, id : v4(), chk : false}));
-    }
+    },
+
+
+    setAllData  : (state, {payload : {type, value}})=>{
+      state.rows = state.rows.map(i=> ({...i, 
+          [type] : value      
+      }))
+    },
+    // 입력유저관리 
+    getUserTemp_SUCCESS : (state, {payload : {data}})=>{
+      state.rows  =data.map(i=> ({
+        ...initialState.rows[0],
+        id : v4(), 
+        SEX:i.sex, // 성별
+        AGE:i.age, // 연령
+        RESIDENCE:i.residence, // 거주지
+        JOB:i.job,  
+      }))
+    },
 
 
   }

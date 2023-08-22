@@ -5,7 +5,7 @@ import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 
 // dashboard routing
-const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
+//const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 
 // utilities routing
 const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
@@ -24,6 +24,7 @@ const History = Loadable(lazy(() => import('views/management/history')));
 const UserList = Loadable(lazy(() => import('views/management/userList')));
 const TeacherMng = Loadable(lazy(() => import('views/management/teacherMng')));
 const ProgramMng = Loadable(lazy(() => import('views/management/programMng')));
+const UserTemp = Loadable(lazy(() => import('views/management/userTemp')));
 
 
 // Program List 
@@ -34,6 +35,8 @@ const UpdateDelete = Loadable(lazy(() => import('views/common/updateDelete')));
 const ServiceInsertForm = Loadable(lazy(() => import('views/serviceInsertForm')));
 const YearMonthResult = Loadable(lazy(() => import('views/yearMonthResult')));
 const SearchProgramResult = Loadable(lazy(() => import('views/searchProgramResult')));
+
+
 
 
 
@@ -87,6 +90,7 @@ const MainRoutes = [{
         { path: 'history', element: <History /> },
         { path: 'teacherMng', element: <TeacherMng /> },
         { path: 'programMng', element: <ProgramMng /> },
+        { path: 'userTemp', element: <UserTemp /> },
         {
             path: 'sae',
             children: [

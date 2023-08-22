@@ -1,5 +1,5 @@
 // assets
-import { IconFloatLeft, IconReportAnalytics} from '@tabler/icons';
+import { IconFloatLeft, IconReportAnalytics, IconUserCircle, IconApiApp, IconAperture} from '@tabler/icons';
 // assets
 import { IconKey } from '@tabler/icons';
 
@@ -34,7 +34,7 @@ const menuItems = {
                     id: 'authentication',
                     title: '운영통계검색',
                     type: 'collapse',
-                    icon: icons.IconKey,
+                    icon: IconApiApp,
                     children: [
                         {
                             id: 'year',
@@ -51,6 +51,13 @@ const menuItems = {
                     ]
                 },
                 {
+                    id: 'userTemp',
+                    title: '프로그램참가자입력',
+                    type: 'item',
+                    icon: IconUserCircle,
+                    url: '/userTemp',   
+                },
+                {
                     id: 'insert',
                     title: '만족도및 효과평가 입력',
                     type: 'item',
@@ -59,9 +66,9 @@ const menuItems = {
                 },
                 {
                     id: 'programResult',
-                    title: '만족도및효과평가결과검색',
+                    title: '만족도 및 효과평가결과검색',
                     type: 'collapse',
-                    icon: icons.IconKey,
+                    icon: IconAperture,
                     children: [
                         {
                             id: 'agencyList',
@@ -112,7 +119,8 @@ const menuItems = {
                             title: '강사관리',
                             type: 'item',
                             url: '/teacherMng',   
-                        }
+                        },
+                     
                     ]
                 },
                 {

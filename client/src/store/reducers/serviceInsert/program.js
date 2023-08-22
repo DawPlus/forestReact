@@ -45,11 +45,16 @@ const initialState = {
         TEACHER : "", // 강사명
         PLACE : "", // 장소 
         BUNYA : "", // 분야 
-    }
-  
+    },
+  programItem: [],
+  programList : [], 
+  teacherItem :[],  
 };
 
 const action = {
+  getProgramList  : createAction(`${name}/getProgramList`),
+  getTeacherList  : createAction(`${name}/getTeacherList`),
+  getUserTemp : createAction(`${name}/getUserTemp`),
   getPreviousProgramList : createAction(`${name}/getPreviousProgramList`, (data) => ({payload : data})),
   getPreviousProgramListAfterSave : createAction(`${name}/getPreviousProgramListAfterSave`, (data) => ({payload : data}))
 }
@@ -60,6 +65,13 @@ export const {getState, reducer, actions} = createCustomSlice({
   initialState,
   action, 
   reducers: {
+    getProgramList_SUCCESS : (state, {payload : {data}})=>{
+      state.programList = data;
+      state.programItem = data.map(({name, bunya})=> ({label : `${name}[${bunya}]` , value : name}))
+    },
+    getTeacherList_SUCCESS : (state, {payload : {data}})=>{
+      state.teacherItem = data.map(({name})=> ({label : name , value : name}))
+    },
 
     addRow  : (state)=>{
       state.rows = state.rows.concat({...initialState.rows[0], id: v4()})
@@ -97,12 +109,30 @@ export const {getState, reducer, actions} = createCustomSlice({
         state.rows = data.map(i=> ({...i, id : v4(), chk : false}));
     },
 
-    
     setAllData  : (state, {payload : {type, value}})=>{
       state.rows = state.rows.map(i=> ({...i, 
           [type] : value      
       }))
-    }
+    },
+    setProgramInfo : (state, {payload : {program, bunya}})=>{
+      state.searchInfo.PROGRAM_NAME= program;
+      state.searchInfo.BUNYA= bunya;
+    },
+    // 입력유저관리 
+    getUserTemp_SUCCESS : (state, {payload : {data}})=>{
+      state.rows  =data.map(i=> ({
+        ...initialState.rows[0],
+        id : v4(), 
+        chk : false, 
+        SEX:i.sex, // 성별
+        AGE:i.age, // 연령
+        RESIDENCE:i.residence, // 거주지
+        JOB:i.job,  
+      }))
+    },
+
+
+
   }
 });
 

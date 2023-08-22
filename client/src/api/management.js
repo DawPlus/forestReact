@@ -16,6 +16,11 @@ const getTeacherMngList = (param)=> callApi("/teacherMng/list")
 const createTeacherMng = (param)=> callApi("/teacherMng/create", param)
 const deleteTeacherMng = (param)=> callApi("/teacherMng/delete", param)
 
+const getUserTemp = (param)=> callApi("/userTemp/list", param)
+const getUserTempAgency = (param)=> callApi("/userTemp/agencyList")
+const createUserTemp = (param)=> callApi("/userTemp/create", param)
+
+
 
 
 
@@ -26,13 +31,15 @@ const api = {
     getRegUser,
     getAllHistories,
     getHistory,
-   
     getProgramMngList,
     createProgramMng,
     deleteProgramMng,
     getTeacherMngList,
     createTeacherMng,
-    deleteTeacherMng
+    deleteTeacherMng,
+    getUserTemp,
+    createUserTemp,
+    getUserTempAgency,
 }
 export default api;
 

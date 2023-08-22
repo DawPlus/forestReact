@@ -3,11 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import {getState, actions} from"store/reducers/serviceInsert/healing"
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
-import IconButton from '@mui/material/IconButton';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
+
 import DynamicTableHead from "ui-component/DynamicTableHead";
 import DynamicTableRow from "../component/dynamicTableRow";
+import SetValue from "../component/setValue";
 
 const InsertForm = ()=>{
 
@@ -71,7 +70,7 @@ const InsertForm = ()=>{
     const fields = [ 
         { label: '이름', name: 'NAME'},
         { label: '성별', name: 'SEX', type : "select"},
-        { label: '연령', name: 'AGE'},
+        { label: '연령', name: 'AGE', type :"age"},
         { label: '거주지', name: 'RESIDENCE', type : "select"},
         { label: '직업', name: 'JOB', type : "select"},
         { label: '과거상담/치유서비스경험', name: 'PAST_STRESS_EXPERIENCE'},
@@ -98,17 +97,18 @@ const InsertForm = ()=>{
     }, [dispatch]);
 
 
+    const onSetValue = (e)=>{
+        dispatch(actions.setAllData(e));
+    }
+
+    const getUserTemp= (agency)=>{
+        dispatch(actions.getUserTemp({agency}))
+    }
+
 
 
     return <>   
-            <div style={{padding : "15px 5px"}}>
-                <IconButton color="primary" onClick={onAdd}>
-                    <AddIcon color="primary" />
-                </IconButton>
-                <IconButton color="primary" onClick={removeRow} style={{margin : "0px 10px"}}>
-                    <RemoveIcon color="primary" />
-                </IconButton>
-            </div>
+            <SetValue onAdd={onAdd} onRemove={removeRow} onSetData={onSetValue} getUserTemp={getUserTemp}/>
             <TableContainer style={{minHeight: "560px" , paddingBottom : "50px" }}>
                 <Table className="insertForm custom-table">
                     <DynamicTableHead headerInfo={headerInfo} />

@@ -1,4 +1,4 @@
-import React ,{useEffect}from "react";
+import React ,{useEffect, useState}from "react";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import {actions, getState} from "store/reducers/programResultReducer"
@@ -16,6 +16,9 @@ import Program from "./program"
 import Facility from "./facility"
 import Prevent from "./prevent"
 import Healing from "./healing"
+
+
+import DatePicker from "ui-component/inputs/datePicker";
 const AgencyList = ()=>{
     // Dispatch
     const dispatch = useDispatch();
@@ -54,21 +57,38 @@ const AgencyList = ()=>{
         }
         
         switch(type){
-            case "1" : dispatch(actions.getProgramResult({ type , agency }))
+            case "1" : dispatch(actions.getProgramResult({ type , agency , openday, endday}))
                 break;
-            case "2" : dispatch(actions.getFaciltyList({ type , agency }))
+            case "2" : dispatch(actions.getFaciltyList({ type , agency, openday, endday }))
                 break;
-            case "4" : dispatch(actions.getPreventList({ type , agency }))
+            case "4" : dispatch(actions.getPreventList({ type , agency, openday, endday }))
                 break;
-            case "5" : dispatch(actions.getHealingList({ type , agency }))
+            case "5" : dispatch(actions.getHealingList({ type , agency, openday, endday }))
                 break;
             default : break;
         }
     }
+
+
+    const [openday, setOpenday] = useState("");
+    const [endday, setEndday] = useState("");
+
+
+    const onReset = ()=>{
+        dispatch(actions.initProgramAgency());
+        setOpenday(s=> "")
+        setEndday(s=> "")
+    }
+
     return <>
         <MainCard>
             <Grid container spacing={2}   alignItems="center">
-                <Grid item sm={4}>
+                <Grid item container spacing={2} alignItems="center" md={12}>
+                    <Grid item sm={3}><DatePicker label="시작일"name="openday" value={openday} onChange={(_, value)=>setOpenday(value)}/></Grid>
+                    <Grid item sm={3}><DatePicker label="종료일"name="endday" value={endday} onChange={(_, value)=>setEndday(value)}/></Grid>
+                    <Grid item sm={6}></Grid>
+                </Grid>
+                <Grid item sm={3}>
                     <FormControl fullWidth size="small" style={{ height: 40 }}>
                         <InputLabel id="forms">입력양식</InputLabel>
                         <Select labelId="forms" value={type} label="입력양식" onChange={onSelectedChange} >
@@ -81,7 +101,7 @@ const AgencyList = ()=>{
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid item sm={6}>       
+                <Grid item sm={3}>       
                 {type !== "" && <>
                     {agencyList.length === 0 && "입력된 만족도및 효과평가 가 없습니다."}
                     {agencyList.length > 0 &&
@@ -99,8 +119,10 @@ const AgencyList = ()=>{
                         }
                 </>}       
                 </Grid>
-                <Grid item sm={2}>
+                <Grid item sm={6}>
                     <div style={{textAlign:"right"}}>
+                    
+                        <Button variant="contained" size="small" color="primary" onClick={onReset} style={{marginRight : "10px"}} >초기화</Button>
                         <Button variant="contained" size="small" color="primary" onClick={onSearch} >조회</Button>
                     </div>
                 </Grid>

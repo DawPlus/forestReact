@@ -10,7 +10,8 @@ const initialState = {
     deleteRow : [], 
     rows : [
       {
-        id : "1", 
+        idx : "", 
+        id : "",
         chk : false, 
         SERVICE_SEQ : "", 
         OPENDAY:"",
@@ -54,6 +55,8 @@ const initialState = {
 };
 
 const action = {
+  
+  getUserTemp : createAction(`${name}/getUserTemp`),
   getPreviousServiceList : createAction(`${name}/getPreviousServiceList`, (data) => ({payload : data})),
   getPreviousServiceListAfterSave : createAction(`${name}/getPreviousServiceListAfterSave`, (data) => ({payload : data}))
 }
@@ -71,15 +74,18 @@ export const {getState, reducer, actions} = createCustomSlice({
       }
     },
     addRow  : (state)=>{
-      state.rows = state.rows.concat({...initialState.rows[0], id: v4()})
+      state.rows = state.rows.concat({...initialState.rows[0], idx: v4()})
     }, 
     removeRow : (state, {payload})=>{
 
-        const filteredList = payload.map(i=> i.id);
+        const filteredList = payload.map(i=> i.idx);
         const deleteSeq = payload.map(i=> i.SERVICE_SEQ);
 
         state.deleteRow = [...new Set([...state.deleteRow, ...deleteSeq])];
-        state.rows = state.rows.filter((i)=> !filteredList.includes(i.id))
+        state.rows = state.rows.filter((i)=> !filteredList.includes(i.idx))
+
+
+        
     },
     changeValue : (state, {payload : {index, key , value}})=>{
       state.rows[index][key] = value;
@@ -98,7 +104,7 @@ export const {getState, reducer, actions} = createCustomSlice({
         Swal.fire({ icon: 'warning', title: '확인', text: "기존 입력된 데이터가 없습니다.", })
       }else{
         Swal.fire({ icon: 'warning', title: '확인', text: "이전에 작성했던 데이터를 불러옵니다."});
-        state.rows = data.map(i=> ({...i, id : v4(), chk : false}));
+        state.rows = data.map(i=> ({...i, idx : v4(), chk : false}));
         state.searchInfo = {
           ...state.searchInfo, 
           PTCPROGRAM : data[0].PTCPROGRAM
@@ -106,10 +112,27 @@ export const {getState, reducer, actions} = createCustomSlice({
       }
     },
     getPreviousServiceListAfterSave_SUCCESS : (state, {payload  : {data}})=>{
-        state.rows = data.map(i=> ({...i, id : v4(), chk : false}));
+        state.rows = data.map(i=> ({...i, idx : v4(), chk : false}));
+    },
+
+    // 입력유저관리 
+    getUserTemp_SUCCESS : (state, {payload : {data}})=>{
+      state.rows  =data.map(i=> ({
+        ...initialState.rows[0],
+        idx : v4(),
+        id : i.id, 
+        chk : false, 
+        SEX:i.sex, // 성별
+        AGE:i.age, // 연령
+        RESIDENCE:i.residence, // 거주지
+        JOB:i.job,  
+      }))
+    },
+    setAllData  : (state, {payload : {type, value}})=>{
+      state.rows = state.rows.map(i=> ({...i, 
+          [type] : value      
+      }))
     }
-
-
   }
 });
 

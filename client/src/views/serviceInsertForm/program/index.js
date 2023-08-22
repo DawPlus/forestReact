@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import MainCard from 'ui-component/cards/MainCard';
 import InsertForm from "./insertForm"
 import SearchInfo from "./searchInfo"
@@ -15,6 +15,11 @@ const Service = ()=>{
     const dispatch  = useDispatch();
 
     React.useEffect(()=>{
+        dispatch(actions.getProgramList())
+        dispatch(actions.getTeacherList())
+
+
+
         return ()=>{
             dispatch(actions.initState())
         }
@@ -24,16 +29,7 @@ const Service = ()=>{
     const {rows, deleteRow, searchInfo, type} = useSelector(s=> getState(s));
     
     const headerInfo = [
-        [ '성별', '연령', '거주지', '직업', '참여구분', '강사', '강사', '강사', '구성/품질', '구성/품질', '구성/품질', '효과성', '효과성', '효과성', '기타의견'
-        , '시작일자' 
-        , '기관명' 
-        , '실시일자' 
-        , '참여일정' 
-        , '프로그램명' 
-        , '강사명'         
-        , '장소' 
-        , '분야' 
-        ],
+        [ '성별', '연령', '거주지', '직업', '참여구분', '강사', '강사', '강사', '구성/품질', '구성/품질', '구성/품질', '효과성', '효과성', '효과성', '기타의견' , '시작일자' , '기관명' , '실시일자' , '참여일정' , '프로그램명' , '강사명' , '장소' , '분야' ],
         [ '', '', '', '', '', '문항1', '문항2', '문항3', '문항4', '문항5', '문항6', '문항7', '문항8', '문항9', '',
             '' , '' , '' , '' , '' , '' , '' , '' ]
     ]
@@ -80,25 +76,25 @@ const Service = ()=>{
                 })
             return;
         } 
-        const excludeValues = ['PROGRAM_SEQ', 'chk']; // 비어있는지 체크에서 제외하고 싶은 값들
+        // const excludeValues = ['PROGRAM_SEQ', 'chk']; // 비어있는지 체크에서 제외하고 싶은 값들
 
         
-    const isCheck = rows.some((row) => {
-        return Object.entries(row).some(([key, value]) => {
-        if (!excludeValues.includes(key)) {
-            return !value || value.trim() === "";
-        }
-        return false;
-        });
-    });
-        if(isCheck){
-            Swal.fire({
-                icon: 'warning',
-                title: '확인',
-                text: "비어있는 항목이 있습니다.",
-                })
-            return;
-        }
+    // const isCheck = rows.some((row) => {
+    //     return Object.entries(row).some(([key, value]) => {
+    //     if (!excludeValues.includes(key)) {
+    //         return !value || value.trim() === "";
+    //     }
+    //     return false;
+    //     });
+    // });
+    //     if(isCheck){
+    //         Swal.fire({
+    //             icon: 'warning',
+    //             title: '확인',
+    //             text: "비어있는 항목이 있습니다.",
+    //             })
+    //         return;
+    //     }
 
 
         // 데이터 가공  
@@ -140,6 +136,10 @@ const Service = ()=>{
 
     const onSearch = ()=>{
         const {   AGENCY , OPENDAY , EVAL_DATE, PROGRAM_NAME} = searchInfo;
+        if([AGENCY , OPENDAY , EVAL_DATE, PROGRAM_NAME].includes("")){
+            Swal.fire({ icon: 'warning', title: '확인', text: '필수 조회조건(기관명, 시작일자, 실시일자, 프로그램명)을 입력해 주십시오', });
+            return;
+        }
         dispatch(actions.getPreviousProgramList({data : {
             AGENCY , OPENDAY , EVAL_DATE, PROGRAM_NAME
         }, type }))

@@ -3,6 +3,7 @@ import { TextField, TableCell } from '@mui/material';
 
 
 import Select from "ui-component/select"
+import NumberInput from "ui-component/inputs/numberInput2"
 
 const DynamicField = ({ type, label, name, onChange, value, idx }) => {
 
@@ -58,15 +59,23 @@ const DynamicField = ({ type, label, name, onChange, value, idx }) => {
     
     }
 
-    return type === 'select'   ? 
-
-    <TableCell>
-        <Select items={item[name]} label={label} value={value} name={name} onChange={onChange(idx)} style={{minWidth: "100px"}}/>
-    </TableCell>
-    : 
-    <TableCell>
-        <TextField size="small" label={label} value={value} name={name} onChange={onChange(idx)} />
-    </TableCell>
+    if(type === "select"){
+        return <TableCell>
+                    <Select items={item[name]} label={label} value={value} name={name} onChange={onChange(idx)} style={{minWidth: "100px"}}/>
+                </TableCell>
+    }else if(type === "age"){
+        return <TableCell>
+                    <NumberInput  label={label} value={value} name={name} onChange={onChange(idx)} style={{minWidth: "100px"}}/>
+                </TableCell>
+    }else if(type ==="jumin"){
+        return <TableCell>
+                <NumberInput  label={label} value={value} name={name} onChange={onChange(idx)} maxLength={6}style={{minWidth: "100px"}}/>
+            </TableCell>
+    }else {
+        return <TableCell>
+                    <TextField size="small" label={label} value={value} name={name} onChange={onChange(idx)} />
+                </TableCell>
+    }
     
 };
 export default memo(DynamicField);

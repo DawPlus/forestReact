@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import {  InputLabel} from '@mui/material';
-import callApi, { client } from "utils/callApi";
+import callApi from "utils/callApi";
 import { Button } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
@@ -259,9 +259,7 @@ const UpdateDelete = ()=>{
                     <MenuItem value={8}>바이브라 측정 검사</MenuItem>
                 </Select>
                 </FormControl>
-            </div>
-
-                
+            </div>                
             <DataGrid title="수정/삭제" data={rows} columns={columns} />
         </MainCard>
     </>

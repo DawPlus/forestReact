@@ -44,6 +44,7 @@ const initialState = {
 };
 
 const action = {
+  getUserTemp : createAction(`${name}/getUserTemp`),
   getList : createAction(`${name}/getList`, (data) => ({payload : data})),
   getListAfterSave : createAction(`${name}/getListAfterSave`, (data) => ({payload : data}))
 }
@@ -59,10 +60,10 @@ export const {getState, reducer, actions} = createCustomSlice({
       state.rows = state.rows.concat({...initialState.rows[0], id: v4()})
     }, 
     removeRow : (state, {payload})=>{
-        const filteredList = payload.map(i=> i.id);
+        const filteredList = payload.map(i=> i.idx);
         const deleteSeq = payload.map(i=> i[key]); // seq
         state.deleteRow = [...new Set([...state.deleteRow, ...deleteSeq])];
-        state.rows = state.rows.filter((i)=> !filteredList.includes(i.id))
+        state.rows = state.rows.filter((i)=> !filteredList.includes(i.idx))
     },
     changeValue : (state, {payload : {index, key , value}})=>{
       state.rows[index][key] = value;
@@ -103,7 +104,26 @@ export const {getState, reducer, actions} = createCustomSlice({
     },
     getListAfterSave_SUCCESS : (state, {payload  : {data}})=>{
         state.rows = data.map(i=> ({...i, idx : v4(), chk : false}));
-    }
+    },
+    setAllData  : (state, {payload : {type, value}})=>{
+      state.rows = state.rows.map(i=> ({...i, 
+          [type] : value      
+      }))
+    },
+    // 입력유저관리 
+    getUserTemp_SUCCESS : (state, {payload : {data}})=>{
+      state.rows  =data.map(i=> ({
+        ...initialState.rows[0],
+        idx : v4(),
+        ID :i.id, 
+        SEX:i.sex, // 성별
+        AGE:i.age, // 연령
+        NAME : i.name, 
+        JUMIN : i.jumin  
+        
+      }))
+    },
+
 
 
   }

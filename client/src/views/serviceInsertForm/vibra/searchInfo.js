@@ -31,7 +31,7 @@ const SearchInfo = ()=>{
     }
 
 
-    const item2 =['사전', '중간', '종결']
+    const item2 =['사전', '사후']
     
 
 
@@ -39,15 +39,15 @@ const SearchInfo = ()=>{
     return <>
         <Grid container spacing={2} alignItems={"center"}>
             <Grid item sm={2}>
+                <DatePicker label="실시일자" value={DATE} onChange={onDateChange} name="DATE"/>
+            </Grid>
+            <Grid item sm={10}></Grid>
+            <Grid item sm={2}>
                 <Input  label="기관명" value={AGENCY} name="AGENCY" onChange={onChange}/> 
             </Grid>
             <Grid item sm={2}>
             <Input  label="측정기구" value={EQUIPMENT} name="EQUIPMENT" onChange={onChange}/> 
             </Grid>
-            <Grid item sm={2}>
-                <DatePicker label="실시일자" value={DATE} onChange={onDateChange} name="DATE"/>
-            </Grid>
-            
             <Grid item sm={2}>
                 <Select options={item2}label="시점"value={PV} name="PV" onChange={onChange} />
             </Grid>

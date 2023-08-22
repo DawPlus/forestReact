@@ -11,11 +11,11 @@ import TableBody from '@mui/material/TableBody';
 import DynamicField from "./dynamicField";
 import { memo } from "react";
 
-const DynamicTableRow = ({ rows, fields, onCheckChange, onChange }) => {
+const DynamicTableRow = ({ rows, fields, onCheckChange, onChange , id = "id"}) => {
   return (
     <TableBody style={{minHeight:"500px"}}>
         {rows.map((row, idx) => 
-          <TableRow key={row.id}>
+          <TableRow key={row[id]}>
             {idx > 0 ? (
               <TableCell style={{ textAlign: "center" }}>
                 <Checkbox checked={row.chk} value="" name="chk" onChange={onCheckChange(idx)} />

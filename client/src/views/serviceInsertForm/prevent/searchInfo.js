@@ -31,21 +31,23 @@ const SearchInfo = ()=>{
     }
 
     const item = [ "당일형", "1박2일형", "2박3일형", ]
-    const item2 =['사전', '중간', '종결']
+    const item2 =['사전','사후']
     
 
 
 
     return <>
         <Grid container spacing={2} alignItems={"center"}>
-            <Grid item sm={2}>
-                <Input  label="기관명" value={AGENCY} name="AGENCY" onChange={onChange}/> 
-            </Grid>
+            
             <Grid item sm={2}>
                 <DatePicker  value={OPENDAY} onChange={onDateChange} label="시작일자" name="OPENDAY" />
             </Grid>
             <Grid item sm={2}>
                 <DatePicker label="실시일자" value={EVAL_DATE} onChange={onDateChange} name="EVAL_DATE"/>
+            </Grid>
+            <Grid item sm={8}></Grid>
+            <Grid item sm={2}>
+                <Input  label="기관명" value={AGENCY} name="AGENCY" onChange={onChange}/> 
             </Grid>
             <Grid item sm={2}>
                 <Select options={item}label="참여일정"value={PTCPROGRAM} name="PTCPROGRAM" onChange={onChange} />

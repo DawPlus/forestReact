@@ -9,10 +9,10 @@ const PositiveNumberInput = ({ label, value, onChange, name, maxLength = 3, ...p
     const numericValue = event.target.value.replace(/[^0-9.]/g, '');
 
     if (numericValue === '') {
-      onChange(name, '');
+      onChange({target : {name,  value : ''}});
     } else if (maxLength !== undefined && numericValue.length <= maxLength) {
       const parsedValue = parseFloat(numericValue);
-      onChange(name, parsedValue);
+      onChange({target : {name,  value : parsedValue}});
     }
   };
 

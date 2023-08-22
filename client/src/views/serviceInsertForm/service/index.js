@@ -119,20 +119,20 @@ const Service = (props)=>{
             return;
         } 
 
-        const isCheck =  rows.some((row) => {
-            return array.some((item) => {
-                return !row[item] || row[item].trim() === "";
-            });
-        });
+        // const isCheck =  rows.some((row) => {
+        //     return array.some((item) => {
+        //         return !row[item] || row[item].trim() === "";
+        //     });
+        // });
 
-        if(isCheck){
-            Swal.fire({
-                icon: 'warning',
-                title: '확인',
-                text: "비어있는 항목이 있습니다.",
-                })
-            return;
-        }
+        // if(isCheck){
+        //     Swal.fire({
+        //         icon: 'warning',
+        //         title: '확인',
+        //         text: "비어있는 항목은 특정값으로 대체됩니다.",
+        //     })
+                
+        // }
 
 
         // 데이터 가공  
@@ -141,7 +141,7 @@ const Service = (props)=>{
 
         Swal.fire({
             title: '서비스환경 만족도 등록',
-            text: `${data.length}개의 항목을 등록 하시겠습니까?`,
+            text: `${data.length}개의 항목을 등록 하시겠습니까? `,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -178,6 +178,7 @@ const Service = (props)=>{
         dispatch(actions.getPreviousServiceList({data : searchInfo}))
     }
 
+
     return <>
         <MainCard style={{marginTop : "10px"}}>
             <SearchInfo/>
@@ -186,7 +187,7 @@ const Service = (props)=>{
                 <Button variant="contained" size="small" color="primary" onClick={onSave} style={{marginLeft : "5px"}}>전송</Button>
             </div>
         </MainCard>
-        <MainCard style={{marginTop : "10px", minHeight: "400px"}}>
+        <MainCard style={{marginTop : "5px", minHeight: "400px"}}>
             <InsertForm/>
         </MainCard>
             

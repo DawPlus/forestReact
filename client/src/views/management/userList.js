@@ -22,7 +22,14 @@ import Avatar from '@mui/material/Avatar';
 
 
 import { blue } from '@mui/material/colors';
-import callApi , { client } from 'utils/callApi';
+import  { client } from 'utils/callApi';
+
+
+const items = [
+  {label : "승인대기", value : "1"},
+  {label : "직원", value : "2"},
+  {label : "관리자", value : "3"},
+]
 
 const useStyles = makeStyles({
   tableContainer: {
@@ -53,7 +60,7 @@ const Member = () => {
     displayName,
     user_id, 
     user_name, 
-    user_pwd,
+    //user_pwd,
     value, 
   } = userMng.detail; 
 
@@ -193,21 +200,8 @@ const Member = () => {
 
   }
 
-const items = [
-  {label : "승인대기", value : "1"},
-  {label : "직원", value : "2"},
-  {label : "관리자", value : "3"},
-]
-
-  const onClick = ()=>{
-    callApi("/test/test").then(r=> console.log(r))
-  }
-
   return (
     <MainCard>
-      <div>
-      <button onClick={onClick}>테스트</button>
-      </div>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={8}>
         <TableContainer className={classes.tableContainer} >

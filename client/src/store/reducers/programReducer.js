@@ -85,6 +85,7 @@ const initialState = {
 
 
     tempList : [], 
+    bunyaList : [], 
     programMngList : [],
     teacherMngList : [],
     rows : [], 
@@ -262,7 +263,9 @@ export const {getState, reducer, actions} = createCustomSlice({
 
     getProgramMngList_SUCCESS :(state, {payload : {data}})=>{
       state.programMngList = data;
+   
     },
+
     
     getTeacherMngList_SUCCESS :(state, {payload : {data}})=>{
       state.teacherMngList = data;

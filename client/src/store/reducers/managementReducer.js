@@ -1,7 +1,21 @@
-import { createAction } from '@reduxjs/toolkit';
+import { createAction, current } from '@reduxjs/toolkit';
 import createCustomSlice from "utils/createCustomSlice";
+import { v4 } from 'uuid';
 
 const name ="management";
+
+
+const initUserTemp = {
+  seq : "", 
+  id : "",
+  name : "", 
+  sex : "", 
+  age : "", 
+  residence : "", 
+  job : "", 
+  jumin : "", 
+  idx : "1",
+}
 
 const initialState = {
     codeList : [],
@@ -45,6 +59,11 @@ const initialState = {
       }
     }, 
 
+    userTempAgency : [],
+    userTemp : [
+      initUserTemp
+    ]
+
 
 
 };
@@ -57,6 +76,9 @@ const action = {
     getProgramMngList : createAction(`${name}/getProgramMngList`),
     getTeacherMngList : createAction(`${name}/getTeacherMngList`),
 
+    getUserTempAgency : createAction(`${name}/getUserTempAgency`),
+    getUserTemp : createAction(`${name}/getUserTemp`),
+  
 }
 
 const codNameList  =[
@@ -140,6 +162,39 @@ export const {getState, reducer, actions} = createCustomSlice({
       setTeacherUpdateInfo : (state, {payload})=>{
         state.teacherMng.updateInfo = payload;
       },
+
+
+
+      // 입력유저관리 
+      getUserTemp_SUCCESS :(state, {payload : {data}})=>{
+        state.userTemp = data.map(i=> ({...i, idx : v4()}))
+      },
+      // 입력유저관리 
+      getUserTempAgency_SUCCESS :(state, {payload : {data}})=>{
+        state.userTempAgency = data;
+      },
+    
+      onUserTempAddRow : (state)=>{
+        state.userTemp = state.userTemp.concat({...initUserTemp, idx : v4()})
+      },
+      onUserTempRemoveRow : (state, {payload})=>{
+        state.userTemp = state.userTemp.filter(i=> i.idx !==payload); 
+      },
+      onChangeUserTemp : (state, {payload: {index, key, value}})=>{
+        state.userTemp[index][key] = value;
+      },
+      setUserTempData : (state)=>{
+        const userTemp = current(state.userTemp);
+        state.userTemp = state.userTemp.map(i=>({
+
+            ...i, 
+            sex : userTemp[0].sex, 
+            age : userTemp[0].age, 
+            residence : userTemp[0].residence, 
+            job : userTemp[0].job, 
+
+        }))
+      }
 
     }
 });

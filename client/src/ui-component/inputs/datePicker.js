@@ -14,7 +14,7 @@ const DatePickerComponent = (props) => {
     const { label, onChange, name, value } = props;
 
     const onDateChange = (value) => {
-        const _val = value.format("YYYY-MM-DD");
+        const _val = value ? value.format("YYYY-MM-DD")  : "";
         onChange(name, _val);
     };
 

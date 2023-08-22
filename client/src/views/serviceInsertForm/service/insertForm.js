@@ -3,11 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {getState, actions} from"store/reducers/serviceInsert/service"
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
-import IconButton from '@mui/material/IconButton';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
 import DynamicTableHead from "ui-component/DynamicTableHead";
 import DynamicTableRow from "../component/dynamicTableRow";
+import SetValue from "../component/setValue";
 
 
 
@@ -18,7 +16,7 @@ const InsertForm = ()=>{
 
     const fields =[
         {name : 'SEX', label:"성별", type : "select"},
-        {name : 'AGE', label:"연령" },
+        {name : 'AGE', label:"연령" , type : "age"},
         {name : 'RESIDENCE', label:"거주지", type : "select"},
         {name : 'JOB', label:"직업", type : "select"},
         {name : 'SCORE1', label:"숙소(문항1)" },
@@ -60,26 +58,31 @@ const InsertForm = ()=>{
     }, [dispatch]);
 
     const removeRow = useCallback(() => {
-        const selectedRowIds = rows.filter(i => i.chk).map(({ id, SERVICE_SEQ }) => ({id, SERVICE_SEQ}));
+        const selectedRowIds = rows.filter(i => i.chk).map(({ idx, SERVICE_SEQ }) => ({idx, SERVICE_SEQ}));
         dispatch(actions.removeRow(selectedRowIds));
     }, [dispatch, rows]);
 
     const onCheckChange = useCallback((idx) => (e) => {
         dispatch(actions.changeValue({ index: idx, key: "chk", value: e.target.checked }));
     }, [dispatch]);
+
+
+
+    const setData = (e)=>{
+        dispatch(actions.setAllData(e))
+    }
+
+    const getUserTemp= (agency)=>{
+        dispatch(actions.getUserTemp({agency}))
+    }
+
     return <>   
-            <div style={{padding : "15px 5px"}}>
-            <IconButton color="primary" onClick={onAdd}>
-                <AddIcon color="primary" />
-            </IconButton>
-            <IconButton color="primary" onClick={removeRow} style={{margin : "0px 10px"}}>
-                <RemoveIcon color="primary" />
-            </IconButton>
-            </div>
+            <SetValue onAdd={onAdd} onRemove={removeRow} onSetData={setData} getUserTemp={getUserTemp}/>
+            
             <TableContainer style={{minHeight: "560px" , paddingBottom : "50px" }}>
                 <Table className="insertForm custom-table">
                     <DynamicTableHead headerInfo={headerInfo} />
-                    <DynamicTableRow rows={rows} fields={fields} onCheckChange={onCheckChange} onChange={onChange} />
+                    <DynamicTableRow rows={rows} fields={fields} onCheckChange={onCheckChange} onChange={onChange} id="idx" />
                 </Table>
             </TableContainer>
     </>

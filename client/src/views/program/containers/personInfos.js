@@ -20,7 +20,7 @@ const DefaultInfos = ()=>{
         LEAD_MAN_CNT,
         LEAD_WOMAN_CNT,
         DAYS_TO_STAY,
-        SUPPORT,
+       // SUPPORT,
       //  INCOME_TYPE,
         PART_TYPE,
         AGE_TYPE,

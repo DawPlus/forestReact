@@ -23,7 +23,7 @@ const keywordItem = [
     { value : "AGENCY" , label : "기관명"},
     { value : "OM" , label : "OM"},
     { value : "DAYS_TO_STAY" , label : "체류기간"},
-    { value : "REGIDENCE" , label : "거주지역"},
+    { value : "RESIDENCE" , label : "거주지역"},
     { value : "SUPPORT" , label : "지원사항"},
     { value : "BIZ_PURPOSE" , label : "사업구분"},
     { value : "PART_TYPE" , label : "참가자유형"},
