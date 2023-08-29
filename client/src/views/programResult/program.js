@@ -25,12 +25,41 @@ const Program = ()=>{
     
     const {programResult, agency} = useSelector(s=> getState(s))
     
-    const [ AVG1, AVG2, AVG3, AVG4, AVG5, AVG6, AVG7, AVG8, AVG9, AVG10, AVG11, AVG12] = useMemo(()=>{
-        return [ "SCORE1", "SCORE2", "SCORE3", "SCORE4", "SCORE5", "SCORE6", "SCORE7", "SCORE8", "SCORE9", "sum1","sum2","sum3"].map(k => {
+    const [
+        AVG1,
+        AVG2,
+        AVG3,
+        AVG4,
+        AVG5,
+        AVG6,
+        AVG7,
+        AVG8,
+        AVG9,
+        AVG10,
+        AVG11,
+        AVG12,
+    ] = useMemo(() => {
+        return [
+            "SCORE1",
+            "SCORE2",
+            "SCORE3",
+            "SCORE4",
+            "SCORE5",
+            "SCORE6",
+            "SCORE7",
+            "SCORE8",
+            "SCORE9",
+            "sum1",
+            "sum2",
+            "sum3",
+        ].map(k => {
             const sum = programResult.reduce((a, c) => a + (parseFloat(c[k]) || 0), 0);
-            return (sum / programResult.length).toFixed(2);
+            const average = sum / programResult.length;
+            const formattedAverage = isNaN(average) ? "-" : average.toFixed(2);
+            return formattedAverage;
         });
-    },[programResult])
+    }, [programResult]);
+    
 
     const headerInfo = [
         ['ID', '프로그램명', '강사명', '장소', '강사', '강사', '강사', '구성/품질', '구성/품질', '구성/품질', '효과성', '효과성', '효과성', '기타의견', '평균', '평균', '평균'],

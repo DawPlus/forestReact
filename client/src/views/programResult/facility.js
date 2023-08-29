@@ -22,35 +22,34 @@ const Program = ()=>{
     const classes = useStyles();
     
     const {facilityList, agency} = useSelector(s=> getState(s))
-    
-    const [ 
-            AVG1,
-            AVG2,
-            AVG3,
-            AVG4,
-            AVG5,
-            AVG6,
-            AVG7,
-            AVG8,
-            AVG9,
-            AVG10,
-            AVG11,
-            AVG12,
-            AVG13,
-            AVG14,
-            AVG15,
-            AVG16,
-            AVG17,
-            AVG18,
-            SUMAVG1,
-            SUMAVG2,
-            SUMAVG3,
-            SUMAVG4,
-            SUMAVG5,
-            SUMAVG6,
-            SUMAVG7,
-        ] = useMemo(()=>{
-        return [ 
+    const [
+        AVG1,
+        AVG2,
+        AVG3,
+        AVG4,
+        AVG5,
+        AVG6,
+        AVG7,
+        AVG8,
+        AVG9,
+        AVG10,
+        AVG11,
+        AVG12,
+        AVG13,
+        AVG14,
+        AVG15,
+        AVG16,
+        AVG17,
+        AVG18,
+        SUMAVG1,
+        SUMAVG2,
+        SUMAVG3,
+        SUMAVG4,
+        SUMAVG5,
+        SUMAVG6,
+        SUMAVG7,
+    ] = useMemo(() => {
+        return [
             "SCORE1",
             "SCORE2",
             "SCORE3",
@@ -75,12 +74,18 @@ const Program = ()=>{
             "sum4",
             "sum5",
             "sum6",
-            "sum7"
+            "sum7",
         ].map(k => {
-            const sum = facilityList.reduce((a, c) => a + (parseFloat(c[k]) || 0), 0);
-            return (sum / facilityList.length).toFixed(2);
+            const nonEmptyValues = facilityList.filter(item => item[k] !== "");
+            const sum = nonEmptyValues.reduce((a, c) => a + parseFloat(c[k] || 0), 0);
+    
+            const average = sum / nonEmptyValues.length;
+            const formattedAverage = isNaN(average) ? "-" : average.toFixed(2);
+            return formattedAverage;
         });
-    },[facilityList])
+    }, [facilityList]);
+    
+    
 
 
     const headerInfo =[

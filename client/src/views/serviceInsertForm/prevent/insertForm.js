@@ -52,6 +52,7 @@ const InsertForm = ()=>{
         { label: '과거상담/치유서비스경험', name: 'PAST_STRESS_EXPERIENCE'},
         ...data
     ];
+    console.log(fields)
     const { rows} = useSelector(s=> getState(s));
 
     const onChange = useCallback((idx) => (e) => {

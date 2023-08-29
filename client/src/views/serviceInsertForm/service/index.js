@@ -106,7 +106,7 @@ const Service = (props)=>{
 
 
 
-    const array = [ "SEX", "AGE", "RESIDENCE", "JOB", "SCORE1", "SCORE2", "SCORE3", "SCORE4", "SCORE5", "SCORE6", "SCORE7", "SCORE8", "SCORE9", "SCORE10", "FACILITY_OPINION", "SCORE11", "SCORE12", "SCORE13", "SCORE14", "SCORE15", "SCORE16", "OPERATION_OPINION", "SCORE17", "SCORE18", ];
+   // const array = [ "SEX", "AGE", "RESIDENCE", "JOB", "SCORE1", "SCORE2", "SCORE3", "SCORE4", "SCORE5", "SCORE6", "SCORE7", "SCORE8", "SCORE9", "SCORE10", "FACILITY_OPINION", "SCORE11", "SCORE12", "SCORE13", "SCORE14", "SCORE15", "SCORE16", "OPERATION_OPINION", "SCORE17", "SCORE18", ];
     
     const onSave = ()=>{
         const hasEmptyValues = Object.values(searchInfo).some(value => !value);

@@ -12,14 +12,14 @@ const InsertForm = ()=>{
 
     const dispatch = useDispatch();
 
-    const data = [ '문항1', '문항2', '문항3', '문항4', '문항5', '문항6', '문항7', '문항8', '문항9', '문항10', '문항11', '문항12', '문항13', '문항14', '문항15', '문항16', '문항17', '문항18', '문항19', '문항20', '문항21', '문항22', '문항23', '문항24', '문항25', '문항26', '문항27', '문항28', '문항29', '문항30', '문항31', '문항32', '문항33', '문항34', '문항35', '문항36', '문항37', '문항38', '문항39', '문항40', '문항41', '문항42', '문항43', '문항44', '문항45', '문항46', '문항47', '문항48', '문항49', '문항50', '문항51', '문항52', '문항53', '문항54', '문항55', '문항56', '문항57', '문항58', '문항59', '문항60', '문항61', '문항62'].map((i, idx)=> ({ label : i, name : 'SCORE'+(idx+1)}))
+    const data = [ '문항1', '문항2', '문항3', '문항4', '문항5', '문항6', '문항7', '문항8', '문항9', '문항10', '문항11', '문항12', '문항13', '문항14', '문항15', '문항16', '문항17', '문항18', '문항19', '문항20', '문항21', '문항22', '문항23', '문항24', '문항25', '문항26', '문항27', '문항28', '문항29', '문항30', '문항31', '문항32', '문항33', '문항34', '문항35', '문항36', '문항37', '문항38', '문항39', '문항40', '문항41', '문항42', '문항43', '문항44', '문항45', '문항46', '문항47', '문항48', '문항49', '문항50', '문항51', '문항52', '문항53', '문항54', '문항55', '문항56', '문항57', '문항58', '문항59', '문항60', '문항61', '문항62'].map((i, idx)=> ({ label : i, name : 'SCORE'+(idx+1), type : "age"}))
     const fields = [ 
         { label: '이름', name: 'NAME'},
-        { label: '성별', name: 'SEX'},
+        { label: '성별', name: 'SEX', type:"select"},
         { label: '연령', name: 'AGE', type:"age"},
-        { label: '거주지', name: 'RESIDENCE'},
-        { label: '직업', name: 'JOB'},
-        { label: '과거상담/치유서비스경험', name: 'PAST_STRESS_EXPERIENCE'},
+        { label: '거주지', name: 'RESIDENCE', type:"select"},
+        { label: '직업', name: 'JOB', type:"select"},
+        { label: '과거상담/치유서비스경험', name: 'PAST_STRESS_EXPERIENCE', type : "age"},
         ...data
     ];
 
@@ -66,8 +66,11 @@ const InsertForm = ()=>{
 
 
     return <>   
-            <SetValue onAdd={onAdd} onRemove={removeRow} onSetData={onSetValue} getUserTemp={getUserTemp}/>
-            <TableContainer style={{minHeight: "560px" , paddingBottom : "50px" }}>
+            <SetValue onAdd={onAdd} onRemove={removeRow} onSetData={onSetValue} getUserTemp={getUserTemp}>  
+                <span>※ 과거상담/치유 서비스경험 : [0 : 미기재, 1 : 무, 2:유]</span>
+            </SetValue>
+
+                <TableContainer style={{minHeight: "560px" , paddingBottom : "50px" }}>
                 <Table className="insertForm custom-table">
                     <DynamicTableHead headerInfo={headerInfo} />
                     <DynamicTableRow rows={rows} fields={fields} onCheckChange={onCheckChange} onChange={onChange} />

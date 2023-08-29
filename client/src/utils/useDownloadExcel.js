@@ -46,8 +46,8 @@ const useDownloadExcel = (props) =>{
     const today = moment();
 
     const downloadExcel = ()=>{
-        // Header Data Setting 
-        const _header = headerInfo.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})))
+       // Header Data Setting 
+        const _header = headerInfo.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
         // data Setting 
         const _data = cellData.map(values => values.map(value => ({ v: value, t: 's', s: defaultStyle })));
         //avg 
@@ -64,8 +64,8 @@ const useDownloadExcel = (props) =>{
 
         ws['!rows'] = Array(headerInfo.length).fill({ hpx: 23 }); 
 
-        XLSX.utils.book_append_sheet(wb, ws, "sheet1");
-
+        XLSX.utils.book_append_sheet(wb, ws, "테스트");
+        
         const todayInfo = today.format("YYYY-MM-DD");
 
         XLSX.writeFile(wb, `${filename}_${todayInfo}.xlsx`);

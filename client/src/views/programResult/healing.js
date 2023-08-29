@@ -25,9 +25,38 @@ const Program = ()=>{
     
     const {healingList, agency} = useSelector(s=> getState(s))
     
-    const [ AVG1, AVG2, AVG3, AVG4, AVG5, AVG6, AVG7, AVG8, AVG9, AVG10, AVG11, AVG12, AVG13, AVG14, AVG15, AVG16, AVG17, AVG18, AVG19, AVG20, AVG21, AVG22, SUMAVG1, SUMAVG2, SUMAVG3, SUMAVG4, SUMAVG5, SUMAVG6, SUMAVG7]=useMemo(
-        ()=>{
-        return [ 
+    const [
+        AVG1,
+        AVG2,
+        AVG3,
+        AVG4,
+        AVG5,
+        AVG6,
+        AVG7,
+        AVG8,
+        AVG9,
+        AVG10,
+        AVG11,
+        AVG12,
+        AVG13,
+        AVG14,
+        AVG15,
+        AVG16,
+        AVG17,
+        AVG18,
+        AVG19,
+        AVG20,
+        AVG21,
+        AVG22,
+        SUMAVG1,
+        SUMAVG2,
+        SUMAVG3,
+        SUMAVG4,
+        SUMAVG5,
+        SUMAVG6,
+        SUMAVG7,
+    ] = useMemo(() => {
+        return [
             "SCORE1",
             "SCORE2",
             "SCORE3",
@@ -56,17 +85,49 @@ const Program = ()=>{
             "sum4",
             "sum5",
             "sum6",
-            "sum7"
+            "sum7",
         ].map(k => {
-            const sum = healingList.filter(i=> i.PV ==="사전").reduce((a, c) => a + (parseFloat(c[k]) || 0), 0);
-            return (sum / healingList.filter(i=> i.PV ==="사전").length).toFixed(2);
+            const sum = healingList.filter(i => i.PV === "사전").reduce((a, c) => a + (parseFloat(c[k]) || 0), 0);
+            const nonEmptyValues = healingList.filter(i => i.PV === "사전").filter(item => item[k] !== "");
+            const average = sum / nonEmptyValues.length;
+            const formattedAverage = isNaN(average) ? "-" : average.toFixed(2);
+            return formattedAverage;
         });
-    },[healingList])
+    }, [healingList]);
+    
 
-
-    const [ AVG1_A, AVG2_A, AVG3_A, AVG4_A, AVG5_A, AVG6_A, AVG7_A, AVG8_A, AVG9_A, AVG10_A, AVG11_A, AVG12_A, AVG13_A, AVG14_A, AVG15_A, AVG16_A, AVG17_A, AVG18_A, AVG19_A, AVG20_A, AVG21_A, AVG22_A, SUMAVG1_A, SUMAVG2_A, SUMAVG3_A, SUMAVG4_A, SUMAVG5_A, SUMAVG6_A, SUMAVG7_A]=useMemo(
-        ()=>{
-        return [ 
+    const [
+        AVG1_A,
+        AVG2_A,
+        AVG3_A,
+        AVG4_A,
+        AVG5_A,
+        AVG6_A,
+        AVG7_A,
+        AVG8_A,
+        AVG9_A,
+        AVG10_A,
+        AVG11_A,
+        AVG12_A,
+        AVG13_A,
+        AVG14_A,
+        AVG15_A,
+        AVG16_A,
+        AVG17_A,
+        AVG18_A,
+        AVG19_A,
+        AVG20_A,
+        AVG21_A,
+        AVG22_A,
+        SUMAVG1_A,
+        SUMAVG2_A,
+        SUMAVG3_A,
+        SUMAVG4_A,
+        SUMAVG5_A,
+        SUMAVG6_A,
+        SUMAVG7_A,
+    ] = useMemo(() => {
+        return [
             "SCORE1",
             "SCORE2",
             "SCORE3",
@@ -95,12 +156,16 @@ const Program = ()=>{
             "sum4",
             "sum5",
             "sum6",
-            "sum7"
+            "sum7",
         ].map(k => {
-            const sum = healingList.filter(i=> i.PV ==="사후").reduce((a, c) => a + (parseFloat(c[k]) || 0), 0);
-            return (sum / healingList.filter(i=> i.PV ==="사후").length).toFixed(2);
+            const sum = healingList.filter(i => i.PV === "사후").reduce((a, c) => a + (parseFloat(c[k]) || 0), 0);
+            const nonEmptyValues = healingList.filter(i => i.PV === "사후").filter(item => item[k] !== "");
+            const average = sum / nonEmptyValues.length;
+            const formattedAverage = isNaN(average) ? "-" : average.toFixed(2);
+            return formattedAverage;
         });
-    },[healingList])
+    }, [healingList]);
+    
 
     const headerInfo = [
         [ "ID", "성명", "성별", "거주지", "직업", "참여일정", "과거스트레스\n해소및힐링\n서비스경험", "영역", "1.욕구충족", "1.욕구충족", "2.긍정정서", "2.긍정정서", "2.긍정정서", "3.자기이해", "3.자기이해", "3.자기이해", "3.자기이해", "4.마음관리기술", "4.마음관리기술", "4.마음관리기술", "5.정서능력측면", "5.정서능력측면", "5.정서능력측면", "5.정서능력측면", "6.영성측면", "6.영성측면", "6.영성측면", "7.삶의조망측면", "7.삶의조망측면", "7.삶의조망측면", "영역", "평균(0~6점)", "평균(0~6점)", "평균(0~6점)", "평균(0~6점)", "평균(0~6점)", "평균(0~6점)", "평균(0~6점)", ],

@@ -166,24 +166,33 @@ export const {getState, reducer, actions} = createCustomSlice({
       });
 
 
-
-        state.healingList = filteredData.map(i=> {
-          const sum1List = [i.SCORE1, i.SCORE2];
-          const sum2List = [i.SCORE3, i.SCORE4, i.SCORE5];
-          const sum3List = [i.SCORE6, i.SCORE7, i.SCORE8, i.SCORE9];
-          const sum4List = [i.SCORE10, i.SCORE11, i.SCORE12];
-          const sum5List = [i.SCORE11, i.SCORE12, i.SCORE13, i.SCORE14];
-          const sum6List = [i.SCORE15, i.SCORE16, i.SCORE17];
-          const sum7List = [i.SCORE18, i.SCORE19, i.SCORE20];
-          const [ sum1, sum2, sum3, sum4, sum5, sum6, sum7] = 
-              [ calculateAverage(sum1List), calculateAverage(sum2List), calculateAverage(sum3List), calculateAverage(sum4List), calculateAverage(sum5List), calculateAverage(sum6List) , calculateAverage(sum7List)]
-          return { ...i, sum1, sum2, sum3, sum4, sum5, sum6, sum7 }
-        })
+      state.healingList = filteredData.map(i => {
+        const sum1List = [i.SCORE1, i.SCORE2];
+        const sum2List = [i.SCORE3, i.SCORE4, i.SCORE5];
+        const sum3List = [i.SCORE6, i.SCORE7, i.SCORE8, i.SCORE9];
+        const sum4List = [i.SCORE10, i.SCORE11, i.SCORE12];
+        const sum5List = [i.SCORE11, i.SCORE12, i.SCORE13, i.SCORE14];
+        const sum6List = [i.SCORE15, i.SCORE16, i.SCORE17];
+        const sum7List = [i.SCORE18, i.SCORE19, i.SCORE20];
+    
+        const [sum1, sum2, sum3, sum4, sum5, sum6, sum7] = [
+            calculateAverage(sum1List),
+            calculateAverage(sum2List),
+            calculateAverage(sum3List),
+            calculateAverage(sum4List),
+            calculateAverage(sum5List),
+            calculateAverage(sum6List),
+            calculateAverage(sum7List)
+        ].map(value => isNaN(value) ? "-" : value);
+    
+        return { ...i, sum1, sum2, sum3, sum4, sum5, sum6, sum7 };
+    });
+    
         },
   
       // 예방서비스 효과평가
       getPreventList_SUCCESS : (state, {payload})=>{
-
+        console.log(payload);
         const sortedData = payload.data.sort((a, b) => {
           if (a.NAME < b.NAME) return -1;
           if (a.NAME > b.NAME) return 1;
@@ -191,7 +200,7 @@ export const {getState, reducer, actions} = createCustomSlice({
           if (a.PV === '사후' && b.PV === '사전') return 1;
           return 0;
       });
-
+      
       // 사전 사후가 없을경우는 0 으로 입력  
       // 사전과 사후가 모두 있는 항목만 출력
       const filteredData = sortedData.filter(data => {
@@ -199,20 +208,29 @@ export const {getState, reducer, actions} = createCustomSlice({
           const hasPost = sortedData.some(item => item.NAME === data.NAME && item.PV === '사후');
           return hasPre && hasPost;
       });
+      
 
 
-
-        state.preventList = filteredData.map(i=> {
+      state.preventList = filteredData.map(i => {
           const sum1List = [i.SCORE1, i.SCORE2, i.SCORE3];
           const sum2List = [i.SCORE4, i.SCORE5, i.SCORE6];
           const sum3List = [i.SCORE7, i.SCORE8, i.SCORE9, i.SCORE10];
           const sum4List = [i.SCORE11, i.SCORE12];
           const sum5List = [i.SCORE13, i.SCORE14, i.SCORE15, i.SCORE16, i.SCORE17];
           const sum6List = [i.SCORE18, i.SCORE19, i.SCORE20];
-          const [ sum1, sum2, sum3, sum4, sum5, sum6] = 
-              [ calculateAverage(sum1List), calculateAverage(sum2List), calculateAverage(sum3List), calculateAverage(sum4List), calculateAverage(sum5List), calculateAverage(sum6List) ]
-          return { ...i, sum1, sum2, sum3, sum4, sum5, sum6 }
-        })
+          
+          const [sum1, sum2, sum3, sum4, sum5, sum6] = [
+              calculateAverage(sum1List),
+              calculateAverage(sum2List),
+              calculateAverage(sum3List),
+              calculateAverage(sum4List),
+              calculateAverage(sum5List),
+              calculateAverage(sum6List)
+          ].map(value => isNaN(value) ? "-" : value);
+      
+          return { ...i, sum1, sum2, sum3, sum4, sum5, sum6 };
+      });
+    
       },
 
       getProgramAgency : (state, {payload : {type}})=>{
@@ -228,42 +246,55 @@ export const {getState, reducer, actions} = createCustomSlice({
       },
       // 프로그램 만족도
       getProgramResult_SUCCESS : (state, {payload})=>{
-
-        state.programResult = payload.data.map(i =>{
+        state.programResult = payload.data.map(i => {
           const sum1List = [i.SCORE1, i.SCORE2, i.SCORE3];
           const sum2List = [i.SCORE4, i.SCORE5, i.SCORE6];
           const sum3List = [i.SCORE7, i.SCORE8, i.SCORE9];
-          const sum1 = sum1List.reduce((sum, num) => sum + +num, 0) / sum1List.filter(i=> +i >0).length
-          const sum2 = sum2List.reduce((sum, num) => sum + +num, 0) / sum2List.filter(i=> +i >0).length
-          const sum3 = sum3List.reduce((sum, num) => sum + +num, 0) / sum3List.filter(i=> +i >0).length
-          const result1 = sum1.toFixed(sum1 % 1 === 0 ? 1 : 2)
-          const result2 = sum2.toFixed(sum2 % 1 === 0 ? 1 : 2)
-          const result3 = sum3.toFixed(sum3 % 1 === 0 ? 1 : 2)
+      
+          const sum1 = sum1List.reduce((sum, num) => sum + +num, 0) / sum1List.filter(num => +num > 0).length;
+          const sum2 = sum2List.reduce((sum, num) => sum + +num, 0) / sum2List.filter(num => +num > 0).length;
+          const sum3 = sum3List.reduce((sum, num) => sum + +num, 0) / sum3List.filter(num => +num > 0).length;
+      
+          const result1 = isNaN(sum1) ? "-" : sum1.toFixed(sum1 % 1 === 0 ? 1 : 2);
+          const result2 = isNaN(sum2) ? "-" : sum2.toFixed(sum2 % 1 === 0 ? 1 : 2);
+          const result3 = isNaN(sum3) ? "-" : sum3.toFixed(sum3 % 1 === 0 ? 1 : 2);
+      
           return {
-            ...i, 
-            sum1 : result1,
-            sum2 : result2,
-            sum3 : result3,
-          }
-        });
+              ...i,
+              sum1: result1,
+              sum2: result2,
+              sum3: result3,
+          };
+      });
+      
       },
 
 
 
       // 시설 서비스환경만족도
       getFaciltyList_SUCCESS : (state, {payload})=>{
-          state.facilityList = payload.data.map(i=> {
-            const sum1List = [i.SCORE1, i.SCORE2];
-            const sum2List = [i.SCORE3, i.SCORE4];
-            const sum3List = [i.SCORE5, i.SCORE6, i.SCORE7];
-            const sum4List = [i.SCORE8, i.SCORE9, i.SCORE10];
-            const sum5List = [i.SCORE11, i.SCORE12, i.SCORE13];
-            const sum6List = [i.SCORE14, i.SCORE15, i.SCORE16];
-            const sum7List = [i.SCORE17, i.SCORE18];
-            const [ sum1, sum2, sum3, sum4, sum5, sum6, sum7 ] = 
-                [ calculateAverage(sum1List), calculateAverage(sum2List), calculateAverage(sum3List), calculateAverage(sum4List), calculateAverage(sum5List), calculateAverage(sum6List), calculateAverage(sum7List) ]
-            return { ...i, sum1, sum2, sum3, sum4, sum5, sum6, sum7 }
-          });
+        state.facilityList = payload.data.map(i => {
+          const sum1List = [i.SCORE1, i.SCORE2];
+          const sum2List = [i.SCORE3, i.SCORE4];
+          const sum3List = [i.SCORE5, i.SCORE6, i.SCORE7];
+          const sum4List = [i.SCORE8, i.SCORE9, i.SCORE10];
+          const sum5List = [i.SCORE11, i.SCORE12, i.SCORE13];
+          const sum6List = [i.SCORE14, i.SCORE15, i.SCORE16];
+          const sum7List = [i.SCORE17, i.SCORE18];
+      
+          const [sum1, sum2, sum3, sum4, sum5, sum6, sum7] = [
+              calculateAverage(sum1List),
+              calculateAverage(sum2List),
+              calculateAverage(sum3List),
+              calculateAverage(sum4List),
+              calculateAverage(sum5List),
+              calculateAverage(sum6List),
+              calculateAverage(sum7List)
+          ].map(value => isNaN(value) ? "-" : value);
+      
+          return { ...i, sum1, sum2, sum3, sum4, sum5, sum6, sum7 };
+      });
+      
       },
 
 
@@ -301,11 +332,21 @@ export const {getState, reducer, actions} = createCustomSlice({
               const sum5List = [i.SCORE11, i.SCORE12, i.SCORE13];
               const sum6List = [i.SCORE14, i.SCORE15, i.SCORE16];
               const sum7List = [i.SCORE17, i.SCORE18];
-              const [ sum1, sum2, sum3, sum4, sum5, sum6, sum7 ] = 
-              [ calculateAverage(sum1List), calculateAverage(sum2List), calculateAverage(sum3List), calculateAverage(sum4List), calculateAverage(sum5List), calculateAverage(sum6List), calculateAverage(sum7List) ]
+              
+              const [sum1, sum2, sum3, sum4, sum5, sum6, sum7] = [
+                  calculateAverage(sum1List),
+                  calculateAverage(sum2List),
+                  calculateAverage(sum3List),
+                  calculateAverage(sum4List),
+                  calculateAverage(sum5List),
+                  calculateAverage(sum6List),
+                  calculateAverage(sum7List)
+              ].map(value => isNaN(value) ? "-" : value);
+              
               avgs = {
-                sum1, sum2, sum3, sum4, sum5, sum6, sum7
-              }
+                  sum1, sum2, sum3, sum4, sum5, sum6, sum7
+              };
+              
             }
             return {
                 ...i, 
@@ -344,9 +385,18 @@ export const {getState, reducer, actions} = createCustomSlice({
                 const sum4List = [i.SCORE11, i.SCORE12];
                 const sum5List = [i.SCORE13, i.SCORE14, i.SCORE15, i.SCORE16, i.SCORE17];
                 const sum6List = [i.SCORE18, i.SCORE19, i.SCORE20];
-                const [ sum1, sum2, sum3, sum4, sum5, sum6] = 
-                    [ calculateAverage(sum1List), calculateAverage(sum2List), calculateAverage(sum3List), calculateAverage(sum4List), calculateAverage(sum5List), calculateAverage(sum6List) ]
-                avgs =  { ...i, sum1, sum2, sum3, sum4, sum5, sum6 }
+                
+                const [sum1, sum2, sum3, sum4, sum5, sum6] = [
+                    calculateAverage(sum1List),
+                    calculateAverage(sum2List),
+                    calculateAverage(sum3List),
+                    calculateAverage(sum4List),
+                    calculateAverage(sum5List),
+                    calculateAverage(sum6List)
+                ].map(value => isNaN(value) ? "-" : value);
+                
+                avgs = { ...i, sum1, sum2, sum3, sum4, sum5, sum6 };
+                
               }else{
 
                 const sum1List = [i.SCORE1, i.SCORE2];
@@ -356,9 +406,19 @@ export const {getState, reducer, actions} = createCustomSlice({
                 const sum5List = [i.SCORE11, i.SCORE12, i.SCORE13, i.SCORE14];
                 const sum6List = [i.SCORE15, i.SCORE16, i.SCORE17];
                 const sum7List = [i.SCORE18, i.SCORE19, i.SCORE20];
-                const [ sum1, sum2, sum3, sum4, sum5, sum6, sum7] = 
-                    [ calculateAverage(sum1List), calculateAverage(sum2List), calculateAverage(sum3List), calculateAverage(sum4List), calculateAverage(sum5List), calculateAverage(sum6List) , calculateAverage(sum7List)]
-                avgs =   { ...i, sum1, sum2, sum3, sum4, sum5, sum6, sum7 }
+                
+                const [sum1, sum2, sum3, sum4, sum5, sum6, sum7] = [
+                    calculateAverage(sum1List),
+                    calculateAverage(sum2List),
+                    calculateAverage(sum3List),
+                    calculateAverage(sum4List),
+                    calculateAverage(sum5List),
+                    calculateAverage(sum6List),
+                    calculateAverage(sum7List)
+                ].map(value => isNaN(value) ? "-" : value);
+                
+                avgs = { ...i, sum1, sum2, sum3, sum4, sum5, sum6, sum7 };
+                
               }
               return {
                 ...i, 

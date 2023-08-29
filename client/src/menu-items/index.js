@@ -120,7 +120,12 @@ const menuItems = {
                             type: 'item',
                             url: '/teacherMng',   
                         },
-                     
+                        {
+                            id: 'excelDown',
+                            title: '엑셀데이터',
+                            type: 'item',
+                            url: '/excelDownload',   
+                        },
                     ]
                 },
                 {

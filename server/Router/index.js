@@ -13,6 +13,7 @@ const programMng = require("./programMng")
 const teacherMng = require("./teacherMng")
 const userTemp = require("./userTemp")
 const programTable = require("./programTable")
+const excelData = require("./excelData")
 
 //router.use(login);
 router.use("/program", program);
@@ -30,6 +31,7 @@ router.use("/teacherMng", teacherMng);
 router.use("/programMng", programMng);
 router.use("/userTemp", userTemp);
 router.use("/programTable", programTable);
+router.use("/excelData", excelData);
 
 
 //router.use("/test", test);

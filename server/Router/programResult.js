@@ -57,8 +57,8 @@ router.post('/getProgramResult', (req, res) => {
         `SELECT * FROM prevent_service WHERE ${conditionString}`,
         `SELECT * FROM healing_service WHERE ${conditionString}`
     ];
-
     const selectedSql = sql[type - 1];
+    
 
     maria(selectedSql, params)
         .then((rows) => {

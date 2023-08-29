@@ -1,5 +1,47 @@
 // utils.js
 
+
+export const defaultStyle = {
+    alignment: {
+        vertical : "center",
+        horizontal : "center",
+        wrapText : true
+    },
+    font : {
+        sz : 10,
+        name : '굴림',
+        color : {rgb : '364152'}
+    },
+    border : {
+        bottom : {style : "thin" , color : {rgb: "666666"}},
+        top : {style : "thin" , color : {rgb: "666666"}},
+        left : {style : "thin" , color : {rgb: "666666"}},
+        right : {style : "thin" , color : {rgb: "666666"}},
+    }
+}
+
+export const headerStyle = {
+    ...defaultStyle,
+    font : {
+        ...defaultStyle.font,
+        bold : true,
+    },
+    fill: { fgColor: { rgb: "d9d9d9" }, patternType : "solid" },
+}
+
+
+export const avgStyle = {
+    ...defaultStyle , 
+    font : {
+        ...defaultStyle.font,
+        bold : true, 
+    },
+    fill: { fgColor: { rgb: "eeffdc" }, patternType : "solid" },
+}
+
+
+
+
 export function generateMergeInfo(headerInfo) {
     let mergeInfo = [];
     let startCol = 0;

@@ -25,10 +25,100 @@ const Program = ()=>{
     const classes = useStyles();
     
     const {preventList, agency} = useSelector(s=> getState(s))
+    const [
+        AVG1,
+        AVG2,
+        AVG3,
+        AVG4,
+        AVG5,
+        AVG6,
+        AVG7,
+        AVG8,
+        AVG9,
+        AVG10,
+        AVG11,
+        AVG12,
+        AVG13,
+        AVG14,
+        AVG15,
+        AVG16,
+        AVG17,
+        AVG18,
+        AVG19,
+        AVG20,
+        SUMAVG1,
+        SUMAVG2,
+        SUMAVG3,
+        SUMAVG4,
+        SUMAVG5,
+        SUMAVG6,
+    ] = useMemo(() => {
+        return [
+            "SCORE1",
+            "SCORE2",
+            "SCORE3",
+            "SCORE4",
+            "SCORE5",
+            "SCORE6",
+            "SCORE7",
+            "SCORE8",
+            "SCORE9",
+            "SCORE10",
+            "SCORE11",
+            "SCORE12",
+            "SCORE13",
+            "SCORE14",
+            "SCORE15",
+            "SCORE16",
+            "SCORE17",
+            "SCORE18",
+            "SCORE19",
+            "SCORE20",
+            "sum1",
+            "sum2",
+            "sum3",
+            "sum4",
+            "sum5",
+            "sum6",
+        ].map(k => {
+            const sum = preventList.filter(i => i.PV === "사전").reduce((a, c) => a + (parseFloat(c[k]) || 0), 0);
+            const nonEmptyValues = preventList.filter(i => i.PV === "사전").filter(item => item[k] !== "");
+            const average = sum / nonEmptyValues.length;
+            const formattedAverage = isNaN(average) ? "-" : average.toFixed(2);
+            return formattedAverage;
+        });
+    }, [preventList]);
     
-    const [ AVG1, AVG2, AVG3, AVG4, AVG5, AVG6, AVG7, AVG8, AVG9, AVG10, AVG11, AVG12, AVG13, AVG14, AVG15, AVG16, AVG17, AVG18, AVG19, AVG20, SUMAVG1, SUMAVG2, SUMAVG3, SUMAVG4, SUMAVG5, SUMAVG6]=useMemo(
-        ()=>{
-        return [ 
+
+    const [
+        AVG1_A,
+        AVG2_A,
+        AVG3_A,
+        AVG4_A,
+        AVG5_A,
+        AVG6_A,
+        AVG7_A,
+        AVG8_A,
+        AVG9_A,
+        AVG10_A,
+        AVG11_A,
+        AVG12_A,
+        AVG13_A,
+        AVG14_A,
+        AVG15_A,
+        AVG16_A,
+        AVG17_A,
+        AVG18_A,
+        AVG19_A,
+        AVG20_A,
+        SUMAVG1_A,
+        SUMAVG2_A,
+        SUMAVG3_A,
+        SUMAVG4_A,
+        SUMAVG5_A,
+        SUMAVG6_A,
+    ] = useMemo(() => {
+        return [
             "SCORE1",
             "SCORE2",
             "SCORE3",
@@ -54,48 +144,16 @@ const Program = ()=>{
             "sum3",
             "sum4",
             "sum5",
-            "sum6"
+            "sum6",
         ].map(k => {
-            const sum = preventList.filter(i=> i.PV ==="사전").reduce((a, c) => a + (parseFloat(c[k]) || 0), 0);
-            return (sum / preventList.filter(i=> i.PV ==="사전").length).toFixed(2);
+            const sum = preventList.filter(i => i.PV === "사후").reduce((a, c) => a + (parseFloat(c[k]) || 0), 0);
+            const nonEmptyValues = preventList.filter(i => i.PV === "사후").filter(item => item[k] !== "");
+            const average = sum / nonEmptyValues.length;
+            const formattedAverage = isNaN(average) ? "-" : average.toFixed(2);
+            return formattedAverage;
         });
-    },[preventList])
-
-
-    const [ AVG1_A, AVG2_A, AVG3_A, AVG4_A, AVG5_A, AVG6_A, AVG7_A, AVG8_A, AVG9_A, AVG10_A, AVG11_A, AVG12_A, AVG13_A, AVG14_A, AVG15_A, AVG16_A, AVG17_A, AVG18_A, AVG19_A, AVG20_A, SUMAVG1_A, SUMAVG2_A, SUMAVG3_A, SUMAVG4_A, SUMAVG5_A, SUMAVG6_A]=useMemo(
-        ()=>{
-        return [ 
-            "SCORE1",
-            "SCORE2",
-            "SCORE3",
-            "SCORE4",
-            "SCORE5",
-            "SCORE6",
-            "SCORE7",
-            "SCORE8",
-            "SCORE9",
-            "SCORE10",
-            "SCORE11",
-            "SCORE12",
-            "SCORE13",
-            "SCORE14",
-            "SCORE15",
-            "SCORE16",
-            "SCORE17",
-            "SCORE18",
-            "SCORE19",
-            "SCORE20",
-            "sum1",
-            "sum2",
-            "sum3",
-            "sum4",
-            "sum5",
-            "sum6"
-        ].map(k => {
-            const sum = preventList.filter(i=> i.PV ==="사후").reduce((a, c) => a + (parseFloat(c[k]) || 0), 0);
-            return (sum / preventList.filter(i=> i.PV ==="사후").length).toFixed(2);
-        });
-    },[preventList])
+    }, [preventList]);
+    
 
 
     const headerInfo = [
@@ -167,7 +225,7 @@ const Program = ()=>{
 ]
 
     const downloadExcel = useDownloadExcel({headerInfo, cellData, avgData, filename  : agency, merges, wscols, type : "type2"});
-
+    console.log(preventList);
 
     return <>
             {preventList.length > 0 ? 

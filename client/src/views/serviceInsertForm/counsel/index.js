@@ -127,30 +127,30 @@ const Service = ()=>{
                 })
             return;
         } 
-        const excludeValues = ['PREVENT_SEQ', 'chk']; // 비어있는지 체크에서 제외하고 싶은 값들
+      //  const excludeValues = ['PREVENT_SEQ', 'chk']; // 비어있는지 체크에서 제외하고 싶은 값들
 
         
-    const isCheck = rows.some((row) => {
-        return Object.entries(row).some(([key, value]) => {
-        if (!excludeValues.includes(key)) {
-            console.log(value)
-            return !value || (value+"").trim() === "";
-        }
-        return false;
-        });
-    });
-        if(isCheck){
-            Swal.fire({
-                icon: 'warning',
-                title: '확인',
-                text: "비어있는 항목이 있습니다.",
-                })
-            return;
-        }
+    // const isCheck = rows.some((row) => {
+    //     return Object.entries(row).some(([key, value]) => {
+    //     if (!excludeValues.includes(key)) {
+    //         console.log(value)
+    //         return !value || (value+"").trim() === "";
+    //     }
+    //     return false;
+    //     });
+    // });
+    //     if(isCheck){
+    //         Swal.fire({
+    //             icon: 'warning',
+    //             title: '확인',
+    //             text: "비어있는 항목이 있습니다.",
+    //             })
+    //         return;
+    //     }
 
         const {SESSION1, SESSION2 , ...res}= searchInfo;
 
-        const prefix= res.PV ==="시전" ? '시작' : res.PV
+        const prefix= res.PV ==="시전" ? '시작' : res.PV ==="중간" ? '중간': '종결'
 
         const _searchInfo = {
             ...res, 
@@ -201,9 +201,31 @@ const Service = ()=>{
 
     const onSearch = ()=>{
         const {   AGENCY , OPENDAY , EVAL_DATE, PROGRAM_NAME} = searchInfo;
-        dispatch(actions.getList({data : {
-            AGENCY , OPENDAY , EVAL_DATE, PROGRAM_NAME
-        }, type }))
+        if([AGENCY , OPENDAY , EVAL_DATE, PROGRAM_NAME].includes("")){
+            Swal.fire({ icon: 'warning', title: '조건확인', text: "조회조건을 입력해 주십시오", })
+            return;
+        }
+
+        Swal.fire({
+            icon: 'warning',
+            title: '확인',
+            text: "조회된 데이터는 수정만 가능합니다. ",
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#767676',
+            confirmButtonText: '확인',
+            cancelButtonText: '취소'
+            }).then((result)=>{
+                if(result.isConfirmed){
+                    dispatch(actions.getList({data : {
+                        AGENCY , OPENDAY , EVAL_DATE, PROGRAM_NAME
+                    }, type }));        
+                }
+            });  
+        
+
+
+
     }
 
     return <>

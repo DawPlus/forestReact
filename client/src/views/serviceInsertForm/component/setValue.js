@@ -77,45 +77,48 @@ const SetValueComponent = (props)=>{
 
     return (<>
         <div style={{padding : "15px 5px"}}>
-                    <Grid container spacing={2}  direction="row" justifyContent="flex-start" alignItems="center">
-                        <Grid item md={1}>
-                            <IconButton color="primary" onClick={onAdd}>
-                                <AddIcon color="primary" />
-                            </IconButton>
-                            <IconButton color="primary" onClick={onRemove} style={{margin : "0px 10px"}}>
-                                <RemoveIcon color="primary" />
-                            </IconButton>
-                        </Grid>
-                        <Grid item md={7}>
-                            <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={2} >
-                                <Grid item md={2}>
-                                    <SelectItems label="항목" value={setType} items={items} onChange={onChangeSelectItem}/>
-                                </Grid>
-                                {setType ===  "" ? null : 
-                                <Grid item md={2}>
-                                    {
-                                        {
-                                            "SEX"  : <Select label="성별" value={values} options={["남", "여", "미기재"]} onChange={(e)=>setValues(e.target.value)}/>,
-                                            "AGE"  : <NumberInput label="연령" value={values} onChange={(name, value)=>setValues(value)}/>,
-                                            "RESIDENCE"  : <Select label="거주지" value={values} options={localeItems} onChange={(e)=>setValues(e.target.value)}/>,
-                                            "JOB"  : <Select label="직업" value={values} options={jobItem} onChange={(e)=>setValues(e.target.value)}/>,
-                                        }[setType]
-                                    }
-                                </Grid>
-                                }
-                                <Grid item md={2}>
-                                    <Button variant="contained" size="small" color="secondary" onClick={onSetValue}>적용</Button>
-                                </Grid>
-                            </Grid>
-                        </Grid>
+            <Grid container spacing={2}  direction="row" justifyContent="flex-start" alignItems="center">
+                <Grid item md={1}>
+                    <IconButton color="primary" onClick={onAdd}>
+                        <AddIcon color="primary" />
+                    </IconButton>
+                    <IconButton color="primary" onClick={onRemove} style={{margin : "0px 10px"}}>
+                        <RemoveIcon color="primary" />
+                    </IconButton>
+                </Grid>
+                <Grid item md={7}>
+                    <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={2} >
                         <Grid item md={2}>
-                            <Select label="기관명" options={agencyItem} value={agency} onChange={(e)=>setAgency(e.target.value)}/>
+                            <SelectItems label="항목" value={setType} items={items} onChange={onChangeSelectItem}/>
                         </Grid>
+                        {setType ===  "" ? null : 
                         <Grid item md={2}>
-                            <Button variant="contained" size="small" color="primary" onClick={onGetTempData} style={{marginLeft : "5px"}}>입력사용자 불러오기</Button>
+                            {
+                                {
+                                    "SEX"  : <Select label="성별" value={values} options={["남", "여", "미기재"]} onChange={(e)=>setValues(e.target.value)}/>,
+                                    "AGE"  : <NumberInput label="연령" value={values} onChange={(name, value)=>setValues(value)}/>,
+                                    "RESIDENCE"  : <Select label="거주지" value={values} options={localeItems} onChange={(e)=>setValues(e.target.value)}/>,
+                                    "JOB"  : <Select label="직업" value={values} options={jobItem} onChange={(e)=>setValues(e.target.value)}/>,
+                                }[setType]
+                            }
+                        </Grid>
+                        }
+                        <Grid item md={2}>
+                            <Button variant="contained" size="small" color="secondary" onClick={onSetValue}>적용</Button>
                         </Grid>
                     </Grid>
-                </div>
+                </Grid>
+                <Grid item md={2}>
+                    <Select label="기관명" options={agencyItem} value={agency} onChange={(e)=>setAgency(e.target.value)}/>
+                </Grid>
+                <Grid item md={2}>
+                    <Button variant="contained" size="small" color="primary" onClick={onGetTempData} style={{marginLeft : "5px"}}>입력사용자 불러오기</Button>
+                </Grid>
+            </Grid>
+        </div>
+        <div>
+        {props.children}
+        </div>
     
     
     

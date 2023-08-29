@@ -90,7 +90,7 @@ const initialState = {
         OPENDAY : "", //시작일자
         AGENCY : "", // 기관명
         EVAL_DATE : "", // 실시일자
-        PTCPROGRAM  : "", // 참여일정
+       // PTCPROGRAM  : "", // 참여일정
         PV : "", // 시점 (사전은 시작으로 변경됨)
     }
   
@@ -169,6 +169,7 @@ export const {getState, reducer, actions} = createCustomSlice({
       state.rows  =data.map(i=> ({
         ...initialState.rows[0],
         id : v4(), 
+        NAME : i.name, 
         SEX:i.sex, // 성별
         AGE:i.age, // 연령
         RESIDENCE:i.residence, // 거주지

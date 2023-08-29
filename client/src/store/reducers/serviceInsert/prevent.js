@@ -128,6 +128,7 @@ export const {getState, reducer, actions} = createCustomSlice({
       state.rows  =data.map(i=> ({
         ...initialState.rows[0],
         id : v4(), 
+        NAME : i.name,
         SEX:i.sex, // 성별
         AGE:i.age, // 연령
         RESIDENCE:i.residence, // 거주지

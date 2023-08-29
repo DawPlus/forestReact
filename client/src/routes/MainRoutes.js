@@ -35,6 +35,7 @@ const UpdateDelete = Loadable(lazy(() => import('views/common/updateDelete')));
 const ServiceInsertForm = Loadable(lazy(() => import('views/serviceInsertForm')));
 const YearMonthResult = Loadable(lazy(() => import('views/yearMonthResult')));
 const SearchProgramResult = Loadable(lazy(() => import('views/searchProgramResult')));
+const ExcelDownload = Loadable(lazy(() => import('views/excelDownload')));
 
 
 
@@ -107,6 +108,7 @@ const MainRoutes = [{
         { path: 'yearMonthResult', element: <YearMonthResult /> },
         // 주제어별 프로그램통계검색
         { path: 'searchProgramResult', element: <SearchProgramResult /> },
+        { path: 'excelDownload', element: <ExcelDownload /> },
     ]
 }];
 

@@ -95,7 +95,7 @@ const AgencyList = ()=>{
                             <MenuItem value="">선택하세요</MenuItem>
                             <MenuItem value="1">프로그램 만족도</MenuItem>
                             <MenuItem value="2">시설서비스환경 만족도</MenuItem>
-                            <MenuItem value="3">상담&치유서비스 효과평가</MenuItem>
+                            {/* <MenuItem value="3">상담&치유서비스 효과평가</MenuItem> */}
                             <MenuItem value="4">예방서비스 효과평가</MenuItem>
                             <MenuItem value="5">힐링서비스 효과평가</MenuItem>
                         </Select>
@@ -133,7 +133,7 @@ const AgencyList = ()=>{
                 {
                     1 : <Program/>,
                     2 : <Facility/>,
-                    3 : <Facility/>,  //?
+                    // 3 : <Facility/>,  //?
                     4 : <Prevent/>,
                     5 : <Healing/>
                 }[type]

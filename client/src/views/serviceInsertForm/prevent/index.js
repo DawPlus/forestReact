@@ -102,26 +102,26 @@ const Service = ()=>{
                 })
             return;
         } 
-        const excludeValues = ['PREVENT_SEQ', 'chk']; // 비어있는지 체크에서 제외하고 싶은 값들
+       // const excludeValues = ['PREVENT_SEQ', 'chk']; // 비어있는지 체크에서 제외하고 싶은 값들
 
         
-    const isCheck = rows.some((row) => {
-        return Object.entries(row).some(([key, value]) => {
-        if (!excludeValues.includes(key)) {
-            console.log(value)
-            return !value || (value+"").trim() === "";
-        }
-        return false;
-        });
-    });
-        if(isCheck){
-            Swal.fire({
-                icon: 'warning',
-                title: '확인',
-                text: "비어있는 항목이 있습니다.",
-                })
-            return;
-        }
+    // const isCheck = rows.some((row) => {
+    //     return Object.entries(row).some(([key, value]) => {
+    //     if (!excludeValues.includes(key)) {
+    //         console.log(value)
+    //         return !value || (value+"").trim() === "";
+    //     }
+    //     return false;
+    //     });
+    // });
+    //     if(isCheck){
+    //         Swal.fire({
+    //             icon: 'warning',
+    //             title: '확인',
+    //             text: "비어있는 항목이 있습니다.",
+    //             })
+    //         return;
+    //     }
 
 
         // 데이터 가공  
@@ -130,7 +130,6 @@ const Service = ()=>{
             return { ...rest, ...searchInfo };
         });
 
-        console.log(data)
 
         Swal.fire({
             title,
