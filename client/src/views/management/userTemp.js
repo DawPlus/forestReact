@@ -14,10 +14,10 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
-
+import DatePicker from "ui-component/inputs/datePicker";
 import {  Input, SelectItems, NumberInput} from "ui-component/inputs";
 
-
+import UserInfo from "./userinfos";
 
 const sexItems = [
     {label  :"남", value : "남"},
@@ -62,7 +62,8 @@ const jobItem = [
     {label : "미기재", value : "미기재"},
 ]
 const UserTemp = ()=>{
-
+    
+    
     const dispatch = useDispatch();
 
     const userTemp = useSelector(s=> getState(s).userTemp)
@@ -100,7 +101,7 @@ const UserTemp = ()=>{
             cancelButtonText : "취소"
         }).then((result) => {    
             if (result.isConfirmed) {
-                api.createUserTemp({data : userTemp, agency}).then(r=> {
+                api.createUserTemp({data : userTemp, agency, openday}).then(r=> {
                     dispatch(actions.getUserTemp());
                 })
                 
@@ -151,8 +152,10 @@ const UserTemp = ()=>{
 
 
     const [agency , setAgency] = useState("");
-
+    const [openday, setOpenday] = useState("");
+    
     const [agencySelect, setAgencySelect] = useState("");
+    const [opendaySelect , setOpendaySelect] = useState("");
 
     const onChangeAgency= (e)=>{
         const value = e.target.value;
@@ -165,7 +168,24 @@ const UserTemp = ()=>{
 
     const onSearch = ()=>{
         setAgency(a=> agencySelect);
-        dispatch(actions.getUserTemp({agency: agencySelect}))
+        setOpenday(a=> opendaySelect);
+        
+        if([agencySelect, opendaySelect].includes("")){
+            Swal.fire({
+                icon: 'warning',
+                title: '확인',
+                text: `[기관, 시작일] 을 선택해 주십시오` ,
+                confirmButtonText: '확인',
+            });
+            return;
+        }
+
+
+        dispatch(actions.getUserTemp({agency: agencySelect, openday: opendaySelect}))
+
+
+
+
     }
 
     return (<>
@@ -173,6 +193,9 @@ const UserTemp = ()=>{
                 <Grid container spacing={2} justifyItems={"center"} alignItems="center">
                     <Grid item md={4}>
                         <SelectItems items={agencyItem} label="기관선택" value={agencySelect} name="agency" onChange={onChangeAgency}/>
+                    </Grid>
+                    <Grid item md={4}>
+                        <DatePicker label="시작일"name="openday" value={opendaySelect} onChange={(_, value)=>setOpendaySelect(value)}/>
                     </Grid>
                     <Grid item md={4}>
                         <Button variant="contained" size="small" color="primary" onClick={onSearch} >조회</Button>
@@ -188,7 +211,15 @@ const UserTemp = ()=>{
                     <Button variant="contained" size="small" color="primary" onClick={onSave}>저장</Button>
                 </div>
                 <div style={{margin:"10px 0px"}}>
-                    <Input label="기관명" value={agency} name="agency" onChange={(e)=>setAgency(e.target.value)} style={{width : "400px"}}/> 
+                    <Grid container spacing={2}>
+                        <Grid item md={3}>
+                            <Input label="기관명" value={agency} name="agency" onChange={(e)=>setAgency(e.target.value)} /> 
+                        </Grid>
+                        <Grid item md={3}>
+                            <DatePicker label="시작일"name="openday" value={openday} onChange={(_, value)=>setOpenday(value)}/>
+                        </Grid>
+                    </Grid>
+                    
                 </div>
                 <TableContainer style={{minHeight: "560px" , paddingBottom : "50px" }}>
                     <Table className="insertForm custom-table">
@@ -205,33 +236,35 @@ const UserTemp = ()=>{
                             </TableRow>
                         </TableHead>
                         <TableBody>
+                        
                         {userTemp.map((i, index)=>
-                            <TableRow key={i.idx}>
-                                <TableCell >
-                                    <Input label="ID" value={i.id} name="id" onChange={onChange(index)}/> 
-                                </TableCell>
-                                <TableCell >
-                                    <Input label="이름" value={i.name} name="name" onChange={onChange(index)}/> 
-                                </TableCell>
-                                <TableCell >
-                                    <SelectItems items={sexItems} label="성별" value={i.sex} name="sex" onChange={onChange(index)}/>
-                                </TableCell>
-                                <TableCell >
-                                    <NumberInput label="연령" value={i.age} name="age" onChange={onNumberChange(index)}/> 
-                                </TableCell>
-                                <TableCell >
-                                    <SelectItems items={residenceItems} label="거주지" value={i.residence} name="residence" onChange={onChange(index)}/>
-                                </TableCell>
-                                <TableCell >
-                                    <SelectItems items={jobItem} label="직업" value={i.job} name="job" onChange={onChange(index)}/>
-                                </TableCell>
-                                <TableCell >
-                                    <NumberInput label="주민번호앞자리" value={i.jumin} maxLength={6} name="jumin" onChange={onNumberChange(index)}/> 
-                                </TableCell>
-                                <TableCell align="center">
-                                    <Button variant="contained" size="small" color="primary" onClick={()=>removeRow(i.idx)}>삭제</Button>
-                                </TableCell>
-                            </TableRow>
+                            <UserInfo key={i.idx} data={i} index={index} onChange={onChange} onNumberChange={onNumberChange} removeRow={removeRow}/>
+                            // <TableRow key={i.idx}>
+                            //     <TableCell >
+                            //         <Input label="ID" value={i.id} name="id" onChange={onChange(index)}/> 
+                            //     </TableCell>
+                            //     <TableCell >
+                            //         <Input label="이름" value={i.name} name="name" onChange={onChange(index)}/> 
+                            //     </TableCell>
+                            //     <TableCell >
+                            //         <SelectItems items={sexItems} label="성별" value={i.sex} name="sex" onChange={onChange(index)}/>
+                            //     </TableCell>
+                            //     <TableCell >
+                            //         <NumberInput label="연령" value={i.age} name="age" onChange={onNumberChange(index)}/> 
+                            //     </TableCell>
+                            //     <TableCell >
+                            //         <SelectItems items={residenceItems} label="거주지" value={i.residence} name="residence" onChange={onChange(index)}/>
+                            //     </TableCell>
+                            //     <TableCell >
+                            //         <SelectItems items={jobItem} label="직업" value={i.job} name="job" onChange={onChange(index)}/>
+                            //     </TableCell>
+                            //     <TableCell >
+                            //         <NumberInput label="주민번호앞자리" value={i.jumin} maxLength={6} name="jumin" onChange={onNumberChange(index)}/> 
+                            //     </TableCell>
+                            //     <TableCell align="center">
+                            //         <Button variant="contained" size="small" color="primary" onClick={()=>removeRow(i.idx)}>삭제</Button>
+                            //     </TableCell>
+                            // </TableRow>
                         )}
                         </TableBody>
                     </Table>

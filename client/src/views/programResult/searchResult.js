@@ -98,17 +98,17 @@ const SearchResult = ()=>{
 
     },[])
 
-    useUpdateEffect(()=>{
-        if(rows.length ===0){
-            Swal.fire({
-                title: `확인`,
-                text: `조회된 검색결과가 없습니다.` ,
-                icon: 'warning',
-            });
-            return;
-        }
+    // useUpdateEffect(()=>{
+    //     if(rows.length ===0){
+    //         Swal.fire({
+    //             title: `확인`,
+    //             text: `조회된 검색결과가 없습니다.` ,
+    //             icon: 'warning',
+    //         });
+    //         return;
+    //     }
 
-    },[rows])
+    // },[rows])
 
     const onAgencyChange = (e)=>{
         const value = e.target.value;

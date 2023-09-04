@@ -216,6 +216,40 @@ const Program = ()=>{
                         </TableRow>
                     </TableHead>      
                     <TableBody>
+                        {/* 통계 */}
+                        <TableRow>
+                            <TableCell className="table-result" align="center" colSpan={7}>통계</TableCell>
+                            <TableCell className="table-result" align="center" >평균</TableCell>
+                            <TableCell className="table-result" align="center">{AVG1}</TableCell>
+                            <TableCell className="table-result" align="center">{AVG2}</TableCell>
+                            <TableCell className="table-result" align="center">{AVG3}</TableCell>
+                            <TableCell className="table-result" align="center">{AVG4}</TableCell>
+                            <TableCell className="table-result" align="center">{AVG5}</TableCell>
+                            <TableCell className="table-result" align="center">{AVG6}</TableCell>
+                            <TableCell className="table-result" align="center">{AVG7}</TableCell>
+                            <TableCell className="table-result" align="center">{AVG8}</TableCell>
+                            <TableCell className="table-result" align="center">{AVG9}</TableCell>
+                            <TableCell className="table-result" align="center">{AVG10}</TableCell>
+                            <TableCell className="table-result" align="center">-</TableCell>
+                            <TableCell className="table-result" align="center">{AVG11}</TableCell>
+                            <TableCell className="table-result" align="center">{AVG12}</TableCell>
+                            <TableCell className="table-result" align="center">{AVG13}</TableCell>
+                            <TableCell className="table-result" align="center">{AVG14}</TableCell>
+                            <TableCell className="table-result" align="center">{AVG15}</TableCell>
+                            <TableCell className="table-result" align="center">{AVG16}</TableCell>
+                            <TableCell className="table-result" align="center">-</TableCell>
+                            <TableCell className="table-result" align="center">{AVG17}</TableCell>
+                            <TableCell className="table-result" align="center">{AVG18}</TableCell>
+
+                            <TableCell className="table-result" align="center">{SUMAVG1}</TableCell>
+                            <TableCell className="table-result" align="center">{SUMAVG2}</TableCell>
+                            <TableCell className="table-result" align="center">{SUMAVG3}</TableCell>
+                            <TableCell className="table-result" align="center">{SUMAVG4}</TableCell>
+                            <TableCell className="table-result" align="center">{SUMAVG5}</TableCell>
+                            <TableCell className="table-result" align="center">{SUMAVG6}</TableCell>
+                            <TableCell className="table-result" align="center">{SUMAVG7}</TableCell>
+
+                        </TableRow>
                         {facilityList.map((row, index) => {
                             return <TableRow key={index}>
                                         <TableCell className="table-cell" align="center">{index + 1}</TableCell>
@@ -255,40 +289,7 @@ const Program = ()=>{
                                         <TableCell className="table-cell" align="center">{row.sum7}</TableCell>
                                 </TableRow>
                         })}
-                        {/* 통계 */}
-                        <TableRow>
-                            <TableCell className="table-result" align="center" colSpan={7}>통계</TableCell>
-                            <TableCell className="table-result" align="center" >평균</TableCell>
-                            <TableCell className="table-result" align="center">{AVG1}</TableCell>
-                            <TableCell className="table-result" align="center">{AVG2}</TableCell>
-                            <TableCell className="table-result" align="center">{AVG3}</TableCell>
-                            <TableCell className="table-result" align="center">{AVG4}</TableCell>
-                            <TableCell className="table-result" align="center">{AVG5}</TableCell>
-                            <TableCell className="table-result" align="center">{AVG6}</TableCell>
-                            <TableCell className="table-result" align="center">{AVG7}</TableCell>
-                            <TableCell className="table-result" align="center">{AVG8}</TableCell>
-                            <TableCell className="table-result" align="center">{AVG9}</TableCell>
-                            <TableCell className="table-result" align="center">{AVG10}</TableCell>
-                            <TableCell className="table-result" align="center">-</TableCell>
-                            <TableCell className="table-result" align="center">{AVG11}</TableCell>
-                            <TableCell className="table-result" align="center">{AVG12}</TableCell>
-                            <TableCell className="table-result" align="center">{AVG13}</TableCell>
-                            <TableCell className="table-result" align="center">{AVG14}</TableCell>
-                            <TableCell className="table-result" align="center">{AVG15}</TableCell>
-                            <TableCell className="table-result" align="center">{AVG16}</TableCell>
-                            <TableCell className="table-result" align="center">-</TableCell>
-                            <TableCell className="table-result" align="center">{AVG17}</TableCell>
-                            <TableCell className="table-result" align="center">{AVG18}</TableCell>
-
-                            <TableCell className="table-result" align="center">{SUMAVG1}</TableCell>
-                            <TableCell className="table-result" align="center">{SUMAVG2}</TableCell>
-                            <TableCell className="table-result" align="center">{SUMAVG3}</TableCell>
-                            <TableCell className="table-result" align="center">{SUMAVG4}</TableCell>
-                            <TableCell className="table-result" align="center">{SUMAVG5}</TableCell>
-                            <TableCell className="table-result" align="center">{SUMAVG6}</TableCell>
-                            <TableCell className="table-result" align="center">{SUMAVG7}</TableCell>
-
-                        </TableRow>
+                        
                     </TableBody>
                 </Table>
             </TableContainer>

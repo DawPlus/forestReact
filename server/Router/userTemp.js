@@ -5,22 +5,22 @@ const maria = require("../maria");
 // 입력
 router.post('/create', async (req, res) => {
     try {
-        const { data, agency } = req.body;
+        const { data, agency , openday} = req.body;
         
         // Delete existing data in the table
-        await maria(`DELETE FROM user_temp where agency = ?`, [agency]);
+        await maria(`DELETE FROM user_temp where agency = ? and openday = ? `, [agency, openday]);
 
         // Insert new data
         const sql = `
             INSERT INTO user_temp
-                (seq, id, name, age, sex, job, jumin, residence, agency)
+                (seq, id, name, age, sex, job, jumin, residence, agency, openday)
             VALUES
-                (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
         `;
 
         const promises = data.map(async data => {
             const { seq, id, name, age, sex, job, jumin, residence } = data;
-            const values = [seq, id, name, age, sex, job, jumin, residence, agency];
+            const values = [seq, id, name, age, sex, job, jumin, residence, agency, openday];
             await maria(sql, values);
         });
 
@@ -43,10 +43,9 @@ router.post('/agencyList', (req, res)=>{
 });
 // 임시저장 조회
 router.post('/list', (req, res)=>{
-    const {agency} = req.body;
-    console.log(agency)
-    const sql = `SELECT * FROM user_temp where agency = ? `;
-    maria(sql,[agency]).then((rows) =>  res.json(rows) )
+    const {agency, openday} = req.body;
+    const sql = `SELECT * FROM user_temp where agency = ? and openday= ?  `;
+    maria(sql,[agency, openday]).then((rows) =>  res.json(rows) )
     .catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));
 
 });

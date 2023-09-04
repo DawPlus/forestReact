@@ -1,7 +1,7 @@
 import React from "react";
 import {PrintSection } from "ui-component/printButton"
 import { useSelector } from "react-redux";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+// import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import DefaultInfo from "./defaultInfo"
 import ProgramOperate from "./programOperate"
 import Facility from "./facility"
@@ -32,7 +32,7 @@ const ReportContainer = ()=>{
         </div>
         <PrintSection>
             <div style={{textAlign :"right" , marginBottom : "15px"}}>
-                    <div style={{width : "250px", display:"inline-block"}}>
+                    {/* <div style={{width : "250px", display:"inline-block"}}>
                         <TableContainer>
                             <Table className="sighLine">
                             <TableHead>
@@ -51,7 +51,7 @@ const ReportContainer = ()=>{
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                    </div>
+                    </div> */}
                 </div>
                 <div style={{textAlign:"center",     margin: "60px 0px 30px 0px"}}>
                     <h1>하이힐링원 프로그램 실시 결과 보고</h1>

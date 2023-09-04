@@ -40,7 +40,7 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
-
+.datepicker .MuiFormControl-root .MuiInputBase-root { height : 40px}
 .swal2-styled.swal2-confirm:focus{    box-shadow: none;}
 .swal2-title{ margin-top: 20px; font-size: 20px; } 
 .swal2-container{ z-index: 1200; }

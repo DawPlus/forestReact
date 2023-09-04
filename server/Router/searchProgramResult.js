@@ -75,7 +75,7 @@ router.post('/getExIncomeList', (req, res)=>{
 
 //효과성 분석 
 router.post('/getProgramEffect', (req, res)=>{
-    const { keyword} = req.body;
+    const { keyword, openday, endday} = req.body;
     const whereText = keyword.filter(obj => obj.text !== '' && obj.type !== "X")
                                 .map(obj => `AND bi.${obj.type} LIKE '${obj.text}'`)
                                 .join(' ');     
@@ -91,7 +91,9 @@ router.post('/getProgramEffect', (req, res)=>{
         FROM 
             healing_service ps
         LEFT JOIN basic_info bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
-        WHERE ps.PV IN ('사전', '사후')
+        WHERE bi.PROGRESS_STATE ="E"
+        AND ps.PV IN ('사전', '사후')
+            ${openday ? `AND bi.OPENDAY BETWEEN ? AND ?` : ''} 
             ${whereText}
         GROUP BY ps.PV;
     `;
@@ -116,7 +118,9 @@ router.post('/getProgramEffect', (req, res)=>{
             ps.SCORE58+ ps.SCORE59+ ps.SCORE60+ ps.SCORE61+ ps.SCORE62)/62,2),0) as avg
         FROM counsel_service ps
         LEFT JOIN basic_info bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
-        WHERE ps.PV = '사전'
+        WHERE bi.PROGRESS_STATE ="E"
+        AND ps.PV = '사전'
+            ${openday ? `AND bi.OPENDAY BETWEEN ? AND ?` : ''} 
             ${whereText}
 
         UNION ALL
@@ -140,7 +144,9 @@ router.post('/getProgramEffect', (req, res)=>{
             ps.SCORE58+ ps.SCORE59+ ps.SCORE60+ ps.SCORE61+ ps.SCORE62)/62,2),0) as avg
         FROM counsel_service ps
         LEFT JOIN basic_info bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
-        WHERE ps.PV = '사후'
+        WHERE bi.PROGRESS_STATE ="E"
+        AND ps.PV = '사후'
+        ${openday ? `AND bi.OPENDAY BETWEEN ? AND ?` : ''} 
         ${whereText}
     `;
 
@@ -151,7 +157,9 @@ router.post('/getProgramEffect', (req, res)=>{
         ps.SCORE11+ ps.SCORE12+ ps.SCORE13+ ps.SCORE14+ ps.SCORE15+ ps.SCORE16+ ps.SCORE17+ ps.SCORE18)/18,2),0) as avg 
         FROM prevent_service ps
         LEFT JOIN basic_info bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
-        WHERE ps.PV IN ("사전", "사후")
+        WHERE bi.PROGRESS_STATE ="E"
+        AND ps.PV IN ("사전", "사후")
+        ${openday ? `AND bi.OPENDAY BETWEEN ? AND ?` : ''} 
         ${whereText}
         GROUP BY ps.PV
     `;
@@ -165,7 +173,8 @@ router.post('/getProgramEffect', (req, res)=>{
                 IFNULL(ROUND(AVG(nullif(ps.num5,0)),2),0) as num5
             FROM hrv_service ps
             LEFT JOIN basic_info bi on(ps.DATE = bi.OPENDAY AND ps.AGENCY = bi.AGENCY AND PV ="사전")
-            WHERE 1=1
+            WHERE bi.PROGRESS_STATE ="E"
+            ${openday ? `AND bi.OPENDAY BETWEEN ? AND ?` : ''} 
             ${whereText}
 
             UNION ALL
@@ -179,16 +188,21 @@ router.post('/getProgramEffect', (req, res)=>{
                 IFNULL(ROUND(AVG(nullif(ps.num5,0)),2),0) as num5
             FROM hrv_service ps
             LEFT JOIN basic_info bi on(ps.DATE = bi.OPENDAY AND ps.AGENCY = bi.AGENCY AND PV ="사후")
-            WHERE 1=1
+            WHERE bi.PROGRESS_STATE ="E"
+            ${openday ? `AND bi.OPENDAY BETWEEN ? AND ?` : ''} 
             ${whereText}
 
     `;
 
+    const params = openday ? [openday, endday] : []; // 조건에 따라 파라미터 설정
+    const params2 = openday ? [openday, endday, openday, endday] : []; // 조건에 따라 파라미터 설정
+
+
     Promise.all([
-        maria(sql),
-        maria(sql2),
-        maria(sql3),
-        maria(sql4),
+        maria(sql, params),
+        maria(sql2,params2),
+        maria(sql3, params),
+        maria(sql4, params2),
     ])
     .then((results) => {
         let rows1 = results[0]; // the result from the first query
@@ -214,7 +228,7 @@ router.post('/getProgramEffect', (req, res)=>{
 
 // 시설서비스 만족도
 router.post('/getSerList', (req, res)=>{
-    const { keyword} = req.body;
+    const { keyword, openday, endday} = req.body;
     const whereText = keyword.filter(obj => obj.text !== '' && obj.type !== "X")
                                 .map(obj => `AND bi.${obj.type} LIKE '${obj.text}'`)
                                 .join(' ');     
@@ -226,10 +240,16 @@ router.post('/getSerList', (req, res)=>{
             ifnull(ROUND(AVG(nullif(ps.score16,0)),2),0) as score16
         FROM service_env_satisfaction ps
         LEFT JOIN basic_info bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
-        WHERE 1=1
+        WHERE bi.PROGRESS_STATE ="E"
+            ${openday ? `AND bi.OPENDAY BETWEEN ? AND ?` : ''} 
             ${whereText}
     `;
-    maria(sql).then((rows) => {  
+
+    
+    const params = openday ? [openday, endday] : []; // 조건에 따라 파라미터 설정
+
+
+    maria(sql, params).then((rows) => {  
         res.json(rows)
     })
     .catch((err) => {
@@ -238,7 +258,7 @@ router.post('/getSerList', (req, res)=>{
 });
 // 프로그램운영
 router.post('/programManage', (req, res)=>{
-    const { keyword} = req.body;
+    const { keyword, openday, endday} = req.body;
     const whereText = keyword.filter(obj => obj.text !== '' && obj.type !== "X")
                                 .map(obj => `AND bi.${obj.type} LIKE '${obj.text}'`)
                                 .join(' ');    
@@ -249,6 +269,7 @@ router.post('/programManage', (req, res)=>{
         FROM 
             basic_info bi
         WHERE bi.PROGRESS_STATE ="E"
+            ${openday ? `AND bi.OPENDAY BETWEEN ? AND ?` : ''} 
             ${whereText}
     `;
     
@@ -260,13 +281,16 @@ router.post('/programManage', (req, res)=>{
                 ROUND(sum(ps.SCORE7+ps.SCORE8+ps.SCORE9)/(count(Case WHEN ps.SCORE8 != 0 then 1 END)+count(CASE WHEN ps.SCORE7 !=0 then 1 END)+count(CASE WHEN ps.SCORE9 !=0 then 1 END)),2)as effect
 			FROM program_satisfaction ps
             LEFT JOIN basic_info bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
-            WHERE  1=1
+            WHERE bi.PROGRESS_STATE ="E"
+                ${openday ? `AND bi.OPENDAY BETWEEN ? AND ?` : ''} 
                 ${whereText}
 			group by bunya
     `;
+    const params = openday ? [openday, endday] : []; // 조건에 따라 파라미터 설정
+
     Promise.all([
-        maria(sql),
-        maria(sql2),
+        maria(sql, params),
+        maria(sql2, params),
     
     ])
     .then((results) => {
@@ -386,7 +410,7 @@ router.post('/getAllPrograms', (req, res)=>{
 
 // 지역별 통계
 router.post('/getResidenceList', (req, res)=>{
-    const { keyword} = req.body;
+    const { keyword, openday, endday} = req.body;
     const whereText = keyword.filter(obj => obj.text !== '' && obj.type !== "X")
                                 .map(obj => `AND ${obj.type} LIKE '${obj.text}'`)
                                 .join(' ');     
@@ -416,13 +440,14 @@ router.post('/getResidenceList', (req, res)=>{
             SELECT "제주") AS r
         LEFT JOIN 
             basic_info AS b ON b.RESIDENCE = r.RESIDENCE AND b.PROGRESS_STATE = "E"
-        WHERE 
-            1 = 1
+        WHERE 1 = 1
+            ${openday ? `AND b.OPENDAY BETWEEN ? AND ?` : ''} 
             ${whereText}
         GROUP BY 
             r.RESIDENCE;
     `;
-    maria(sql).then((rows) => {  
+    const params = openday ? [openday, endday] : []; // 조건에 따라 파라미터 설정
+    maria(sql, params).then((rows) => {  
         res.json(rows)
     })
     .catch((err) => {
@@ -434,7 +459,7 @@ router.post('/getResidenceList', (req, res)=>{
 
 /// 완료 
 router.post('/getPartTypeList', (req, res)=>{
-    const { keyword} = req.body;
+    const { keyword, openday, endday} = req.body;
     const whereText = keyword.filter(obj => obj.text !== '' && obj.type !== "X")
                                 .map(obj => `AND ${obj.type} LIKE '${obj.text}'`)
                                 .join(' ');     
@@ -472,9 +497,13 @@ router.post('/getPartTypeList', (req, res)=>{
             IFNULL(SUM(case when BIZ_PURPOSE ="사회공헌" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_society
         FROM basic_info
         WHERE PROGRESS_STATE ="E"
+        ${openday ? `AND OPENDAY BETWEEN ? AND ?` : ''} 
         ${whereText}
     `;
-    maria(sql).then((rows) => {
+
+    const params = openday ? [openday, endday] : []; // 조건에 따라 파라미터 설정
+
+    maria(sql, params).then((rows) => {
         res.json(rows)
     })
     .catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));

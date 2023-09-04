@@ -129,6 +129,22 @@ const Program = ()=>{
                     </TableHead>
                         
                     <TableBody>
+                        <TableRow>
+                                <TableCell className="table-result" align="center" colSpan={4}>통계</TableCell>
+                                <TableCell className="table-result" align="center">{AVG1}</TableCell>
+                                <TableCell className="table-result" align="center">{AVG2}</TableCell>
+                                <TableCell className="table-result" align="center">{AVG3}</TableCell>
+                                <TableCell className="table-result" align="center">{AVG4}</TableCell>
+                                <TableCell className="table-result" align="center">{AVG5}</TableCell>
+                                <TableCell className="table-result" align="center">{AVG6}</TableCell>
+                                <TableCell className="table-result" align="center">{AVG7}</TableCell>
+                                <TableCell className="table-result" align="center">{AVG8}</TableCell>
+                                <TableCell className="table-result" align="center">{AVG9}</TableCell>
+                                <TableCell className="table-result" align="center">-</TableCell>
+                                <TableCell className="table-result" align="center">{AVG10}</TableCell>
+                                <TableCell className="table-result" align="center">{AVG11}</TableCell>
+                                <TableCell className="table-result" align="center">{AVG12}</TableCell>
+                            </TableRow>
                     {programResult.map((row, index) => {
                         
                         return <TableRow key={index}>
@@ -153,22 +169,7 @@ const Program = ()=>{
                             </TableRow>
                     })}
 
-                            <TableRow>
-                                <TableCell className="table-result" align="center" colSpan={4}>통계</TableCell>
-                                <TableCell className="table-result" align="center">{AVG1}</TableCell>
-                                <TableCell className="table-result" align="center">{AVG2}</TableCell>
-                                <TableCell className="table-result" align="center">{AVG3}</TableCell>
-                                <TableCell className="table-result" align="center">{AVG4}</TableCell>
-                                <TableCell className="table-result" align="center">{AVG5}</TableCell>
-                                <TableCell className="table-result" align="center">{AVG6}</TableCell>
-                                <TableCell className="table-result" align="center">{AVG7}</TableCell>
-                                <TableCell className="table-result" align="center">{AVG8}</TableCell>
-                                <TableCell className="table-result" align="center">{AVG9}</TableCell>
-                                <TableCell className="table-result" align="center">-</TableCell>
-                                <TableCell className="table-result" align="center">{AVG10}</TableCell>
-                                <TableCell className="table-result" align="center">{AVG11}</TableCell>
-                                <TableCell className="table-result" align="center">{AVG12}</TableCell>
-                            </TableRow>
+                        
                     </TableBody>
                 </Table>
             </TableContainer>

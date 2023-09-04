@@ -286,86 +286,8 @@ const Program = ()=>{
                         </TableRow>
                     </TableHead>      
                     <TableBody>
-                        {preventList.map((row, index) => {
-
-                            const cnt = index % 2;
-
-                            return cnt === 0 ? 
-                            
-                                    <TableRow key={index}>
-                                        <TableCell className="table-cell" rowSpan={2} align="center">{(index / 2) + 1}</TableCell>
-                                        <TableCell className="table-cell" rowSpan={2} align="center">{row.NAME}</TableCell>
-                                        <TableCell className="table-cell" rowSpan={2} align="center">{row.SEX}</TableCell>
-                                        <TableCell className="table-cell" rowSpan={2} align="center">{row.RESIDENCE}</TableCell>
-                                        <TableCell className="table-cell" rowSpan={2} align="center">{row.JOB}</TableCell>
-                                        <TableCell className="table-cell" rowSpan={2} align="center">{row.PTCPROGRAM}</TableCell>
-                                        <TableCell className="table-cell" rowSpan={2} align="center">{row.PAST_STRESS_EXPERIENCE}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.PV}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.SCORE1}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.SCORE2}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.SCORE3}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.SCORE4}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.SCORE5}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.SCORE6}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.SCORE7}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.SCORE8}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.SCORE9}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.SCORE10}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.SCORE11}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.SCORE12}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.SCORE13}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.SCORE14}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.SCORE15}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.SCORE16}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.SCORE17}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.SCORE18}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.SCORE19}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.SCORE20}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.PV}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.sum1}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.sum2}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.sum3}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.sum4}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.sum5}</TableCell>
-                                        <TableCell className="table-cell" align="center">{row.sum6}</TableCell>                                        
-                                    </TableRow>
-                          
-                            :
-                          
-                                <TableRow key={index}>
-                                    <TableCell className="table-cell" align="center">{row.PV}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.SCORE1}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.SCORE2}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.SCORE3}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.SCORE4}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.SCORE5}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.SCORE6}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.SCORE7}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.SCORE8}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.SCORE9}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.SCORE10}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.SCORE11}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.SCORE12}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.SCORE13}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.SCORE14}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.SCORE15}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.SCORE16}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.SCORE17}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.SCORE18}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.SCORE19}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.SCORE20}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.PV}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.sum1}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.sum2}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.sum3}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.sum4}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.sum5}</TableCell>
-                                    <TableCell className="table-cell" align="center">{row.sum6}</TableCell>                                        
-                                </TableRow>
-                          
-                        })}
-                        {/* 통계 */}
-                        <TableRow>
+                         {/* 통계 */}
+                         <TableRow>
                             <TableCell className="table-result" align="center" colSpan={6} rowSpan={3}>통계</TableCell>
                             <TableCell className="table-result" align="center" rowSpan={3}>평균</TableCell>
                             <TableCell className="table-result" align="center">사전</TableCell>
@@ -457,6 +379,85 @@ const Program = ()=>{
                             <TableCell className="table-result" align="center">{(SUMAVG5_A - SUMAVG5).toFixed(2)}</TableCell>
                             <TableCell className="table-result" align="center">{(SUMAVG6_A - SUMAVG6).toFixed(2)}</TableCell>
                         </TableRow>
+                        {preventList.map((row, index) => {
+
+                            const cnt = index % 2;
+
+                            return cnt === 0 ? 
+                            
+                                    <TableRow key={index}>
+                                        <TableCell className="table-cell" rowSpan={2} align="center">{(index / 2) + 1}</TableCell>
+                                        <TableCell className="table-cell" rowSpan={2} align="center">{row.NAME}</TableCell>
+                                        <TableCell className="table-cell" rowSpan={2} align="center">{row.SEX}</TableCell>
+                                        <TableCell className="table-cell" rowSpan={2} align="center">{row.RESIDENCE}</TableCell>
+                                        <TableCell className="table-cell" rowSpan={2} align="center">{row.JOB}</TableCell>
+                                        <TableCell className="table-cell" rowSpan={2} align="center">{row.PTCPROGRAM}</TableCell>
+                                        <TableCell className="table-cell" rowSpan={2} align="center">{row.PAST_STRESS_EXPERIENCE}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.PV}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.SCORE1}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.SCORE2}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.SCORE3}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.SCORE4}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.SCORE5}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.SCORE6}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.SCORE7}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.SCORE8}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.SCORE9}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.SCORE10}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.SCORE11}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.SCORE12}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.SCORE13}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.SCORE14}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.SCORE15}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.SCORE16}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.SCORE17}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.SCORE18}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.SCORE19}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.SCORE20}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.PV}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.sum1}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.sum2}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.sum3}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.sum4}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.sum5}</TableCell>
+                                        <TableCell className="table-cell" align="center">{row.sum6}</TableCell>                                        
+                                    </TableRow>
+                          
+                            :
+                          
+                                <TableRow key={index}>
+                                    <TableCell className="table-cell" align="center">{row.PV}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.SCORE1}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.SCORE2}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.SCORE3}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.SCORE4}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.SCORE5}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.SCORE6}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.SCORE7}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.SCORE8}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.SCORE9}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.SCORE10}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.SCORE11}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.SCORE12}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.SCORE13}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.SCORE14}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.SCORE15}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.SCORE16}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.SCORE17}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.SCORE18}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.SCORE19}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.SCORE20}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.PV}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.sum1}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.sum2}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.sum3}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.sum4}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.sum5}</TableCell>
+                                    <TableCell className="table-cell" align="center">{row.sum6}</TableCell>                                        
+                                </TableRow>
+                          
+                        })}
+                       
                     </TableBody>
                 </Table>
             </TableContainer>

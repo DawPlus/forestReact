@@ -1,4 +1,4 @@
-import React , {useEffect}from "react";
+import React , {useEffect, useMemo}from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {actions, getState} from "store/reducers/updateDeleteReducer"
 import {actions as pActions} from "store/reducers/programReducer"
@@ -13,9 +13,13 @@ import callApi from "utils/callApi";
 import { Button } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
-
+import DatePicker from "ui-component/inputs/datePicker";
 import { useNavigate } from 'react-router-dom';
-import { useMemo } from "react";
+
+
+import { Grid } from "@mui/material";
+
+
 const UpdateDelete = ()=>{
     const navigate = useNavigate();
     // Dispatch
@@ -31,17 +35,17 @@ const UpdateDelete = ()=>{
     }, [])
 
     // Component Did Mount 
-    useEffect(()=>{
-        if(type){
-            dispatch(actions.getList({type}))
-        }else{
-            dispatch(actions.setValue({
-                key : "rows", 
-                value : []
-            }))
-        }
+    // useEffect(()=>{
+    //     if(type){
+    //         // dispatch(actions.getList({type}))
+    //     }else{
+    //         dispatch(actions.setValue({
+    //             key : "rows", 
+    //             value : []
+    //         }))
+    //     }
 
-    },[type]);
+    // },[type]);
 
     // 입력양식 변경 Event 
     const onSelectChange = (e)=>{
@@ -239,27 +243,44 @@ const UpdateDelete = ()=>{
         return result;
 
 
-    },[type]);
+    },[rows]);
     
+
+    const [openday, setOpenday] = React.useState("");
+    const [endday, setEndday] = React.useState("");
+
+    const onSearch= ()=>{
+        dispatch(actions.getList({type, openday, endday}))
+    }
 
     return <>
         <MainCard>
-            <div>
-                <FormControl sx={{ m: 1, minWidth: 220 }} size="small">
-                <InputLabel id="demo-select-small-label">입력양식</InputLabel>
-                <Select labelId="demo-select-small-label" id="demo-select-small" value={type} label="입력양식" onChange={onSelectChange} >
-                    <MenuItem value="">입력 양식을 선택해주세요.</MenuItem>
-                    <MenuItem value={1}>프로그램 운영 결과</MenuItem>
-                    <MenuItem value={2}>서비스환경 만족도</MenuItem>
-                    <MenuItem value={3}>프로그램 만족도</MenuItem>
-                    <MenuItem value={4}>상담&치유서비스 효과평가</MenuItem>
-                    <MenuItem value={5}>예방서비스 효과평가</MenuItem>
-                    <MenuItem value={6}>힐링서비스 효과평가</MenuItem>
-                    <MenuItem value={7}>HRV 측정 검사</MenuItem>
-                    <MenuItem value={8}>바이브라 측정 검사</MenuItem>
-                </Select>
+        <Grid item container spacing={2} alignItems="center" md={12}>
+            <Grid item md={3}><DatePicker label="시작일"name="openday" value={openday} onChange={(_, value)=>setOpenday(value)}/></Grid>
+            <Grid item md={3}><DatePicker label="종료일"name="endday" value={endday} onChange={(_, value)=>setEndday(value)}/></Grid>
+            <Grid item md={6}></Grid>
+            <Grid item md={3}>
+                <FormControl size="small" style={{width: "100%"}}>
+                    <InputLabel id="demo-select-small-label">입력양식</InputLabel>
+                    <Select labelId="demo-select-small-label" id="demo-select-small" value={type} label="입력양식" onChange={onSelectChange} >
+                        <MenuItem value="">입력 양식을 선택해주세요.</MenuItem>
+                        <MenuItem value={1}>프로그램 운영 결과</MenuItem>
+                        <MenuItem value={2}>서비스환경 만족도</MenuItem>
+                        <MenuItem value={3}>프로그램 만족도</MenuItem>
+                        <MenuItem value={4}>상담&치유서비스 효과평가</MenuItem>
+                        <MenuItem value={5}>예방서비스 효과평가</MenuItem>
+                        <MenuItem value={6}>힐링서비스 효과평가</MenuItem>
+                        <MenuItem value={7}>HRV 측정 검사</MenuItem>
+                        <MenuItem value={8}>바이브라 측정 검사</MenuItem>
+                    </Select>
                 </FormControl>
-            </div>                
+            </Grid>
+            <Grid item md={3}>  
+                <Button variant="contained" size="small" color="primary" onClick={onSearch} >조회</Button>
+            </Grid>
+        </Grid>
+        </MainCard>
+        <MainCard>
             <DataGrid title="수정/삭제" data={rows} columns={columns} />
         </MainCard>
     </>

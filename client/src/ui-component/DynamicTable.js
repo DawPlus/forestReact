@@ -55,15 +55,6 @@ const DynamicTable = (props)=>{
                 <Table sx={{ minWidth: 700 }} aria-label="spanning table" size="small" className="custom-table">
                     <DynamicTableHead headerInfo={headerInfo}/>
                     <TableBody>
-                        {rows.map((i, idx) =>
-                            <TableRow key={idx}>
-                                {dataCellInfo.map((cellKey) => 
-                                <TableCell className="table-cell" align="center" key={cellKey}>
-                                    {i[cellKey]}
-                                </TableCell>
-                                )}
-                            </TableRow>
-                        )}
                         <TableRow>
                             {avgCellData.map((cell, idx) =>
                                 cell ? (
@@ -73,6 +64,15 @@ const DynamicTable = (props)=>{
                                 ) : null
                             )}
                         </TableRow>
+                        {rows.map((i, idx) =>
+                            <TableRow key={idx}>
+                                {dataCellInfo.map((cellKey) => 
+                                <TableCell className="table-cell" align="center" key={cellKey}>
+                                    {i[cellKey]}
+                                </TableCell>
+                                )}
+                            </TableRow>
+                        )}
                     </TableBody>
                 </Table>
             </TableContainer>

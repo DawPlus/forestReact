@@ -10,8 +10,8 @@ import TextField from '@mui/material/TextField';
 import Swal from "sweetalert2";
 import {PrintSection } from "ui-component/printButton"
 import ProgramManage  from "./programManage";
-
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import DatePicker from "ui-component/inputs/datePicker";
+// import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import ParticipationType from "./participationType";
 import ResidenceList from "./residenceList"
 import SerList from "./serList"
@@ -49,11 +49,11 @@ const SearchPage = ()=>{
             });
             return;
         }
-        dispatch(actions.getPartTypeList({ keyword }));
-        dispatch(actions.getResidenceList({ keyword }));
-        dispatch(actions.programManage({ keyword }));
-        dispatch(actions.getSerList({ keyword }));
-        dispatch(actions.getProgramEffect({ keyword }));
+        dispatch(actions.getPartTypeList({ keyword, openday, endday }));
+        dispatch(actions.getResidenceList({ keyword, openday, endday }));
+        dispatch(actions.programManage({ keyword, openday, endday }));
+        dispatch(actions.getSerList({ keyword, openday, endday }));
+        dispatch(actions.getProgramEffect({ keyword, openday, endday }));
         // dispatch(actions.getAllPrograms({ keyword }));
     }
 
@@ -73,9 +73,18 @@ const SearchPage = ()=>{
     const onPrint = ()=>{
         window.print();
     }
+
+
+    const [openday, setOpenday] = React.useState("");
+    const [endday, setEndday] = React.useState("");
+
+
     return <>
         <MainCard>
             <Grid container  alignItems="center" spacing={1}>
+                <Grid item sm={3}><DatePicker label="시작일"name="openday" value={openday} onChange={(_, value)=>setOpenday(value)}/></Grid>
+                <Grid item sm={3}><DatePicker label="종료일"name="endday" value={endday} onChange={(_, value)=>setEndday(value)}/></Grid>
+                <Grid item sm={6}></Grid>
                 {keyword.map((i, idx)=> 
                     <Grid item sm={3} key={idx}>
                         <Grid container  alignItems="center" spacing={1}>
@@ -99,26 +108,6 @@ const SearchPage = ()=>{
         <MainCard   id="print" style={{marginTop : "10px", minHeight: "400px"}}>
             <PrintSection>
             <div style={{textAlign :"right" , marginBottom : "15px"}}>
-                    <div style={{width : "250px", display:"inline-block"}}>
-                        <TableContainer>
-                            <Table className="sighLine">
-                            <TableHead>
-                                <TableRow >
-                                    <TableCell>담당</TableCell>
-                                    <TableCell>팀장</TableCell>
-                                    <TableCell>사무국장</TableCell>
-                                </TableRow>
-                            </TableHead>
-                                <TableBody>
-                                    <TableRow>
-                                        <TableCell></TableCell>
-                                        <TableCell></TableCell>
-                                        <TableCell></TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </div>
                 </div>
                 <div style={{textAlign:"center",     margin: "60px 0px 30px 0px"}}>
                     <h1>주제어별 프로그램 통계</h1>
@@ -132,7 +121,7 @@ const SearchPage = ()=>{
                 <SerList/>
                 {/* 효과성분석 */}
                 <ProgramEffect/>
-{/*                 
+                {/*                 
                 <ProgramOverview/> */}
                 
             </PrintSection>

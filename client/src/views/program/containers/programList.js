@@ -57,14 +57,14 @@ const ProgramListContainer = ()=>{
             return;
         }
 
-        if (programList.length >= 7) {
-            Swal.fire({
-                icon: 'warning',
-                title: '확인',
-                text: "프로그램은 7개 까지만 추가 할 수 있습니다. ",
-                });
-            return;
-        }
+        // if (programList.length >= 7) { 
+        //     Swal.fire({
+        //         icon: 'warning',
+        //         title: '확인',
+        //         text: "프로그램은 7개 까지만 추가 할 수 있습니다. ",
+        //         });
+        //     return;
+        // }
         dispatch(actions.addArrTarget({
             target : "programList", 
             value : pageInfo,

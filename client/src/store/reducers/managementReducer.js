@@ -167,7 +167,9 @@ export const {getState, reducer, actions} = createCustomSlice({
 
       // 입력유저관리 
       getUserTemp_SUCCESS :(state, {payload : {data}})=>{
-        state.userTemp = data.map(i=> ({...i, idx : v4()}))
+        console.log(data)
+        
+        state.userTemp = data.length > 0 ? data.map(i=> ({...i, idx : v4()})) : initialState.userTemp
       },
       // 입력유저관리 
       getUserTempAgency_SUCCESS :(state, {payload : {data}})=>{

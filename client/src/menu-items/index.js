@@ -44,7 +44,7 @@ const menuItems = {
                         },
                         {
                             id: 'program',
-                            title: '프로그램통계',
+                            title: '운영통계',
                             type: 'item',
                             url: '/searchProgramResult',
                         }

@@ -16,7 +16,7 @@ import ProgramEffect  from "./programEffect";
 import ExIncomeList  from "./exIncomeList";
 import {PrintSection } from "ui-component/printButton"
 
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+// import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 const YearMonthResult = ()=>{
 
@@ -82,7 +82,7 @@ const YearMonthResult = ()=>{
         <MainCard  id="print" style={{marginTop : "10px", minHeight: "400px"}}>
         <PrintSection>
             <div style={{textAlign :"right" , marginBottom : "15px"}}>
-                <div style={{width : "250px", display:"inline-block"}}>
+                {/* <div style={{width : "250px", display:"inline-block"}}>
                     <TableContainer>
                         <Table className="sighLine">
                         <TableHead>
@@ -101,7 +101,7 @@ const YearMonthResult = ()=>{
                             </TableBody>
                         </Table>
                     </TableContainer>
-                </div>
+                </div> */}
             </div>
             <div style={{textAlign:"center",     margin: "60px 0px 30px 0px"}}>
                 <h1>하이힐링원 연·월 프로그램 실시 결과 보고</h1>
