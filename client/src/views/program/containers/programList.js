@@ -5,11 +5,11 @@ import { styled } from '@mui/material/styles';
 import NumberInput from "ui-component/inputs/numberInput";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-
+import Autocomplete from '@mui/material/Autocomplete';
 import { useDispatch, useSelector } from "react-redux";
 import { getState , actions} from "store/reducers/programReducer";
 import { makeStyles } from '@mui/styles';
-
+import TextField from '@mui/material/TextField';
 import Swal from "sweetalert2";
 import { useMemo } from "react";
 
@@ -92,7 +92,11 @@ const ProgramListContainer = ()=>{
         return list.filter(i=> i);
 
     },[programMngList, pageInfo.col1]);
-    const bunyaItem = useMemo(()=> programMngList.map(i=> ({label : `${i.bunya}`, value : i.bunya})),[programMngList]);
+    const bunyaItem = useMemo(()=> {
+        const _data = [...new Set(programMngList.map(i=> i.bunya))];
+        return _data.map(i=> ({label : i, value : i}))
+    },[programMngList]);
+
     const teacherItems = useMemo(()=> teacherMngList.map(i=> ({label : i.name , value : i.name})),[teacherMngList]);
 
     const onChangeProgram = (e)=>{
@@ -108,10 +112,11 @@ const ProgramListContainer = ()=>{
             col1 : e.target.value, 
         }))
     }
-    const onChangeTeacher= (e)=>{
+    const onChangeTeacher= (e,value)=>{
+        
         setPageInfo(s=> ({
             ...s, 
-            col2 : e.target.value
+            col2 : value
         }))
     }
     
@@ -126,7 +131,18 @@ const ProgramListContainer = ()=>{
                     <SelectItems label="프로그램명" value={pageInfo.programName} items={programItems} onChange={onChangeProgram}/>
                 </Grid>
                 <Grid item  xs={2} >  
-                    <SelectItems label="강사명" value={pageInfo.col2} items={teacherItems} onChange={onChangeTeacher}/>
+                    <Autocomplete
+                            size="small"
+                            value={pageInfo.col2}
+                            disablePortal
+                            id="combo-box-demo"
+                            options={teacherItems}
+                            onInputChange={onChangeTeacher}
+                            fullWidth
+                            noOptionsText={"조회된 강사가 없습니다."}
+                            renderInput={(params) => <TextField {...params} label="강사" style={{height : "40px"}}/>}
+                        />
+                    {/* <SelectItems label="강사명" value={pageInfo.col2} items={teacherItems} onChange={onChangeTeacher}/> */}
                 </Grid>
                 <Grid item  xs={2} >  
                     <NumberInput name="col3" label="내부강사" value={pageInfo.col3} onChange={onNumberChange}/>

@@ -7,10 +7,10 @@ const { encrypt, decrypt } = require('../util');
     // 사용자 정보 수정  
     router.post('/test', (req, res)=>{
 
-        const enc = encrypt("kim990119");
+        const enc = encrypt("ShMCj/h5bWm+FVxaKozK2g==");
         console.log(enc)
 
-        const dec = decrypt(enc);
+        const dec = decrypt("HX/g4aOnApQxQjpz40zOdA==");
         console.log(dec);
 
 

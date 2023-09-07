@@ -4,14 +4,16 @@ import { Grid } from '@mui/material';
 
 import { useDispatch, useSelector } from "react-redux";
 import { getState, actions } from "store/reducers/serviceInsert/service";
-import {  Input, Select, DatePicker} from "ui-component/inputs";
+import {  Input,  DatePicker} from "ui-component/inputs";
 
 const SearchInfo = ()=>{
 
 
     const dispatch = useDispatch();
 
-    const { AGENCY , OPENDAY , EVAL_DATE, PTCPROGRAM } = useSelector(s=> getState(s).searchInfo);
+    const { AGENCY , OPENDAY , EVAL_DATE
+    //    , PTCPROGRAM 
+    } = useSelector(s=> getState(s).searchInfo);
 
 
     const onChange = (e)=>{
@@ -25,7 +27,7 @@ const SearchInfo = ()=>{
         dispatch(actions.setSearchInfo({ key, value }))
     }
 
-    const item = [ "당일형", "1박2일형", "2박3일형", ]
+    // const item = [ "당일형", "1박2일형", "2박3일형", ]
 
     return <>
         <Grid container spacing={1} alignItems={"center"}>
@@ -41,7 +43,7 @@ const SearchInfo = ()=>{
                 <Input  label="기관명" value={AGENCY} name="AGENCY" onChange={onChange}/> 
             </Grid>
             <Grid item sm={3}>
-                <Select options={item}label="참여일정"value={PTCPROGRAM} name="PTCPROGRAM" onChange={onChange} />
+                {/* <Select options={item}label="참여일정"value={PTCPROGRAM} name="PTCPROGRAM" onChange={onChange} /> */}
             </Grid>         
         </Grid>
         

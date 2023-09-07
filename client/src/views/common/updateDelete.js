@@ -170,7 +170,7 @@ const UpdateDelete = ()=>{
                 break;
             default : break;
             }
-                console.log(value);
+                
         Swal.fire({
             title: `${name}`,
             text: `${name} 을/를 삭제 하시겠습니까? ` ,

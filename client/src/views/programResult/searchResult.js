@@ -1,8 +1,8 @@
-import React, {useState} from "react";
+import React  from "react";
 import MainCard from 'ui-component/cards/MainCard';
 
 import Select from "ui-component/select";
-import Input from "ui-component/inputs/input";
+// import Input from "ui-component/inputs/input";
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 
@@ -17,8 +17,8 @@ import PreventResult from "./preventResult";
 import HealingResult from "./healingResult";
 import Swal from "sweetalert2";
 
-import ProgramTable from "ui-component/programTable";
-import useUpdateEffect from "hooks/useUpdateEffect";
+// import ProgramTable from "ui-component/programTable";
+// import useUpdateEffect from "hooks/useUpdateEffect";
 const SearchResult = ()=>{
 
     const dispatch = useDispatch();
@@ -28,11 +28,11 @@ const SearchResult = ()=>{
     const {effect, keyword} = searchInfo;
 
 
-    const [params, setParams] = useState({
-        openday : "",
-        endday : "", 
-        agency : "", 
-    })
+    // const [params, setParams] = useState({
+    //     openday : "",
+    //     endday : "", 
+    //     agency : "", 
+    // })
 
 
     const effectItems = [
@@ -82,12 +82,21 @@ const SearchResult = ()=>{
             return;
         }
 
+        if(!searchInfo.effect){
+            Swal.fire({
+                title: `확인`,
+                text: `입력양식을 선택해 주십시오` ,
+                icon: 'warning',
+            });
+            return;
+        }
+
+
         dispatch(actions.getSearchResult(searchInfo));
-        setParams(a=> ({
-            openday  : searchInfo.openday, 
-            endday : searchInfo.endday, 
-            agency : searchInfo.AGENCY
-        }))
+        // setParams(a=> ({
+        //     openday  : searchInfo.openday, 
+        //     endday : searchInfo.endday, 
+        // }))
 
     }
 
@@ -110,11 +119,11 @@ const SearchResult = ()=>{
 
     // },[rows])
 
-    const onAgencyChange = (e)=>{
-        const value = e.target.value;
-        dispatch(actions.setSearchAgency(value))
+    // const onAgencyChange = (e)=>{
+    //     const value = e.target.value;
+    //     dispatch(actions.setSearchAgency(value))
 
-    }
+    // }
     const setDate = (key, value)=>{
         dispatch(actions.setSearchData({key, value}))
     }
@@ -124,29 +133,25 @@ const SearchResult = ()=>{
     return <>
             <MainCard>
                 <Grid container  alignItems="center" spacing={2}>
-                    <Grid item md={3} >
+                    <Grid item md={2} >
                         <DatePicker label="시작일"name="openday" value={searchInfo.openday} onChange={setDate}/>
                     </Grid>
-                    <Grid item md={3}>
+                    <Grid item md={2}>
                         <DatePicker label="종료일" name="endday" value={searchInfo.endday} onChange={setDate}/>
                     </Grid>
-                    <Grid item md={6}></Grid>
-                    <Grid item md={4}>
+                    <Grid item md={2}>
                         <Select value={effect} label="입력양식" name="effect" items={effectItems}onChange={onChangeHandler}/>
                     </Grid>
-                    <Grid item md={4}>
+                    {/* <Grid item md={4}>
                         <Input label="기관명" name="AGENCY" value={searchInfo.AGENCY} size="small" onChange={onAgencyChange} variant="outlined" />
-                    </Grid>
-                    <Grid item md={4}>
-                        <div style={{textAlign: "right"}}>
-                            
+                    </Grid> */}
+                    <Grid item md={6}>
+                        <div style={{textAlign: "left"}}>
                             <Button variant="contained" color="primary" onClick={onSearch} >조회</Button>
                         </div>
                     </Grid>
-
-                    
                         {keyword.map((i, idx)=> 
-                            <Grid item md={3} key={idx}>
+                            <Grid item md={2} key={idx}>
                                 <Grid container spacing={1}>
                                     <Grid item md={6}>
                                         <Select minWidth="50" value={i.type} label={`주제어${idx+1}`} name="type" items={keywordItem} onChange={onChangeKeyword(idx)}/>
@@ -162,7 +167,7 @@ const SearchResult = ()=>{
             <MainCard style={{marginTop : "10px"}}>
                 {rows.length > 0 && 
                 <>
-                    <ProgramTable param={params}/>
+                    {/* <ProgramTable param={params}/> */}
                     {/* <ParticipationType/>
                     <ResidenceList/>
                     <ProgramManage/> */}

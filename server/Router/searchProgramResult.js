@@ -405,7 +405,31 @@ router.post('/getAllPrograms', (req, res)=>{
     });
 });
 
-
+router.post('/getIsCloseMine', (req, res)=>{
+    const { keyword, openday, endday} = req.body;
+    const whereText = keyword.filter(obj => obj.text !== '' && obj.type !== "X")
+                                .map(obj => `AND ${obj.type} LIKE '${obj.text}'`)
+                                .join(' ');     
+    let sql = `
+        select count(*) as CNT
+        from dbstatistics.basic_info b  
+        where b.ISCLOSEMINE = 1  
+        AND b.PROGRESS_STATE = "E"    
+            ${openday ? `AND b.OPENDAY BETWEEN ? AND ?` : ''} 
+            ${whereText}
+    `;
+    
+    
+    const params = openday ? [openday, endday] : []; // 조건에 따라 파라미터 설정
+    maria(sql, params).then((rows) => {  
+    
+        res.json(rows[0])
+    })
+    .catch((err) => {
+    
+        res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
+    });
+});
 
 
 // 지역별 통계
@@ -465,12 +489,10 @@ router.post('/getPartTypeList', (req, res)=>{
                                 .join(' ');     
     let sql = `
         SELECT 
-            COUNT(case when AGE_TYPE ="아동" then 1 end ) as count_kidboy,
-            COUNT(case when AGE_TYPE ="청소년" then 1 end ) as count_boy,
+        COUNT(case when AGE_TYPE ="아동청소년" then 1 end ) as count_kidboy,
             COUNT(case when AGE_TYPE ="성인" then 1 end ) as count_adult,
             COUNT(case when AGE_TYPE ="노인" then 1 end ) as count_old,
-            IFNULL(SUM(case when AGE_TYPE ="아동" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_kidboy,
-            IFNULL(SUM(case when AGE_TYPE ="청소년" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_boy,
+            IFNULL(SUM(case when AGE_TYPE ="아동청소년" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_kidboy,
             IFNULL(SUM(case when AGE_TYPE ="성인" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_adult,
             IFNULL(SUM(case when AGE_TYPE ="노인" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_old,
             COUNT(case when PART_TYPE ="장애인" then 1 end ) as count_handicap,
@@ -485,14 +507,28 @@ router.post('/getPartTypeList', (req, res)=>{
             IFNULL(SUM(case when PART_TYPE ="교직원" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_teacher,
             IFNULL(SUM(case when PART_TYPE ="중독" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_addict,
             IFNULL(SUM(case when PART_TYPE ="기타" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_etc,
-            COUNT(case when INCOME_TYPE ="기타" then 1 end ) as count_income_etc,
-            COUNT(case when INCOME_TYPE ="녹색자금" then 1 end ) as count_income_green,
-            COUNT(case when INCOME_TYPE ="산림복지바우처" then 1 end ) as count_income_voucher,
-            IFNULL(SUM(case when INCOME_TYPE ="기타" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_income_etc,
-            IFNULL(SUM(case when INCOME_TYPE ="녹색자금" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_income_green,
-            IFNULL(SUM(case when INCOME_TYPE ="산림복지바우처" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_income_voucher,
+
+            COUNT(case when PART_FORM ="단체" then 1 end ) as count_income_etc,
+            COUNT(case when PART_FORM ="개인" then 1 end ) as count_income_green,
+            COUNT(case when PART_FORM ="기타" then 1 end ) as count_income_voucher,
+            IFNULL(SUM(case when PART_FORM ="단체" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_income_etc,
+            IFNULL(SUM(case when PART_FORM ="개인" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_income_green,
+            IFNULL(SUM(case when PART_FORM ="기타" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_income_voucher,
+            COUNT(case when ORG_NATURE ="교육기관" then 1 end ) as org_1,
+            COUNT(case when ORG_NATURE ="복지기관" then 1 end ) as org_2,
+            COUNT(case when ORG_NATURE ="기업" then 1 end ) as org_3,
+            COUNT(case when ORG_NATURE ="관공서" then 1 end ) as org_4,
+            COUNT(case when ORG_NATURE ="강원랜드" then 1 end ) as org_5,
+            IFNULL(SUM(case when ORG_NATURE ="교육기관" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as org_part_1,
+            IFNULL(SUM(case when ORG_NATURE ="복지기관" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as org_part_2,
+            IFNULL(SUM(case when ORG_NATURE ="기업" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as org_part_3,
+            IFNULL(SUM(case when ORG_NATURE ="관공서" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as org_part_4,
+            IFNULL(SUM(case when ORG_NATURE ="강원랜드" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as org_part_5,
+
+            
             COUNT(case when BIZ_PURPOSE ="수익사업" then 1 end ) as count_benefit,
             COUNT(case when BIZ_PURPOSE ="사회공헌" then 1 end ) as count_society,
+
             IFNULL(SUM(case when BIZ_PURPOSE ="수익사업" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_benefit,
             IFNULL(SUM(case when BIZ_PURPOSE ="사회공헌" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_society
         FROM basic_info

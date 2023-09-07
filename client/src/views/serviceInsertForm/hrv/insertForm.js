@@ -60,9 +60,11 @@ const InsertForm = ()=>{
         dispatch(actions.setAllData(e));
     }
 
-    const getUserTemp= (agency)=>{
-        dispatch(actions.getUserTemp({agency}))
+    const getUserTemp= (value)=>{
+        const [agency, openday] = value.split("/")
+        dispatch(actions.getUserTemp({agency, openday}))
     }
+
 
     return <>   
             <SetValue onAdd={onAdd} onRemove={removeRow} onSetData={onSetValue} getUserTemp={getUserTemp}/>

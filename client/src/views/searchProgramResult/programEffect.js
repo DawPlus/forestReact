@@ -18,6 +18,7 @@ const ParticipationType = ()=>{
 
     return <>
         <TableContainer style={{marginTop : "20px"}}>
+        <h3 className="tableTitle" style={{marginBottom:"0px"}}>효과성분석</h3>
             <Table className="report custom-table">
             <DynamicTableHead headerInfo={headerInfo}/>
                 <TableBody>

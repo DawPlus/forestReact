@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const maria = require("../maria");
-const CryptoJS = require("crypto-js")
 
-const secretKey = CryptoJS.enc.Hex.parse("forestHealing");
-const iv = CryptoJS.enc.Hex.parse('000102030405060708090a0b0c0d0e');
+
+const { encrypt, decrypt } = require('../util');
+
 
     // 코드 조회 
     router.post('/getBasicInfoPage', (req, res)=>{
@@ -34,33 +34,44 @@ const iv = CryptoJS.enc.Hex.parse('000102030405060708090a0b0c0d0e');
         const sql = `SELECT user_id, value, user_pwd, user_name FROM user_info`;
         maria(sql).then((rows) => {
 
-            res.json(rows)
+            res.json(rows.map(i=> ({...i, user_pwd  : decrypt(i.user_pwd)})))
         })
         .catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));
     });
     
+       // 비밀번호 초기화 
+    router.post('/resetPassword', (req, res)=>{
+        const {user_id} = req.body;
+        
+        const enc = encrypt("1111");
+
+        const values = [  enc, user_id]
+
+        const sqls = `
+            UPDATE user_info
+            SET user_pwd = ?
+            WHERE user_id = ?;
+        ` 
+        maria(sqls, values).then(() => {
+            res.json({result : true})
+        }).catch((err) => {console.log(err); res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })});
+    });
     // 사용자 정보 수정  
     router.post('/updateRegUser', (req, res)=>{
         const {data} = req.body;
-        const { user_id, user_name, value } = data;
-
-        // const encPassword = CryptoJS.AES.encrypt(user_pwd, secretKey, {
-        //     iv: iv,
-        //     mode: CryptoJS.mode.CBC,
-        //     padding: CryptoJS.pad.Pkcs7
-        // }).toString();
-        // console.log(encPassword)
-
-        const values = [ user_id, user_name,  value ]
+        const { user_id, user_name, value , user_pwd} = data;
+        const password  = encrypt(user_pwd);
+        const values = [ user_id, user_name,  value , password]
 
         const sqls = `
                 INSERT INTO user_info
-                    (user_id, user_name, value)
+                    (user_id, user_name, value, user_pwd)
                 VALUES
-                    (?, ?, ?)
+                    (?, ?, ?, ?)
                 ON DUPLICATE KEY UPDATE
                     user_name = VALUES(user_name),
-                    value = VALUES(value);
+                    value = VALUES(value),
+                    user_pwd = VALUES(user_pwd);
         ` 
         maria(sqls, values).then(() => {
             res.json({result : true})

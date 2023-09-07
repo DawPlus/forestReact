@@ -36,7 +36,7 @@ router.post('/create', async (req, res) => {
 
 // 임시저장 조회
 router.post('/agencyList', (req, res)=>{
-    const sql = `SELECT agency FROM user_temp group by agency`;
+    const sql = `SELECT * FROM user_temp group by agency`;
     maria(sql).then((rows) =>  res.json(rows) )
     .catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));
 
@@ -51,8 +51,9 @@ router.post('/list', (req, res)=>{
 });
 // 임시저장 삭제
 router.post('/delete', (req, res)=>{
-    const sql = `DELETE FROM user_temp`;
-    maria(sql).then((rows) =>   res.json({ result: true }))
+    const {agency, openday} = req.body;
+    const sql = `DELETE FROM user_temp where agency = ? and openday = ? `;
+    maria(sql, [agency, openday]).then((rows) =>   res.json({ result: true }))
     .catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));
 });
 

@@ -225,7 +225,7 @@ const Program = ()=>{
 ]
 
     const downloadExcel = useDownloadExcel({headerInfo, cellData, avgData, filename  : agency, merges, wscols, type : "type2"});
-    console.log(preventList);
+    
 
     return <>
             {preventList.length > 0 ? 

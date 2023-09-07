@@ -18,23 +18,24 @@ const ParticipationType = ()=>{
 
     return <>
         <TableContainer style={{marginTop : "20px"}}>
+        <h3 className="tableTitle" style={{marginBottom:"0px"}}>효과성분석</h3>
             <Table className="report custom-table">
             <DynamicTableHead headerInfo={headerInfo}/>
                 <TableBody>
                     {data.map((i, idx)=>
                         <TableRow key={idx}>
-                            <TableCell>{i.PV}</TableCell>
-                            <TableCell>{i.preventSum}</TableCell>
-                            <TableCell>{i.preventAvg}</TableCell>
-                            <TableCell>{i.counselSum}</TableCell>
-                            <TableCell>{i.counselAvg}</TableCell>
-                            <TableCell>{i.healingTotalSum}</TableCell>
-                            <TableCell>{i.healingAverageScore}</TableCell>
-                            <TableCell>{i.hrvNum1}</TableCell>
-                            <TableCell>{i.hrvNum2}</TableCell>
-                            <TableCell>{i.hrvNum3}</TableCell>
-                            <TableCell>{i.hrvNum4}</TableCell>
-                            <TableCell>{i.hrvNum5}</TableCell>
+                            <TableCell style={{width: "150px"}}>{i.PV}</TableCell>
+                            <TableCell style={{width: "150px"}}>{i.preventSum}</TableCell>
+                            <TableCell style={{width: "150px"}}>{i.preventAvg}</TableCell>
+                            <TableCell style={{width: "150px"}}>{i.counselSum}</TableCell>
+                            <TableCell style={{width: "150px"}}>{i.counselAvg}</TableCell>
+                            <TableCell style={{width: "150px"}}>{i.healingTotalSum}</TableCell>
+                            <TableCell style={{width: "150px"}}>{i.healingAverageScore}</TableCell>
+                            <TableCell style={{width: "150px"}}>{i.hrvNum1}</TableCell>
+                            <TableCell style={{width: "150px"}}>{i.hrvNum2}</TableCell>
+                            <TableCell style={{width: "150px"}}>{i.hrvNum3}</TableCell>
+                            <TableCell style={{width: "150px"}}>{i.hrvNum4}</TableCell>
+                            <TableCell style={{width: "150px"}}>{i.hrvNum5}</TableCell>
                         </TableRow>
                     )}
                 </TableBody>

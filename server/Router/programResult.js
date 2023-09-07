@@ -74,7 +74,7 @@ router.post('/getProgramResult', (req, res) => {
 
 // 만족도 / 효과평가 조회 
 router.post('/getSearchResult', (req, res)=>{
-    const {effect, keyword, AGENCY, openday} = req.body;
+    const {effect, keyword,  openday, endday} = req.body;
     
     const whereText = keyword.filter(obj => obj.text !== '' && obj.type !== "X")
                                 .map(obj => `AND ${obj.type} LIKE '${obj.text}'`)
@@ -88,17 +88,17 @@ router.post('/getSearchResult', (req, res)=>{
     // 4 : 예방서비스 효과평가
     // 5 : 힐링서비스 효과평가
     const sql = {
-        program : 'SELECT * FROM program_satisfaction WHERE 1=1 AND AGENCY= ? '+whereText, // 프로그램 만족도 
-        facility : 'SELECT * FROM service_env_satisfaction WHERE 1=1 AND AGENCY= ?'+ whereText,// 시설서비스환경만족도
-        counseling : 'SELECT * FROM counsel_service WHERE 1=1 AND AGENCY= ?'+ whereText,// 상담치유
-        prevent : 'SELECT * FROM prevent_service WHERE 1=1 AND AGENCY= ?'+ whereText, // 예방서비스
-        healing : 'SELECT * FROM healing_service WHERE 1=1 AND AGENCY= ?'+ whereText // 힐링서비스
+        program : `SELECT * FROM program_satisfaction WHERE 1=1     ${openday ? `AND OPENDAY BETWEEN ? AND ?` : ''}   `+whereText, // 프로그램 만족도 
+        facility : `SELECT * FROM service_env_satisfaction WHERE 1=1   ${openday ? `AND OPENDAY BETWEEN ? AND ?` : ''}   `+ whereText,// 시설서비스환경만족도
+        counseling : `SELECT * FROM counsel_service WHERE 1=1    ${openday ? `AND OPENDAY BETWEEN ? AND ?` : ''}  `+ whereText,// 상담치유
+        prevent : `SELECT * FROM prevent_service WHERE 1=1    ${openday ? `AND OPENDAY BETWEEN ? AND ?` : ''}  `+ whereText, // 예방서비스
+        healing : `SELECT * FROM healing_service WHERE 1=1    ${openday ? `AND OPENDAY BETWEEN ? AND ?` : ''}  `+ whereText // 힐링서비스
     };
 
-        maria(sql[effect],[AGENCY]).then((rows) => 
-            res.json(rows))
-        .catch((err) => {
-        console.log(err)
+    
+    const params = openday ? [openday, endday] : []; // 조건에 따라 파라미터 설정
+        maria(sql[effect], params).then((rows) => res.json(rows)).catch((err) => {
+            console.log(err)
         res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
     });
 });

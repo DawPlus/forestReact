@@ -12,14 +12,14 @@ const InsertForm = ()=>{
 
     const dispatch = useDispatch();
 
-    const data = [ '문항1', '문항2', '문항3', '문항4', '문항5', '문항6', '문항7', '문항8', '문항9', '문항10', '문항11', '문항12', '문항13', '문항14', '문항15', '문항16', '문항17', '문항18', '문항19', '문항20', '문항21', '문항22', '문항23', '문항24', '문항25', '문항26', '문항27', '문항28', '문항29', '문항30', '문항31', '문항32', '문항33', '문항34', '문항35', '문항36', '문항37', '문항38', '문항39', '문항40', '문항41', '문항42', '문항43', '문항44', '문항45', '문항46', '문항47', '문항48', '문항49', '문항50', '문항51', '문항52', '문항53', '문항54', '문항55', '문항56', '문항57', '문항58', '문항59', '문항60', '문항61', '문항62'].map((i, idx)=> ({ label : i, name : 'SCORE'+(idx+1), type : "age"}))
+    const data = [ '문항1', '문항2', '문항3', '문항4', '문항5', '문항6', '문항7', '문항8', '문항9', '문항10', '문항11', '문항12', '문항13', '문항14', '문항15', '문항16', '문항17', '문항18', '문항19', '문항20', '문항21', '문항22', '문항23', '문항24', '문항25', '문항26', '문항27', '문항28', '문항29', '문항30', '문항31', '문항32', '문항33', '문항34', '문항35', '문항36', '문항37', '문항38', '문항39', '문항40', '문항41', '문항42', '문항43', '문항44', '문항45', '문항46', '문항47', '문항48', '문항49', '문항50', '문항51', '문항52', '문항53', '문항54', '문항55', '문항56', '문항57', '문항58', '문항59', '문항60', '문항61', '문항62'].map((i, idx)=> ({ label : i, name : 'SCORE'+(idx+1), type : "eNumber"}))
     const fields = [ 
         { label: '이름', name: 'NAME'},
         { label: '성별', name: 'SEX', type:"select"},
         { label: '연령', name: 'AGE', type:"age"},
         { label: '거주지', name: 'RESIDENCE', type:"select"},
         { label: '직업', name: 'JOB', type:"select"},
-        { label: '과거상담/치유서비스경험', name: 'PAST_STRESS_EXPERIENCE', type : "age"},
+        { label: '과거상담/치유서비스 경험', name: 'PAST_STRESS_EXPERIENCE', type : "eNumber"},
         ...data
     ];
 
@@ -59,8 +59,9 @@ const InsertForm = ()=>{
         dispatch(actions.setAllData(e));
     }
 
-    const getUserTemp= (agency)=>{
-        dispatch(actions.getUserTemp({agency}))
+    const getUserTemp= (value)=>{
+        const [agency, openday] = value.split("/")
+        dispatch(actions.getUserTemp({agency, openday}))
     }
 
 

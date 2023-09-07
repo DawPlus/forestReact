@@ -37,13 +37,23 @@ const ParticipationType = ()=>{
         part_old,
         part_society,
         part_teacher,
-
+        org_1,
+        org_2,
+        org_3,
+        org_4,
+        org_5,
+        org_part_1,
+        org_part_2,
+        org_part_3,
+        org_part_4,
+        org_part_5,
+        
 
     } = useSelector(s=> getState(s).partTypeList)
 
     const headerInfo = [
-        ["참가유형", "연령대",  "연령대", "연령대", "연령대", "참가자유형", "참가자유형", "참가자유형", "참가자유형", "참가자유형", "참가자유형", "참가자유형", "수입구분", "수입구분", "수입구분", "수입구분", "사업구분", "사업구분", "사업구분"],
-        ["", "아동ㆍ청소년",  "성인", "노인", "계", "장애인", "저소득층", "가족", "중독", "교직원", "기타", "계", "녹색자금", "바우처", "기타", "계", "사회공헌", "수입사업", "계"],
+        ["참가유형", "연령대",  "연령대", "연령대", "연령대", "참가자유형", "참가자유형", "참가자유형", "참가자유형", "참가자유형", "참가자유형", "참가자유형", "참여형태", "참여형태", "참여형태", "참여형태", "사업구분", "사업구분", "사업구분", "단체성격", "단체성격", "단체성격", "단체성격", "단체성격", "단체성격"],
+        ["", "아동ㆍ청소년",  "성인", "노인", "계", "장애인", "저소득층", "가족", "중독", "교직원", "기타", "계", "단체", "개인", "기타", "계", "사회공헌", "수입사업", "계", "교육기관", "복지기관", "기업", "관공서", "강원랜드", "계" ],
     ]
 
     
@@ -53,25 +63,31 @@ const ParticipationType = ()=>{
             <DynamicTableHead headerInfo={headerInfo}/>
             <TableBody>
                 <TableRow>
-                    <TableCell>유형(건)</TableCell>
-                    <TableCell>{count_kidboy}</TableCell>
-                    <TableCell>{count_adult}</TableCell>
-                    <TableCell>{count_old}</TableCell>
-                    <TableCell>{count_kidboy+count_old+count_boy +count_adult}</TableCell>
-                    <TableCell>{count_handicap}</TableCell>
-                    <TableCell>{count_lowincome}</TableCell>
-                    <TableCell>{count_family}</TableCell>
-                    <TableCell>{count_addict}</TableCell>
-                    <TableCell>{count_teacher}</TableCell>
-                    <TableCell>{count_etc}</TableCell>
-                    <TableCell>{count_handicap+ count_lowincome+ count_family+ count_addict+ count_teacher+ count_etc}</TableCell>
-                    <TableCell>{count_income_green}</TableCell>
-                    <TableCell>{count_income_voucher}</TableCell>
-                    <TableCell>{count_income_etc}</TableCell>
-                    <TableCell>{count_income_green+ count_income_voucher+count_income_etc}</TableCell>
-                    <TableCell>{count_society}</TableCell>
-                    <TableCell>{count_benefit}</TableCell>
-                    <TableCell>{count_benefit+ count_society}</TableCell>
+                    <TableCell style={{width : "170px"}}>유형(건)</TableCell>
+                    <TableCell style={{width : "170px"}}>{count_kidboy}</TableCell>
+                    <TableCell style={{width : "170px"}}>{count_adult}</TableCell>
+                    <TableCell style={{width : "170px"}}>{count_old}</TableCell>
+                    <TableCell style={{width : "170px"}}>{count_kidboy+count_old+count_boy +count_adult}</TableCell>
+                    <TableCell style={{width : "170px"}}>{count_handicap}</TableCell>
+                    <TableCell style={{width : "170px"}}>{count_lowincome}</TableCell>
+                    <TableCell style={{width : "170px"}}>{count_family}</TableCell>
+                    <TableCell style={{width : "170px"}}>{count_addict}</TableCell>
+                    <TableCell style={{width : "170px"}}>{count_teacher}</TableCell>
+                    <TableCell style={{width : "170px"}}>{count_etc}</TableCell>
+                    <TableCell style={{width : "170px"}}>{count_handicap+ count_lowincome+ count_family+ count_addict+ count_teacher+ count_etc}</TableCell>
+                    <TableCell style={{width : "170px"}}>{count_income_green}</TableCell>
+                    <TableCell style={{width : "170px"}}>{count_income_voucher}</TableCell>
+                    <TableCell style={{width : "170px"}}>{count_income_etc}</TableCell>
+                    <TableCell style={{width : "170px"}}>{count_income_green+ count_income_voucher+count_income_etc}</TableCell>
+                    <TableCell style={{width : "170px"}}>{count_society}</TableCell>
+                    <TableCell style={{width : "170px"}}>{count_benefit}</TableCell>
+                    <TableCell style={{width : "170px"}}>{count_benefit+ count_society}</TableCell>
+                    <TableCell style={{width : "170px"}}>{org_1}</TableCell>
+                    <TableCell style={{width : "170px"}}>{org_2}</TableCell>
+                    <TableCell style={{width : "170px"}}>{org_3}</TableCell>
+                    <TableCell style={{width : "170px"}}>{org_4}</TableCell>
+                    <TableCell style={{width : "170px"}}>{org_5}</TableCell>
+                    <TableCell style={{width : "170px"}}>{org_1+org_2+org_3+org_4+org_5}</TableCell>
                 </TableRow>
                 <TableRow>
                     <TableCell>인원(수)</TableCell>
@@ -93,6 +109,12 @@ const ParticipationType = ()=>{
                     <TableCell>{part_society}</TableCell>
                     <TableCell>{part_benefit}</TableCell>
                     <TableCell>{part_benefit+ part_society}</TableCell>
+                    <TableCell style={{width : "170px"}}>{org_part_1}</TableCell>
+                    <TableCell style={{width : "170px"}}>{org_part_2}</TableCell>
+                    <TableCell style={{width : "170px"}}>{org_part_3}</TableCell>
+                    <TableCell style={{width : "170px"}}>{org_part_4}</TableCell>
+                    <TableCell style={{width : "170px"}}>{org_part_5}</TableCell>
+                    <TableCell style={{width : "170px"}}>{org_part_1+org_part_2+org_part_3+org_part_4+org_part_5}</TableCell>
                 </TableRow>
             </TableBody>
         </Table>

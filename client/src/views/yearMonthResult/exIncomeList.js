@@ -15,6 +15,7 @@ const ExIncomeList = ()=>{
     const {expend, income, incomeTotal}= useSelector(s=> getState(s).exIncomeList)
     return <>
         <TableContainer style={{marginTop : "20px"}}>
+        <h3 className="tableTitle" style={{marginBottom:"0px"}}>지출및매출금액</h3>
             <Table className="report custom-table">
             <DynamicTableHead headerInfo={headerInfo}/>
                 <TableBody>

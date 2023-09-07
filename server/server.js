@@ -59,8 +59,6 @@ app.use(session({
 
 // 로그인 확인을 위한 미들웨어 함수
 function checkUserSession(req, res, next) {  
-    console.log("userInfo")
-    console.log(req.session)
     if (!req.session.userInfo) {    
         // userInfo가 비어있는 경우 로그인하지 않았음을 알리는 응답 전송
         res.json({invalidateSession: true});

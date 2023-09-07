@@ -3,7 +3,7 @@ import { FormControl, OutlinedInput, InputLabel } from '@mui/material';
 import { v4 as uuidv4 } from "uuid";
 
 const InputComponent = (props) => {
-    const { label, name, value, ...res} = props;
+    const { label, name, value, type ="text", ...res } = props;
 
     const id = useMemo(() => uuidv4(), []);
 
@@ -12,7 +12,7 @@ const InputComponent = (props) => {
             <InputLabel htmlFor={id}>{label}</InputLabel>
             <OutlinedInput
                 id={id}
-                type="text"
+                type={type}
                 name={name}
                 value={value}
                 label={label}

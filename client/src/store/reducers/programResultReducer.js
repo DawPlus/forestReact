@@ -69,10 +69,10 @@ const initialState = {
 
   searchResult  : {
     searchInfo : {
-        openday : "2021-04-07", 
-        endday : "2021-04-07",
-        effect : "program",
-        AGENCY : "상상지역아동센터",
+        openday : "", 
+        endday : "",
+        effect : "",
+       //AGENCY : "상상지역아동센터",
         keyword : [
           {type : "X", text : ""},
           {type : "X", text : ""},
@@ -192,7 +192,7 @@ export const {getState, reducer, actions} = createCustomSlice({
   
       // 예방서비스 효과평가
       getPreventList_SUCCESS : (state, {payload})=>{
-        console.log(payload);
+       
         const sortedData = payload.data.sort((a, b) => {
           if (a.NAME < b.NAME) return -1;
           if (a.NAME > b.NAME) return 1;

@@ -15,6 +15,7 @@ const ParticipationType = ()=>{
 
     return <>
         <TableContainer style={{marginTop : "20px"}}>
+            <h3 className="tableTitle" style={{marginBottom:"0px"}}>프로그램운영/만족도</h3>
             <Table className="report custom-table">
             <TableHead>
                 <TableRow>

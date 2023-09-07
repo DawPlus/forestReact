@@ -18,7 +18,7 @@ const initialState = {
         AGENCY:"",
         SEX:"미기재", // 성별
         AGE:"", // 연령
-        PTCPROGRAM:"",
+        PTCPROGRAM:"1",
         RESIDENCE:"미기재", // 거주지
         JOB:"",
         EVAL_DATE:"",

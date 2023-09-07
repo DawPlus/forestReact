@@ -5,8 +5,8 @@ const name ="yearMonthResult";
 
 const initialState = {
   type : "serviceInsertForm",
-  openday : "2020-01-01",
-  endday : "2023-07-07",
+  openday : "",
+  endday : "",
   partTypeList : {
     count_addict :"",
     count_adult :"",
@@ -38,6 +38,16 @@ const initialState = {
     part_old :"",
     part_society :"",
     part_teacher :"",
+    org_1 : "",
+    org_2 : "",
+    org_3 : "",
+    org_4 : "",
+    org_5 : "",
+    org_part_1 : "",
+    org_part_2 : "",
+    org_part_3 : "",
+    org_part_4 : "",
+    org_part_5 : "",
   },
   residenceList : [], 
   programOverview : {

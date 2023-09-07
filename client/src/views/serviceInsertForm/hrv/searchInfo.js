@@ -13,7 +13,7 @@ const SearchInfo = ()=>{
         
         AGENCY, // 기관명
         DATE, // 실시일자
-        EQUIPMENT , // 측정기구
+       // EQUIPMENT , // 측정기구
         PV, // 시점 (사전은 시작으로 변경됨)
         
     } = useSelector(s=> getState(s).searchInfo);
@@ -41,13 +41,12 @@ const SearchInfo = ()=>{
             <Grid item sm={2}>
                 <DatePicker label="실시일자" value={DATE} onChange={onDateChange} name="DATE"/>
             </Grid>
-            <Grid item sm={10}></Grid>
             <Grid item sm={2}>
                 <Input  label="기관명" value={AGENCY} name="AGENCY" onChange={onChange}/> 
             </Grid>
-            <Grid item sm={2}>
+            {/* <Grid item sm={2}>
             <Input  label="측정기구" value={EQUIPMENT} name="EQUIPMENT" onChange={onChange}/> 
-            </Grid>
+            </Grid> */}
             <Grid item sm={2}>
                 <Select options={item2}label="시점"value={PV} name="PV" onChange={onChange} />
             </Grid>

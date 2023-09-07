@@ -1,4 +1,4 @@
-import React from "react";
+import React , {useState}from "react";
 import MainCard from 'ui-component/cards/MainCard';
 import Button from '@mui/material/Button';
 import PrintIcon from '@mui/icons-material/Print';
@@ -15,6 +15,8 @@ import SerList  from "./serList";
 import ProgramEffect  from "./programEffect";
 import ExIncomeList  from "./exIncomeList";
 import {PrintSection } from "ui-component/printButton"
+import callApi from "utils/callApi";
+import Swal from "sweetalert2";
 
 // import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
@@ -27,10 +29,26 @@ const YearMonthResult = ()=>{
 
     useEffect(()=>{
         
+        return ()=>{
+            dispatch(actions.initState())
+        }
     },[])
 
 
+
+    const [isCloseMineCount, setIsMineCloseCount] = useState(0);
+
     const onSearch = ()=>{
+        if([openday, endday].includes("")){
+            Swal.fire({
+                icon: 'warning',
+                title: '확인',
+                text: "조회조건을 확인해 주십시오",
+                });
+            return;
+        }
+
+
         // 참가유형
         dispatch(actions.getPartTypeList({ openday, endday }));
         // 지역 목록
@@ -45,6 +63,11 @@ const YearMonthResult = ()=>{
         dispatch(actions.getProgramEffect({ openday, endday }));
         // 수입지출
         dispatch(actions.getExIncomeList({ openday, endday }));
+
+        callApi("/yearMonthResult/getIsCloseMine", {openday, endday}).then(r=> setIsMineCloseCount(r.data.CNT))
+        
+
+
     }
 
 
@@ -109,16 +132,21 @@ const YearMonthResult = ()=>{
             <div style={{textAlign: "right", fontSize: "12px"}}>
                 {`기간 : ${openday} ~ ${endday}`}
             </div>
+            <h3 className="tableTitle" style={{marginTop:"0px"}}>참가유형</h3>
             <ParticipationType/>
-            <ResidenceList/>
+            <ResidenceList isCloseMineCount={isCloseMineCount}/>
             <ProgramOverview/>
             {/* 프로그램윤영 */}
+            
             <ProgramManage/>
             {/* 시설만족도 */}
+            
             <SerList/>
             {/* 효과성분석 */}
+            
             <ProgramEffect/>
             {/* 수입지출 */}
+            
             <ExIncomeList/>
         </PrintSection>
         </MainCard>

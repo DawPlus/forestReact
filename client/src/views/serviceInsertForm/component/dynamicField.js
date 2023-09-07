@@ -4,6 +4,8 @@ import { TextField, TableCell } from '@mui/material';
 
 import Select from "ui-component/select"
 import NumberInput from "ui-component/inputs/numberInput2"
+import SNumberInput from "ui-component/inputs/sNumberInput"
+import ENumberInput from "ui-component/inputs/eNumberInput"
 
 const DynamicField = ({ type, label, name, onChange, value, idx }) => {
 
@@ -70,6 +72,14 @@ const DynamicField = ({ type, label, name, onChange, value, idx }) => {
     }else if(type ==="jumin"){
         return <TableCell>
                 <NumberInput  label={label} value={value} name={name} onChange={onChange(idx)} maxLength={6}style={{minWidth: "100px"}}/>
+            </TableCell>
+    }else if(type ==="sNumber"){
+        return <TableCell>
+                <SNumberInput  label={label} value={value} name={name} onChange={onChange(idx)} maxLength={1}style={{minWidth: "100px"}}/>
+            </TableCell>
+    }else if(type ==="eNumber"){
+        return <TableCell>
+                <ENumberInput  label={label} value={value} name={name} onChange={onChange(idx)} maxLength={1}style={{minWidth: "100px"}}/>
             </TableCell>
     }else {
         return <TableCell>

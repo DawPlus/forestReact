@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Grid} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+
 import MainCard from 'ui-component/cards/MainCard';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -20,9 +20,9 @@ import CardHeader from '@mui/material/CardHeader';
 import Avatar from '@mui/material/Avatar';
 
 
-
 import { blue } from '@mui/material/colors';
-import  { client } from 'utils/callApi';
+import  callApi, { client } from 'utils/callApi';
+import { Grid } from '@mui/material';
 
 
 const items = [
@@ -52,6 +52,8 @@ const useStyles = makeStyles({
 });
 
 const Member = () => {
+  
+
   const classes = useStyles();
   const dispatch = useDispatch();
   const userMng = useSelector(s=>getState(s).userMng);
@@ -60,7 +62,8 @@ const Member = () => {
     displayName,
     user_id, 
     user_name, 
-    //user_pwd,
+    user_pwd,
+    user_pwd_check,
     value, 
   } = userMng.detail; 
 
@@ -89,6 +92,7 @@ const Member = () => {
         detail : {
           ...userMng.detail,
           ...row,
+          user_pwd_check : row.user_pwd,
           displayName : row.user_name,
         }
       }
@@ -129,6 +133,12 @@ const Member = () => {
         Swal.fire({ title: `확인`, text: `사용자를 선택해 주십시오` , icon: 'warning', })
         return;
       }
+      if(user_pwd !== user_pwd_check){
+        Swal.fire({ title: `확인`, text: `비밀번호를 확인해 주십시오.(확인과 다릅니다.)` , icon: 'warning' })
+        return;
+      }
+
+
 
       Swal.fire({
         title: `[${user_name}] 사용자 정보변경`,
@@ -163,6 +173,12 @@ const Member = () => {
 
   // 회원 삭제
   const onDelete = ()=>{
+
+        if(!user_name){
+          Swal.fire({ title: `확인`, text: `사용자를 선택해 주십시오` , icon: 'warning', })
+          return;
+        }
+
         // 관리자 삭제 불가 
         if(value === "3"){
           Swal.fire({ title: `관리자 삭제 `, text: `관리자는 삭제 할 수 없습니다. ` , icon: 'error'});
@@ -197,7 +213,37 @@ const Member = () => {
               })
           }
       })
+  }
 
+  const onReset = ()=>{
+    if(!user_name){
+      Swal.fire({ title: `확인`, text: `사용자를 선택해 주십시오` , icon: 'warning', })
+      return;
+    }
+
+
+    Swal.fire({
+      title: `[${user_name}] 비밀번호 초기화 `,
+      text: `비밀번호를 초기화 하시겠습니까? ` ,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#767676',
+      confirmButtonText: '확인',
+      cancelButtonText: '취소'
+  }).then((result) => {
+  
+      if(result.isConfirmed){
+            callApi("/management/resetPassword", {user_id}).then(({data})=>{
+              if(data.result){
+                Swal.fire({ title: `확인`, text: `비밀번호가 초기화 되었습니다. ` , icon: 'success'}).then(()=>{
+                  dispatch(actions.getRegUser());
+                })
+              }
+            })
+          
+      }
+  })
   }
 
   return (
@@ -249,7 +295,12 @@ const Member = () => {
                 <Grid item md={12}>
                   <Input name="user_name" label="이름"  value={user_name} onChange={onChange}/>  
                 </Grid>
-                <Grid item md={12}></Grid>
+                <Grid item md={12}>
+                  <Input name="user_pwd"  type="password" label="비밀번호"   value={user_pwd} onChange={onChange}/>  
+                </Grid>
+                <Grid item md={12}>
+                  <Input name="user_pwd_check"  type="password" label="확인"   value={user_pwd_check} onChange={onChange}/>  
+                </Grid>
                 
             </Grid>
             
@@ -261,6 +312,7 @@ const Member = () => {
           <CardActions style={{paddingLeft : "35px"}}>
             <Button variant="contained" color="primary" onClick={onSave} >변경사항저장</Button>
             <Button variant="contained" color="inherit" onClick={onDelete} >회원삭제</Button>
+            <Button variant="contained" color="inherit" onClick={onReset} >비밀번호초기화</Button>
           </CardActions>
         </Card>
 

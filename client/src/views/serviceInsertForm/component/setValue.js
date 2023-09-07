@@ -67,9 +67,11 @@ const SetValueComponent = (props)=>{
     }
     const [agencyItem, setAgencyItem] = useState([])
     const [agency, setAgency] = useState("");
+    
     React.useEffect(()=>{
         callApi("/userTemp/agencyList").then(({data})=> {
-            setAgencyItem(data.map(i=> i.agency))
+            
+            setAgencyItem(data.map(i=> ({label : `${i.agency} [${i.openday}]`,  value : `${i.agency}/${i.openday}`})))
         });
     },[])
 
@@ -109,10 +111,10 @@ const SetValueComponent = (props)=>{
                     </Grid>
                 </Grid>
                 <Grid item md={2}>
-                    <Select label="기관명" options={agencyItem} value={agency} onChange={(e)=>setAgency(e.target.value)}/>
+                    <SelectItems label="기관명" items={agencyItem} value={agency} onChange={(e)=>setAgency(e.target.value)}/>
                 </Grid>
                 <Grid item md={2}>
-                    <Button variant="contained" size="small" color="primary" onClick={onGetTempData} style={{marginLeft : "5px"}}>입력사용자 불러오기</Button>
+                    <Button variant="contained" size="small" color="primary" onClick={onGetTempData} style={{marginLeft : "5px"}}>참가자명단 불러오기</Button>
                 </Grid>
             </Grid>
         </div>

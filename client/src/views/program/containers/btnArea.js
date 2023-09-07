@@ -2,11 +2,11 @@ import React  from "react";
 // project imports
 import callApi from "utils/callApi";
 import {Grid, Button,} from '@mui/material';
-import {  useSelector } from "react-redux";
-import { getState } from "store/reducers/programReducer";
+import {  useDispatch, useSelector } from "react-redux";
+
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
-
+import { getState , actions} from "store/reducers/programReducer";
 const columnNames = {
     OPENDAY : "참여시작일",
     AGENCY : "단체명",
@@ -41,6 +41,8 @@ const columnNames = {
 };
 
 const InsertOperateResult = ()=>{
+
+    const dispatch = useDispatch();
 
     const navigate = useNavigate();
 
@@ -80,9 +82,7 @@ const InsertOperateResult = ()=>{
     //저장
     const onSave = ()=>{
 
-
-
-        const excludeList = ["BASIC_INFO_SEQ", "SUPPORT", "INCOME_TYPE", "REG_ID", "DAYS_TO_STAY", "PROGRESS_STATE", "PROGRAM_IN_OUT", "ISCLOSEMINE"];
+        const excludeList = ["BASIC_INFO_SEQ", "SUPPORT", "INCOME_TYPE", "REG_ID", "DAYS_TO_STAY", "PROGRESS_STATE", "PROGRAM_IN_OUT", "ISCLOSEMINE", "PROGRAM_OPINION","SERVICE_OPINION",  "OVERALL_OPINION"];
         // 기본값 체크 
         const result = checkEmptyColumns(data, excludeList, columnNames);
         
@@ -160,10 +160,10 @@ const InsertOperateResult = ()=>{
                 Swal.fire({
                     icon: 'success',
                     title: '확인',
-                    text: "정상등록 되었습니다. 만족도효과평가 입력으로 이동합니다.",
+                    text: "임시저장되었습니다.",
                     }).then(()=>{
-                        navigate("/serviceInsertForm")
-
+                        //navigate("/serviceInsertForm")
+                        dispatch(actions.getTempList());
                     });  
             }
         })

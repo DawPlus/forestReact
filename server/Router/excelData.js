@@ -138,25 +138,70 @@ router.post('/programList', (req, res)=>{
         let sheet2 = results[1]; // the result from the second query
         let sheet3 = results[2]; // the result from the second query
         let sheet4 = results[3]; // the result from the second query
-        sheet4 = sheet4.map((i,idx)=> ({
-            idx : idx + 1, 
-            TEACHER : i.TEACHER, 
-            PROGRAM_NAME : i.PROGRAM_NAME,
-            CNT : i.CNT,
-            avg_score1 : i.avg_score1,
-            avg_score2 : i.avg_score2,
-            avg_score3 : i.avg_score3,
-            avg_avg1  : (i.avg_score1+ i.avg_score2 + i.avg_score3)/3,
-            avg_score4 : i.avg_score4,
-            avg_score5 : i.avg_score5,
-            avg_score6 : i.avg_score6,
-            avg_avg2  : (i.avg_score4+ i.avg_score5 + i.avg_score6)/3,
-            avg_score7 : i.avg_score7,
-            avg_score8 : i.avg_score8,
-            avg_score9 : i.avg_score9,
-            avg_avg3  : (i.avg_score7+ i.avg_score8 + i.avg_score9)/3,
-            total_avg : (i.avg_score1 + i.avg_score2+ i.avg_score3+ i.avg_score4+ i.avg_score5+ i.avg_score6+ i.avg_score7+ i.avg_score8+ i.avg_score9)/9
-        }))
+        sheet4 = sheet4.map((i, idx) => {
+            const avgScore1 = i.avg_score1 !== null && i.avg_score1 !== 0 ? Number(i.avg_score1) : 0;
+            const avgScore2 = i.avg_score2 !== null && i.avg_score2 !== 0 ? Number(i.avg_score2) : 0;
+            const avgScore3 = i.avg_score3 !== null && i.avg_score3 !== 0 ? Number(i.avg_score3) : 0;
+            const avgScore4 = i.avg_score4 !== null && i.avg_score4 !== 0 ? Number(i.avg_score4) : 0;
+            const avgScore5 = i.avg_score5 !== null && i.avg_score5 !== 0 ? Number(i.avg_score5) : 0;
+            const avgScore6 = i.avg_score6 !== null && i.avg_score6 !== 0 ? Number(i.avg_score6) : 0;
+            const avgScore7 = i.avg_score7 !== null && i.avg_score7 !== 0 ? Number(i.avg_score7) : 0;
+            const avgScore8 = i.avg_score8 !== null && i.avg_score8 !== 0 ? Number(i.avg_score8) : 0;
+            const avgScore9 = i.avg_score9 !== null && i.avg_score9 !== 0 ? Number(i.avg_score9) : 0;
+        
+            const avg1Sum = avgScore1 + avgScore2 + avgScore3;
+            const avg2Sum = avgScore4 + avgScore5 + avgScore6;
+            const avg3Sum = avgScore7 + avgScore8 + avgScore9;
+        
+            let avg_avg1, avg_avg2, avg_avg3, total_avg;
+        
+            if (avg1Sum !== 0) {
+                avg_avg1 = (avg1Sum / 3).toFixed(2);
+            } else {
+                avg_avg1 = 'N/A';
+            }
+        
+            if (avg2Sum !== 0) {
+                avg_avg2 = (avg2Sum / 3).toFixed(2);
+            } else {
+                avg_avg2 = 'N/A';
+            }
+        
+            if (avg3Sum !== 0) {
+                avg_avg3 = (avg3Sum / 3).toFixed(2);
+            } else {
+                avg_avg3 = 'N/A';
+            }
+        
+            const totalSum = avg1Sum + avg2Sum + avg3Sum;
+        
+            if (totalSum !== 0) {
+                total_avg = (totalSum / 9).toFixed(2);
+            } else {
+                total_avg = 'N/A';
+            }
+        
+            return {
+                idx: idx + 1,
+                TEACHER: i.TEACHER,
+                PROGRAM_NAME: i.PROGRAM_NAME,
+                CNT: i.CNT,
+                avg_score1: i.avg_score1,
+                avg_score2: i.avg_score2,
+                avg_score3: i.avg_score3,
+                avg_avg1,
+                avg_score4: i.avg_score4,
+                avg_score5: i.avg_score5,
+                avg_score6: i.avg_score6,
+                avg_avg2,
+                avg_score7: i.avg_score7,
+                avg_score8: i.avg_score8,
+                avg_score9: i.avg_score9,
+                avg_avg3,
+                total_avg,
+            };
+        });
+        
 
 
         res.json({

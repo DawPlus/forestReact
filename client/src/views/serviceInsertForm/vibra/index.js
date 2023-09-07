@@ -55,7 +55,7 @@ const Service = ()=>{
     const downloadExcel = useDownloadExcel({headerInfo, cellData, wscols,merges,  filename  : title});
 
     const onSave = ()=>{
-        const hasEmptyValues = Object.values(searchInfo).some(value => !value);
+        const hasEmptyValues = Object.keys(searchInfo).some(key => key !== 'EQUIPMENT' && !searchInfo[key]);
         if (hasEmptyValues) {
             Swal.fire({
                 icon: 'warning',

@@ -24,11 +24,9 @@ const Service = ()=>{
 
     const {rows, deleteRow, searchInfo, type} = useSelector(s=> getState(s));
     
-   
-   
     
     const headerInfo = [
-        [ '이름', '성별', '연령', '거주지', '직업', '과거상담/치유서비스 경험', 
+        [ '이름', '성별', '연령', '거주지', '직업', '스트레스해소 및 힐링 서비스 경험', 
             '중독특징이해',
             '중독특징이해',
             '중독특징이해',
@@ -93,7 +91,8 @@ const Service = ()=>{
     const downloadExcel = useDownloadExcel({headerInfo, cellData, wscols,merges,  filename  : title});
 
     const onSave = ()=>{
-        const hasEmptyValues = Object.values(searchInfo).some(value => !value);
+        const hasEmptyValues = Object.keys(searchInfo).some(key => key !== 'PTCPROGRAM' && !searchInfo[key]);
+
         if (hasEmptyValues) {
             Swal.fire({
                 icon: 'warning',

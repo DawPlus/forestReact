@@ -28,7 +28,7 @@ const Service = ()=>{
    
     
     const headerInfo = [
-        [ '이름', '성별', '연령', '거주지', '직업', '과거상담/치유서비스 경험', 
+        [ '이름', '성별', '연령', '거주지', '직업', '스트레스해소 및 힐링 서비스 경험', 
             '욕구충족',
             '욕구충족',
             '긍정정서',
@@ -118,7 +118,8 @@ const Service = ()=>{
     const downloadExcel = useDownloadExcel({headerInfo, cellData, wscols,merges,  filename  : title});
 
     const onSave = ()=>{
-        const hasEmptyValues = Object.values(searchInfo).some(value => !value);
+        const hasEmptyValues = Object.keys(searchInfo).some(key => key !== 'PTCPROGRAM' && !searchInfo[key]);
+
         if (hasEmptyValues) {
             Swal.fire({
                 icon: 'warning',
@@ -127,7 +128,7 @@ const Service = ()=>{
                 })
             return;
         } 
-        const excludeValues = ['HEALING_SEQ', 'chk']; // 비어있는지 체크에서 제외하고 싶은 값들
+        // const excludeValues = ['HEALING_SEQ', 'chk']; // 비어있는지 체크에서 제외하고 싶은 값들
 
         
     // const isCheck = rows.some((row) => {

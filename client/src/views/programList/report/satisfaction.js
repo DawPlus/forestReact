@@ -46,7 +46,7 @@ const ProgramSatisfaction = ()=>{
                         <TableCell className="table-header" align="center" rowSpan={2}>프로그램명</TableCell>
                         <TableCell className="table-header" align="center" rowSpan={2}>분야</TableCell>
                         <TableCell className="table-header" align="center" rowSpan={2}>강사명</TableCell>
-                        <TableCell className="table-header" align="center" rowSpan={2}>구분</TableCell>
+                        <TableCell className="table-header" align="center" rowSpan={2}>참여구분</TableCell>
                         <TableCell className="table-header" align="center" colSpan={4}>강사</TableCell>
                         <TableCell className="table-header" align="center" colSpan={4}>내용구성</TableCell>
                         <TableCell className="table-header" align="center" colSpan={4}>효과성</TableCell>

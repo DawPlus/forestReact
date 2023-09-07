@@ -4,8 +4,7 @@ import { getState } from "store/reducers/searchProgramReducer";
 import { useSelector } from "react-redux";
 
 
-const headerInfo =     
-['구분', '산림교육', '예방교육', '산림치유', '아트','릴렉싱','에너제틱', '쿠킹', '이벤트', '합계'];
+const headerInfo = ['구분', '산림교육', '예방교육', '산림치유', '아트','릴렉싱','에너제틱', '쿠킹', '이벤트', '합계'];
 
 
 const ParticipationType = ()=>{
@@ -15,6 +14,7 @@ const ParticipationType = ()=>{
 
     return <>
         <TableContainer style={{marginTop : "20px"}}>
+        <h3 className="tableTitle" style={{marginBottom:"0px"}}>프로그램운영/만족도</h3>
             <Table className="report custom-table">
             <TableHead>
                 <TableRow>
@@ -52,7 +52,7 @@ const ParticipationType = ()=>{
                                 <TableCell>{data.에너제틱}</TableCell>
                                 <TableCell>{data.쿠킹}</TableCell>
                                 <TableCell>{data.이벤트}</TableCell>
-                                <TableCell>{data.합계}</TableCell>
+                                <TableCell>{isNaN(data.합계)  ? 0  : data.합계}</TableCell>
                             </TableRow>
                         ))}
                         

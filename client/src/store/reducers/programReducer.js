@@ -263,7 +263,6 @@ export const {getState, reducer, actions} = createCustomSlice({
 
     getProgramMngList_SUCCESS :(state, {payload : {data}})=>{
       state.programMngList = data;
-   
     },
 
     

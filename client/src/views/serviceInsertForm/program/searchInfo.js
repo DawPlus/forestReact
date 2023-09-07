@@ -14,7 +14,7 @@ const SearchInfo = ()=>{
         OPENDAY,
         AGENCY,
         EVAL_DATE,
-        PTCPROGRAM,
+       // PTCPROGRAM,
         PROGRAM_NAME,
         TEACHER,
         PLACE,
@@ -38,10 +38,10 @@ const SearchInfo = ()=>{
     }
 
 
-    const bunyaItem = programList.map(i=> i.bunya)
+    const bunyaItem = [... new Set(programList.map(i=> i.bunya))]
     const programItem = programList.map(i=> i.bunya === BUNYA  ? i.name  : null).filter(o=> o)
 
-    const item = [ "당일형", "1박2일형", "2박3일형", ]
+    //const item = [ "당일형", "1박2일형", "2박3일형", ]
     // const item2 = [ '산림교육', '예방교육', '산림치유', '아트', '릴렉싱', '에너제틱', '쿠킹', '이벤트' ]
 
 
@@ -64,9 +64,9 @@ const SearchInfo = ()=>{
             <Grid item sm={2}>
                 <Select options={programItem} label="프로그램명" name="PROGRAM_NAME" value={PROGRAM_NAME}onChange={onChange}/>
             </Grid>
-            <Grid item sm={2}>
+            {/* <Grid item sm={2}>
                 <Select options={item}label="참여일정"value={PTCPROGRAM} name="PTCPROGRAM" onChange={onChange} />
-            </Grid>
+            </Grid> */}
             <Grid item sm={2}>
                 <SelectItems items={teacherItem} label="강사명" name="TEACHER" value={TEACHER}onChange={onChange}/>
             </Grid>

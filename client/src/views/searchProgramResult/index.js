@@ -16,6 +16,8 @@ import ParticipationType from "./participationType";
 import ResidenceList from "./residenceList"
 import SerList from "./serList"
 import ProgramEffect from "./programEffect"
+import { useEffect } from "react";
+import callApi from "utils/callApi";
 
 
 const keywordItem = [
@@ -28,7 +30,9 @@ const keywordItem = [
     { value : "BIZ_PURPOSE" , label : "사업구분"},
     { value : "PART_TYPE" , label : "참가자유형"},
     { value : "AGE_TYPE" , label : "연령대"},
-    { value : "INCOME_TYPE" , label : "수입구분"},
+    { value : "PART_FORM" , label : "참여형태"},
+    { value : "ORG_NATURE" , label : "단체성격"},
+    // { value : "INCOME_TYPE" , label : "수입구분"},
     { value : "SERVICE_TYPE" , label : "서비스유형"},
 ]
 
@@ -38,7 +42,14 @@ const SearchPage = ()=>{
 
     const dispatch = useDispatch();
 
+    useEffect(()=>{
+        return ()=>{
+            dispatch(actions.initState())
+        }
+    },[])
 
+
+    const [isCloseMineCount, setIsMineCloseCount] = React.useState(0);
     const onSearch = ()=>{
         const isTextEmpty = keyword.every( i=> i.text === "");
         if(isTextEmpty){
@@ -54,6 +65,9 @@ const SearchPage = ()=>{
         dispatch(actions.programManage({ keyword, openday, endday }));
         dispatch(actions.getSerList({ keyword, openday, endday }));
         dispatch(actions.getProgramEffect({ keyword, openday, endday }));
+
+        callApi("/searchProgram/getIsCloseMine", {keyword, openday, endday}).then(r=> setIsMineCloseCount(r.data.CNT))
+
         // dispatch(actions.getAllPrograms({ keyword }));
     }
 
@@ -114,7 +128,7 @@ const SearchPage = ()=>{
                 </div>
                 <ParticipationType/>
                 {/* 지역 */}
-                <ResidenceList/>
+                <ResidenceList isCloseMineCount={isCloseMineCount}/>
                 {/* 프로그램운영 */}
                 <ProgramManage/>
                 {/* 시설만족도 */}

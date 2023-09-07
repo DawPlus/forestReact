@@ -52,7 +52,7 @@ const ProgramOperate = ()=>{
 
     return returnVal;
     },[PROGRAM_IN_OUT])
-console.log(programList)
+
     
     return <>
         <TableContainer style={{marginTop : "20px"}}>

@@ -40,6 +40,7 @@ router.post("/login", (req,res)=>{
         
         
     const encPassword = encrypt(password);
+    console.log(encPassword)
 
     maria(sql, [id, encPassword])
     .then((rows) => {

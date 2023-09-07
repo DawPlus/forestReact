@@ -15,52 +15,53 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
 import DatePicker from "ui-component/inputs/datePicker";
-import {  Input, SelectItems, NumberInput} from "ui-component/inputs";
+import {  Input, SelectItems} from "ui-component/inputs";
 
 import UserInfo from "./userinfos";
+import callApi from "utils/callApi";
 
-const sexItems = [
-    {label  :"남", value : "남"},
-    {label  :"여", value : "여"},
-    {label  :"미기재", value : "미기재"},
-]
-const residenceItems = [
-    {label : "서울", value : "서울"},
-    {label : "부산", value : "부산"},
-    {label : "대구", value : "대구"},
-    {label : "인천", value : "인천"},
-    {label : "광주", value : "광주"},
-    {label : "대전", value : "대전"},
-    {label : "울산", value : "울산"},
-    {label : "세종", value : "세종"},
-    {label : "경기", value : "경기"},
-    {label : "강원", value : "강원"},
-    {label : "충북", value : "충북"},
-    {label : "충남", value : "충남"},
-    {label : "전북", value : "전북"},
-    {label : "전남", value : "전남"},
-    {label : "경북", value : "경북"},
-    {label : "경남", value : "경남"},
-    {label : "제주", value : "제주"},
-    {label : "미기재", value : "미기재"}
-]
-const jobItem = [
-    {label : "학생", value : "학생"},
-    {label : "자영업", value : "자영업"},
-    {label : "서비스직", value : "서비스직"},
-    {label : "판매영업직", value : "판매영업직"},
-    {label : "기능", value : "기능"},
-    {label : "단순노무직", value : "단순노무직"},
-    {label : "고위공직/임직원", value : "고위공직/임직원"},
-    {label : "임직원", value : "임직원"},
-    {label : "전문직", value : "전문직"},
-    {label : "일반사무직", value : "일반사무직"},
-    {label : "농림어업축산직", value : "농림어업축산직"},
-    {label : "주부", value : "주부"},
-    {label : "무직", value : "무직"},
-    {label : "기타", value : "기타"},
-    {label : "미기재", value : "미기재"},
-]
+// const sexItems = [
+//     {label  :"남", value : "남"},
+//     {label  :"여", value : "여"},
+//     {label  :"미기재", value : "미기재"},
+// ]
+// const residenceItems = [
+//     {label : "서울", value : "서울"},
+//     {label : "부산", value : "부산"},
+//     {label : "대구", value : "대구"},
+//     {label : "인천", value : "인천"},
+//     {label : "광주", value : "광주"},
+//     {label : "대전", value : "대전"},
+//     {label : "울산", value : "울산"},
+//     {label : "세종", value : "세종"},
+//     {label : "경기", value : "경기"},
+//     {label : "강원", value : "강원"},
+//     {label : "충북", value : "충북"},
+//     {label : "충남", value : "충남"},
+//     {label : "전북", value : "전북"},
+//     {label : "전남", value : "전남"},
+//     {label : "경북", value : "경북"},
+//     {label : "경남", value : "경남"},
+//     {label : "제주", value : "제주"},
+//     {label : "미기재", value : "미기재"}
+// ]
+// const jobItem = [
+//     {label : "학생", value : "학생"},
+//     {label : "자영업", value : "자영업"},
+//     {label : "서비스직", value : "서비스직"},
+//     {label : "판매영업직", value : "판매영업직"},
+//     {label : "기능", value : "기능"},
+//     {label : "단순노무직", value : "단순노무직"},
+//     {label : "고위공직/임직원", value : "고위공직/임직원"},
+//     {label : "임직원", value : "임직원"},
+//     {label : "전문직", value : "전문직"},
+//     {label : "일반사무직", value : "일반사무직"},
+//     {label : "농림어업축산직", value : "농림어업축산직"},
+//     {label : "주부", value : "주부"},
+//     {label : "무직", value : "무직"},
+//     {label : "기타", value : "기타"},
+//     {label : "미기재", value : "미기재"},
+// ]
 const UserTemp = ()=>{
     
     
@@ -101,9 +102,17 @@ const UserTemp = ()=>{
             cancelButtonText : "취소"
         }).then((result) => {    
             if (result.isConfirmed) {
-                api.createUserTemp({data : userTemp, agency, openday}).then(r=> {
-                    dispatch(actions.getUserTemp());
+                api.createUserTemp({data : userTemp, agency, openday}).then(r=>    Swal.fire({
+                    icon: 'success',
+                    title: '확인',
+                    text: `정상 등록 되었습니다. ` ,
+                })).then(r=> {
+                    dispatch(actions.getUserTemp({agency: agencySelect, openday: opendaySelect}))
+
                 })
+                // api.createUserTemp({data : userTemp, agency, openday}).then(r=> {
+                    
+                // })
                 
             } 
         })
@@ -111,27 +120,18 @@ const UserTemp = ()=>{
 
     }
 
-    const onNumberChange = index => (key, value)=>{
-        dispatch(actions.onChangeUserTemp({ index, key, value }))
-    }
-
-    const onChange= index =>  e=> {
-        const key = e.target.name;
-        const value = e.target.value;        
-        dispatch(actions.onChangeUserTemp({ index, key, value }))
-    }   
     // 추가 
     const onAdd = ()=>{
         dispatch(actions.onUserTempAddRow())
     }
     // 삭제
-    const removeRow = (d)=>{
-        if(userTemp.length ===1){
-            Swal.fire({ icon: 'warning', title: '삭제확인', text: `모든 Row를 삭제할수 없습니다.` , confirmButtonText: '확인', })
-            return;
-        }
-        dispatch(actions.onUserTempRemoveRow(d))
-    }
+    // const removeRow = (d)=>{
+    //     if(userTemp.length ===1){
+    //         Swal.fire({ icon: 'warning', title: '삭제확인', text: `모든 Row를 삭제할수 없습니다.` , confirmButtonText: '확인', })
+    //         return;
+    //     }
+    //     dispatch(actions.onUserTempRemoveRow(d))
+    // }
 
     const setRowData = ()=>{
         Swal.fire({
@@ -182,11 +182,57 @@ const UserTemp = ()=>{
 
 
         dispatch(actions.getUserTemp({agency: agencySelect, openday: opendaySelect}))
+    }
 
+
+    const onDelete = ()=>{
+        setAgency(a=> agencySelect);
+        setOpenday(a=> opendaySelect);
+        
+        if([agencySelect, opendaySelect].includes("")){
+            Swal.fire({
+                icon: 'warning',
+                title: '확인',
+                text: `[기관, 시작일] 을 선택해 주십시오` ,
+                confirmButtonText: '확인',
+            });
+            return;
+        }
+
+
+
+        Swal.fire({
+            icon: 'warning',
+            title: '삭제',
+            text: `해당 기관의 참가자정보를 삭제 하시겠습니까?` ,
+            showCancelButton: true,
+            confirmButtonText: '확인',
+            cancelButtonText : "취소"
+        }).then((result) => {    
+            if (result.isConfirmed) {  
+                callApi("/userTemp/delete", {agency : agencySelect, openday : opendaySelect}).then(r=> 
+                    Swal.fire({
+                        icon: 'success',
+                        title: '확인',
+                        text: `삭제 되었습니다. ` 
+                    })
+                ).then(r=>{
+                    setAgency(r=> "");
+                    setOpenday(r=> "");
+                    setAgencySelect(r=> "");
+                    setOpendaySelect(r=> "");
+                    dispatch(actions.initUserTemp());
+                    dispatch(actions.getUserTempAgency());
+
+                })
+            } 
+        })
 
 
 
     }
+
+
 
     return (<>
             <MainCard>
@@ -198,7 +244,8 @@ const UserTemp = ()=>{
                         <DatePicker label="시작일"name="openday" value={opendaySelect} onChange={(_, value)=>setOpendaySelect(value)}/>
                     </Grid>
                     <Grid item md={4}>
-                        <Button variant="contained" size="small" color="primary" onClick={onSearch} >조회</Button>
+                        <Button variant="contained" size="small" color="primary" onClick={onSearch} style={{marginRight : "10px"}} >조회</Button>
+                        <Button variant="contained" size="small" color="error" onClick={onDelete} >삭제</Button>
                     </Grid>
                 
                 </Grid>
@@ -231,40 +278,14 @@ const UserTemp = ()=>{
                                 <TableCell className="table-header" align="center">연령</TableCell>
                                 <TableCell className="table-header" align="center">거주지</TableCell>
                                 <TableCell className="table-header" align="center">직업</TableCell>
-                                <TableCell className="table-header" align="center">주민번호</TableCell>
+                                {/* <TableCell className="table-header" align="center">주민번호</TableCell> */}
                                 <TableCell className="table-header" align="center">삭제</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                         
                         {userTemp.map((i, index)=>
-                            <UserInfo key={i.idx} data={i} index={index} onChange={onChange} onNumberChange={onNumberChange} removeRow={removeRow}/>
-                            // <TableRow key={i.idx}>
-                            //     <TableCell >
-                            //         <Input label="ID" value={i.id} name="id" onChange={onChange(index)}/> 
-                            //     </TableCell>
-                            //     <TableCell >
-                            //         <Input label="이름" value={i.name} name="name" onChange={onChange(index)}/> 
-                            //     </TableCell>
-                            //     <TableCell >
-                            //         <SelectItems items={sexItems} label="성별" value={i.sex} name="sex" onChange={onChange(index)}/>
-                            //     </TableCell>
-                            //     <TableCell >
-                            //         <NumberInput label="연령" value={i.age} name="age" onChange={onNumberChange(index)}/> 
-                            //     </TableCell>
-                            //     <TableCell >
-                            //         <SelectItems items={residenceItems} label="거주지" value={i.residence} name="residence" onChange={onChange(index)}/>
-                            //     </TableCell>
-                            //     <TableCell >
-                            //         <SelectItems items={jobItem} label="직업" value={i.job} name="job" onChange={onChange(index)}/>
-                            //     </TableCell>
-                            //     <TableCell >
-                            //         <NumberInput label="주민번호앞자리" value={i.jumin} maxLength={6} name="jumin" onChange={onNumberChange(index)}/> 
-                            //     </TableCell>
-                            //     <TableCell align="center">
-                            //         <Button variant="contained" size="small" color="primary" onClick={()=>removeRow(i.idx)}>삭제</Button>
-                            //     </TableCell>
-                            // </TableRow>
+                            <UserInfo key={i.idx} data={i} index={index}/>
                         )}
                         </TableBody>
                     </Table>

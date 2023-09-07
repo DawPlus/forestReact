@@ -40,6 +40,19 @@ const initialState = {
         part_old :"",
         part_society :"",
         part_teacher :"",
+
+        org_1 :"",
+        org_2 :"",
+        org_3 :"",
+        org_4 :"",
+        org_5 :"",
+        
+        org_part_1 :"",
+        org_part_2 :"",
+        org_part_3 :"",
+        org_part_4 :"",
+        org_part_5 :"",
+        
     },
     programOverview : {
         people: [],
@@ -235,15 +248,23 @@ export const {getState, reducer, actions} = createCustomSlice({
             // 합계를 계산하는 함수를 만듭니다.
             function calculateTotal(obj) {
                 let sum = 0;
-                let notnull =0;
-                for(let key in obj) {
-                    if(key !== 'type') {
-                    sum += obj[key] ;
-                    obj[key] >0 && notnull++ ;
+                let notnull = 0;
+                for (let key in obj) {
+                    if (key !== 'type') {
+                        const value = obj[key];
+                        if (!isNaN(value)) { // Check if the value is NaN
+                            sum += value;
+                            value > 0 && notnull++;
+                        } else {
+                            // Replace NaN with 0
+                            sum += 0;
+                            notnull++;
+                        }
                     }
                 }
                 return parseFloat((sum / notnull).toFixed(2));
             }
+            
             // 각 객체에 '합계' 항목을 추가합니다.
             result2.forEach(row => {
                 row['합계'] = calculateTotal(row);

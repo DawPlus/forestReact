@@ -36,7 +36,7 @@ const MyDatePicker = (props) => {
     
 
 
-    console.log(value);
+    
     return (
         <DatePicker
         selected={value ? moment(value, format).toDate() : null}

@@ -14,9 +14,11 @@ const teacherMng = require("./teacherMng")
 const userTemp = require("./userTemp")
 const programTable = require("./programTable")
 const excelData = require("./excelData")
+const test = require("./test")
 
 //router.use(login);
 router.use("/program", program);
+router.use("/test", test);
 
 
 

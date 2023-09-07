@@ -1,15 +1,14 @@
 import React from "react";
 
-import { Button, Grid} from '@mui/material';
-import Table from '@mui/material/Table';
-import TableContainer from '@mui/material/TableContainer';
+import { Button,} from '@mui/material';
+
 import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
+
 import TableRow from '@mui/material/TableRow';
-import TableBody from '@mui/material/TableBody';
-import DatePicker from "ui-component/inputs/datePicker";
+import {actions} from "store/reducers/managementReducer"
 import {  Input, SelectItems, NumberInput} from "ui-component/inputs";
 
+import { useDispatch } from "react-redux";
 
 const sexItems = [
     {label  :"남", value : "남"},
@@ -53,14 +52,31 @@ const jobItem = [
     {label : "기타", value : "기타"},
     {label : "미기재", value : "미기재"},
 ]
-const userInfos = (props)=>{
+const UserInfos = (props)=>{
+    const dispatch = useDispatch();
     const {
         data,
         index, 
-        onChange,
-        onNumberChange,
-        removeRow
+       // onChange,
+       // onNumberChange,
+       // removeRow
     } = props;
+
+
+
+    const onChange= index =>  e=> {
+        const key = e.target.name;
+        const value = e.target.value;        
+        dispatch(actions.onChangeUserTemp({ index, key, value }))
+    }   
+    const onNumberChange = index => (key, value)=>{
+        dispatch(actions.onChangeUserTemp({ index, key, value }))
+    }
+
+ // 삭제
+    const removeRow = (d)=>{
+        dispatch(actions.onUserTempRemoveRow(d))
+    }
 
     const {
         id,
@@ -70,7 +86,7 @@ const userInfos = (props)=>{
         age,
         residence,
         job,
-        jumin,
+        //jumin,
     } = data;
     return (<>
     <           TableRow>
@@ -92,9 +108,9 @@ const userInfos = (props)=>{
                     <TableCell >
                         <SelectItems items={jobItem} label="직업" value={job} name="job" onChange={onChange(index)}/>
                     </TableCell>
-                    <TableCell >
+                    {/* <TableCell >
                         <NumberInput label="주민번호앞자리" value={jumin} maxLength={6} name="jumin" onChange={onNumberChange(index)}/> 
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell align="center">
                         <Button variant="contained" size="small" color="primary" onClick={()=>removeRow(idx)}>삭제</Button>
                     </TableCell>
@@ -103,4 +119,4 @@ const userInfos = (props)=>{
     </>);
 
 }
-export default React.memo(userInfos);
+export default React.memo(UserInfos);

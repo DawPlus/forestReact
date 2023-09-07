@@ -73,7 +73,7 @@ const ReportContainer = ()=>{
             {/* 소감 */}
             <Remark/>
             {/* 지출금액 */}
-            <Expense/>
+            {/* <Expense/> */}
             {/* 수입금액 */}
             <Income/>
 

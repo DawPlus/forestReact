@@ -29,9 +29,8 @@ const Service = ()=>{
     const {rows, deleteRow, searchInfo, type} = useSelector(s=> getState(s));
     
     const headerInfo = [
-        [ '성별', '연령', '거주지', '직업', '참여구분', '강사', '강사', '강사', '구성/품질', '구성/품질', '구성/품질', '효과성', '효과성', '효과성', '기타의견' , '시작일자' , '기관명' , '실시일자' , '참여일정' , '프로그램명' , '강사명' , '장소' , '분야' ],
-        [ '', '', '', '', '', '문항1', '문항2', '문항3', '문항4', '문항5', '문항6', '문항7', '문항8', '문항9', '',
-            '' , '' , '' , '' , '' , '' , '' , '' ]
+        [ '성별', '연령', '거주지', '직업', '참여구분', '강사', '강사', '강사', '구성/품질', '구성/품질', '구성/품질', '효과성', '효과성', '효과성', '시작일자' , '기관명' , '실시일자' , '프로그램명' , '강사명' , '장소' , '분야' ],
+        [ '', '', '', '', '', '문항1', '문항2', '문항3', '문항4', '문항5', '문항6', '문항7', '문항8', '문항9', '' , '' , '' , '' , '' , '' , ''  ]
     ]
 
     const cellData = rows.map((i,idx) => Object.values({
@@ -49,11 +48,11 @@ const Service = ()=>{
         SCORE7 : i.SCORE7,
         SCORE8 : i.SCORE8,
         SCORE9 : i.SCORE9,
-        ETC_OPINION : i.ETC_OPINION,
+       // ETC_OPINION : i.ETC_OPINION,
         OPENDAY : i.OPENDAY,
         AGENCY : i.AGENCY,
         EVAL_DATE : i.EVAL_DATE,
-        PTCPROGRAM : i.PTCPROGRAM,
+       // PTCPROGRAM : i.PTCPROGRAM,
         PROGRAM_NAME : i.PROGRAM_NAME,
         TEACHER : i.TEACHER,
         PLACE : i.PLACE,
@@ -67,7 +66,8 @@ const Service = ()=>{
     const downloadExcel = useDownloadExcel({headerInfo, cellData, wscols,merges,  filename  : "프로그램 만족도 "});
 
     const onSave = ()=>{
-        const hasEmptyValues = Object.values(searchInfo).some(value => !value);
+        const hasEmptyValues = Object.keys(searchInfo).some(key => key !== 'PTCPROGRAM' && !searchInfo[key]);
+
         if (hasEmptyValues) {
             Swal.fire({
                 icon: 'warning',

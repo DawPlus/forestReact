@@ -34,7 +34,7 @@ const MoneyTable = (props)=>{
 
 
     const onChange = (e)=>{
-        console.log(e.target.name, e.target.value)
+      
         setPageInfo(s=>({
             ...s, 
             [e.target.name] : e.target.value

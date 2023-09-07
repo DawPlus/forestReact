@@ -17,6 +17,9 @@ const initUserTemp = {
   idx : "1",
 }
 
+const _initUserTemp = new Array(20).fill(null).map(i=> ({...initUserTemp, idx : v4()}))
+
+
 const initialState = {
     codeList : [],
     userMng : {
@@ -26,6 +29,7 @@ const initialState = {
         user_id : "", 
         user_name : "", 
         user_pwd : "",
+        user_pwd_check : "",
         value : "", 
       }
     },
@@ -60,9 +64,7 @@ const initialState = {
     }, 
 
     userTempAgency : [],
-    userTemp : [
-      initUserTemp
-    ]
+    userTemp : _initUserTemp
 
 
 
@@ -82,8 +84,8 @@ const action = {
 }
 
 const codNameList  =[
-  // {type : "SUPPORT", name : "지원사항"},
-  // {type : "INCOME_TYPE", name : "수입구분"},
+  {type : "SUPPORT", name : "단체성격"},
+  {type : "INCOME_TYPE", name : "참여형태"},
   {type : "PART_TYPE", name : "참가자유형"},
   {type : "BIZ_PURPOSE", name : "사업구분"},
   {type : "PROGRAM_IN_OUT", name : "프로그램"},
@@ -98,6 +100,10 @@ export const {getState, reducer, actions} = createCustomSlice({
     initialState,
     action, 
     reducers: {
+
+      initUserTemp : (state)=> {
+        state.userTemp = initialState.userTemp;
+      },
         getBaseInfoPage_SUCCESS : (state, {payload })=>{
             const codeList = Object.entries(payload.data).reduce((acc, [type, values]) => {
               if (type !== 'SEQ') {
@@ -115,6 +121,7 @@ export const {getState, reducer, actions} = createCustomSlice({
       // 등록사용자 조회 
       getRegUser_SUCCESS : (state, {payload})=>{
         state.userMng.rows = payload.data.map(i=> ({...i, chk : false}))
+        state.userMng.detail =initialState.userMng.detail;
       },
       onChangeUserDetailInfo : (state, {payload :{key, value}})=>{
         state.userMng.detail[key] = value;
@@ -167,8 +174,6 @@ export const {getState, reducer, actions} = createCustomSlice({
 
       // 입력유저관리 
       getUserTemp_SUCCESS :(state, {payload : {data}})=>{
-        console.log(data)
-        
         state.userTemp = data.length > 0 ? data.map(i=> ({...i, idx : v4()})) : initialState.userTemp
       },
       // 입력유저관리 
