@@ -274,32 +274,37 @@ router.post('/programManage', (req, res)=>{
     `;
     
     let sql2 = `
-            SELECT
-                bunya,
-                ROUND(sum(ps.SCORE1+ps.SCORE2+ps.SCORE3)/(count(Case WHEN ps.SCORE1 != 0 then 1 END)+count(CASE WHEN ps.SCORE2 !=0 then 1 END)+count(Case WHen ps.SCORE3 !=0 then 1 END)),2)as program,
-                ROUND(sum(ps.SCORE4+ps.SCORE5+ps.SCORE6)/(count(Case WHEN ps.SCORE4 != 0 then 1 END)+count(CASE WHEN ps.SCORE5 !=0 then 1 END)+count(Case WHen ps.SCORE6 !=0 then 1 END)),2)as content,
-                ROUND(sum(ps.SCORE7+ps.SCORE8+ps.SCORE9)/(count(Case WHEN ps.SCORE8 != 0 then 1 END)+count(CASE WHEN ps.SCORE7 !=0 then 1 END)+count(CASE WHEN ps.SCORE9 !=0 then 1 END)),2)as effect
-			FROM program_satisfaction ps
-            LEFT JOIN basic_info bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
-            WHERE bi.PROGRESS_STATE ="E"
+                SELECT
+                    bunya,
+                    ROUND(SUM(ps.SCORE1 + ps.SCORE2 + ps.SCORE3) / (COUNT(CASE WHEN ps.SCORE1 != 0 THEN 1 END) + COUNT(CASE WHEN ps.SCORE2 != 0 THEN 1 END) + COUNT(CASE WHEN ps.SCORE3 != 0 THEN 1 END)), 2) AS program,
+                    ROUND(SUM(ps.SCORE4 + ps.SCORE5 + ps.SCORE6) / (COUNT(CASE WHEN ps.SCORE4 != 0 THEN 1 END) + COUNT(CASE WHEN ps.SCORE5 != 0 THEN 1 END) + COUNT(CASE WHEN ps.SCORE6 != 0 THEN 1 END)), 2) AS content,
+                    ROUND(SUM(ps.SCORE7 + ps.SCORE8 + ps.SCORE9) / (COUNT(CASE WHEN ps.SCORE8 != 0 THEN 1 END) + COUNT(CASE WHEN ps.SCORE7 != 0 THEN 1 END) + COUNT(CASE WHEN ps.SCORE9 != 0 THEN 1 END)), 2) AS effect, 
+                    COUNT(*) AS cnt
+                FROM dbstatistics.program_satisfaction ps
+                LEFT JOIN dbstatistics.basic_info bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
+                WHERE bi.PROGRESS_STATE = "E"
                 ${openday ? `AND bi.OPENDAY BETWEEN ? AND ?` : ''} 
                 ${whereText}
 			group by bunya
     `;
+    
     const params = openday ? [openday, endday] : []; // 조건에 따라 파라미터 설정
 
     Promise.all([
         maria(sql, params),
         maria(sql2, params),
     
+    
     ])
     .then((results) => {
         let rows1 = results[0]; // the result from the first query
         let rows2 = results[1]; // the result from the second query
     
+    
         res.json({
             manage: rows1,
             bunya : rows2,
+            
             
         });
     })
@@ -436,7 +441,7 @@ router.post('/getIsCloseMine', (req, res)=>{
 router.post('/getResidenceList', (req, res)=>{
     const { keyword, openday, endday} = req.body;
     const whereText = keyword.filter(obj => obj.text !== '' && obj.type !== "X")
-                                .map(obj => `AND ${obj.type} LIKE '${obj.text}'`)
+                                .map(obj => `AND b.${obj.type} LIKE '${obj.text}'`)
                                 .join(' ');     
     let sql = `
         SELECT 
@@ -475,6 +480,7 @@ router.post('/getResidenceList', (req, res)=>{
         res.json(rows)
     })
     .catch((err) => {
+        console.log(err)
         res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
     });
 });

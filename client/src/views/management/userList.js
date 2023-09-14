@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import MainCard from 'ui-component/cards/MainCard';
 import Table from '@mui/material/Table';

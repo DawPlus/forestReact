@@ -81,7 +81,7 @@ router.post('/getResidenceList', (req, res)=>{
             basic_info AS b ON b.RESIDENCE = r.RESIDENCE AND b.PROGRESS_STATE = "E"
         WHERE 
             1 = 1
-            AND OPENDAY BETWEEN ? AND ?  AND AGENCY =?
+            AND b.OPENDAY BETWEEN ? AND ?  AND b.AGENCY =?
         GROUP BY 
             r.RESIDENCE;
     `;

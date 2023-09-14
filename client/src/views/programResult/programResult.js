@@ -1,7 +1,7 @@
 import React from "react";
 import { getState} from "store/reducers/programResultReducer"
 import {  useSelector } from "react-redux";
-import DynamicTable from "ui-component/DynamicTable";
+import DynamicTable from "ui-component/DynamicTableNoRow";
 
 const ProgramResult = ()=>{ 
 

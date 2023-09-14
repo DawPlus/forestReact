@@ -5,7 +5,7 @@ import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
 
 import DynamicTableHead from "ui-component/DynamicTableHead";
-import DynamicTableRow from "../component/dynamicTableRow";
+// import DynamicTableRow from "../component/dynamicTableRow";
 import SetValue from "../component/setValue";
 
 import TableCell from '@mui/material/TableCell';
@@ -95,9 +95,9 @@ const InsertForm = ()=>{
                             {fields.map((field) => {
                                 
                               //  console.log(field)
-                                if(field.name ==="SCORE9" && row["TYPE"] === "인솔자"){
+                                if(field.name ==="SCORE9" && row["TYPE"] === "참여자"){
                                     
-                                    return null;
+                                    return <TableCell style={{ textAlign: "center" }}> - </TableCell>;
                                 }
 
 

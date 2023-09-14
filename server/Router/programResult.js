@@ -79,9 +79,6 @@ router.post('/getSearchResult', (req, res)=>{
     const whereText = keyword.filter(obj => obj.text !== '' && obj.type !== "X")
                                 .map(obj => `AND ${obj.type} LIKE '${obj.text}'`)
                                 .join(' ');     
-    
-    
-
     // 1 : 프로그램 만족도 Program
     // 2 : 시설서비스환경 만족도
     // 3 : 상담&치유서비스 효과평가

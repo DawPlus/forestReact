@@ -218,7 +218,8 @@ export const {getState, reducer, actions} = createCustomSlice({
                 let result2 = [
                     {type: '강사'},
                     {type: '내용구성'},
-                    {type: '효과성'}
+                    {type: '효과성'},
+                    {type: '참여인원'}
                 ]
                     
                 
@@ -232,6 +233,7 @@ export const {getState, reducer, actions} = createCustomSlice({
                         result2[0][category] = item.program || 0;
                         result2[1][category] = item.content || 0;
                         result2[2][category] = item.effect || 0;
+                        result2[3][category] = item.cnt || 0;
                         sum += item.program + item.content + item.effect;
                     });
                     avg[category] = parseFloat((sum / (3 * filteredData.length)).toFixed(2));
@@ -239,6 +241,7 @@ export const {getState, reducer, actions} = createCustomSlice({
                     result2[0][category] = 0;
                     result2[1][category] = 0;
                     result2[2][category] = 0;
+                    result2[3][category] = 0;
                     avg[category] = 0;
                 }
             });
@@ -249,6 +252,9 @@ export const {getState, reducer, actions} = createCustomSlice({
             function calculateTotal(obj) {
                 let sum = 0;
                 let notnull = 0;
+
+
+
                 for (let key in obj) {
                     if (key !== 'type') {
                         const value = obj[key];
@@ -262,9 +268,14 @@ export const {getState, reducer, actions} = createCustomSlice({
                         }
                     }
                 }
+                
+
+                if(obj["type"] ==="참여인원"){
+                    return  sum;
+                }
+
                 return parseFloat((sum / notnull).toFixed(2));
             }
-            
             // 각 객체에 '합계' 항목을 추가합니다.
             result2.forEach(row => {
                 row['합계'] = calculateTotal(row);

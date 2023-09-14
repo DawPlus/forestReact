@@ -9,7 +9,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import { makeStyles } from "@mui/styles";
 import Paper from '@mui/material/Paper';
-import useDownloadExcel from "utils/useDownloadExcel";
+import {useAvgDownloadExcel} from "utils/useDownloadExcel";
 import Button from '@mui/material/Button';
 import { generateMergeInfo } from "utils/utils";
 import DynamicTableHead from "ui-component/DynamicTableHead";
@@ -158,7 +158,7 @@ const ProgramResult = ()=>{
         ["","","","차이값", (AVG1_A- AVG1).toFixed(2), (AVG2_A- AVG2).toFixed(2), (AVG3_A- AVG3).toFixed(2), (AVG4_A- AVG4).toFixed(2), (AVG5_A- AVG5).toFixed(2), (AVG6_A- AVG6).toFixed(2), (AVG7_A- AVG7).toFixed(2), (AVG8_A- AVG8).toFixed(2), (AVG9_A- AVG9).toFixed(2), (AVG10_A- AVG10).toFixed(2), (AVG11_A- AVG11).toFixed(2), (AVG12_A- AVG12).toFixed(2), (AVG13_A- AVG13).toFixed(2), (AVG14_A- AVG14).toFixed(2), (AVG15_A- AVG15).toFixed(2), (AVG16_A- AVG16).toFixed(2), (AVG17_A- AVG17).toFixed(2), (AVG18_A- AVG18).toFixed(2), (AVG19_A- AVG19).toFixed(2), (AVG20_A- AVG20).toFixed(2), (AVG21_A- AVG21).toFixed(2), (AVG22_A- AVG22).toFixed(2), "차이값", (SUMAVG1_A - SUMAVG1).toFixed(2), (SUMAVG2_A - SUMAVG2).toFixed(2), (SUMAVG3_A - SUMAVG3).toFixed(2), (SUMAVG4_A - SUMAVG4).toFixed(2), (SUMAVG5_A - SUMAVG5).toFixed(2), (SUMAVG6_A - SUMAVG6).toFixed(2), (SUMAVG7_A - SUMAVG7).toFixed(2)]
 ]
     
-    const downloadExcel = useDownloadExcel({headerInfo, cellData, avgData, merges, wscols, type : "type2"});
+    const downloadExcel = useAvgDownloadExcel({headerInfo, cellData, avgData, merges, wscols, type : "type2"});
 
     return <>
             <div style={{padding : "10px 0px", textAlign:"right"}}>
@@ -270,7 +270,7 @@ const ProgramResult = ()=>{
                             <TableCell className="table-result" align="center">{(SUMAVG6_A - SUMAVG6).toFixed(2)}</TableCell>
                             <TableCell className="table-result" align="center">{(SUMAVG7_A - SUMAVG7).toFixed(2)}</TableCell>
                         </TableRow>
-                        {rows.map((row, index) => {
+                        {/* {rows.map((row, index) => {
 
                             const cnt = index % 2;
 
@@ -347,7 +347,7 @@ const ProgramResult = ()=>{
                                     <TableCell className="table-cell" align="center">{row.sum7}</TableCell>                                                
                                 </TableRow>
                         })}
-                     
+                      */}
                     </TableBody>
                 </Table>
             </TableContainer>

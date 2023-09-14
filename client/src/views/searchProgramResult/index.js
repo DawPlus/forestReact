@@ -20,13 +20,70 @@ import { useEffect } from "react";
 import callApi from "utils/callApi";
 
 
+const itemObject = {
+    RESIDENCE : [
+        {label : "서울", value : "서울"},
+        {label : "부산", value : "부산"},
+        {label : "대구", value : "대구"},
+        {label : "인천", value : "인천"},
+        {label : "광주", value : "광주"},
+        {label : "대전", value : "대전"},
+        {label : "울산", value : "울산"},
+        {label : "세종", value : "세종"},
+        {label : "경기", value : "경기"},
+        {label : "강원", value : "강원"},
+        {label : "충북", value : "충북"},
+        {label : "충남", value : "충남"},
+        {label : "전북", value : "전북"},
+        {label : "전남", value : "전남"},
+        {label : "경북", value : "경북"},
+        {label : "경남", value : "경남"},
+        {label : "제주", value : "제주"},
+        {label : "미기재", value : "미기재"}
+    ],
+    BIZ_PURPOSE : [
+        {label  :"사회공헌", value : "사회공헌"},
+        {label  :"수익사업", value : "수익사업"},
+    ],
+    AGE_TYPE : [
+        {label  :"아동청소년", value : "아동청소년"},
+        {label  :"성인", value : "성인"},
+        {label  :"노인", value : "노인"},
+    ],
+    PART_FORM : [
+        {label  :"단체", value : "단체"},
+        {label  :"개인", value : "개인"},
+        {label  :"기타", value : "기타"},
+    ],
+    ORG_NATURE : [
+        {label  :"교육기관", value : "교육기관"},
+        {label  :"복지기관", value : "복지기관"},
+        {label  :"기업", value : "기업"},
+        {label  :"관공서", value : "관공서"},
+        {label  :"강원랜드", value : "강원랜드"},
+    ],
+    SERVICE_TYPE : [
+        {label  :"산림교육", value : "산림교육"},
+        {label  :"산림치유", value : "산림치유"},
+        {label  :"행위중독치유", value : "행위중독치유"},
+        {label  :"행위중독예방", value : "행위중독예방"},
+        {label  :"힐링", value : "힐링"},
+    ],
+    PART_TYPE : [
+        {label : "일반", value : "일반"},
+        {label : "가족", value : "가족"},
+        {label : "장애인", value : "장애인"},
+        {label : "다문화", value : "다문화"},
+    ]
+
+}
 const keywordItem = [
     { value : "X" , label : "해당없음"},
     { value : "AGENCY" , label : "기관명"},
     { value : "OM" , label : "OM"},
     { value : "DAYS_TO_STAY" , label : "체류기간"},
     { value : "RESIDENCE" , label : "거주지역"},
-    { value : "SUPPORT" , label : "지원사항"},
+    //{ value : "SUPPORT" , label : "지원사항"},
     { value : "BIZ_PURPOSE" , label : "사업구분"},
     { value : "PART_TYPE" , label : "참가자유형"},
     { value : "AGE_TYPE" , label : "연령대"},
@@ -106,7 +163,11 @@ const SearchPage = ()=>{
                                 <Select minWidth="50" value={i.type} label={`주제어${idx+1}`} name="type" items={keywordItem} onChange={onChangeKeyword(idx)}/>
                             </Grid>
                             <Grid item sm={6}>
-                                <TextField label="주제어" name="text" value={i.text} size="small" onChange={onChangeKeyword(idx)} variant="outlined" />
+                                {itemObject[i.type] ? 
+                                <Select value={i.text} label="주제어" name="text" items={itemObject[i.type]}onChange={onChangeKeyword(idx)}/>
+                                :<TextField label="주제어" name="text" value={i.text} size="small" onChange={onChangeKeyword(idx)} variant="outlined" />
+                            }
+                                
                             </Grid>
                         </Grid>
                     </Grid>

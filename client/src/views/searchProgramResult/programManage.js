@@ -36,11 +36,11 @@ const ParticipationType = ()=>{
                                 <TableCell>{data.에너제틱}</TableCell>
                                 <TableCell>{data.쿠킹}</TableCell>
                                 <TableCell>{data.이벤트}</TableCell>
-                                <TableCell>{data.합계}</TableCell>
+                                <TableCell>{isNaN(data.합계)  ? 0  : data.합계}</TableCell>
                             </TableRow>
                         ))}
                         
-                        {bunya.map((data, idx) => (
+                        {bunya.map((data, idx) => data.type !=="참여인원" &&
                             <TableRow key={idx}>                        
                                 {idx ===  0 ? <TableCell className="table-header" rowSpan={4}>프로그램<br/>만족도</TableCell> : null}
                                 <TableCell>{data.type}</TableCell>
@@ -53,9 +53,25 @@ const ParticipationType = ()=>{
                                 <TableCell>{data.쿠킹}</TableCell>
                                 <TableCell>{data.이벤트}</TableCell>
                                 <TableCell>{isNaN(data.합계)  ? 0  : data.합계}</TableCell>
-                            </TableRow>
-                        ))}
+                            </TableRow>           
+                        )}
                         
+                        {/* {bunya.map((data, idx) => data.type ==="참여인원" &&
+                            <TableRow key={idx}>                        
+                                <TableCell className="table-header" colSpan={2}>참여인원</TableCell>
+                                <TableCell>{data.산림교육}</TableCell>
+                                <TableCell>{data.예방교육}</TableCell>
+                                <TableCell>{data.산림치유}</TableCell>
+                                <TableCell>{data.아트}</TableCell>
+                                <TableCell>{data.릴렉싱}</TableCell>
+                                <TableCell>{data.에너제틱}</TableCell>
+                                <TableCell>{data.쿠킹}</TableCell>
+                                <TableCell>{data.이벤트}</TableCell>
+                                <TableCell>{isNaN(data.합계)  ? 0  : data.합계}</TableCell>
+                            </TableRow>
+                        )}
+                         */}
+
                     
                 </TableBody>
             </Table>
