@@ -105,7 +105,14 @@ const Service = ()=>{
         }).then((result) => {
             if(result.isConfirmed){
 
-                callApi("/insertForm/create", {data  , deleteRow, type}).then(r=> {
+                const params = {
+                    data, 
+                    date : searchInfo.DATE, 
+                    agency : searchInfo.AGENCY
+                }
+
+
+                callApi("/insertForm/createHrv", params).then(r=> {
                     if(r.data.result){
                         Swal.fire({
                             icon: 'success',

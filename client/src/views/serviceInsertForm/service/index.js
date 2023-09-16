@@ -37,7 +37,7 @@ const Service = (props)=>{
     },[])
 
 
-    const {rows, deleteRow, searchInfo} = useSelector(s=> getState(s));
+    const {rows,  searchInfo} = useSelector(s=> getState(s));
     
 
 
@@ -140,6 +140,9 @@ const Service = (props)=>{
         const data = rows.map(i=> ({...i, ...searchInfo}))
 
 
+
+
+
         Swal.fire({
             title: '서비스환경 만족도 등록',
             text: `${data.length}개의 항목을 등록 하시겠습니까? `,
@@ -152,7 +155,14 @@ const Service = (props)=>{
         }).then((result) => {
             if(result.isConfirmed){
 
-                callApi("/insertForm/serviceInsert", {data  , deleteRow}).then(r=> {
+                const params = {
+                        data, 
+                        agency  : searchInfo.AGENCY, 
+                        openday : searchInfo.OPENDAY, 
+                        eval_date : searchInfo.EVAL_DATE
+                }
+
+                callApi("/insertForm/serviceInsert", params).then(r=> {
                     if(r.data.result){
                         Swal.fire({
                             icon: 'success',

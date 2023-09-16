@@ -80,7 +80,7 @@ const SetValueComponent = (props)=>{
     return (<>
         <div style={{padding : "15px 5px"}}>
             <Grid container spacing={2}  direction="row" justifyContent="flex-start" alignItems="center">
-                <Grid item md={1}>
+                <Grid item md={2}>
                     <IconButton color="primary" onClick={onAdd}>
                         <AddIcon color="primary" />
                     </IconButton>
@@ -88,7 +88,7 @@ const SetValueComponent = (props)=>{
                         <RemoveIcon color="primary" />
                     </IconButton>
                 </Grid>
-                <Grid item md={7}>
+                <Grid item md={6}>
                     <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={2} >
                         <Grid item md={2}>
                             <SelectItems label="항목" value={setType} items={items} onChange={onChangeSelectItem}/>

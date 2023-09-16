@@ -22,10 +22,7 @@ const Service = ()=>{
     },[])
 
 
-    const {rows, deleteRow, searchInfo, type} = useSelector(s=> getState(s));
-    
-   
-   
+    const {rows,  searchInfo, type} = useSelector(s=> getState(s));
     
     const headerInfo = [
         [ '이름', '성별', '연령', '거주지', '직업', '스트레스해소 및 힐링 서비스 경험', 
@@ -168,7 +165,15 @@ const Service = ()=>{
         }).then((result) => {
             if(result.isConfirmed){
 
-                callApi("/insertForm/create", {data  , deleteRow, type}).then(r=> {
+
+                const params = {
+                    data, 
+                    agency : searchInfo.AGENCY,
+                    openday : searchInfo.OPENDAY,
+                    evaldate : searchInfo.EVAL_DATE 
+                }
+
+                callApi("/insertForm/createHealing", params).then(r=> {
                     if(r.data.result){
                         Swal.fire({
                             icon: 'success',

@@ -102,6 +102,7 @@ export const {getState, reducer, actions} = createCustomSlice({
     getPreviousServiceList_SUCCESS : (state, {payload  : {data}})=>{
       if(data.length === 0 ){
         Swal.fire({ icon: 'warning', title: '확인', text: "기존 입력된 데이터가 없습니다.", })
+        state.rows = initialState.rows;
       }else{
         Swal.fire({ icon: 'warning', title: '확인', text: "이전에 작성했던 데이터를 불러옵니다."});
         state.rows = data.map(i=> ({...i, idx : v4(), chk : false}));

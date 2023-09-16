@@ -22,7 +22,7 @@ const Service = ()=>{
     },[])
 
 
-    const {rows, deleteRow, searchInfo, type} = useSelector(s=> getState(s));
+    const {rows,  searchInfo, type} = useSelector(s=> getState(s));
     
     
     const headerInfo = [
@@ -142,7 +142,14 @@ const Service = ()=>{
         }).then((result) => {
             if(result.isConfirmed){
 
-                callApi("/insertForm/create", {data  , deleteRow, type}).then(r=> {
+
+                const params = {
+                    data, 
+                    agency : searchInfo.AGENCY,
+                    openday : searchInfo.OPENDAY, 
+                    evaldate : searchInfo.EVAL_DATE
+                }
+                callApi("/insertForm/createPrevent", params).then(r=> {
                     if(r.data.result){
                         Swal.fire({
                             icon: 'success',

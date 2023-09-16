@@ -5,6 +5,7 @@ import {actions, getState} from "store/reducers/programResultReducer"
 import { useDispatch, useSelector } from "react-redux";
 import MainCard from 'ui-component/cards/MainCard';
 
+
 import { Grid } from "@mui/material";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -19,6 +20,17 @@ import Healing from "./healing"
 
 
 import DatePicker from "ui-component/inputs/datePicker";
+import SelectItems from "ui-component/inputs/selectItems";
+
+
+const typeItems =  [
+    {label : "선택", value : ""},
+    {label : "인솔자", value : "인솔자"},
+    {label : "참여자", value : "참여자"},
+    {label : "미기재", value : "미기재"},
+]
+
+
 const AgencyList = ()=>{
     // Dispatch
     const dispatch = useDispatch();
@@ -57,7 +69,7 @@ const AgencyList = ()=>{
         }
         
         switch(type){
-            case "1" : dispatch(actions.getProgramResult({ type , agency , openday, endday}))
+            case "1" : dispatch(actions.getProgramResult({ type , agency , openday, endday, inType : searchType}))
                 break;
             case "2" : dispatch(actions.getFaciltyList({ type , agency, openday, endday }))
                 break;
@@ -80,6 +92,8 @@ const AgencyList = ()=>{
         setEndday(s=> "")
     }
 
+
+    const [searchType ,setSearchType] = useState("");
     return <>
         <MainCard>
             <Grid container spacing={2}   alignItems="center">
@@ -119,7 +133,10 @@ const AgencyList = ()=>{
                         }
                 </>}       
                 </Grid>
-                <Grid item sm={6}>
+                <Grid item sm={3}>
+                    {type === "1"  ? <SelectItems items={typeItems} label={"참여구분"} value={searchType} name={"name"} onChange={(e)=>setSearchType(e.target.value)} /> : null}
+                </Grid>
+                <Grid item sm={3}>
                     <div style={{textAlign:"right"}}>
                     
                         <Button variant="contained" size="small" color="primary" onClick={onReset} style={{marginRight : "10px"}} >초기화</Button>

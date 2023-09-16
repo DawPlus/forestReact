@@ -32,8 +32,8 @@ router.post('/getProgramAgency', (req, res)=>{
 
 // 만족도 / 효과평가 조회 
 router.post('/getProgramResult', (req, res) => {
-    const { type, agency, openday, endday } = req.body;
-
+    const { type, agency, openday, endday, inType } = req.body;
+    
     const conditions = [`AGENCY = ?`];
     const params = [agency];
 
@@ -46,6 +46,9 @@ router.post('/getProgramResult', (req, res) => {
     } else if (endday) {
         conditions.push(`OPENDAY <= ?`);
         params.push(endday);
+    }else if (inType && type === "1") {
+        conditions.push(`TYPE = ?`);
+        params.push(inType);
     }
 
     const conditionString = conditions.join(' AND ');
@@ -59,7 +62,6 @@ router.post('/getProgramResult', (req, res) => {
     ];
     const selectedSql = sql[type - 1];
     
-
     maria(selectedSql, params)
         .then((rows) => {
             res.json(rows);

@@ -22,7 +22,7 @@ const Service = ()=>{
     },[])
 
 
-    const {rows, deleteRow, searchInfo, type} = useSelector(s=> getState(s));
+    const {rows, searchInfo, type} = useSelector(s=> getState(s));
     const headerInfo = [
         [ '이름', '성별', '연령', '거주지', '직업', '스트레스해소 및 힐링 서비스 경험', 
         '변화동기', '변화동기', '신뢰(라포)', '신뢰(라포)', '신뢰(라포)', '서비스이해', '서비스이해', '조절실패', '조절실패', '조절실패', '현저성', '현저성', '현저성', '문제적결과', '문제적결과', '문제적결과', '문제적결과', '낮은자기조절력', '낮은자기조절력', '낮은자기조절력', '낮은자기조절력', '낮은자기조절력', '낮은자기조절력', '부정정서', '부정정서', '부정정서', '편향된신념', '편향된신념', '편향된신념', '역기능적자기도식', '역기능적자기도식', '역기능적자기도식', '역기능적자기도식', '역기능적자기도식', '역기능적자기도식', '대인관계기술부족', '대인관계기술부족', '대인관계기술부족', '대인민감성', '대인민감성', '대인민감성', '대인민감성', '관계/유능욕구충족', '관계/유능욕구충족', '긍정정서', '긍정정서', '긍정정서', '삶의만족', '삶의만족', '삶의만족', '자기이해', '자기이해', '자기이해', '자기이해', '자기수용', '자기수용', '자기수용', '마음관리기술/기회', '마음관리기술/기회', '마음관리기술/기회', '스마트폰활용역량', '스마트폰활용역량', ],
@@ -178,7 +178,15 @@ const Service = ()=>{
         }).then((result) => {
             if(result.isConfirmed){
 
-                callApi("/insertForm/create", {data  , deleteRow, type}).then(r=> {
+
+                const params = {
+                        data, 
+                        agency : searchInfo.AGENCY, 
+                        openday : searchInfo.OPENDAY, 
+                        evaldate  :searchInfo.EVAL_DATE,
+                }
+
+                callApi("/insertForm/createCounsel", params).then(r=> {
                     if(r.data.result){
                         Swal.fire({
                             icon: 'success',
@@ -205,23 +213,23 @@ const Service = ()=>{
             Swal.fire({ icon: 'warning', title: '조건확인', text: "조회조건을 입력해 주십시오", })
             return;
         }
-
-        Swal.fire({
-            icon: 'warning',
-            title: '확인',
-            text: "조회된 데이터는 수정만 가능합니다. ",
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#767676',
-            confirmButtonText: '확인',
-            cancelButtonText: '취소'
-            }).then((result)=>{
-                if(result.isConfirmed){
-                    dispatch(actions.getList({data : {
-                        AGENCY , OPENDAY , EVAL_DATE, PROGRAM_NAME
-                    }, type }));        
-                }
-            });  
+        dispatch(actions.getList({data : {
+            AGENCY , OPENDAY , EVAL_DATE, PROGRAM_NAME
+        }, type }));        
+        // Swal.fire({
+        //     icon: 'warning',
+        //     title: '확인',
+        //     text: "조회된 데이터는 수정만 가능합니다. ",
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#3085d6',
+        //     cancelButtonColor: '#767676',
+        //     confirmButtonText: '확인',
+        //     cancelButtonText: '취소'
+        //     }).then((result)=>{
+        //         if(result.isConfirmed){
+                   
+        //         }
+        //     });  
         
 
 

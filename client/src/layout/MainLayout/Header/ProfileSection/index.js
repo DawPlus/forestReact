@@ -203,12 +203,12 @@ const ProfileSection = () => {
 
 
 
-    // const onTest = ()=>{
-    //     callApi("/test/test").then((r)=>{
-    //         console.log(r)
+    const onTest = ()=>{
+        callApi("/test/test", {data : "kim990119"}).then((r)=>{
+            console.log(r)
 
-    //     });
-    // }
+        });
+    }
 
 
 
@@ -278,12 +278,12 @@ const ProfileSection = () => {
                                 <MainCard border={false} elevation={16} content={false} boxShadow shadow={theme.shadows[16]}>
                                         <Box sx={{ p: 2 }}>
                                             <List component="nav" sx={{ width: '100%', maxWidth: 350, minWidth: 300, backgroundColor: theme.palette.background.paper, borderRadius: '10px', [theme.breakpoints.down('md')]: { minWidth: '100%' }, '& .MuiListItemButton-root': { mt: 0.5 } }} >
-                                                {/* <ListItemButton sx={{ borderRadius: `${customization.borderRadius}px` }}  onClick={onTest} >
+                                                <ListItemButton sx={{ borderRadius: `${customization.borderRadius}px` }}  onClick={onTest} >
                                                     <ListItemIcon>
                                                         <IconBookDownload stroke={1.5} size="1.3rem" />
                                                     </ListItemIcon>
                                                     <ListItemText primary={<Typography variant="body2">테스트</Typography>} />
-                                                </ListItemButton> */}
+                                                </ListItemButton>
                                                 <ListItemButton sx={{ borderRadius: `${customization.borderRadius}px` }}  onClick={onDownLoad} >
                                                     <ListItemIcon>
                                                         <IconBookDownload stroke={1.5} size="1.3rem" />

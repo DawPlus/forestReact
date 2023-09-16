@@ -92,6 +92,8 @@ const initialState = {
         EVAL_DATE : "", // 실시일자
        // PTCPROGRAM  : "", // 참여일정
         PV : "", // 시점 (사전은 시작으로 변경됨)
+        SESSION1 :"", // 회기 시점
+        SESSION2 :"", // 회기 시점
     }
   
 };

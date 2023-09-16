@@ -66,16 +66,16 @@ const Service = ()=>{
     const downloadExcel = useDownloadExcel({headerInfo, cellData, wscols,merges,  filename  : "프로그램 만족도 "});
 
     const onSave = ()=>{
-        const hasEmptyValues = Object.keys(searchInfo).some(key => key !== 'PTCPROGRAM' && !searchInfo[key]);
+        // const hasEmptyValues = Object.keys(searchInfo).some(key => key !== 'PTCPROGRAM' && !searchInfo[key]);
 
-        if (hasEmptyValues) {
-            Swal.fire({
-                icon: 'warning',
-                title: '확인',
-                text: "기본정보를 모두 입력해 주십시오.",
-                })
-            return;
-        } 
+        // if (hasEmptyValues) {
+        //     Swal.fire({
+        //         icon: 'warning',
+        //         title: '확인',
+        //         text: "기본정보를 모두 입력해 주십시오.",
+        //         })
+        //     return;
+        // } 
         // const excludeValues = ['PROGRAM_SEQ', 'chk']; // 비어있는지 체크에서 제외하고 싶은 값들
 
         
@@ -115,8 +115,16 @@ const Service = ()=>{
             cancelButtonText: '취소'
         }).then((result) => {
             if(result.isConfirmed){
+                console.log(searchInfo)
+                const params =  {
+                    data , 
+                    openday :  searchInfo.OPENDAY, 
+                    agency : searchInfo.AGENCY, 
+                    evaldate : searchInfo.EVAL_DATE, 
+                    program_name : searchInfo.PROGRAM_NAME
+                }
 
-                callApi("/insertForm/create", {data  , deleteRow, type}).then(r=> {
+                callApi("/insertForm/createProgram",params).then(r=> {
                     if(r.data.result){
                         Swal.fire({
                             icon: 'success',

@@ -22,7 +22,7 @@ const Service = ()=>{
     },[])
 
 
-    const {rows, deleteRow, searchInfo, type} = useSelector(s=> getState(s));
+    const {rows,  searchInfo, type} = useSelector(s=> getState(s));
     const headerInfo = [
         ['ID', '이름', '주민등록번호', '성별', '연령', '적극공격성', '스트레스', '불안', '의심', '밸런스', '카리스마', '에너지', '자기조절', '억제','신경증'],
         [ '', '', '', '', '', '', '', '', '', '', '', '', '','', '', ]
@@ -104,8 +104,13 @@ const Service = ()=>{
             cancelButtonText: '취소'
         }).then((result) => {
             if(result.isConfirmed){
+                const params = {
+                    data, 
+                    date : searchInfo.DATE, 
+                    agency : searchInfo.AGENCY
+                }
 
-                callApi("/insertForm/create", {data  , deleteRow, type}).then(r=> {
+                callApi("/insertForm/createVibra",params).then(r=> {
                     if(r.data.result){
                         Swal.fire({
                             icon: 'success',

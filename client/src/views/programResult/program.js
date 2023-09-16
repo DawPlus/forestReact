@@ -62,8 +62,8 @@ const Program = ()=>{
     
 
     const headerInfo = [
-        ['ID', '프로그램명', '강사명', '장소', '강사', '강사', '강사', '구성/품질', '구성/품질', '구성/품질', '효과성', '효과성', '효과성', '기타의견', '평균', '평균', '평균'],
-        ['', '', '', '', '문항1', '문항2', '문항3', '문항4', '문항5', '문항6', '문항7', '문항8', '문항9', '', '강사', '구성품질', '효과성']
+        ['ID', '프로그램명', '강사명', '장소',"참여구분", '강사', '강사', '강사', '구성/품질', '구성/품질', '구성/품질', '효과성', '효과성', '효과성', '평균', '평균', '평균'],
+        ['', '', '', '','', '문항1', '문항2', '문항3', '문항4', '문항5', '문항6', '문항7', '문항8', '문항9', '강사', '구성품질', '효과성']
     ]
     const merges = generateMergeInfo(headerInfo);
     const cellData = programResult.map((item,idx) => Object.values({
@@ -71,6 +71,7 @@ const Program = ()=>{
         PROGRAM_NAME: item.PROGRAM_NAME,
         TEACHER: item.TEACHER,
         PLACE: item.PLACE,
+        TYPE: item.TYPE,
         SCORE1: item.SCORE1,
         SCORE2: item.SCORE2,
         SCORE3: item.SCORE3,
@@ -80,13 +81,13 @@ const Program = ()=>{
         SCORE7: item.SCORE7,
         SCORE8: item.SCORE8,
         SCORE9: item.SCORE9,
-        ETC_OPINION: item.ETC_OPINION,
+       // ETC_OPINION: item.ETC_OPINION,
         sum1: item.sum1,
         sum2: item.sum2,
         sum3: item.sum3,
     }));
 
-    const avgData = [ "", "", "", "통계", AVG1, AVG2, AVG3, AVG4, AVG5, AVG6, AVG7, AVG8, AVG9, "-", AVG10, AVG11, AVG12]
+    const avgData = [ "", "", "","","통계", AVG1, AVG2, AVG3, AVG4, AVG5, AVG6, AVG7, AVG8, AVG9,  AVG10, AVG11, AVG12]
 
     var wscols = [ {wch:8}, {wch:25}, {wch:15}, {wch:17}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:15}, {wch:10}, {wch:15}, {wch:10}];        
     
@@ -106,10 +107,11 @@ const Program = ()=>{
                             <TableCell className="table-header" rowSpan={2} align="center">프로그램명</TableCell>
                             <TableCell className="table-header" rowSpan={2} align="center">강사명</TableCell>
                             <TableCell className="table-header" rowSpan={2} align="center">장소</TableCell>
+                            <TableCell className="table-header" rowSpan={2} align="center">참여구분</TableCell>
                             <TableCell className="table-header" colSpan={3} align="center">강사</TableCell>
                             <TableCell className="table-header" colSpan={3} align="center">구성/품질</TableCell>
                             <TableCell className="table-header" colSpan={3} align="center">효과성</TableCell>
-                            <TableCell className="table-header" rowSpan={2} align="center">기타의견</TableCell>
+                            {/* <TableCell className="table-header" rowSpan={2} align="center">기타의견</TableCell> */}
                             <TableCell className="table-header" colSpan={3} align="center">평균</TableCell>
                         </TableRow>
                         <TableRow>
@@ -130,7 +132,7 @@ const Program = ()=>{
                         
                     <TableBody>
                         <TableRow>
-                                <TableCell className="table-result" align="center" colSpan={4}>통계</TableCell>
+                                <TableCell className="table-result" align="center" colSpan={5}>통계</TableCell>
                                 <TableCell className="table-result" align="center">{AVG1}</TableCell>
                                 <TableCell className="table-result" align="center">{AVG2}</TableCell>
                                 <TableCell className="table-result" align="center">{AVG3}</TableCell>
@@ -140,7 +142,7 @@ const Program = ()=>{
                                 <TableCell className="table-result" align="center">{AVG7}</TableCell>
                                 <TableCell className="table-result" align="center">{AVG8}</TableCell>
                                 <TableCell className="table-result" align="center">{AVG9}</TableCell>
-                                <TableCell className="table-result" align="center">-</TableCell>
+                                {/* <TableCell className="table-result" align="center">-</TableCell> */}
                                 <TableCell className="table-result" align="center">{AVG10}</TableCell>
                                 <TableCell className="table-result" align="center">{AVG11}</TableCell>
                                 <TableCell className="table-result" align="center">{AVG12}</TableCell>
@@ -152,6 +154,7 @@ const Program = ()=>{
                                 <TableCell className="table-cell" align="center">{row.PROGRAM_NAME}</TableCell>
                                 <TableCell className="table-cell" align="center">{row.TEACHER}</TableCell>
                                 <TableCell className="table-cell" align="center">{row.PLACE}</TableCell>
+                                <TableCell className="table-cell" align="center">{row.TYPE}</TableCell>
                                 <TableCell className="table-cell" align="center">{row.SCORE1}</TableCell>
                                 <TableCell className="table-cell" align="center">{row.SCORE2}</TableCell>
                                 <TableCell className="table-cell" align="center">{row.SCORE3}</TableCell>
@@ -161,7 +164,7 @@ const Program = ()=>{
                                 <TableCell className="table-cell" align="center">{row.SCORE7}</TableCell>
                                 <TableCell className="table-cell" align="center">{row.SCORE8}</TableCell>
                                 <TableCell className="table-cell" align="center">{row.SCORE9}</TableCell>
-                                <TableCell className="table-cell" align="center">{row.ETC_OPINION}</TableCell>
+                                {/* <TableCell className="table-cell" align="center">{row.ETC_OPINION}</TableCell> */}
                                 <TableCell className="table-cell" align="center">{row.sum1}</TableCell>
                                 <TableCell className="table-cell" align="center">{row.sum2}</TableCell>
                                 <TableCell className="table-cell" align="center">{row.sum3}</TableCell>

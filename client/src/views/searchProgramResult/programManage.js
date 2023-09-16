@@ -56,7 +56,7 @@ const ParticipationType = ()=>{
                             </TableRow>           
                         )}
                         
-                        {/* {bunya.map((data, idx) => data.type ==="참여인원" &&
+                        {bunya.map((data, idx) => data.type ==="참여인원" &&
                             <TableRow key={idx}>                        
                                 <TableCell className="table-header" colSpan={2}>참여인원</TableCell>
                                 <TableCell>{data.산림교육}</TableCell>
@@ -70,7 +70,7 @@ const ParticipationType = ()=>{
                                 <TableCell>{isNaN(data.합계)  ? 0  : data.합계}</TableCell>
                             </TableRow>
                         )}
-                         */}
+                        
 
                     
                 </TableBody>
