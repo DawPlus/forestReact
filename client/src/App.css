@@ -169,3 +169,10 @@
   text-align: center;
 }
 .MuiOutlinedInput-notchedOutline{ border-radius: 3px;}
+
+
+
+.customTextArea  .Mui-readOnly { 
+  background:  #FFF;
+
+}

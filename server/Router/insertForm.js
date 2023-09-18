@@ -195,10 +195,15 @@ router.post('/createCounsel', (req, res)=>{
 
     try{
         const rows = data.map(item => {
-            const values = fields.map(field =>  typeof item[field] === 'number' ? item[field] || null : `'${item[field] || ''}'`);
+            const values = fields.map(field => {
+                const fieldValue = item[field] !== undefined && item[field] !== null ? item[field] : '';
+                if (fieldValue === 0) {
+                return 0;
+                }
+                return typeof fieldValue === 'string' ? `'${fieldValue}'` : fieldValue;
+            });
             return `(${values.join(', ')})`;
         });
-
 
     const mergedString = fields.join(",")
 
@@ -230,7 +235,13 @@ router.post('/createPrevent', (req, res)=>{
 
     try{
         const rows = data.map(item => {
-            const values = fields.map(field =>  typeof item[field] === 'number' ? item[field] || null : `'${item[field] || ''}'`);
+            const values = fields.map(field => {
+                const fieldValue = item[field] !== undefined && item[field] !== null ? item[field] : '';
+                if (fieldValue === 0) {
+                return 0;
+                }
+                return typeof fieldValue === 'string' ? `'${fieldValue}'` : fieldValue;
+            });
             return `(${values.join(', ')})`;
         });
 
@@ -264,11 +275,29 @@ router.post('/createHealing', (req, res)=>{
     const {fields, table} = dbTable["healing_service"];
 
     try{
-        const rows = data.map(item => {
-            const values = fields.map(field =>  typeof item[field] === 'number' ? item[field] || null : `'${item[field] || ''}'`);
-            return `(${values.join(', ')})`;
+        // const rows = data.map(item => {
+        //     const values = fields.map(field => {
+        //       if (typeof item[field] === 'number') {
+        //         return item[field] === 0 ? 0 : '';
+        //       } else {
+        //         const fieldValue = item[field] || ''; // null 또는 빈 문자열로 설정
+        //         return isNaN(fieldValue) ? `'${fieldValue}'` : fieldValue;
+        //       }
+        //     });
+        //     return `(${values.join(', ')})`;
+        //   });
+          
+    const rows = data.map(item => {
+        const values = fields.map(field => {
+            const fieldValue = item[field] !== undefined && item[field] !== null ? item[field] : '';
+            if (fieldValue === 0) {
+            return 0;
+            }
+            return typeof fieldValue === 'string' ? `'${fieldValue}'` : fieldValue;
         });
-
+        return `(${values.join(', ')})`;
+    });
+          
 
     const mergedString = fields.join(",")
 
@@ -300,10 +329,15 @@ router.post('/createHrv', (req, res)=>{
 
     try{
         const rows = data.map(item => {
-            const values = fields.map(field =>  typeof item[field] === 'number' ? item[field] || null : `'${item[field] || ''}'`);
+            const values = fields.map(field => {
+                const fieldValue = item[field] !== undefined && item[field] !== null ? item[field] : '';
+                if (fieldValue === 0) {
+                return 0;
+                }
+                return typeof fieldValue === 'string' ? `'${fieldValue}'` : fieldValue;
+            });
             return `(${values.join(', ')})`;
         });
-
 
     const mergedString = fields.join(",")
 
@@ -335,7 +369,13 @@ router.post('/createVibra', (req, res)=>{
 
     try{
         const rows = data.map(item => {
-            const values = fields.map(field =>  typeof item[field] === 'number' ? item[field] || null : `'${item[field] || ''}'`);
+            const values = fields.map(field => {
+                const fieldValue = item[field] !== undefined && item[field] !== null ? item[field] : '';
+                if (fieldValue === 0) {
+                return 0;
+                }
+                return typeof fieldValue === 'string' ? `'${fieldValue}'` : fieldValue;
+            });
             return `(${values.join(', ')})`;
         });
 

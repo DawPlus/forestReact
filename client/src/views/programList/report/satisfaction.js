@@ -98,12 +98,12 @@ const ProgramSatisfaction = ()=>{
                     : null}
                     {programSaf.map((i, key)=>
                     <TableRow key={key}>
-                        {/* {key %2 === 0 ? <TableCell rowSpan={2}>{i.PROGRAM_NAME}</TableCell> :null}
+                        {key %2 === 0 ? <TableCell rowSpan={2}>{i.PROGRAM_NAME}</TableCell> :null}
                         {key %2 === 0 ? <TableCell rowSpan={2}>{i.BUNYA}</TableCell> :null}
-                        {key %2 === 0 ? <TableCell rowSpan={2}>{i.TEACHER}</TableCell> :null}                         */}
-                        <TableCell >{i.PROGRAM_NAME}</TableCell> 
+                        {key %2 === 0 ? <TableCell rowSpan={2}>{i.TEACHER}</TableCell> :null}                        
+                        {/* <TableCell >{i.PROGRAM_NAME}</TableCell> 
                         <TableCell >{i.BUNYA}</TableCell> 
-                        <TableCell >{i.TEACHER}</TableCell> 
+                        <TableCell >{i.TEACHER}</TableCell>  */}
                         
                         <TableCell>{i.type}</TableCell>
                         <TableCell>{i.score1}</TableCell>

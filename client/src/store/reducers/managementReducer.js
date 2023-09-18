@@ -178,7 +178,8 @@ export const {getState, reducer, actions} = createCustomSlice({
       },
       // 입력유저관리 
       getUserTempAgency_SUCCESS :(state, {payload : {data}})=>{
-        state.userTempAgency = data;
+        state.userTempAgency = data; 
+        state.userTemp = initialState.userTemp;
       },
     
       onUserTempAddRow : (state)=>{

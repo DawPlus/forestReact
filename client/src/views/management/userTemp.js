@@ -107,8 +107,13 @@ const UserTemp = ()=>{
                     title: '확인',
                     text: `정상 등록 되었습니다. ` ,
                 })).then(r=> {
-                    dispatch(actions.getUserTemp({agency: agencySelect, openday: opendaySelect}))
-
+                    //dispatch(actions.getUserTemp({agency: agencySelect, openday: opendaySelect}))
+                    setAgency(r=> "");
+                    setOpenday(r=> "");
+                    setAgencySelect(r=> "");
+                    setOpendaySelect(r=> "");
+                    dispatch(actions.initUserTemp());
+                    dispatch(actions.getUserTempAgency());
                 })
                 // api.createUserTemp({data : userTemp, agency, openday}).then(r=> {
                     
