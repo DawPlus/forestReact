@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getState, actions } from "store/reducers/serviceInsert/program";
 import {  Input, Select, DatePicker} from "ui-component/inputs";
 import SelectItems from "ui-component/inputs/selectItems";
-
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 const SearchInfo = ()=>{
 
 
@@ -24,9 +25,19 @@ const SearchInfo = ()=>{
   //  const programItem = useSelector(s=> getState(s).programItem);
     const programList = useSelector(s=> getState(s).programList);
     const teacherItem = useSelector(s=> getState(s).teacherItem);
-
+    const onChangeTeacher= (e,value)=>{
+        dispatch(actions.setSearchInfo({
+            key :'TEACHER', 
+            value : value
+        }))        
+        // setPageInfo(s=> ({
+        //     ...s, 
+        //     col2 : value
+        // }))
+    }
 
     const onChange = (e)=>{
+
         dispatch(actions.setSearchInfo({
             key : e.target.name, 
             value : e.target.value
@@ -68,7 +79,18 @@ const SearchInfo = ()=>{
                 <Select options={item}label="참여일정"value={PTCPROGRAM} name="PTCPROGRAM" onChange={onChange} />
             </Grid> */}
             <Grid item sm={2}>
-                <SelectItems items={teacherItem} label="강사명" name="TEACHER" value={TEACHER}onChange={onChange}/>
+                {/* <SelectItems items={teacherItem} label="강사명" name="TEACHER" value={TEACHER}onChange={onChange}/> */}
+                <Autocomplete
+                    size="small"
+                    value={TEACHER}
+                    disablePortal
+                    id="combo-box-demo"
+                    options={teacherItem}
+                    onInputChange={onChangeTeacher}
+                    fullWidth
+                    noOptionsText={"조회된 강사가 없습니다."}
+                    renderInput={(params) => <TextField {...params} label="강사" style={{height : "40px"}}/>}
+                />
             </Grid>
             <Grid item sm={2}>
                 <Input  label="장소" value={PLACE} name="PLACE" onChange={onChange}/> 

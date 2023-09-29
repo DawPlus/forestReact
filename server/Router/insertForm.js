@@ -189,7 +189,7 @@ router.post('/createProgram', (req, res)=>{
 // 상담치유
 router.post('/createCounsel', (req, res)=>{
     const {user_name} = req.session?.userInfo;
-    const {data, agency, openday, evaldate } = req.body;
+    const {data, agency, openday, evaldate, pv } = req.body;
 
     const {fields, table} = dbTable["counsel_service"];
 
@@ -209,11 +209,11 @@ router.post('/createCounsel', (req, res)=>{
 
     const insertQuery = `INSERT INTO ${table} (${mergedString}) VALUES ${rows}`;
    // deleteRows가 있는 경우에만 deleteQuery 실행
-    const deleteQuery = `DELETE FROM counsel_service WHERE AGENCY = ? AND OPENDAY = ? AND EVAL_DATE = ?`;
+    const deleteQuery = `DELETE FROM counsel_service WHERE AGENCY = ? AND OPENDAY = ? AND EVAL_DATE = ? AND PV = ? `;
 
     const regId = user_name;
 
-    maria(deleteQuery, [agency, openday, evaldate])
+    maria(deleteQuery, [agency, openday, evaldate, pv])
         .then(() =>  maria(insertQuery))
         .then(() => createHistory(regId, "상담/치유서비스 효과평가"))
         .then(() => res.json({ result: true }))
@@ -229,7 +229,7 @@ router.post('/createCounsel', (req, res)=>{
 // 예방서비스
 router.post('/createPrevent', (req, res)=>{
     const {user_name} = req.session?.userInfo;
-    const {data, agency, openday, evaldate } = req.body;
+    const {data, agency, openday, evaldate , pv} = req.body;
 
     const {fields, table} = dbTable["prevent_service"];
 
@@ -250,11 +250,11 @@ router.post('/createPrevent', (req, res)=>{
 
     const insertQuery = `INSERT INTO ${table} (${mergedString}) VALUES ${rows}`;
    // deleteRows가 있는 경우에만 deleteQuery 실행
-    const deleteQuery = `DELETE FROM prevent_service WHERE AGENCY = ? AND OPENDAY = ? AND EVAL_DATE = ?`;
+    const deleteQuery = `DELETE FROM prevent_service WHERE AGENCY = ? AND OPENDAY = ? AND EVAL_DATE = ? AND PV = ? `;
 
     const regId = user_name;
 
-    maria(deleteQuery, [agency, openday, evaldate])
+    maria(deleteQuery, [agency, openday, evaldate, pv])
         .then(() =>  maria(insertQuery))
         .then(() => createHistory(regId, "예방서비스 효과평가"))
         .then(() => res.json({ result: true }))
@@ -270,7 +270,7 @@ router.post('/createPrevent', (req, res)=>{
 // 힐링서비스
 router.post('/createHealing', (req, res)=>{
     const {user_name} = req.session?.userInfo;
-    const {data, agency, openday, evaldate } = req.body;
+    const {data, agency, openday, evaldate , pv} = req.body;
 
     const {fields, table} = dbTable["healing_service"];
 
@@ -303,11 +303,11 @@ router.post('/createHealing', (req, res)=>{
 
     const insertQuery = `INSERT INTO ${table} (${mergedString}) VALUES ${rows}`;
    // deleteRows가 있는 경우에만 deleteQuery 실행
-    const deleteQuery = `DELETE FROM healing_service WHERE AGENCY = ? AND OPENDAY = ? AND EVAL_DATE = ?`;
+    const deleteQuery = `DELETE FROM healing_service WHERE AGENCY = ? AND OPENDAY = ? AND EVAL_DATE = ? and PV = ? `;
 
     const regId = user_name;
 
-    maria(deleteQuery, [agency, openday, evaldate])
+    maria(deleteQuery, [agency, openday, evaldate, pv])
         .then(() =>  maria(insertQuery))
         .then(() => createHistory(regId, "힐링서비스 효과평가"))
         .then(() => res.json({ result: true }))
@@ -323,7 +323,7 @@ router.post('/createHealing', (req, res)=>{
 // HRV측정검사
 router.post('/createHrv', (req, res)=>{
     const {user_name} = req.session?.userInfo;
-    const {data, agency, date} = req.body;
+    const {data, agency, date, pv} = req.body;
 
     const {fields, table} = dbTable["hrv_service"];
 
@@ -343,11 +343,11 @@ router.post('/createHrv', (req, res)=>{
 
     const insertQuery = `INSERT INTO ${table} (${mergedString}) VALUES ${rows}`;
    // deleteRows가 있는 경우에만 deleteQuery 실행
-    const deleteQuery = `DELETE FROM hrv_service WHERE AGENCY = ? AND DATE = ?`;
+    const deleteQuery = `DELETE FROM hrv_service WHERE AGENCY = ? AND DATE = ? AND PV = ? `;
 
     const regId = user_name;
 
-    maria(deleteQuery, [agency, date])
+    maria(deleteQuery, [agency, date, pv])
         .then(() =>  maria(insertQuery))
         .then(() => createHistory(regId, "HRV 측정 검사"))
         .then(() => res.json({ result: true }))
@@ -363,7 +363,7 @@ router.post('/createHrv', (req, res)=>{
 // 바이브라 측정검사
 router.post('/createVibra', (req, res)=>{
     const {user_name} = req.session?.userInfo;
-    const {data, agency, date} = req.body;
+    const {data, agency, date, pv } = req.body;
 
     const {fields, table} = dbTable["vibra_service"];
 
@@ -384,11 +384,11 @@ router.post('/createVibra', (req, res)=>{
 
     const insertQuery = `INSERT INTO ${table} (${mergedString}) VALUES ${rows}`;
    // deleteRows가 있는 경우에만 deleteQuery 실행
-    const deleteQuery = `DELETE FROM vibra_service WHERE AGENCY = ? AND DATE = ?`;
+    const deleteQuery = `DELETE FROM vibra_service WHERE AGENCY = ? AND DATE = ? AND PV = ? `;
 
     const regId = user_name;
 
-    maria(deleteQuery, [agency, date])
+    maria(deleteQuery, [agency, date, pv])
         .then(() =>  maria(insertQuery))
         .then(() => createHistory(regId, "바이브라 측정 검사"))
         .then(() => res.json({ result: true }))

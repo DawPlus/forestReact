@@ -45,7 +45,7 @@ const initialState = {
 
 const action = {
   getUserTemp : createAction(`${name}/getUserTemp`),
-  getList : createAction(`${name}/getList`, (data) => ({payload : data})),
+  //getList : createAction(`${name}/getList`, (data) => ({payload : data})),
   getListAfterSave : createAction(`${name}/getListAfterSave`, (data) => ({payload : data}))
 }
 
@@ -55,7 +55,12 @@ export const {getState, reducer, actions} = createCustomSlice({
   initialState,
   action, 
   reducers: {
-
+    getList : (state, {payload})=>{
+      state.searchInfo = {
+        ...state.searchInfo, 
+        ...payload.data
+      }
+    },
     addRow  : (state)=>{
       state.rows = state.rows.concat({...initialState.rows[0], idx: v4()})
     }, 

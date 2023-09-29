@@ -49,6 +49,7 @@ export default function DynamicTableHead({ headerInfo }) {
                         rowSpan={rowSpan}
                         colSpan={colSpan}
                         align="center"
+                        style={{width : "150px"}}
                     >
                     {cell}
                     </TableCell>

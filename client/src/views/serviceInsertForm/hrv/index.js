@@ -9,20 +9,35 @@ import { actions, getState } from "store/reducers/serviceInsert/hrv";
 import Swal from "sweetalert2";
 import useDownloadExcel from "utils/useDownloadExcel";
 import { generateMergeInfo } from "utils/utils";
+import { useLocation, useNavigate } from "react-router";
 
 
 const Service = ()=>{
-
+ // 1. useLocation 훅 취득
+    const location = useLocation();
+    const navigate = useNavigate();
     const dispatch  = useDispatch();
 
     React.useEffect(()=>{
+        if(!location.state) return;
+        
+        const {data} = location.state;
+        
+        const [col1 , col2 , col3] = [data[6], data[3], data[7]]
+        
+        dispatch(actions.getList({data : {
+            AGENCY  : col1 ,
+            DATE : col2,
+            PV : col3 
+        }, type }))
+        
         return ()=>{
             dispatch(actions.initState())
         }
     },[])
 
 
-    const {rows, deleteRow, searchInfo, type} = useSelector(s=> getState(s));
+    const {rows,  searchInfo, type} = useSelector(s=> getState(s));
     const headerInfo = [
         ['ID', '이름', '주민등록번호', '성별', '연령', '자율신경활성도', '자율신경균형도', '스트레스저항도', '스트레스지수', '피로도지수', '평균심박동수', '심장안정도', '이상심박동수'],
         ['', '', '', '', '', '', '', '', '', '', '', '', '', ]
@@ -108,12 +123,26 @@ const Service = ()=>{
                 const params = {
                     data, 
                     date : searchInfo.DATE, 
-                    agency : searchInfo.AGENCY
+                    agency : searchInfo.AGENCY,
+                    pv  : searchInfo.PV,
                 }
 
 
                 callApi("/insertForm/createHrv", params).then(r=> {
                     if(r.data.result){
+                        if(location.state){
+                            Swal.fire({
+                                icon: 'success',
+                                title: '확인',
+                                text: "수정이 완료 되었습니다. 수정/삭제 페이지로 이동합니다. ",
+                                }).then(()=>{
+                                    navigate("/updateDelete", {
+                                        state : {
+                                            params : location.state.searchInfo
+                                        }
+                                    });
+                            });
+                        }else{
                         Swal.fire({
                             icon: 'success',
                             title: '확인',
@@ -122,9 +151,11 @@ const Service = ()=>{
                                 downloadExcel()
                                 dispatch(actions.getListAfterSave({data : {
                                     AGENCY  : searchInfo.AGENCY,
-                                    OPENDAY : searchInfo.OPENDAY,
+                                    DATE : searchInfo.DATE,
+                                    PV : searchInfo.PV
                                 }, type}))
                             });  
+                        }
                     }
                 })
             }
@@ -134,9 +165,12 @@ const Service = ()=>{
 
 
     const onSearch = ()=>{
+        
         const {   AGENCY } = searchInfo;
         dispatch(actions.getList({data : {
-            AGENCY 
+            AGENCY ,
+            DATE : searchInfo.DATE,
+            PV : searchInfo.PV
         }, type }))
     }
 

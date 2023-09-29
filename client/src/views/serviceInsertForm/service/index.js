@@ -9,11 +9,11 @@ import { actions, getState } from "store/reducers/serviceInsert/service";
 import Swal from "sweetalert2";
 import useDownloadExcel from "utils/useDownloadExcel";
 
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 const Service = (props)=>{
     // 1. useLocation 훅 취득
     const location = useLocation();
-
+    const navigate = useNavigate();
     const dispatch  = useDispatch();
 
     React.useEffect(()=>{
@@ -164,14 +164,29 @@ const Service = (props)=>{
 
                 callApi("/insertForm/serviceInsert", params).then(r=> {
                     if(r.data.result){
-                        Swal.fire({
-                            icon: 'success',
-                            title: '확인',
-                            text: "정상등록 되었습니다.",
-                            }).then(()=>{
-                                downloadExcel()
-                                dispatch(actions.getPreviousServiceListAfterSave({data : searchInfo}))
-                            });  
+                        console.log(location.state.searchInfo)
+                        if(location.state){
+                            Swal.fire({
+                                icon: 'success',
+                                title: '확인',
+                                text: "수정이 완료 되었습니다. 수정/삭제 페이지로 이동합니다. ",
+                                }).then(()=>{
+                                    navigate("/updateDelete", {
+                                        state : {
+                                            params : location.state.searchInfo
+                                        }
+                                    });
+                            });
+                        }else{
+                            Swal.fire({
+                                icon: 'success',
+                                title: '확인',
+                                text: "정상등록 되었습니다.",
+                                }).then(()=>{
+                                    downloadExcel()
+                                    dispatch(actions.getPreviousServiceListAfterSave({data : searchInfo}))
+                                });  
+                        }
                     }
                 })
             }

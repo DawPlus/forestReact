@@ -38,6 +38,7 @@ const ServiceInsertForm = ()=>{
     ]
 
     const onChange = (e)=>{
+        location.state = null
         setType(e.target.value)
     }
     

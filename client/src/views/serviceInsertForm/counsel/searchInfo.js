@@ -32,7 +32,8 @@ const SearchInfo = ()=>{
     }
 
     const item =['게임', '도박', 'SNS', '성인물', '웹툰/웹소설', '기타동영상', '기타',]
-    const item2 =['사전','중간','종결']
+   // const item2 =['사전','중간','종결']
+    const item2 =['사전','사후']
     
 
 

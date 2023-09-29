@@ -42,22 +42,22 @@ const ParticipationType = ()=>{
                 <DynamicTableHead headerInfo={headerInfo}/>
                 <TableBody>
                     <TableRow>
-                        <TableCell>{OPENDAY}</TableCell>       
-                        <TableCell>{DAYS_TO_STAY}</TableCell>       
-                        <TableCell>{RESIDENCE}</TableCell>       
-                        <TableCell>{PART_MAN_CNT}</TableCell>       
-                        <TableCell>{PART_WOMAN_CNT}</TableCell>       
-                        <TableCell>{sum1 }</TableCell>       
-                        <TableCell>{LEAD_MAN_CNT}</TableCell>       
-                        <TableCell>{LEAD_WOMAN_CNT}</TableCell>       
-                        <TableCell>{sum2}</TableCell>       
-                        <TableCell>{sum1 + sum2}</TableCell>       
-                        <TableCell>{(sum1 + sum2)* DAYS_TO_STAY}</TableCell>       
-                        <TableCell>{AGE_TYPE}</TableCell>       
-                        <TableCell>{PART_TYPE}</TableCell>       
-                        <TableCell>{BIZ_PURPOSE}</TableCell>
-                        <TableCell>{ORG_NATURE}</TableCell>
-                        <TableCell>{PART_FORM}</TableCell>
+                        <TableCell style={{width : "150px"}}>{OPENDAY}</TableCell>       
+                        <TableCell style={{width : "150px"}}>{DAYS_TO_STAY}</TableCell>       
+                        <TableCell style={{width : "150px"}}>{RESIDENCE}</TableCell>       
+                        <TableCell style={{width : "150px"}}>{PART_MAN_CNT}</TableCell>       
+                        <TableCell style={{width : "150px"}}>{PART_WOMAN_CNT}</TableCell>       
+                        <TableCell style={{width : "150px"}}>{sum1 }</TableCell>       
+                        <TableCell style={{width : "150px"}}>{LEAD_MAN_CNT}</TableCell>       
+                        <TableCell style={{width : "150px"}}>{LEAD_WOMAN_CNT}</TableCell>       
+                        <TableCell style={{width : "150px"}}>{sum2}</TableCell>       
+                        <TableCell style={{width : "150px"}}>{sum1 + sum2}</TableCell>       
+                        <TableCell style={{width : "150px"}}>{(sum1 + sum2)* DAYS_TO_STAY}</TableCell>       
+                        <TableCell style={{width : "150px"}}>{AGE_TYPE}</TableCell>       
+                        <TableCell style={{width : "150px"}}>{PART_TYPE}</TableCell>       
+                        <TableCell style={{width : "150px"}}>{BIZ_PURPOSE}</TableCell>
+                        <TableCell style={{width : "150px"}}>{ORG_NATURE}</TableCell>
+                        <TableCell style={{width : "150px"}}>{PART_FORM}</TableCell>
                     </TableRow>
                 </TableBody>
             </Table>

@@ -5,7 +5,7 @@ import {Grid, Button,} from '@mui/material';
 import {  useDispatch, useSelector } from "react-redux";
 
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { getState , actions} from "store/reducers/programReducer";
 const columnNames = {
     OPENDAY : "참여시작일",
@@ -41,6 +41,12 @@ const columnNames = {
 };
 
 const InsertOperateResult = ()=>{
+
+
+        
+    // 1. useLocation 훅 취득
+    const location = useLocation();
+
 
     const dispatch = useDispatch();
 
@@ -114,13 +120,40 @@ const InsertOperateResult = ()=>{
 
         callApi("/insertOperation/create", {data: params}).then(r=> {
             if(r.data.result){
-                Swal.fire({
-                    icon: 'success',
-                    title: '확인',
-                    text: "정상등록 되었습니다. 만족도효과평가 입력으로 이동합니다.",
-                    }).then(()=>{
-                        navigate("/serviceInsertForm");
-                    });  
+
+
+                if(location.state){
+                    Swal.fire({
+                        icon: 'success',
+                        title: '확인',
+                        text: "수정이 완료 되었습니다. 수정/삭제 페이지로 이동합니다. ",
+                        }).then(()=>{
+                            navigate("/updateDelete", {
+                                state : {
+                                    params : location.state.params
+                                }
+                            });
+    
+    
+    
+                        });
+
+
+                }else{
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: '확인',
+                        text: "정상등록 되었습니다. 만족도효과평가 입력으로 이동합니다.",
+                        }).then(()=>{
+                            navigate("/serviceInsertForm");
+    
+    
+    
+                        });
+                }
+
+
             }
         })
     }

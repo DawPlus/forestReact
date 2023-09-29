@@ -5,96 +5,6 @@ const maria = require("../maria");
 
 
 
-// 프로그램목록
-const sheet1Sql = `SELECT * FROM basic_info`;
-// 운영현황
-const sheet2Sql = `
-        SELECT
-            ROW_NUMBER() OVER (ORDER BY YEAR(STR_TO_DATE(bi.OPENDAY, '%Y-%m-%d')) DESC, MONTH(STR_TO_DATE(bi.OPENDAY, '%Y-%m-%d')) DESC, DAYOFMONTH(STR_TO_DATE(bi.OPENDAY, '%Y-%m-%d')) DESC) AS 순번,
-            YEAR(STR_TO_DATE(bi.OPENDAY, '%Y-%m-%d')) AS 년도,
-            MONTH(STR_TO_DATE(bi.OPENDAY, '%Y-%m-%d')) AS 월,
-            DAYOFMONTH(STR_TO_DATE(bi.OPENDAY, '%Y-%m-%d')) AS 일,
-            bi.BIZ_PURPOSE,
-            bi.SERVICE_TYPE,
-            bi.AGENCY,
-            bi.RESIDENCE,
-            bi.ORG_NATURE,
-            bi.PART_FORM,
-            bi.AGE_TYPE,
-            bi.DAYS_TO_STAY,
-            (bi.PART_MAN_CNT + bi.PART_WOMAN_CNT + bi.LEAD_MAN_CNT + bi.LEAD_WOMAN_CNT) AS CNT,
-            (bi.PART_MAN_CNT + bi.PART_WOMAN_CNT + bi.LEAD_MAN_CNT + bi.LEAD_WOMAN_CNT) * bi.DAYS_TO_STAY AS REAL_CNT,
-            bi.ISCLOSEMINE,
-            bi.OM,
-            ROUND(COALESCE(SUM(e.EXPENSE_PRICE), 0), 2) AS TOTAL_EXPENSE
-        FROM
-            dbstatistics.basic_info AS bi
-        LEFT JOIN
-            dbstatistics.expense AS e ON bi.BASIC_INFO_SEQ = e.BASIC_INFO_SEQ
-        GROUP BY
-            년도, 월, 일, bi.BASIC_INFO_SEQ
-        ORDER BY
-            순번;
-`
-const sheet3Sql = `
-
-    SELECT
-        RANK() OVER (ORDER BY YEAR(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC, 
-                            MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC,
-                            DAY(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC) AS 순번,
-        YEAR(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 년도,
-        MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 월,
-        DAY(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 일,
-        agency,
-        BUNYA,
-        PROGRAM_NAME,
-        TEACHER,
-        ROUND(AVG(CASE WHEN SCORE1 > 0 THEN SCORE1 ELSE NULL END), 2) AS avg_score1,
-        ROUND(AVG(CASE WHEN SCORE2 > 0 THEN SCORE2 ELSE NULL END), 2) AS avg_score2,
-        ROUND(AVG(CASE WHEN SCORE3 > 0 THEN SCORE3 ELSE NULL END), 2) AS avg_score3,
-        ROUND(AVG(CASE WHEN SCORE4 > 0 THEN SCORE4 ELSE NULL END), 2) AS avg_score4,
-        ROUND(AVG(CASE WHEN SCORE5 > 0 THEN SCORE5 ELSE NULL END), 2) AS avg_score5,
-        ROUND(AVG(CASE WHEN SCORE6 > 0 THEN SCORE6 ELSE NULL END), 2) AS avg_score6,
-        ROUND(AVG(CASE WHEN SCORE7 > 0 THEN SCORE7 ELSE NULL END), 2) AS avg_score7,
-        ROUND(AVG(CASE WHEN SCORE8 > 0 THEN SCORE8 ELSE NULL END), 2) AS avg_score8,
-        ROUND(AVG(CASE WHEN SCORE9 > 0 THEN SCORE9 ELSE NULL END), 2) AS avg_score9
-    FROM
-        dbstatistics.program_satisfaction
-
-    GROUP BY
-        agency,
-        openday,
-        BUNYA,
-        PROGRAM_NAME,
-        TEACHER;
-
-
-`;
-// TODO 평균 에 소수점 제외 , 0 제외 기능 추가 필요 
-const sheet4Sql = `
-    SELECT
-        TEACHER,
-        PROGRAM_NAME,
-        COUNT(*) AS CNT,
-        ROUND(AVG(CASE WHEN SCORE1 > 0 THEN SCORE1 ELSE NULL END), 2) AS avg_score1,
-        ROUND(AVG(CASE WHEN SCORE2 > 0 THEN SCORE2 ELSE NULL END), 2) AS avg_score2,
-        ROUND(AVG(CASE WHEN SCORE3 > 0 THEN SCORE3 ELSE NULL END), 2) AS avg_score3,
-        ROUND(AVG(CASE WHEN SCORE4 > 0 THEN SCORE4 ELSE NULL END), 2) AS avg_score4,
-        ROUND(AVG(CASE WHEN SCORE5 > 0 THEN SCORE5 ELSE NULL END), 2) AS avg_score5,
-        ROUND(AVG(CASE WHEN SCORE6 > 0 THEN SCORE6 ELSE NULL END), 2) AS avg_score6,
-        ROUND(AVG(CASE WHEN SCORE7 > 0 THEN SCORE7 ELSE NULL END), 2) AS avg_score7,
-        ROUND(AVG(CASE WHEN SCORE8 > 0 THEN SCORE8 ELSE NULL END), 2) AS avg_score8,
-        ROUND(AVG(CASE WHEN SCORE9 > 0 THEN SCORE9 ELSE NULL END), 2) AS avg_score9    
-    FROM
-        dbstatistics.program_satisfaction
-    GROUP BY
-        TEACHER,
-        PROGRAM_NAME
-
-`
-
-
-
 const sheet5Sql = `
     SELECT
         YEAR(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 년도,
@@ -125,12 +35,123 @@ const sheet5Sql = `
 //프로그램 목록조회
 router.post('/programList', (req, res)=>{ 
 
+    const {openday, endday} = req.body;
+
+
+    console.log(openday, endday);
+
+
+
+
+    // 프로그램목록
+    const sheet1Sql = `SELECT * FROM basic_info  WHERE 1=1 ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}`;
+    // 운영현황
+    const sheet2Sql = `
+        SELECT
+            ROW_NUMBER() OVER (ORDER BY YEAR(STR_TO_DATE(bi.OPENDAY, '%Y-%m-%d')) DESC, 
+                                    MONTH(STR_TO_DATE(bi.OPENDAY, '%Y-%m-%d')) DESC, 
+                                    DAYOFMONTH(STR_TO_DATE(bi.OPENDAY, '%Y-%m-%d')) DESC) AS 순번,
+            YEAR(STR_TO_DATE(bi.OPENDAY, '%Y-%m-%d')) AS 년도,
+            MONTH(STR_TO_DATE(bi.OPENDAY, '%Y-%m-%d')) AS 월,
+            DAYOFMONTH(STR_TO_DATE(bi.OPENDAY, '%Y-%m-%d')) AS 일,
+            bi.OPENDAY,
+            bi.BIZ_PURPOSE,
+            bi.SERVICE_TYPE,
+            bi.AGENCY,
+            bi.RESIDENCE,
+            bi.ORG_NATURE,
+            bi.PART_FORM,
+            bi.AGE_TYPE,
+            bi.DAYS_TO_STAY,
+            (bi.PART_MAN_CNT + bi.PART_WOMAN_CNT + bi.LEAD_MAN_CNT + bi.LEAD_WOMAN_CNT) AS CNT,
+            (bi.PART_MAN_CNT + bi.PART_WOMAN_CNT + bi.LEAD_MAN_CNT + bi.LEAD_WOMAN_CNT) * bi.DAYS_TO_STAY AS REAL_CNT,
+            CASE
+                WHEN bi.ISCLOSEMINE = 1 THEN '1'
+                ELSE ''
+            END AS ISCLOSEMINE,
+            bi.OM,
+            ROUND(COALESCE(SUM(e.EXPENSE_PRICE), 0), 2) AS TOTAL_EXPENSE
+        FROM
+            dbstatistics.basic_info AS bi
+        LEFT JOIN
+            dbstatistics.expense AS e ON bi.BASIC_INFO_SEQ = e.BASIC_INFO_SEQ
+        WHERE 1=1
+            ${openday ? `AND STR_TO_DATE(bi.OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+        GROUP BY
+            년도, 월, 일, bi.BASIC_INFO_SEQ
+        ORDER BY
+            순번;
+
+    `
+
+    const sheet3Sql = `
+
+        SELECT
+            ROW_NUMBER() OVER (ORDER BY YEAR(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC, 
+                                MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC,
+                                DAY(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC) AS 순번,
+            YEAR(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 년도,
+            MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 월,
+            DAY(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 일,
+            OPENDAY, 
+            agency,
+            BUNYA,
+            PROGRAM_NAME,
+            TEACHER,
+            ROUND(AVG(CASE WHEN SCORE1 > 0 THEN SCORE1 ELSE NULL END), 2) AS avg_score1,
+            ROUND(AVG(CASE WHEN SCORE2 > 0 THEN SCORE2 ELSE NULL END), 2) AS avg_score2,
+            ROUND(AVG(CASE WHEN SCORE3 > 0 THEN SCORE3 ELSE NULL END), 2) AS avg_score3,
+            ROUND(AVG(CASE WHEN SCORE4 > 0 THEN SCORE4 ELSE NULL END), 2) AS avg_score4,
+            ROUND(AVG(CASE WHEN SCORE5 > 0 THEN SCORE5 ELSE NULL END), 2) AS avg_score5,
+            ROUND(AVG(CASE WHEN SCORE6 > 0 THEN SCORE6 ELSE NULL END), 2) AS avg_score6,
+            ROUND(AVG(CASE WHEN SCORE7 > 0 THEN SCORE7 ELSE NULL END), 2) AS avg_score7,
+            ROUND(AVG(CASE WHEN SCORE8 > 0 THEN SCORE8 ELSE NULL END), 2) AS avg_score8,
+            ROUND(AVG(CASE WHEN SCORE9 > 0 THEN SCORE9 ELSE NULL END), 2) AS avg_score9
+            FROM
+            dbstatistics.program_satisfaction
+            WHERE 1=1
+                ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+            GROUP BY
+            agency,
+            openday,
+            BUNYA,
+            PROGRAM_NAME,
+            TEACHER;
+
+
+    `;
+    // TODO 평균 에 소수점 제외 , 0 제외 기능 추가 필요 
+    const sheet4Sql = `
+        SELECT
+            TEACHER,
+            PROGRAM_NAME,
+            COUNT(*) AS CNT,
+            ROUND(AVG(CASE WHEN SCORE1 > 0 THEN SCORE1 ELSE NULL END), 2) AS avg_score1,
+            ROUND(AVG(CASE WHEN SCORE2 > 0 THEN SCORE2 ELSE NULL END), 2) AS avg_score2,
+            ROUND(AVG(CASE WHEN SCORE3 > 0 THEN SCORE3 ELSE NULL END), 2) AS avg_score3,
+            ROUND(AVG(CASE WHEN SCORE4 > 0 THEN SCORE4 ELSE NULL END), 2) AS avg_score4,
+            ROUND(AVG(CASE WHEN SCORE5 > 0 THEN SCORE5 ELSE NULL END), 2) AS avg_score5,
+            ROUND(AVG(CASE WHEN SCORE6 > 0 THEN SCORE6 ELSE NULL END), 2) AS avg_score6,
+            ROUND(AVG(CASE WHEN SCORE7 > 0 THEN SCORE7 ELSE NULL END), 2) AS avg_score7,
+            ROUND(AVG(CASE WHEN SCORE8 > 0 THEN SCORE8 ELSE NULL END), 2) AS avg_score8,
+            ROUND(AVG(CASE WHEN SCORE9 > 0 THEN SCORE9 ELSE NULL END), 2) AS avg_score9    
+        FROM
+            dbstatistics.program_satisfaction
+        WHERE 1=1
+            ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+        GROUP BY
+            TEACHER,
+            PROGRAM_NAME
+    `
+
+
+    const params = openday ? [openday, endday] : []; // 조건에 따라 파라미터 설정
 
     Promise.all([
-        maria(sheet1Sql),
-        maria(sheet2Sql),
-        maria(sheet3Sql),
-        maria(sheet4Sql),
+        maria(sheet1Sql, params),
+        maria(sheet2Sql, params),
+        maria(sheet3Sql,params),
+        maria(sheet4Sql,params),
     
     ])
     .then((results) => {

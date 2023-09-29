@@ -91,6 +91,7 @@ const initialState = {
         AGENCY : "", // 기관명
         EVAL_DATE : "", // 실시일자
        // PTCPROGRAM  : "", // 참여일정
+        COUNSEL_CONTENTS : "",
         PV : "", // 시점 (사전은 시작으로 변경됨)
         SESSION1 :"", // 회기 시점
         SESSION2 :"", // 회기 시점
@@ -100,7 +101,7 @@ const initialState = {
 
 const action = {
   getUserTemp : createAction(`${name}/getUserTemp`),
-  getList : createAction(`${name}/getList`, (data) => ({payload : data})),
+  //getList : createAction(`${name}/getList`, (data) => ({payload : data})),
   getListAfterSave : createAction(`${name}/getListAfterSave`, (data) => ({payload : data}))
 }
 
@@ -110,6 +111,12 @@ export const {getState, reducer, actions} = createCustomSlice({
   initialState,
   action, 
   reducers: {
+    getList : (state, {payload})=>{
+      state.searchInfo = {
+        ...state.searchInfo, 
+        ...payload.data
+      }
+    },
 
     addRow  : (state)=>{
       state.rows = state.rows.concat({...initialState.rows[0], id: v4()})

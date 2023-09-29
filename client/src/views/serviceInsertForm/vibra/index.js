@@ -9,13 +9,27 @@ import { actions, getState } from "store/reducers/serviceInsert/vibra";
 import Swal from "sweetalert2";
 import useDownloadExcel from "utils/useDownloadExcel";
 import { generateMergeInfo } from "utils/utils";
+import { useLocation, useNavigate } from "react-router";
 
 
 const Service = ()=>{
-
+ // 1. useLocation 훅 취득
+ const location = useLocation();
     const dispatch  = useDispatch();
-
+    const navigate = useNavigate();
     React.useEffect(()=>{
+
+        if(!location.state) return;
+        
+        const {data} = location.state;
+        
+        const [col1 , col2 , col3] = [data[6], data[3], data[7]]
+        
+        dispatch(actions.getList({data : {
+            AGENCY  : col1 ,
+            DATE : col2,
+            PV : col3 
+        }, type }))
         return ()=>{
             dispatch(actions.initState())
         }
@@ -107,11 +121,25 @@ const Service = ()=>{
                 const params = {
                     data, 
                     date : searchInfo.DATE, 
-                    agency : searchInfo.AGENCY
+                    agency : searchInfo.AGENCY,
+                    pv : searchInfo.PV
                 }
 
                 callApi("/insertForm/createVibra",params).then(r=> {
                     if(r.data.result){
+                        if(location.state){
+                            Swal.fire({
+                                icon: 'success',
+                                title: '확인',
+                                text: "수정이 완료 되었습니다. 수정/삭제 페이지로 이동합니다. ",
+                                }).then(()=>{
+                                    navigate("/updateDelete", {
+                                        state : {
+                                            params : location.state.searchInfo
+                                        }
+                                    });
+                            });
+                        }else{
                         Swal.fire({
                             icon: 'success',
                             title: '확인',
@@ -120,9 +148,11 @@ const Service = ()=>{
                                 downloadExcel()
                                 dispatch(actions.getListAfterSave({data : {
                                     AGENCY  : searchInfo.AGENCY,
-                                    OPENDAY : searchInfo.OPENDAY,
+                                    DATE : searchInfo.DATE,
+                                    PV : searchInfo.PV
                                 }, type}))
                             });  
+                        }
                     }
                 })
             }
@@ -134,7 +164,9 @@ const Service = ()=>{
     const onSearch = ()=>{
         const {   AGENCY } = searchInfo;
         dispatch(actions.getList({data : {
-            AGENCY 
+            AGENCY ,
+            DATE : searchInfo.DATE,
+            PV : searchInfo.PV
         }, type }))
     }
 

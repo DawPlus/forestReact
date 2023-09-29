@@ -45,7 +45,7 @@ const AmountInputForm = ({ data,  type}) => {
                     </div>
                 </Grid>
                 <Grid item sm={3}>
-                    <NumberInput name="EXPENSE_PRICE"  value={EXPENSE_PRICE} label="금액" size="small" onChange={onNumberChange}/>
+                    <NumberInput name="EXPENSE_PRICE" maxLength={15} value={EXPENSE_PRICE} label="금액" size="small" onChange={onNumberChange}/>
                 </Grid>
                 <Grid item sm={4}>
                     <Input name="EXPENSE_DETAIL"  value={EXPENSE_DETAIL} label="세부내역" size="small" onChange={onChangeHandler}/>

@@ -75,9 +75,9 @@ const Incomes =memo(()=>{
     }
 
     const onAddClick = ()=>{
-        const isEmpty =pageInfo.INCOME_TYPE === "할인율" ?  [pageInfo.INCOME_TYPE, pageInfo.INCOME_PRICE, pageInfo.INCOME_NOTE].includes(""):  Object.values(pageInfo).some(value => value === "");
-        if(isEmpty){
-            Swal.fire({ title : "확인", text : "비어있는값이 있습니다."})
+        // const isEmpty =pageInfo.INCOME_TYPE === "할인율" ?  [pageInfo.INCOME_TYPE, pageInfo.INCOME_PRICE, pageInfo.INCOME_NOTE].includes(""):  Object.values(pageInfo).some(value => value === "");
+        if( [pageInfo.INCOME_TYPE, pageInfo.INCOME_PRICE].includes("")){
+            Swal.fire({ title : "확인", text : "분류 / 금액 을 입력해 주십시오 "})
             return;
         }
 
@@ -122,6 +122,11 @@ const Incomes =memo(()=>{
     }
 
 
+    const displayRows = React.useMemo(()=>[...incomeExtraList].sort((a, b) => a.INCOME_TYPE.localeCompare(b.INCOME_TYPE)),[incomeExtraList])
+    
+
+
+
     return (<>   
                 <Grid container spacing={2} alignItems="center" style={{padding :"10px 0px"}}>
                         <Grid item xs={12}>
@@ -129,37 +134,57 @@ const Incomes =memo(()=>{
                         </Grid>
 
                     {income.map((i, idx)=>
-                        <Grid container item spacing={1} alignItems="center" sm={12} style={{marginTop : "1px"}} key={i.id}>
-                            <Grid item sm={2}>
-                                <div style={{textAlign:"center"}}>
-                                    {i.TITLE}
-                                </div>
-                            </Grid>
-                            <Grid item sm={3}>
-                                <NumberInput name="INCOME_PRICE"  value={i.INCOME_PRICE} label="금액" size="small" onChange={onNumberChange(i.id)}/>
-                            </Grid>
-                            {i.INCOME_TYPE !=="할인율" &&
-                            <Grid item sm={4}>
-                                <Input name="INCOME_DETAIL"  value={i.INCOME_DETAIL} label="세부내역" size="small" onChange={onChangeHandler(i.id)}/>
-                            </Grid>
-                            }
-                            <Grid item sm={i.INCOME_TYPE !=="할인율"  ? 3 : 7}>
-                                <Input name="INCOME_NOTE"  value={i.INCOME_NOTE} label="비고" size="small" onChange={onChangeHandler(i.id)}/>
-                            </Grid>
-                        </Grid>
+                        {
+                        return i.INCOME_TYPE !=="할인율" ? <Grid container item spacing={1} alignItems="center" sm={12} style={{marginTop : "1px"}} key={i.id}>
+                                    <Grid item sm={2}>
+                                        <div style={{textAlign:"center"}}>
+                                            {i.TITLE}
+                                        </div>
+                                    </Grid>
+                                    
+                                    <Grid item sm={3}>
+                                        <NumberInput name="INCOME_PRICE" maxLength={15}  value={i.INCOME_PRICE} label="금액" size="small" onChange={onNumberChange(i.id)}/>
+                                    </Grid>
+                                    <Grid item sm={4}>
+                                        <Input name="INCOME_DETAIL"  value={i.INCOME_DETAIL} label="세부내역" size="small" onChange={onChangeHandler(i.id)}/>
+                                    </Grid>
+                                    <Grid item sm={3}>
+                                        <Input name="INCOME_NOTE"  value={i.INCOME_NOTE} label="비고" size="small" onChange={onChangeHandler(i.id)}/>
+                                    </Grid>
+                                </Grid>
+                                :
+                                <Grid container item spacing={1} alignItems="center" sm={12} style={{marginTop : "1px"}} key={i.id}>
+                                    <Grid item sm={2}>
+                                        <div style={{textAlign:"center"}}>
+                                            {i.TITLE}
+                                        </div>
+                                    </Grid>
+                                    
+                                    <Grid item sm={3} container  direction="row" justifyContent="center" alignItems="center">
+                                        <Grid item sm={11}>
+                                            <NumberInput name="INCOME_PRICE" maxLength={15}  value={i.INCOME_PRICE} label="할인율" size="small" onChange={onNumberChange(i.id)}/>
+                                        </Grid>
+                                        <Grid item sm={1}><div style={{textAlign:"center"}}>%</div></Grid>
+                                    </Grid>
+                                    <Grid item sm={7}>
+                                        <Input name="INCOME_NOTE"  value={i.INCOME_NOTE} label="비고" size="small" onChange={onChangeHandler(i.id)}/>
+                                    </Grid>
+                                </Grid>
+
+                        }
                     )}
 
                     <Grid item sm={2}>
                         <Select name="INCOME_TYPE"  value={pageInfo.INCOME_TYPE} label="분류" items={items}size="small" onChange={onChange}/>
                     </Grid>
                     <Grid item sm={2}>
-                        <NumberInput name="INCOME_PRICE"  value={pageInfo.INCOME_PRICE} label="금액" size="small" onChange={onInputChange}/>
+                        <NumberInput name="INCOME_PRICE" maxLength={15}  value={pageInfo.INCOME_PRICE} label="금액" size="small" onChange={onInputChange}/>
                     </Grid>
                     {pageInfo.INCOME_TYPE === "할인율" ? 
                     <>
-                    <Grid item sm={6}>
-                        <Input name="INCOME_NOTE"  value={pageInfo.INCOME_NOTE} label="비고" size="small" onChange={onChange}/>
-                    </Grid>
+                        <Grid item sm={6}>
+                            <Input name="INCOME_NOTE"  value={pageInfo.INCOME_NOTE} label="비고" size="small" onChange={onChange}/>
+                        </Grid>
                     </> 
                     : 
                     <>
@@ -190,12 +215,12 @@ const Incomes =memo(()=>{
                         </TableRow>
                         </TableHead>
                         <TableBody>
-                            {incomeExtraList.length === 0 && 
+                            {displayRows.length === 0 && 
                             <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
                                 <TableCell colSpan={5} align="center">등록된 항목이 없습니다.</TableCell>
                             </TableRow>
                             }
-                            {incomeExtraList.map((i, idx) => 
+                            {displayRows.map((i, idx) => 
                                 <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} key={idx} >
                                     <TableCell align="center">{idx +1}</TableCell>
                                     <TableCell align="center">{i.INCOME_TYPE}</TableCell>

@@ -98,40 +98,43 @@ const ProgramOperate = ()=>{
                         <TableCell>{programList.reduce((acc, obj) => acc + +obj.outTeacher, 0)}</TableCell>
                     </TableRow>
                     <TableRow>
-                        <TableCell rowSpan={5}>객실배정</TableCell>
+                        <TableCell rowSpan={5}>기타사항</TableCell>
                         <TableCell className="table-header" align="center">분류</TableCell>
-                        <TableCell className="table-header" align="center" colSpan={2}>인원(명)</TableCell>
-                        <TableCell className="table-header" align="center" colSpan={2}>객실(실)</TableCell>
-                        <TableCell className="table-header" align="center" colSpan={2}>식사</TableCell>
-                        <TableCell className="table-header" align="center" colSpan={3}>계</TableCell>
+                        <TableCell className="table-header" align="center" colSpan={3}>인원(명)</TableCell>
+                        <TableCell className="table-header" align="center" colSpan={3}>객실(실)</TableCell>
+                        <TableCell className="table-header" align="center" colSpan={3}>식사</TableCell>
+                        {/* <TableCell className="table-header" align="center" colSpan={3}>계</TableCell> */}
                     </TableRow>
                     <TableRow>
                         <TableCell>참여자</TableCell>
-                        <TableCell colSpan={2}>{ROOM_PART_PEOPLE}</TableCell>
-                        <TableCell colSpan={2}>{ROOM_PART_ROOM}</TableCell>
-                        <TableCell colSpan={2}>{MEAL_TYPE * MEAL_PART}</TableCell>    
-                        <TableCell colSpan={3}>{+ROOM_PART_PEOPLE + +ROOM_PART_ROOM + (MEAL_TYPE * MEAL_PART)}</TableCell>    
+                        <TableCell colSpan={3}>{ROOM_PART_PEOPLE}</TableCell>
+                        <TableCell colSpan={3}>{ROOM_PART_ROOM}</TableCell>
+                        <TableCell colSpan={3}>{MEAL_TYPE * MEAL_PART}</TableCell>    
+                        {/* <TableCell colSpan={3}>{+ROOM_PART_PEOPLE + +ROOM_PART_ROOM + (MEAL_TYPE * MEAL_PART)}</TableCell>     */}
                     </TableRow>
                     <TableRow>
                         <TableCell>인솔자</TableCell>
-                        <TableCell colSpan={2}>{ROOM_LEAD_PEOPLE}</TableCell>
-                        <TableCell colSpan={2}>{ROOM_LEAD_ROOM}</TableCell>
-                        <TableCell colSpan={2}>{MEAL_TYPE * MEAL_LEAD}</TableCell>    
-                        <TableCell colSpan={3}>{+ROOM_LEAD_PEOPLE + +ROOM_LEAD_ROOM + (MEAL_TYPE * MEAL_LEAD)}</TableCell>    
+                        <TableCell colSpan={3}>{ROOM_LEAD_PEOPLE}</TableCell>
+                        <TableCell colSpan={3}>{ROOM_LEAD_ROOM}</TableCell>
+                        <TableCell colSpan={3}>{MEAL_TYPE * MEAL_LEAD}</TableCell>    
+                        {/* <TableCell colSpan={3}>{+ROOM_LEAD_PEOPLE + +ROOM_LEAD_ROOM + (MEAL_TYPE * MEAL_LEAD)}</TableCell>     */}
                     </TableRow>
                     <TableRow>
                         <TableCell>기타</TableCell>
-                        <TableCell colSpan={2}>{ROOM_ETC_PEOPLE}</TableCell>
-                        <TableCell colSpan={2}>{ROOM_ETC_ROOM}</TableCell>
-                        <TableCell colSpan={2}>{MEAL_TYPE * MEAL_ETC}</TableCell>    
-                        <TableCell colSpan={3}>{+ROOM_ETC_PEOPLE + +ROOM_ETC_ROOM + (MEAL_TYPE * MEAL_ETC)}</TableCell>    
+                        <TableCell colSpan={3}>{ROOM_ETC_PEOPLE}</TableCell>
+                        <TableCell colSpan={3}>{ROOM_ETC_ROOM}</TableCell>
+                        <TableCell colSpan={3}>{MEAL_TYPE * MEAL_ETC}</TableCell>    
+                        {/* <TableCell colSpan={3}>{+ROOM_ETC_PEOPLE + +ROOM_ETC_ROOM + (MEAL_TYPE * MEAL_ETC)}</TableCell>     */}
                     </TableRow>
                     <TableRow>
                         <TableCell>계</TableCell>
-                        <TableCell colSpan={2}>{+ROOM_PART_PEOPLE + +ROOM_LEAD_PEOPLE + +ROOM_ETC_PEOPLE}</TableCell>
-                        <TableCell colSpan={2}>{+ROOM_PART_ROOM + +ROOM_LEAD_ROOM + +ROOM_ETC_ROOM}</TableCell>
-                        <TableCell colSpan={2}>{MEAL_TYPE * (+MEAL_PART + +MEAL_LEAD  + +MEAL_ETC)}</TableCell>    
-                        <TableCell colSpan={3}>{+ROOM_PART_PEOPLE + +ROOM_LEAD_PEOPLE + +ROOM_ETC_PEOPLE + +ROOM_PART_ROOM + +ROOM_LEAD_ROOM + +ROOM_ETC_ROOM + (MEAL_TYPE * (+MEAL_PART + +MEAL_LEAD  + +MEAL_ETC))}</TableCell>    
+                        <TableCell colSpan={3}>{+ROOM_PART_PEOPLE + +ROOM_LEAD_PEOPLE + +ROOM_ETC_PEOPLE}</TableCell>
+                        <TableCell colSpan={3}>{+ROOM_PART_ROOM + +ROOM_LEAD_ROOM + +ROOM_ETC_ROOM}</TableCell>
+                        <TableCell colSpan={3}>{MEAL_TYPE * (+MEAL_PART + +MEAL_LEAD  + +MEAL_ETC)}</TableCell>    
+                        {/* <TableCell colSpan={3}>{+ROOM_PART_PEOPLE + +ROOM_LEAD_PEOPLE + +ROOM_ETC_PEOPLE}</TableCell>
+                        <TableCell colSpan={3}>{+ROOM_PART_ROOM + +ROOM_LEAD_ROOM + +ROOM_ETC_ROOM}</TableCell>
+                        <TableCell colSpan={3}>{MEAL_TYPE * (+MEAL_PART + +MEAL_LEAD  + +MEAL_ETC)}</TableCell>     */}
+                        {/* <TableCell colSpan={3}>{+ROOM_PART_PEOPLE + +ROOM_LEAD_PEOPLE + +ROOM_ETC_PEOPLE + +ROOM_PART_ROOM + +ROOM_LEAD_ROOM + +ROOM_ETC_ROOM + (MEAL_TYPE * (+MEAL_PART + +MEAL_LEAD  + +MEAL_ETC))}</TableCell>     */}
                     </TableRow>
                 </TableBody>
             </Table>

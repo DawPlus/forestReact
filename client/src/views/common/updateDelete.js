@@ -16,16 +16,41 @@ import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DatePicker from "ui-component/inputs/datePicker";
 import { useNavigate } from 'react-router-dom';
 
+import { useLocation } from 'react-router-dom';
+
 
 import { Grid } from "@mui/material";
 
 
 const UpdateDelete = ()=>{
+
+    // 1. useLocation 훅 취득
+    const location = useLocation();
+
     const navigate = useNavigate();
     // Dispatch
     const dispatch = useDispatch();
     // Rows
     const {rows, type} = useSelector(s=> getState(s));
+
+
+    React.useEffect(()=>{
+        
+        if(!location.state) return; 
+        const {params}= location.state;
+        console.log(params)
+        setOpenday(s=> params.openday);
+        setEndday(s=> params.endday);
+        dispatch(actions.setValue({
+            key : "type",
+            value : params.type
+        }));
+        dispatch(actions.getList({...params}))
+
+        // const [openday, setOpenday] = React.useState("");
+        // const [endday, setEndday] = React.useState("");
+
+    },[location.state])
 
     useEffect(()=>{
         
@@ -78,31 +103,34 @@ const UpdateDelete = ()=>{
                 // {value : "hrvInsertForm" , label : "HRV 측정 검사"},
                 // {value : "vibraInsertForm" , label : "바이브라 측정 검사"},
 
+                const searchInfo = {type, openday : selectOpenday, endday : selectEndday}
+
+
                 switch(type){
                     case 1 : // 프로그램운영결과
                         dispatch(pActions.getTempData({seq}))
-                        navigate("/insertOperateResult")
+                        navigate("/insertOperateResult", {state : {params : {type, openday : selectOpenday, endday : selectEndday}} })
                         break;
                     case 2 : // 서비스환경만족도
-                        navigate("/serviceInsertForm", {state : {type  : "serviceInsertForm", name ,openday, evalDate} })
+                        navigate("/serviceInsertForm", {state : {type  : "serviceInsertForm", name ,openday, evalDate, searchInfo} })
                         break;
                     case 3 : // 프로그램만족도
-                        navigate("/serviceInsertForm", {state : {type : "programInsertForm", name ,openday, evalDate} })
+                        navigate("/serviceInsertForm", {state : {type : "programInsertForm", data, searchInfo} })
                         break;
                     case 4 : // 상담&치유서비스 효과평가
-                        navigate("/serviceInsertForm", {state : {type : "counselInsertForm", name ,openday, evalDate} })
+                        navigate("/serviceInsertForm", {state : {type : "counselInsertForm", data, searchInfo} })
                         break;
                     case 5 : // 예방서비스 효과평가
-                        navigate("/serviceInsertForm", {state : {type : "preventInsertForm", name ,openday, evalDate} })
+                        navigate("/serviceInsertForm", {state : {type : "preventInsertForm",data, searchInfo} })
                         break;
                     case 6 : // 힐링서비스 효과평가
-                        navigate("/serviceInsertForm", {state : {type : "healingInsertForm", name ,openday, evalDate} })
+                        navigate("/serviceInsertForm", {state : {type : "healingInsertForm", data, searchInfo} })
                         break;
                     case 7 : // HRV 측정 검사
-                        navigate("/serviceInsertForm", {state : {type : "hrvInsertForm", name ,openday, evalDate} })
+                        navigate("/serviceInsertForm", {state : {type : "hrvInsertForm", data, searchInfo} })
                         break;
                     case 8 : // 바이브라 측정 검사
-                        navigate("/serviceInsertForm", {state : {type : "vibraInsertForm", name ,openday, evalDate} })
+                        navigate("/serviceInsertForm", {state : {type : "vibraInsertForm", data, searchInfo} })
                         break;
                     default : break;
                         
@@ -111,7 +139,7 @@ const UpdateDelete = ()=>{
             }
         })
     }
-    const displays = [3,4,5,7,8];
+    const displays = [3,4,5,6,7,8];
 
     // 삭제 클릭 
     const onDeleteClick = (data)=>{
@@ -233,7 +261,20 @@ const UpdateDelete = ()=>{
 
         if (Number(type) === 3) {
             appendRows.push({ name: "PROGRAM_NAME", options }); // DISPLAY에 포함될 경우만 추가
+            appendRows.push({ name: "BUNYA", options }); // DISPLAY에 포함될 경우만 추가
+            appendRows.push({ name: "TEACHER", options }); // DISPLAY에 포함될 경우만 추가
+            appendRows.push({ name: "PLACE", options }); // DISPLAY에 포함될 경우만 추가
         }
+        // 상담치유
+        if (Number(type) === 4) {
+            appendRows.push({ name: "COUNSEL_CONTENTS", options }); // DISPLAY에 포함될 경우만 추가
+            
+        }
+        if ([7,8].includes(Number(type))) {
+            appendRows.push({ name: "DATE", options }); // DISPLAY에 포함될 경우만 추가
+        }
+        
+
 
         if(displays.includes(Number(type)) ){
             result.push(...appendRows);
@@ -246,18 +287,18 @@ const UpdateDelete = ()=>{
     },[rows]);
     
 
-    const [openday, setOpenday] = React.useState("");
-    const [endday, setEndday] = React.useState("");
+    const [selectOpenday, setOpenday] = React.useState("");
+    const [selectEndday, setEndday] = React.useState("");
 
     const onSearch= ()=>{
-        dispatch(actions.getList({type, openday, endday}))
+        dispatch(actions.getList({type, openday  : selectOpenday, endday : selectEndday}))
     }
 
     return <>
         <MainCard>
         <Grid item container spacing={2} alignItems="center" md={12}>
-            <Grid item md={3}><DatePicker label="시작일"name="openday" value={openday} onChange={(_, value)=>setOpenday(value)}/></Grid>
-            <Grid item md={3}><DatePicker label="종료일"name="endday" value={endday} onChange={(_, value)=>setEndday(value)}/></Grid>
+            <Grid item md={3}><DatePicker label="시작일"name="openday" value={selectOpenday} onChange={(_, value)=>setOpenday(value)}/></Grid>
+            <Grid item md={3}><DatePicker label="종료일"name="endday" value={selectEndday} onChange={(_, value)=>setEndday(value)}/></Grid>
             <Grid item md={6}></Grid>
             <Grid item md={3}>
                 <FormControl size="small" style={{width: "100%"}}>
@@ -281,7 +322,9 @@ const UpdateDelete = ()=>{
         </Grid>
         </MainCard>
         <MainCard>
-            <DataGrid title="수정/삭제" data={rows} columns={columns} />
+            <DataGrid title="수정/삭제" data={rows} columns={columns} options={{
+                rowsPerPage : 100
+            }} />
         </MainCard>
     </>
 

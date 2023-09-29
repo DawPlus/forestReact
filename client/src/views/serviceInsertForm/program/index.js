@@ -9,16 +9,55 @@ import { actions, getState } from "store/reducers/serviceInsert/program";
 import useDownloadExcel from "utils/useDownloadExcel";
 import { generateMergeInfo } from "utils/utils";
 import Swal from "sweetalert2";
+import { useLocation, useNavigate } from "react-router";
 
 const Service = ()=>{
-
+    // 1. useLocation 훅 취득
+    const location = useLocation();
+    const navigate = useNavigate();
     const dispatch  = useDispatch();
 
+
+    const {rows,  searchInfo, type} = useSelector(s=> getState(s));
+    
+
+
     React.useEffect(()=>{
+
+
         dispatch(actions.getProgramList())
         dispatch(actions.getTeacherList())
 
 
+
+        if(!location.state) return;
+
+        const {data} = location.state;
+      
+        const [col1 , col2 , col3, col4, col5, col6, col7] = [data[6], data[3], data[4], data[8], data[9], data[10], data[11]]
+
+
+        dispatch(actions.getPreviousProgramList({data : {
+            AGENCY :col1,
+            OPENDAY   :col2 ,
+            EVAL_DATE :col3,
+            PROGRAM_NAME :col4
+        },type }))
+
+        
+        dispatch(actions.setValue({
+            key : "searchInfo" , 
+            value : {
+                ...searchInfo, 
+                AGENCY :col1,
+                OPENDAY   :col2 ,
+                EVAL_DATE :col3,
+                PROGRAM_NAME :col4, 
+                BUNYA : col5,
+                TEACHER : col6,
+                PLACE : col7,
+            }
+        }))
 
         return ()=>{
             dispatch(actions.initState())
@@ -26,8 +65,6 @@ const Service = ()=>{
     },[])
 
 
-    const {rows, deleteRow, searchInfo, type} = useSelector(s=> getState(s));
-    
     const headerInfo = [
         [ '성별', '연령', '거주지', '직업', '참여구분', '강사', '강사', '강사', '구성/품질', '구성/품질', '구성/품질', '효과성', '효과성', '효과성', '시작일자' , '기관명' , '실시일자' , '프로그램명' , '강사명' , '장소' , '분야' ],
         [ '', '', '', '', '', '문항1', '문항2', '문항3', '문항4', '문항5', '문항6', '문항7', '문항8', '문항9', '' , '' , '' , '' , '' , '' , ''  ]
@@ -115,7 +152,7 @@ const Service = ()=>{
             cancelButtonText: '취소'
         }).then((result) => {
             if(result.isConfirmed){
-                console.log(searchInfo)
+           
                 const params =  {
                     data , 
                     openday :  searchInfo.OPENDAY, 
@@ -126,6 +163,19 @@ const Service = ()=>{
 
                 callApi("/insertForm/createProgram",params).then(r=> {
                     if(r.data.result){
+                        if(location.state){
+                            Swal.fire({
+                                icon: 'success',
+                                title: '확인',
+                                text: "수정이 완료 되었습니다. 수정/삭제 페이지로 이동합니다. ",
+                                }).then(()=>{
+                                    navigate("/updateDelete", {
+                                        state : {
+                                            params : location.state.searchInfo
+                                        }
+                                    });
+                            });
+                        }else{
                         Swal.fire({
                             icon: 'success',
                             title: '확인',
@@ -134,6 +184,7 @@ const Service = ()=>{
                                 downloadExcel()
                                 dispatch(actions.getPreviousProgramListAfterSave({data : searchInfo, type}))
                             });  
+                        }
                     }
                 })
             }

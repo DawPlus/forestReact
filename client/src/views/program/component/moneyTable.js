@@ -46,9 +46,12 @@ const MoneyTable = (props)=>{
     }
 
     const onAddClick = ()=>{
-        const isEmpty = Object.values(pageInfo).some(value => value === "");
-        if(isEmpty){
-            Swal.fire({ title : "확인", text : "비어있는값이 있습니다."})
+
+
+        
+        //const isEmpty = Object.values(pageInfo).some(value => value === "");
+        if([  pageInfo.EXPENSE_TYPE, pageInfo.EXPENSE_PRICE].includes("") ){
+            Swal.fire({ title : "확인", text : "분류 / 금액 을 입력해 주십시오 "})
             return;
         }
 
@@ -98,6 +101,9 @@ const MoneyTable = (props)=>{
         }))
     }
 
+    const displayRows = React.useMemo(()=>[...data].sort((a, b) => a.EXPENSE_TYPE.localeCompare(b.EXPENSE_TYPE)),[data])
+
+
     return (<>
             <div style={{padding : "10px", width : "100%"}}>
                 {/* <div style={{padding: "0px 0px 10px 8px" ,"fontSize": "15px"}}></div> */}
@@ -107,7 +113,7 @@ const MoneyTable = (props)=>{
                         <Select name="EXPENSE_TYPE"  value={pageInfo.EXPENSE_TYPE} label="분류" items={type==="expense" ? expenseItems : expenseItems2}size="small" onChange={onChange}/>
                     </Grid>
                     <Grid item md={2}>
-                        <NumberInput name="EXPENSE_PRICE"  value={pageInfo.EXPENSE_PRICE} label="금액" size="small" onChange={onInputChange}/>
+                        <NumberInput name="EXPENSE_PRICE"  maxLength={15} value={pageInfo.EXPENSE_PRICE} label="금액" size="small" onChange={onInputChange}/>
                     </Grid>
                     <Grid item md={4}>
                         <Input name="EXPENSE_DETAIL"  value={pageInfo.EXPENSE_DETAIL} label="세부내역" size="small" onChange={onChange}/>
@@ -140,7 +146,7 @@ const MoneyTable = (props)=>{
                                 <TableCell colSpan={5} align="center">등록된 항목이 없습니다.</TableCell>
                             </TableRow>
                             }
-                            {data.map((i, idx) => 
+                            {displayRows.map((i, idx) => 
                                 <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} key={idx} >
                                     <TableCell align="center">{idx +1}</TableCell>
                                     <TableCell align="center">{getLabel(i.EXPENSE_TYPE)}</TableCell>

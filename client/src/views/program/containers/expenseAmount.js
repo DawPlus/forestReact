@@ -68,7 +68,7 @@ const ExpenseAmount = ()=>{
                         {teacherList.filter(i=> i.TITLE.includes("예정")).map((it, idx)=>{
                                 return (
                                     <Grid item sm={3} key={idx}>
-                                        <NumberInput name="EXPENSE_PRICE"  value={it.EXPENSE_PRICE} label={it.TITLE.replace("강사예정", "")}  onChange={onChange(it.id, 'teacherList')}/>
+                                        <NumberInput name="EXPENSE_PRICE"  value={it.EXPENSE_PRICE} label={it.TITLE.replace("강사예정", "")}   maxLength={15} onChange={onChange(it.id, 'teacherList')}/>
                                     </Grid>)
                             }
                         )}
@@ -93,7 +93,7 @@ const ExpenseAmount = ()=>{
                         {customList.filter(i=> i.TITLE.includes("예정")).map((it, idx)=>{
                                 return (
                                     <Grid item sm={3} key={idx}>
-                                        <NumberInput name="EXPENSE_PRICE"  value={it.EXPENSE_PRICE} label={it.TITLE.replace("고객예정", "")}  onChange={onChange(it.id, "customList")}/>
+                                        <NumberInput name="EXPENSE_PRICE"  value={it.EXPENSE_PRICE} label={it.TITLE.replace("고객예정", "")} maxLength={15} onChange={onChange(it.id, "customList")}/>
                                     </Grid>)
                             }
                         )}

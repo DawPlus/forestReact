@@ -9,13 +9,43 @@ import { actions, getState } from "store/reducers/serviceInsert/prevent";
 import Swal from "sweetalert2";
 import useDownloadExcel from "utils/useDownloadExcel";
 import { generateMergeInfo } from "utils/utils";
+import { useLocation, useNavigate } from "react-router";
 
 
 const Service = ()=>{
-
+    // 1. useLocation 훅 취득
+    const location = useLocation();
+    const navigate = useNavigate();
     const dispatch  = useDispatch();
 
     React.useEffect(()=>{
+        
+
+        if(!location.state) return;
+        
+        const {data} = location.state;
+
+       
+        
+        const [col1 , col2 , col3, col4] = [data[6], data[3], data[4], data[7]]
+        dispatch(actions.getList({data : {
+            AGENCY  : col1,
+            OPENDAY  : col2,
+            EVAL_DATE : col3,
+            PV : col4
+        }, type }))
+        // const [col1 , col2 , col3, col4, col5, col6, col7] = [data[6], data[3], data[4], data[8], data[9], data[10], data[11]]
+
+        // dispatch(actions.setValue({
+        //     key : "searchInfo" , 
+        //     value : {
+        //         ...searchInfo, 
+        //         AGENCY :col1,
+        //         OPENDAY   :col2 ,
+        //         EVAL_DATE :col3,
+        //         PV :col4, 
+        //     }
+        // }))
         return ()=>{
             dispatch(actions.initState())
         }
@@ -147,10 +177,25 @@ const Service = ()=>{
                     data, 
                     agency : searchInfo.AGENCY,
                     openday : searchInfo.OPENDAY, 
-                    evaldate : searchInfo.EVAL_DATE
+                    evaldate : searchInfo.EVAL_DATE,
+                    pv : searchInfo.PV
                 }
                 callApi("/insertForm/createPrevent", params).then(r=> {
                     if(r.data.result){
+                        if(location.state){
+                            Swal.fire({
+                                icon: 'success',
+                                title: '확인',
+                                text: "수정이 완료 되었습니다. 수정/삭제 페이지로 이동합니다. ",
+                                }).then(()=>{
+                                    navigate("/updateDelete", {
+                                        state : {
+                                            params : location.state.searchInfo
+                                        }
+                                    });
+                            });
+                        }else{
+
                         Swal.fire({
                             icon: 'success',
                             title: '확인',
@@ -160,8 +205,10 @@ const Service = ()=>{
                                 dispatch(actions.getListAfterSave({data : {
                                     AGENCY  : searchInfo.AGENCY,
                                     OPENDAY : searchInfo.OPENDAY,
+                                    PV : searchInfo.PV
                                 }, type}))
                             });  
+                        }
                     }
                 })
             }
@@ -171,9 +218,9 @@ const Service = ()=>{
 
 
     const onSearch = ()=>{
-        const {   AGENCY , OPENDAY , EVAL_DATE, PROGRAM_NAME} = searchInfo;
+        const {   AGENCY , OPENDAY , EVAL_DATE, PROGRAM_NAME, PV} = searchInfo;
         dispatch(actions.getList({data : {
-            AGENCY , OPENDAY , EVAL_DATE, PROGRAM_NAME
+            AGENCY , OPENDAY , EVAL_DATE, PROGRAM_NAME, PV
         }, type }))
     }
 

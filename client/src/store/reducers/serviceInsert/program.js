@@ -28,7 +28,7 @@ const initialState = {
         SCORE8 : "",
         SCORE9 : "",
         ETC_OPINION : "",
-        TYPE : "미기재", // 참여구분
+        TYPE : "참여자", // 참여구분
     }
 
     ],

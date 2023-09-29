@@ -13,9 +13,10 @@ const IncomeContainer = ()=>{
 
 
     // 할인율 제외목록
-    const incomeList = income.filter(i=> i.INCOME_TYPE !=="할인율");
+    const incomeList = income.filter(i=> i.INCOME_TYPE !=="할인율").sort((a, b) => a.INCOME_TYPE.localeCompare(b.INCOME_TYPE));;
     // 할인율
     const disCount  = income.find(i=> i.INCOME_TYPE === "할인율") || {}
+    console.log(disCount)
     // 계
     const totalIncomeList = incomeList.reduce( (acc, cur)=>{
         acc += +cur.INCOME_PRICE
@@ -42,6 +43,16 @@ const IncomeContainer = ()=>{
         return finalPrice;
       }
 
+
+      function formatNumberWithCommas(value) {
+        const numberValue = parseInt(value, 10); // 형 변환 시도
+        if (!isNaN(numberValue)) { // 형 변환이 성공한 경우
+          return numberValue.toLocaleString();
+        }
+        return value; // 형 변환이 실패한 경우 그대로 반환
+      }
+      
+
     return <>
         <TableContainer style={{marginTop : "20px"}}>
         <h3 className="tableTitle">수입금액</h3>
@@ -59,15 +70,15 @@ const IncomeContainer = ()=>{
                     {incomeList.map((i, idx)=> 
                         <TableRow key={idx}>
                             <TableCell>{`${i.INCOME_TYPE}(천원)`}</TableCell>
-                            <TableCell>{i.INCOME_PRICE}</TableCell>
+                            <TableCell>{formatNumberWithCommas(i.INCOME_PRICE)}</TableCell>
                             <TableCell>{decodeSpecialCharacters(i.INCOME_DETAIL)}</TableCell>
                             <TableCell>{decodeSpecialCharacters(i.INCOME_NOTE)}</TableCell>
                         </TableRow>
                     )}
                     <TableRow>
                         <TableCell>계(천원)</TableCell>
-                        <TableCell>{totalIncomeList}</TableCell>
-                        <TableCell>{disCount.INCOME_PRICE}</TableCell>
+                        <TableCell>{formatNumberWithCommas(totalIncomeList)}</TableCell>
+                        <TableCell>{`${disCount.INCOME_PRICE} %`} </TableCell>
                         <TableCell></TableCell>
                     </TableRow>
                     <TableRow>

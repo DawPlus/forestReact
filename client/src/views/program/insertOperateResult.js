@@ -22,7 +22,6 @@ import Swal from "sweetalert2";
 
 const InsertOperateResult = ()=>{
 
-  
 
   const dispatch= useDispatch();
 
