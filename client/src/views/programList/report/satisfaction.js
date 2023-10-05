@@ -50,7 +50,8 @@ const ProgramSatisfaction = ()=>{
                         <TableCell className="table-header" align="center" colSpan={4}>강사</TableCell>
                         <TableCell className="table-header" align="center" colSpan={4}>내용구성</TableCell>
                         <TableCell className="table-header" align="center" colSpan={4}>효과성</TableCell>
-                        <TableCell className="table-header" align="center" rowSpan={2}>전체평균</TableCell>
+                        <TableCell className="table-header" align="center" rowSpan={2}style={{width :"100px"}}>설문참가인원</TableCell>
+                        <TableCell className="table-header" align="center" rowSpan={2} >전체평균</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell className="table-header" align="center">전문성</TableCell>
@@ -130,6 +131,7 @@ const ProgramSatisfaction = ()=>{
                                         score2 : i.score8,
                                         score3 : i.score9,
                         })}</TableCell>
+                        <TableCell>{i.cnt}</TableCell>
                         <TableCell>{calculateAverage({
                                         score1 : i.score1,
                                         score2 : i.score2,

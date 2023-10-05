@@ -19,7 +19,7 @@ import { useState } from "react";
 // 프로그램목록명
 const sheet1Header = [["분야", "프로그램명", "강사명", "내부강사", "외부강사"]];
 const sheet2Header = [["순번", "년도", "월", "일", "사업구분", "목적구분", "단체명", "지역", "단체유형", "참여형태", "대상", "체류일", "참여인원", "연인원", "폐광지역", "OM", "지출금액"]];
-const sheet3Header = [["순번", "년도", "월", "일", "단체명", "분야", "프로그램명", "강사명", "항목1", "항목2", "항목3", "항목4", "항목5", "항목6", "항목7", "항목8", "항목9"]];
+const sheet3Header = [["순번", "년도", "월", "일", "단체명", "분야", "프로그램명", "강사명", "참가인원","항목1", "항목2", "항목3", "항목4", "항목5", "항목6", "항목7", "항목8", "항목9"]];
 const sheet4Header = [ ['순번', '강사명', '프로그램명','횟수', '전문성',"성실성", "반응성", "평균", "체계성", "적합성", "흥미성", '평균', "학습성", "재참여", "추천", "평균", "총평균"] ];
 //const sheet5Header = [["구분", "건(사회공헌)", "실인원(사회공헌)", "연인원(사회공헌)", "건(수입구분)", "실인원(수입구분)", "연인원(수입구분)", "건(전체)", "실인원(전체)", "연인원(전체)"]];
 
@@ -97,6 +97,8 @@ const ExcelDownload = ()=>{
                             if (matchingProgram2) {
                                 // data2에서 PROGRAM_NAME, BUNYA, TEACHER가 일치하는 경우
                                 // avg_score 값을 추가
+
+                                program.row_count = matchingData2.row_count || "";
                                 program.avg_score1 = matchingData2.avg_score1 || "";
                                 program.avg_score2 = matchingData2.avg_score2 || "";
                                 program.avg_score3 = matchingData2.avg_score3 || "";
@@ -108,6 +110,7 @@ const ExcelDownload = ()=>{
                                 program.avg_score9 = matchingData2.avg_score9 || "";
                             } else {
                                 // data2에서 일치하지 않는 항목에는 빈 문자열을 추가
+                                program.row_count = "";
                                 program.avg_score1 = "";
                                 program.avg_score2 = "";
                                 program.avg_score3 = "";
@@ -124,6 +127,7 @@ const ExcelDownload = ()=>{
                         // data2에서 일치하는 항목을 찾지 못한 경우
                         // programs 목록에 빈 문자열을 추가
                         newItem.programs.forEach(program => {
+                            program.row_count = "";
                             program.avg_score1 = "";
                             program.avg_score2 = "";
                             program.avg_score3 = "";
@@ -169,6 +173,7 @@ const ExcelDownload = ()=>{
                 bunya : rest.BUNYA, 
                 PROGRAM_NAME : rest.PROGRAM_NAME, 
                 TEACHER : rest.TEACHER, 
+                rowCount : rest.row_count,
                 avg_score1 : rest.avg_score1,
                 avg_score2 : rest.avg_score2,
                 avg_score3 : rest.avg_score3,
@@ -237,14 +242,14 @@ const ExcelDownload = ()=>{
                 return acc;
             }, {});
             
-            console.log(countData)
+     
             // 결과 데이터 생성
             const result = Object.entries(countData).map(([key, count]) => {
                 const [TEACHER, PROGRAM_NAME, BUNYA] = key.split('-');
                 return { TEACHER, PROGRAM_NAME, BUNYA, CNT: count };
             });
             
-            console.log(result);
+     
 
 
             const sheet4Merge = result.map((item, idx) => {
@@ -270,7 +275,7 @@ const ExcelDownload = ()=>{
                     };
             });
             
-            console.log(sheet4Merge);
+   
 
 
 

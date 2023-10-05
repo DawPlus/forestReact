@@ -49,24 +49,26 @@ router.post('/getProgramListDetail', (req, res)=>{
                         FROM service_env_satisfaction
                         WHERE AGENCY = ? AND OPENDAY = ?`
 
-    const sql3 = `SELECT PROGRAM_NAME, TEACHER, BUNYA, type, 
-                    IFNULL(ROUND(AVG(nullif(score1, 0)), 2), 0) as score1,
-                    IFNULL(ROUND(AVG(nullif(score2, 0)), 2), 0) as score2,
-                    IFNULL(ROUND(AVG(nullif(score3, 0)), 2), 0) as score3,
-                    IFNULL(ROUND(AVG(nullif(score4, 0)), 2), 0) as score4,
-                    IFNULL(ROUND(AVG(nullif(score5, 0)), 2), 0) as score5,
-                    IFNULL(ROUND(AVG(nullif(score6, 0)), 2), 0) as score6,
-                    IFNULL(ROUND(AVG(nullif(score7, 0)), 2), 0) as score7,
-                    IFNULL(ROUND(AVG(nullif(score8, 0)), 2), 0) as score8,
-                    IFNULL(ROUND(AVG(nullif(score9, 0)), 2), 0) as score9
-                FROM program_satisfaction
+    const sql3 = `SELECT ps.PROGRAM_NAME, ps.TEACHER, ps.BUNYA, ps.type, 
+                    IFNULL(ROUND(AVG(nullif(ps.score1, 0)), 2), 0) as score1,
+                    IFNULL(ROUND(AVG(nullif(ps.score2, 0)), 2), 0) as score2,
+                    IFNULL(ROUND(AVG(nullif(ps.score3, 0)), 2), 0) as score3,
+                    IFNULL(ROUND(AVG(nullif(ps.score4, 0)), 2), 0) as score4,
+                    IFNULL(ROUND(AVG(nullif(ps.score5, 0)), 2), 0) as score5,
+                    IFNULL(ROUND(AVG(nullif(ps.score6, 0)), 2), 0) as score6,
+                    IFNULL(ROUND(AVG(nullif(ps.score7, 0)), 2), 0) as score7,
+                    IFNULL(ROUND(AVG(nullif(ps.score8, 0)), 2), 0) as score8,
+                    IFNULL(ROUND(AVG(nullif(ps.score9, 0)), 2), 0) as score9,
+                    COUNT(*) AS cnt
+                FROM program_satisfaction ps
+                LEFT JOIN dbstatistics.basic_info bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
                 WHERE 1=1 
-                    AND AGENCY = ?
-                    AND OPENDAY = ? AND AGE != 0 
-                    AND (TYPE = "참여자" OR TYPE = "인솔자")
-                GROUP BY PROGRAM_NAME, TEACHER, BUNYA, TYPE
-                ORDER BY PROGRAM_NAME, TEACHER, BUNYA,
-                    CASE WHEN TYPE = '참여자' THEN 0 ELSE 1 END;
+                    AND ps.AGENCY = ?
+                    AND ps.OPENDAY = ? AND ps.AGE != 0 
+                    AND (ps.TYPE = "참여자" OR ps.TYPE = "인솔자")
+                GROUP BY ps.PROGRAM_NAME, ps.TEACHER, ps.BUNYA, ps.TYPE
+                ORDER BY ps.PROGRAM_NAME, ps.TEACHER, ps.BUNYA,
+                    CASE WHEN ps.TYPE = '참여자' THEN 0 ELSE 1 END;
                 `
 
 
