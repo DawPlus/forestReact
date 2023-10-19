@@ -95,11 +95,11 @@ const InsertOperateResult = ()=>{
         if (!result) {
             return
         }
-        // 프로그램 등록여부 체크 
-        if(programList.length === 0){
-            Swal.fire(`프로그램을 입력해 주십시오.`);
-            return;
-        }
+        // 프로그램 등록여부 체크  - 프로그램 미실시도 잇다고함.
+        // if(programList.length === 0){
+        //     Swal.fire(`프로그램을 입력해 주십시오.`);
+        //     return;
+        // }
 
         const expenseList = [...teacherList, ...teacherExtraList, ...customList , ...customExtraList].map(({TITLE, id, ...rest})=> ({...rest}));
         const incomeList = [...income, ...incomeExtraList].map(({TITLE, id, ...rest})=> ({...rest}));

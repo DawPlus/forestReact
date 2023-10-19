@@ -164,7 +164,6 @@ const Service = (props)=>{
 
                 callApi("/insertForm/serviceInsert", params).then(r=> {
                     if(r.data.result){
-                        console.log(location.state.searchInfo)
                         if(location.state){
                             Swal.fire({
                                 icon: 'success',
@@ -183,8 +182,9 @@ const Service = (props)=>{
                                 title: '확인',
                                 text: "정상등록 되었습니다.",
                                 }).then(()=>{
-                                    downloadExcel()
-                                    dispatch(actions.getPreviousServiceListAfterSave({data : searchInfo}))
+                                    // downloadExcel()
+                                        dispatch(actions.initState())
+                                    //  dispatch(actions.getPreviousServiceListAfterSave({data : searchInfo}))
                                 });  
                         }
                     }

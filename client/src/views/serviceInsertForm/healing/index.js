@@ -210,12 +210,13 @@ const Service = ()=>{
                             title: '확인',
                             text: "정상등록 되었습니다.",
                             }).then(()=>{
-                                downloadExcel()
-                                dispatch(actions.getListAfterSave({data : {
-                                    AGENCY  : searchInfo.AGENCY,
-                                    OPENDAY : searchInfo.OPENDAY,
-                                    PV : searchInfo.PV
-                                }, type}))
+                                dispatch(actions.initState())
+                                // downloadExcel()
+                                // dispatch(actions.getListAfterSave({data : {
+                                //     AGENCY  : searchInfo.AGENCY,
+                                //     OPENDAY : searchInfo.OPENDAY,
+                                //     PV : searchInfo.PV
+                                // }, type}))
                             });  
                         }
                     }

@@ -140,7 +140,7 @@ router.post('/create', (req, res)=>{
             ISCLOSEMINE = VALUES(ISCLOSEMINE)
         
     `;  
-    console.log(sql, values)
+
     
     maria(sql, values).then((rows) => {
         const pk = BASIC_INFO_SEQ ? BASIC_INFO_SEQ : rows.insertId;

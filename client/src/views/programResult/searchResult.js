@@ -46,6 +46,10 @@ const itemObject = {
         {label : "제주", value : "제주"},
         {label : "미기재", value : "미기재"}
     ],
+    PV : [
+        {label : "사전", value : "사전"},
+        {label : "사후", value : "사후"}
+    ],
     JOB  : [
         {label : "학생", value : "학생"},
         {label : "자영업", value : "자영업"},
@@ -94,20 +98,30 @@ const SearchResult = ()=>{
         {label : "힐링 서비스", value : "healing"},
     ]
 
-
-    const keywordItem = [
+    const programKeywordItem = [
         { value : "X" , label : "해당없음"},
-        // { value : "AGENCY" , label : "기관명"},
         { value : "SEX" , label : "성별"},
         { value : "AGE" , label : "연령(만)"},
         { value : "RESIDENCE" , label : "거주지"},
         { value : "JOB" , label : "직업"},
         { value : "OPENDAY" , label : "시작일자"},
         { value : "PLACE" , label : "장소"},
+
         { value : "TEACHER" , label : "강사"},
         { value : "PROGRAM_NAME" , label : "프로그램이름"},
-        { value : "BUNYA" , label : "분야"},
+        { value : "BUNYA" , label : "분야"},    
     ]
+
+//    const keywordItem =  [
+//         { value : "X" , label : "해당없음"},
+//         // { value : "AGENCY" , label : "기관명"},
+//         { value : "SEX" , label : "성별"},
+//         { value : "AGE" , label : "연령(만)"},
+//         { value : "RESIDENCE" , label : "거주지"},
+//         { value : "JOB" , label : "직업"},
+//         { value : "OPENDAY" , label : "시작일자"},
+//         // { value : "PV" , label : "시점"},
+//     ]
 
     const onChangeHandler = (e)=>{
         dispatch(actions.onChangeSearchResult(e.target.value));
@@ -188,7 +202,6 @@ const SearchResult = ()=>{
         dispatch(actions.setSearchData({key, value}))
     }
 
-
     
     return <>
             <MainCard>
@@ -214,11 +227,12 @@ const SearchResult = ()=>{
                             <Grid item md={3} key={idx}>
                                 <Grid container spacing={1}>
                                     <Grid item md={6}>
-                                        <Select minWidth="50" value={i.type} label={`주제어${idx+1}`} name="type" items={keywordItem} onChange={onChangeKeyword(idx)}/>
+                                        {/* <Select minWidth="50" value={i.type} label={`주제어${idx+1}`} name="type" items={["healing","prevent", "counsel"].includes(effect) ? healingKeywordItem:keywordItem} onChange={onChangeKeyword(idx)}/> */}
+                                        <Select minWidth="50" value={i.type} label={`주제어${idx+1}`} name="type" items={programKeywordItem} onChange={onChangeKeyword(idx)}/>
                                     </Grid>
                                     <Grid item md={6}>
                                         {
-                                        ["SEX", "RESIDENCE", "JOB"].includes(i.type) ? 
+                                        ["SEX", "RESIDENCE", "JOB", "PV"].includes(i.type) ? 
                                                 <Select value={i.text} label="주제어" name="text" items={itemObject[i.type]}onChange={onChangeKeyword(idx)}/>
                                             : i.type === "OPENDAY" ?   <DatePicker label="주제어" name="text" value={i.type} onChange={onChangeKeywordDate(idx)}/> : 
                                                                         <TextField label="주제어" name="text" value={i.text} size="small" onChange={onChangeKeyword(idx)} variant="outlined" />

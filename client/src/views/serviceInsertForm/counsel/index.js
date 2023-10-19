@@ -26,8 +26,6 @@ const Service = ()=>{
         const {data} = location.state;
         const [col1 , col2 , col3, col4, col5] = [data[6], data[3], data[4], data[7], data[8]]
 
-        console.log(data)
-
         dispatch(actions.getList({data : {
             AGENCY  : col1,
             OPENDAY  : col2,
@@ -241,12 +239,13 @@ const Service = ()=>{
                             title: '확인',
                             text: "정상등록 되었습니다.",
                             }).then(()=>{
-                                downloadExcel()
-                                dispatch(actions.getListAfterSave({data : {
-                                    AGENCY  : searchInfo.AGENCY,
-                                    OPENDAY : searchInfo.OPENDAY,
-                                    PV : searchInfo.PV
-                                }, type}))
+                                dispatch(actions.initState())
+                                // downloadExcel()
+                                // dispatch(actions.getListAfterSave({data : {
+                                //     AGENCY  : searchInfo.AGENCY,
+                                //     OPENDAY : searchInfo.OPENDAY,
+                                //     PV : searchInfo.PV
+                                // }, type}))
                             });  
                         }    
                     }

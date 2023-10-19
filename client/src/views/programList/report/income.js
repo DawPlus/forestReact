@@ -16,7 +16,7 @@ const IncomeContainer = ()=>{
     const incomeList = income.filter(i=> i.INCOME_TYPE !=="할인율").sort((a, b) => a.INCOME_TYPE.localeCompare(b.INCOME_TYPE));;
     // 할인율
     const disCount  = income.find(i=> i.INCOME_TYPE === "할인율") || {}
-    console.log(disCount)
+    
     // 계
     const totalIncomeList = incomeList.reduce( (acc, cur)=>{
         acc += +cur.INCOME_PRICE

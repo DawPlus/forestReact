@@ -6,10 +6,10 @@ const { createHistory } = require('../util');
 
 // 입력
 router.post('/create', (req, res)=>{
-    console.log(req.session)
+    
     const {user_name = "admin"} = req.session?.userInfo || "admin";
 
-    console.log(user_name)
+    
     const {data} = req.body; 
     const { program_seq, name, bunya } = data;
     const values = [ program_seq, name, bunya,  user_name, user_name ]

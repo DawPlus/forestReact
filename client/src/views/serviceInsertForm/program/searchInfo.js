@@ -3,7 +3,7 @@ import { Grid } from '@mui/material';
 import { useDispatch, useSelector } from "react-redux";
 import { getState, actions } from "store/reducers/serviceInsert/program";
 import {  Input, Select, DatePicker} from "ui-component/inputs";
-import SelectItems from "ui-component/inputs/selectItems";
+//import SelectItems from "ui-component/inputs/selectItems";
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 const SearchInfo = ()=>{

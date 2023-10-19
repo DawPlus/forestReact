@@ -181,8 +181,9 @@ const Service = ()=>{
                             title: '확인',
                             text: "정상등록 되었습니다.",
                             }).then(()=>{
-                                downloadExcel()
-                                dispatch(actions.getPreviousProgramListAfterSave({data : searchInfo, type}))
+                                dispatch(actions.initState())
+                                // downloadExcel()
+                                // dispatch(actions.getPreviousProgramListAfterSave({data : searchInfo, type}))
                             });  
                         }
                     }

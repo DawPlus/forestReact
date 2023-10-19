@@ -262,7 +262,7 @@ router.post('/programManage', (req, res)=>{
     const whereText = keyword.filter(obj => obj.text !== '' && obj.type !== "X")
                                 .map(obj => `AND bi.${obj.type} LIKE '${obj.text}'`)
                                 .join(' ');    
-                                console.log(whereText) 
+                                
     let sql = `
         SELECT 
             PROGRAM_IN_OUT as PROGRAM_IN_OUT2

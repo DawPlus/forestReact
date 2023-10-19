@@ -101,9 +101,9 @@ const action = {
     getResidenceList : createAction(`${name}/getResidenceList`),
 
 
-
-
     getSearchResult : createAction(`${name}/getSearchResult`),
+
+
 
 
 }
@@ -366,13 +366,14 @@ export const {getState, reducer, actions} = createCustomSlice({
               return 0;
           });
     
+          
           // 사전 사후가 없을경우는 0 으로 입력  
           // 사전과 사후가 모두 있는 항목만 출력
           const filteredData = sortedData.filter(data => {
               const hasPre = sortedData.some(item => item.NAME === data.NAME && item.PV === '사전');
               const hasPost = sortedData.some(item => item.NAME === data.NAME && item.PV === '사후');
               return hasPre && hasPost;
-          });
+          }); // 사전사후 모두 잇어야함 
   
           state.searchResult.rows = filteredData.map(i=> {
               let avgs = {}

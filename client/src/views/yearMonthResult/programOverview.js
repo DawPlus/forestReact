@@ -6,8 +6,10 @@ import DynamicTableHead from "ui-component/DynamicTableHead";
 
 
 const headerInfo =     [
-    ["구분", '참여인원(명)', '참여인원(명)', '참여인원(명)', '참여인원(명)', '참여인원(명)', '참여인원(명)', '참여인원(명)', '참여인원(명)', '지원사항', '지원사항', '지원사항', '지원사항', '서비스유형', '서비스유형', '서비스유형', '서비스유형', '서비스유형', '서비스유형'],
-    ["", '남(참여자)', '여(참여자', '계', '남(인솔자)', '여(인솔자)', '계', '실인원', '연인원', '프로그램', '숙박', '식사', '기타', '산림교육', '산림치유', '중독치유', '중독예방', '힐링', '기타'],
+    ["구분", '참여인원(명)', '참여인원(명)', '참여인원(명)', '참여인원(명)', '참여인원(명)', '참여인원(명)', '참여인원(명)', '참여인원(명)' , '서비스유형', '서비스유형', '서비스유형', '서비스유형', '서비스유형', '서비스유형'],
+    ["", '남(참여자)', '여(참여자', '계', '남(인솔자)', '여(인솔자)', '계', '실인원', '연인원', '산림교육', '산림치유', '중독치유', '중독예방', '힐링', '기타'],
+    // ["구분", '참여인원(명)', '참여인원(명)', '참여인원(명)', '참여인원(명)', '참여인원(명)', '참여인원(명)', '참여인원(명)', '참여인원(명)', '지원사항', '지원사항', '지원사항', '지원사항', '서비스유형', '서비스유형', '서비스유형', '서비스유형', '서비스유형', '서비스유형'],
+    // ["", '남(참여자)', '여(참여자', '계', '남(인솔자)', '여(인솔자)', '계', '실인원', '연인원', '프로그램', '숙박', '식사', '기타', '산림교육', '산림치유', '중독치유', '중독예방', '힐링', '기타'],
     
 ]
 
@@ -69,10 +71,10 @@ const ParticipationType = ()=>{
                                     <TableCell>{i.soc_part_man + i.soc_part_woman +i.soc_lead_man + i.soc_lead_woman || ""}</TableCell>
                                 </>}
                                 <TableCell>{i.grand_total}</TableCell>
-                                <TableCell>{i.count_program}</TableCell>                        
+                                {/* <TableCell>{i.count_program}</TableCell>                        
                                 <TableCell>{i.count_accommodation}</TableCell>                        
                                 <TableCell>{i.count_meal}</TableCell>                        
-                                <TableCell>{i.count_etc}</TableCell>                        
+                                <TableCell>{i.count_etc}</TableCell>                         */}
                                 {/* <TableCell>{i.count_accommodation + i.count_program + i.count_meal + i.count_etc }</TableCell>                         */}
                                 <TableCell>{i.forest_edu}</TableCell>                        
                                 <TableCell>{i.forest_healing}</TableCell>                        
@@ -92,10 +94,10 @@ const ParticipationType = ()=>{
                                 <TableCell>{totalRow.lead_man + totalRow.lead_woman  + totalRow.soc_lead_man + totalRow.soc_lead_woman  || ""}</TableCell>                        
                                 <TableCell>{totalRow.part_man + totalRow.part_woman+totalRow.lead_man + totalRow.lead_woman + totalRow.soc_part_man + totalRow.soc_part_woman +totalRow.soc_lead_man + totalRow.soc_lead_woman  || ""}</TableCell>
                                 <TableCell>{totalRow.grand_total}</TableCell>
-                                <TableCell>{totalRow.count_program}</TableCell>                        
+                                {/* <TableCell>{totalRow.count_program}</TableCell>                        
                                 <TableCell>{totalRow.count_accommodation}</TableCell>                        
                                 <TableCell>{totalRow.count_meal}</TableCell>                        
-                                <TableCell>{totalRow.count_etc}</TableCell>                        
+                                <TableCell>{totalRow.count_etc}</TableCell>                         */}
                                 {/* <TableCell>{totalRow.count_accommodation + totalRow.count_program + totalRow.count_meal + totalRow.count_etc }</TableCell>                         */}
                                 <TableCell>{totalRow.forest_edu}</TableCell>                        
                                 <TableCell>{totalRow.forest_healing}</TableCell>                        

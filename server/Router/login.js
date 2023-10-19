@@ -40,7 +40,7 @@ router.post("/login", (req,res)=>{
         
         
     const encPassword = encrypt(password);
-    console.log(encPassword)
+    
 
     maria(sql, [id, encPassword])
     .then((rows) => {
@@ -64,7 +64,7 @@ router.post("/login", (req,res)=>{
 });
 
 router.post("/logout", (req, res)=>{
-    console.log(req.session)
+    
     if(req.session){
         req.session.destroy(()=>{
             res.json({message : "logout success"})

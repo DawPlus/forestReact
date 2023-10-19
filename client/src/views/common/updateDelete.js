@@ -38,7 +38,7 @@ const UpdateDelete = ()=>{
         
         if(!location.state) return; 
         const {params}= location.state;
-        console.log(params)
+        
         setOpenday(s=> params.openday);
         setEndday(s=> params.endday);
         dispatch(actions.setValue({

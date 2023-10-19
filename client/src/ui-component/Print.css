@@ -1,17 +1,30 @@
 @media print {
-    body * {
+   body * {
        visibility: hidden;
-    }
-    .print-section, .print-section * {
+   }
+   .print-section, .print-section * {
        visibility: visible;
-    }
-    .print-section {
-      border: none !important;
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
+   }
+   .print-section {
+       border: none !important;
+       -webkit-print-color-adjust: exact;
+       print-color-adjust: exact;
        position: absolute;
        left: 0;
        top: 0;
-    }
- }
- 
+       width: 100%;
+   }
+   .print-section table {
+      width: 100%; /* 테이블을 100%로 설정하여 페이지에 맞추려 시도 */
+      /* 다른 스타일 조정 */
+  }
+   .print-section table td, .print-section table th {
+       font-size: 10px !important;
+       line-height: 11px !important;
+       width: 40px !important;
+       white-space: normal !important; /* 텍스트 줄 바꿈을 자동으로 처리 */
+   }
+}
+@page {
+   margin: 0.5cm; /* 원하는 마진 크기로 조절 */
+}

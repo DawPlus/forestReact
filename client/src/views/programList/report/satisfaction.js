@@ -39,19 +39,19 @@ const ProgramSatisfaction = ()=>{
     
     return <>
         <TableContainer style={{marginTop : "20px"}}>
-        <h3 className="tableTitle">프로그램만족도</h3>
+            <h3 className="tableTitle">프로그램만족도</h3>
             <Table className="report custom-table">
                 <TableHead>
                     <TableRow>
                         <TableCell className="table-header" align="center" rowSpan={2}>프로그램명</TableCell>
                         <TableCell className="table-header" align="center" rowSpan={2}>분야</TableCell>
                         <TableCell className="table-header" align="center" rowSpan={2}>강사명</TableCell>
-                        <TableCell className="table-header" align="center" rowSpan={2}>참여구분</TableCell>
+                        <TableCell className="table-header" align="center" rowSpan={2} style={{lineHeight :"13px"}}>참여<br/>구분</TableCell>
                         <TableCell className="table-header" align="center" colSpan={4}>강사</TableCell>
                         <TableCell className="table-header" align="center" colSpan={4}>내용구성</TableCell>
                         <TableCell className="table-header" align="center" colSpan={4}>효과성</TableCell>
-                        <TableCell className="table-header" align="center" rowSpan={2}style={{width :"100px"}}>설문참가인원</TableCell>
-                        <TableCell className="table-header" align="center" rowSpan={2} >전체평균</TableCell>
+                        <TableCell className="table-header" align="center" rowSpan={2} style={{lineHeight :"13px"}}>설문<br/>참가<br/>인원</TableCell>
+                        <TableCell className="table-header" align="center" rowSpan={2} style={{lineHeight :"13px"}}>전체<br/>평균</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell className="table-header" align="center">전문성</TableCell>
@@ -74,7 +74,6 @@ const ProgramSatisfaction = ()=>{
                         <TableRow>
                             <TableCell colSpan={17}>조회된 정보가 없습니다.</TableCell>
                         </TableRow>  : 
-                        
                         _programList.map((item, index) =>
                         <TableRow key={index}>
                             <TableCell >{item.programName}</TableCell>
@@ -94,56 +93,34 @@ const ProgramSatisfaction = ()=>{
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
+                            <TableCell></TableCell>
                         </TableRow>
                         )
-                    : null}
+                    : <></>}
                     {programSaf.map((i, key)=>
-                    <TableRow key={key}>
-                        {key %2 === 0 ? <TableCell rowSpan={2}>{i.PROGRAM_NAME}</TableCell> :null}
-                        {key %2 === 0 ? <TableCell rowSpan={2}>{i.BUNYA}</TableCell> :null}
-                        {key %2 === 0 ? <TableCell rowSpan={2}>{i.TEACHER}</TableCell> :null}                        
-                        {/* <TableCell >{i.PROGRAM_NAME}</TableCell> 
-                        <TableCell >{i.BUNYA}</TableCell> 
-                        <TableCell >{i.TEACHER}</TableCell>  */}
-                        
-                        <TableCell>{i.type}</TableCell>
-                        <TableCell>{i.score1}</TableCell>
-                        <TableCell>{i.score2}</TableCell>
-                        <TableCell>{i.score3}</TableCell>
-                        <TableCell>{calculateAverage({
-                                        score1 : i.score1,
-                                        score2 : i.score2,
-                                        score3 : i.score3,
-                        })}</TableCell>
-                        <TableCell>{i.score4}</TableCell>
-                        <TableCell>{i.score5}</TableCell>
-                        <TableCell>{i.score6}</TableCell>
-                        <TableCell>{calculateAverage({
-                                        score1 : i.score4,
-                                        score2 : i.score5,
-                                        score3 : i.score6,
-                        })}</TableCell>
-                        <TableCell>{i.score7}</TableCell>
-                        <TableCell>{i.score8}</TableCell>
-                        <TableCell>{i.score9}</TableCell>
-                        <TableCell>{calculateAverage({
-                                        score1 : i.score7,
-                                        score2 : i.score8,
-                                        score3 : i.score9,
-                        })}</TableCell>
-                        <TableCell>{i.cnt}</TableCell>
-                        <TableCell>{calculateAverage({
-                                        score1 : i.score1,
-                                        score2 : i.score2,
-                                        score3 : i.score3,
-                                        score4 : i.score4,
-                                        score5 : i.score5,
-                                        score6 : i.score6,
-                                        score7 : i.score7,
-                                        score8 : i.score8,
-                                        score9 : i.score9,
-                        })}</TableCell>
-                    </TableRow>
+                        <TableRow key={key}>
+                            {/* <TableCell>{i.PROGRAM_NAME}</TableCell>
+                            <TableCell>{i.BUNYA}</TableCell>
+                            <TableCell>{i.TEACHER}</TableCell> */}
+                            {key %2 === 0 ? <TableCell rowSpan={2}>{i.PROGRAM_NAME}</TableCell> :null}
+                            {key %2 === 0 ? <TableCell rowSpan={2}>{i.BUNYA}</TableCell> :null}
+                            {key %2 === 0 ? <TableCell rowSpan={2}>{i.TEACHER}</TableCell> :null}
+                            <TableCell>{i.type}</TableCell>
+                            <TableCell>{i.score1}</TableCell>
+                            <TableCell>{i.score2}</TableCell>
+                            <TableCell>{i.score3}</TableCell>
+                            <TableCell>{calculateAverage({ score1 : i.score1, score2 : i.score2, score3 : i.score3, })}</TableCell>
+                            <TableCell>{i.score4}</TableCell>
+                            <TableCell>{i.score5}</TableCell>
+                            <TableCell>{i.score6}</TableCell> 
+                            <TableCell>{calculateAverage({ score1 : i.score4, score2 : i.score5, score3 : i.score6, })}</TableCell>
+                            <TableCell>{i.score7}</TableCell>
+                            <TableCell>{i.score8}</TableCell>
+                            <TableCell>{i.score9}</TableCell>
+                            <TableCell>{calculateAverage({ score1 : i.score7, score2 : i.score8, score3 : i.score9, })}</TableCell>
+                            <TableCell>{i.cnt}</TableCell>
+                            <TableCell>{calculateAverage({ score1 : i.score1, score2 : i.score2, score3 : i.score3, score4 : i.score4, score5 : i.score5, score6 : i.score6, score7 : i.score7, score8 : i.score8, score9 : i.score9, })}</TableCell>
+                        </TableRow>
                     )}
                 </TableBody>
             </Table>

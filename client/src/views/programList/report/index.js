@@ -67,7 +67,9 @@ const ReportContainer = ()=>{
             {/*시설서비스 만족도  */}
             <Facility/>
             {/* 프로그램만족도 */}
+           
             <Satisfaction/>
+           
             {/* 프로그램효과 */}
             <Effect/>
             {/* 소감 */}

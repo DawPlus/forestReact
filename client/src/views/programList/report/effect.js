@@ -13,6 +13,7 @@ const ProgramOperate = ()=>{
 
     
     return <>
+    <div>
         <TableContainer style={{marginTop : "20px"}}>
             <h3 className="tableTitle">프로그램효과</h3>
             <Table className="report custom-table">
@@ -64,9 +65,14 @@ const ProgramOperate = ()=>{
                     </TableRow>
                 </TableBody>
             </Table>
+            </TableContainer>
+            </div>
+
             
+            <div>
+            <TableContainer style={{marginTop : "20px"}}>
             <h3 className="tableTitle">자율신경검사효과성</h3>
-            <Table className="report custom-table" style={{marginTop : "5px"}}>
+            <Table className="report custom-table" >
                 <TableHead>
                     <TableRow>
                         <TableCell className="table-header" align="center" rowSpan={2}>구분</TableCell>
@@ -110,6 +116,7 @@ const ProgramOperate = ()=>{
                 </TableBody>
             </Table>
         </TableContainer>
+        </div>   
     </>
 
 }

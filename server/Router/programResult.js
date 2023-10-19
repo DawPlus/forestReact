@@ -78,14 +78,24 @@ router.post('/getProgramResult', (req, res) => {
 router.post('/getSearchResult', (req, res)=>{
     const {effect, keyword,  openday, endday} = req.body;
     
-    const whereText = keyword.filter(obj => obj.text !== '' && obj.type !== "X")
-                                .map(obj => `AND ${obj.type} LIKE '${obj.text}'`)
-                                .join(' ');     
+    
+    let whereText = keyword.filter(obj => {
+        const notInclude = effect !== "program" ? ['X','TEACHER', 'PROGRAM_NAME', 'BUNYA', 'PLACE'] :['X']
+        return obj.text !== '' && !notInclude.includes(obj.type)
+    }).map(obj => `AND ${obj.type} LIKE '${obj.text}'`).join(' ');     
+
+
+
+
+
     // 1 : 프로그램 만족도 Program
     // 2 : 시설서비스환경 만족도
     // 3 : 상담&치유서비스 효과평가
     // 4 : 예방서비스 효과평가
     // 5 : 힐링서비스 효과평가
+
+    
+
     const sql = {
         program : `SELECT * FROM program_satisfaction WHERE 1=1     ${openday ? `AND OPENDAY BETWEEN ? AND ?` : ''}   `+whereText, // 프로그램 만족도 
         facility : `SELECT * FROM service_env_satisfaction WHERE 1=1   ${openday ? `AND OPENDAY BETWEEN ? AND ?` : ''}   `+ whereText,// 시설서비스환경만족도
@@ -97,7 +107,7 @@ router.post('/getSearchResult', (req, res)=>{
     
     const params = openday ? [openday, endday] : []; // 조건에 따라 파라미터 설정
         maria(sql[effect], params).then((rows) => res.json(rows)).catch((err) => {
-            console.log(err)
+          
         res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
     });
 });

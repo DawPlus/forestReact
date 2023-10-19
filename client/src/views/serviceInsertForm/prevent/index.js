@@ -121,9 +121,9 @@ const Service = ()=>{
     const downloadExcel = useDownloadExcel({headerInfo, cellData, wscols,merges,  filename  : title});
 
     const onSave = ()=>{
-        const hasEmptyValues = Object.keys(searchInfo).some(key => key !== 'PTCPROGRAM' && !searchInfo[key]);
+        // const hasEmptyValues = Object.keys(searchInfo).some(key => key !== 'PTCPROGRAM' && !searchInfo[key]);
 
-        if (hasEmptyValues) {
+        if ([searchInfo.OPENDAY, searchInfo.AGENCY, searchInfo.EVAL_DATE, searchInfo.PV].includes("")) {
             Swal.fire({
                 icon: 'warning',
                 title: '확인',
@@ -201,12 +201,13 @@ const Service = ()=>{
                             title: '확인',
                             text: "정상등록 되었습니다.",
                             }).then(()=>{
-                                downloadExcel()
-                                dispatch(actions.getListAfterSave({data : {
-                                    AGENCY  : searchInfo.AGENCY,
-                                    OPENDAY : searchInfo.OPENDAY,
-                                    PV : searchInfo.PV
-                                }, type}))
+                                dispatch(actions.initState())
+                                // downloadExcel()
+                                // dispatch(actions.getListAfterSave({data : {
+                                //     AGENCY  : searchInfo.AGENCY,
+                                //     OPENDAY : searchInfo.OPENDAY,
+                                //     PV : searchInfo.PV
+                                // }, type}))
                             });  
                         }
                     }
