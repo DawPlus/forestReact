@@ -6,45 +6,45 @@ import Swal from "sweetalert2";
 
 const name ="serviceInsert/service";
 
+const initRowData =  {
+  idx : "", 
+  id : "",
+  chk : false, 
+  SERVICE_SEQ : "", 
+  OPENDAY:"",
+  AGENCY:"",
+  SEX:"미기재", // 성별
+  AGE:"", // 연령
+  PTCPROGRAM:"1",
+  RESIDENCE:"미기재", // 거주지
+  JOB:"",
+  EVAL_DATE:"",
+  SCORE1:"",
+  SCORE2:"",
+  SCORE3:"",
+  SCORE4:"",
+  SCORE5:"",
+  SCORE6:"",
+  SCORE7:"",
+  SCORE8:"",
+  SCORE9:"",
+  SCORE10:"",
+  FACILITY_OPINION:"",
+  SCORE11:"",
+  SCORE12:"",
+  SCORE13:"",
+  SCORE14:"",
+  SCORE15:"",
+  SCORE16:"",
+  OPERATION_OPINION:"",
+  SCORE17:"",
+  SCORE18:""
+}
+
+
 const initialState = {
     deleteRow : [], 
-    rows : [
-      {
-        idx : "", 
-        id : "",
-        chk : false, 
-        SERVICE_SEQ : "", 
-        OPENDAY:"",
-        AGENCY:"",
-        SEX:"미기재", // 성별
-        AGE:"", // 연령
-        PTCPROGRAM:"1",
-        RESIDENCE:"미기재", // 거주지
-        JOB:"",
-        EVAL_DATE:"",
-        SCORE1:"",
-        SCORE2:"",
-        SCORE3:"",
-        SCORE4:"",
-        SCORE5:"",
-        SCORE6:"",
-        SCORE7:"",
-        SCORE8:"",
-        SCORE9:"",
-        SCORE10:"",
-        FACILITY_OPINION:"",
-        SCORE11:"",
-        SCORE12:"",
-        SCORE13:"",
-        SCORE14:"",
-        SCORE15:"",
-        SCORE16:"",
-        OPERATION_OPINION:"",
-        SCORE17:"",
-        SCORE18:""
-      }
-
-    ],
+    rows : [initRowData],
     searchInfo : {
         AGENCY : "",  
         OPENDAY : "", 
@@ -133,7 +133,41 @@ export const {getState, reducer, actions} = createCustomSlice({
       state.rows = state.rows.map(i=> ({...i, 
           [type] : value      
       }))
+    },
+
+    setExcelData : (state, {payload})=>{
+      const _rows = payload.map(i=>({
+        ...initRowData, 
+        idx : v4(), 
+        SEX:i.col1, // 성별
+        AGE:i.col2, // 연령
+        RESIDENCE:i.col3, // 거주지
+        JOB:i.col4,
+        SCORE1:i.col5,
+        SCORE2:i.col6,
+        SCORE3:i.col7,
+        SCORE4:i.col8,
+        SCORE5:i.col9,
+        SCORE6:i.col10,
+        SCORE7:i.col11,
+        SCORE8:i.col12,
+        SCORE9:i.col13,
+        SCORE10:i.col14,
+        SCORE11:i.col15,
+        SCORE12:i.col16,
+        SCORE13:i.col17,
+        SCORE14:i.col18,
+        SCORE15:i.col19,
+        SCORE16:i.col20,
+        SCORE17:i.col21,
+        SCORE18:i.col22
+      }))
+
+      state.rows = _rows;
+
+
     }
+
   }
 });
 

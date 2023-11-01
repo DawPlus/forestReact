@@ -6,6 +6,28 @@ import Swal from "sweetalert2";
 
 const name ="serviceInsert/program";
 
+
+const initRowData =   {
+  id : "1", 
+  chk : false, 
+  PROGRAM_SEQ : "",
+  SEX : "미기재", // 성별
+  AGE : "", // 연령
+  RESIDENCE : "미기재", // 거주지
+  JOB : "미기재", // 직업
+  SCORE1 : "",
+  SCORE2 : "",
+  SCORE3 : "",
+  SCORE4 : "",
+  SCORE5 : "",
+  SCORE6 : "",
+  SCORE7 : "",
+  SCORE8 : "",
+  SCORE9 : "",
+  ETC_OPINION : "",
+  TYPE : "참여자", // 참여구분
+}
+
 const initialState = {
     type : "program_satisfaction",
     deleteRow : [], 
@@ -130,7 +152,28 @@ export const {getState, reducer, actions} = createCustomSlice({
         JOB:i.job,  
       }))
     },
+    setExcelData : (state, {payload})=>{
+      const _rows = payload.map(i=>({
+        ...initRowData, 
+        id : v4(), 
+        SEX:i.col1, // 성별
+        AGE:i.col2, // 연령
+        RESIDENCE:i.col3, // 거주지
+        JOB:i.col4,
+        TYPE : i.col5, // 참여구분
+        SCORE1:i.col6,
+        SCORE2:i.col7,
+        SCORE3:i.col8,
+        SCORE4:i.col9,
+        SCORE5:i.col10,
+        SCORE6:i.col11,
+        SCORE7:i.col12,
+        SCORE8:i.col13,
+        SCORE9:i.col14,        
+      }))
 
+      state.rows = _rows;
+    }
 
 
   }

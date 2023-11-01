@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { actions, getState } from "store/reducers/serviceInsert/service";
 import Swal from "sweetalert2";
 import useDownloadExcel from "utils/useDownloadExcel";
-
+import ExcelUpload from "ui-component/excelUploader";
 import { useLocation, useNavigate } from 'react-router-dom';
 const Service = (props)=>{
     // 1. useLocation 훅 취득
@@ -204,13 +204,16 @@ const Service = (props)=>{
         dispatch(actions.getPreviousServiceList({data : searchInfo}))
     }
 
-
+    const onChangeExcel = value =>{
+        dispatch(actions.setExcelData(value));
+    }
     return <>
         <MainCard style={{marginTop : "10px"}}>
             <SearchInfo/>
             <div style={{marginTop : "10px"}}>
                 <Button variant="contained" size="small" color="secondary" onClick={onSearch}>조회</Button>
                 <Button variant="contained" size="small" color="primary" onClick={onSave} style={{marginLeft : "5px"}}>전송</Button>
+                <ExcelUpload onDataProcessed={onChangeExcel} startRow={3} type="service"/>
             </div>
         </MainCard>
         <MainCard style={{marginTop : "5px", minHeight: "400px"}}>

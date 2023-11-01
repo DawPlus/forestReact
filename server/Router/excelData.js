@@ -328,106 +328,146 @@ router.post('/programList', (req, res)=>{
 
 
 
-    //  효과성분석
-    const sheet6Sql_1 = `
+    //  효과성분석 - 힐링서비스
+    const sheet6Sql = `
         SELECT 
+            ROW_NUMBER() OVER (ORDER BY YEAR(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC,
+                                            MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC,
+                                            DAY(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC) AS 순번,
+                YEAR(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 년도,
+                MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 월,
+                DAY(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 일,
+                AGENCY,
+                PV,
+                IFNULL(SUM(SCORE1 + SCORE2 + SCORE3 + SCORE4 + SCORE5 + SCORE6 + SCORE7 + SCORE8 + SCORE9 + SCORE10 +
+                    SCORE11 + SCORE12 + SCORE13 + SCORE14 + SCORE15 + SCORE16 + SCORE17 + SCORE18 + SCORE19 + SCORE20 +
+                    SCORE21 + SCORE22), 0) AS TotalSum,
+                IFNULL(ROUND(AVG((SCORE1 + SCORE2 + SCORE3 + SCORE4 + SCORE5 + SCORE6 + SCORE7 + SCORE8 + SCORE9 + SCORE10 +
+                    SCORE11 + SCORE12 + SCORE13 + SCORE14 + SCORE15 + SCORE16 + SCORE17 + SCORE18 + SCORE19 + SCORE20 +
+                    SCORE21 + SCORE22) / 22), 2), 0) AS AverageScore
+            FROM 
+                dbstatistics.healing_service
+            WHERE PV IN ('사전', '사후')
+            ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+            GROUP BY AGENCY, PV;
+    `;
+
+
+    //  효과성분석 - 예방효과
+    const sheet7Sql = `
+        SELECT 
+            ROW_NUMBER() OVER (ORDER BY YEAR(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC,
+                                            MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC,
+                                            DAY(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC) AS 순번,
+                YEAR(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 년도,
+                MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 월,
+                DAY(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 일,
+                AGENCY,
+                PV,
+            IFNULL(SUM(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
+                    SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18),0) as sum,
+            IFNULL(ROUND(AVG(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
+                    SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE18)/18,2),0) as avg
+            FROM 
+                dbstatistics.prevent_service
+            WHERE PV IN ('사전', '사후')
+            ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+            GROUP BY AGENCY, PV;
+    `;
+
+
+    //  효과성분석 - 상담치유
+    const sheet8Sql = `
+        SELECT 
+            ROW_NUMBER() OVER (ORDER BY YEAR(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC,
+                                            MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC,
+                                            DAY(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC) AS 순번,
+                YEAR(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 년도,
+                MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 월,
+                DAY(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 일,
+                AGENCY,
+                PV,
+            IFNULL(SUM(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
+                    SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE18+
+                    SCORE19+ SCORE20+ SCORE21+ SCORE22+ SCORE23+ SCORE24+ SCORE25+ SCORE26+ SCORE27+
+                    SCORE28+ SCORE29+ SCORE30+ SCORE31+ SCORE32+ SCORE33+ SCORE34+ SCORE35+ SCORE36+ SCORE37+
+                    SCORE38+ SCORE39+ SCORE40+ SCORE41+ SCORE42+ SCORE43+ SCORE44+ SCORE45+ SCORE46+ SCORE47+
+                    SCORE48+ SCORE49+ SCORE50+ SCORE51+ SCORE52+ SCORE53+ SCORE54+ SCORE55+ SCORE56+ SCORE57+
+                    SCORE58+ SCORE59+ SCORE60+ SCORE61+ SCORE62),0) as sum,
+            IFNULL(ROUND(AVG(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
+                    SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE18+
+                    SCORE19+ SCORE20+ SCORE21+ SCORE22+ SCORE23+ SCORE24+ SCORE25+ SCORE26+ SCORE27+
+                    SCORE28+ SCORE29+ SCORE30+ SCORE31+ SCORE32+ SCORE33+ SCORE34+ SCORE35+ SCORE36+ SCORE37+
+                    SCORE38+ SCORE39+ SCORE40+ SCORE41+ SCORE42+ SCORE43+ SCORE44+ SCORE45+ SCORE46+ SCORE47+
+                    SCORE48+ SCORE49+ SCORE50+ SCORE51+ SCORE52+ SCORE53+ SCORE54+ SCORE55+ SCORE56+ SCORE57+
+                    SCORE58+ SCORE59+ SCORE60+ SCORE61+ SCORE62)/62,2),0) as avg
+            FROM 
+                dbstatistics.counsel_service
+            WHERE PV IN ('사전', '사후')
+            ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+            GROUP BY AGENCY, PV;
+    `;
+    //  효과성분석 - 상담치유
+    const sheet9Sql = `
+        SELECT 
+            ROW_NUMBER() OVER (ORDER BY AGENCY, PV) AS 순번,
+            YEAR(STR_TO_DATE(DATE, '%Y-%m-%d')) AS 년도,
+            MONTH(STR_TO_DATE(DATE, '%Y-%m-%d')) AS 월,
+            DAY(STR_TO_DATE(DATE, '%Y-%m-%d')) AS 일,
+            AGENCY,
             PV,
-            IFNULL(SUM(SCORE1 + SCORE2 + SCORE3 + SCORE4 + SCORE5 + SCORE6 + SCORE7 + SCORE8 + SCORE9 + SCORE10 +
-                SCORE11 + SCORE12 + SCORE13 + SCORE14 + SCORE15 + SCORE16 + SCORE17 + SCORE18 + SCORE19 + SCORE20 +
-                SCORE21 + SCORE22), 0) AS TotalSum,
-            IFNULL(ROUND(AVG((SCORE1 + SCORE2 + SCORE3 + SCORE4 + SCORE5 + SCORE6 + SCORE7 + SCORE8 + SCORE9 + SCORE10 +
-                SCORE11 + SCORE12 + SCORE13 + SCORE14 + SCORE15 + SCORE16 + SCORE17 + SCORE18 + SCORE19 + SCORE20 +
-                SCORE21 + SCORE22) / 22), 2), 0) AS AverageScore
+            IFNULL(ROUND(AVG(nullif(num1,0)),2),0) as num1, 
+            IFNULL(ROUND(AVG(nullif(num2,0)),2),0) as num2,
+            IFNULL(ROUND(AVG(nullif(num3,0)),2),0) as num3, 
+            IFNULL(ROUND(AVG(nullif(num4,0)),2),0) as num4, 
+            IFNULL(ROUND(AVG(nullif(num5,0)),2),0) as num5
         FROM 
-            healing_service
+            dbstatistics.hrv_service
         WHERE PV IN ('사전', '사후')
-            ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
-        GROUP BY PV;
-    `
+        ${openday ? `AND STR_TO_DATE(DATE, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+        GROUP BY AGENCY, PV
+        ORDER BY AGENCY, PV;
 
-    let sheet6Sql_2 = `
-        SELECT 
-            '사전' as PV,
-            IFNULL(SUM(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
-            SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE18+
-            SCORE19+ SCORE20+ SCORE21+ SCORE22+ SCORE23+ SCORE24+ SCORE25+ SCORE26+ SCORE27+
-            SCORE28+ SCORE29+ SCORE30+ SCORE31+ SCORE32+ SCORE33+ SCORE34+ SCORE35+ SCORE36+ SCORE37+
-            SCORE38+ SCORE39+ SCORE40+ SCORE41+ SCORE42+ SCORE43+ SCORE44+ SCORE45+ SCORE46+ SCORE47+
-            SCORE48+ SCORE49+ SCORE50+ SCORE51+ SCORE52+ SCORE53+ SCORE54+ SCORE55+ SCORE56+ SCORE57+
-            SCORE58+ SCORE59+ SCORE60+ SCORE61+ SCORE62),0) as sum,
-
-            IFNULL(ROUND(AVG(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
-            SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE18+
-            SCORE19+ SCORE20+ SCORE21+ SCORE22+ SCORE23+ SCORE24+ SCORE25+ SCORE26+ SCORE27+
-            SCORE28+ SCORE29+ SCORE30+ SCORE31+ SCORE32+ SCORE33+ SCORE34+ SCORE35+ SCORE36+ SCORE37+
-            SCORE38+ SCORE39+ SCORE40+ SCORE41+ SCORE42+ SCORE43+ SCORE44+ SCORE45+ SCORE46+ SCORE47+
-            SCORE48+ SCORE49+ SCORE50+ SCORE51+ SCORE52+ SCORE53+ SCORE54+ SCORE55+ SCORE56+ SCORE57+
-            SCORE58+ SCORE59+ SCORE60+ SCORE61+ SCORE62)/62,2),0) as avg
-        FROM counsel_service
-        WHERE PV = '사전'
-            ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
-
-        UNION ALL
-
-        SELECT 
-            '사후' as PV,
-            IFNULL(SUM(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
-            SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE18+
-            SCORE19+ SCORE20+ SCORE21+ SCORE22+ SCORE23+ SCORE24+ SCORE25+ SCORE26+ SCORE27+
-            SCORE28+ SCORE29+ SCORE30+ SCORE31+ SCORE32+ SCORE33+ SCORE34+ SCORE35+ SCORE36+ SCORE37+
-            SCORE38+ SCORE39+ SCORE40+ SCORE41+ SCORE42+ SCORE43+ SCORE44+ SCORE45+ SCORE46+ SCORE47+
-            SCORE48+ SCORE49+ SCORE50+ SCORE51+ SCORE52+ SCORE53+ SCORE54+ SCORE55+ SCORE56+ SCORE57+
-            SCORE58+ SCORE59+ SCORE60+ SCORE61+ SCORE62),0) as sum,
-
-            IFNULL(ROUND(AVG(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
-            SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE18+
-            SCORE19+ SCORE20+ SCORE21+ SCORE22+ SCORE23+ SCORE24+ SCORE25+ SCORE26+ SCORE27+
-            SCORE28+ SCORE29+ SCORE30+ SCORE31+ SCORE32+ SCORE33+ SCORE34+ SCORE35+ SCORE36+ SCORE37+
-            SCORE38+ SCORE39+ SCORE40+ SCORE41+ SCORE42+ SCORE43+ SCORE44+ SCORE45+ SCORE46+ SCORE47+
-            SCORE48+ SCORE49+ SCORE50+ SCORE51+ SCORE52+ SCORE53+ SCORE54+ SCORE55+ SCORE56+ SCORE57+
-            SCORE58+ SCORE59+ SCORE60+ SCORE61+ SCORE62)/62,2),0) as avg
-        FROM counsel_service
-        WHERE PV = '사후'
-        ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
     `;
 
-    let sheet6Sql_3 = `
-        select PV,  IFNULL(SUM(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
-            SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18),0) as sum,
-            IFNULL(ROUND(AVG(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
-            SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18)/18,2),0) as avg 
-        FROM prevent_service
-        WHERE PV IN ("사전", "사후")
-        ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
-        GROUP BY PV
-    `;
-    let sheet6Sql_4 = `
-            SELECT 
-                '사전' as PV, 
-                IFNULL(ROUND(AVG(nullif(num1,0)),2),0) as num1, 
-                IFNULL(ROUND(AVG(nullif(num2,0)),2),0) as num2,
-                IFNULL(ROUND(AVG(nullif(num3,0)),2),0) as num3, 
-                IFNULL(ROUND(AVG(nullif(num4,0)),2),0) as num4, 
-                IFNULL(ROUND(AVG(nullif(num5,0)),2),0) as num5
-            FROM hrv_service
-            WHERE 1=1
-            AND PV = '사전'
-            ${openday ? `AND STR_TO_DATE(DATE, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+ 
+    // let sheet6Sql_3 = `
+    //     select PV,  IFNULL(SUM(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
+    //         SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18),0) as sum,
+    //         IFNULL(ROUND(AVG(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
+    //         SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18)/18,2),0) as avg 
+    //     FROM prevent_service
+    //     WHERE PV IN ("사전", "사후")
+    //     ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+    //     GROUP BY PV
+    // `;
+    // let sheet6Sql_4 = `
+            // SELECT 
+            //     '사전' as PV, 
+            //     IFNULL(ROUND(AVG(nullif(num1,0)),2),0) as num1, 
+            //     IFNULL(ROUND(AVG(nullif(num2,0)),2),0) as num2,
+            //     IFNULL(ROUND(AVG(nullif(num3,0)),2),0) as num3, 
+            //     IFNULL(ROUND(AVG(nullif(num4,0)),2),0) as num4, 
+            //     IFNULL(ROUND(AVG(nullif(num5,0)),2),0) as num5
+            // FROM hrv_service
+            // WHERE 1=1
+            // AND PV = '사전'
+            // ${openday ? `AND STR_TO_DATE(DATE, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
 
-            UNION ALL
+            // UNION ALL
 
-            SELECT 
-                '사후' as PV, 
-                IFNULL(ROUND(AVG(nullif(num1,0)),2),0) as num1, 
-                IFNULL(ROUND(AVG(nullif(num2,0)),2),0) as num2,
-                IFNULL(ROUND(AVG(nullif(num3,0)),2),0) as num3, 
-                IFNULL(ROUND(AVG(nullif(num4,0)),2),0) as num4, 
-                IFNULL(ROUND(AVG(nullif(num5,0)),2),0) as num5
-            FROM hrv_service
-            WHERE 1=1
-            AND PV = '사후'
-            ${openday ? `AND STR_TO_DATE(DATE, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
-    `;
+            // SELECT 
+            //     '사후' as PV, 
+            //     IFNULL(ROUND(AVG(nullif(num1,0)),2),0) as num1, 
+            //     IFNULL(ROUND(AVG(nullif(num2,0)),2),0) as num2,
+            //     IFNULL(ROUND(AVG(nullif(num3,0)),2),0) as num3, 
+            //     IFNULL(ROUND(AVG(nullif(num4,0)),2),0) as num4, 
+            //     IFNULL(ROUND(AVG(nullif(num5,0)),2),0) as num5
+            // FROM hrv_service
+            // WHERE 1=1
+            // AND PV = '사후'
+            // ${openday ? `AND STR_TO_DATE(DATE, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+    // `;
 
 
 
@@ -443,10 +483,11 @@ router.post('/programList', (req, res)=>{
         maria(sheet5Sql,params),
 
 
-        maria(sheet6Sql_1,params),
-        maria(sheet6Sql_2,params2),
-        maria(sheet6Sql_3,params),
-        maria(sheet6Sql_4,params2),
+        maria(sheet6Sql,params),
+        maria(sheet7Sql,params),
+        maria(sheet8Sql,params),
+        maria(sheet9Sql,params),
+       
     
     ])
     .then((results) => {
@@ -457,31 +498,12 @@ router.post('/programList', (req, res)=>{
         let sheet5 = results[4]; // the result from the second query
         
         
-        let sheet6_1 = results[5]; // the result from the second query
-        let sheet6_2 = results[6]; // the result from the second query
-        let sheet6_3 = results[7]; // the result from the second query
-        let sheet6_4 = results[8]; // the result from the second query
+        let sheet6 = results[5]; 
+        let sheet7 = results[6]; 
+        let sheet8 = results[7]; 
+        let sheet9 = results[8]; 
+     
         
-        const sheet6Data = {
-            healing: sheet6_1,
-            counsel : sheet6_2,
-            prevent: sheet6_3,
-            hrv : sheet6_4
-        }
-                
-        let sheet6 = ["사전", "사후"].map(PV => {
-            let row = { PV };
-            for (let key in sheet6Data) {
-                let item = sheet6Data[key].find(d => d.PV === PV);
-                for (let prop in item) {
-                    if (prop !== "PV") {
-                        row[`${key}${prop[0].toUpperCase()}${prop.slice(1)}`] = item[prop];
-                    }
-                }
-            }
-            return row;
-        });
-
 
 
 
@@ -560,6 +582,9 @@ router.post('/programList', (req, res)=>{
             sheet4,
             sheet5, 
             sheet6, 
+            sheet7, 
+            sheet8, 
+            sheet9
         });
     })
     .catch((err) => {console.log(err); res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })});

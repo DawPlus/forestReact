@@ -55,7 +55,19 @@ app.use(session({
 //     },
 // }));
 
+app.get('/api/download/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(__dirname, 'public/downloads', filename+".xlsx");  
+    console.log(filename, filePath)    
 
+    // 다운로드 파일을 응답으로 전송
+    res.download(filePath, filename,  (err) => {
+      if (err) {
+        console.error('파일 다운로드 오류:', err);
+        res.status(404).send('파일을 찾을 수 없습니다.');
+      }
+    });
+  });
 
 // 로그인 확인을 위한 미들웨어 함수
 function checkUserSession(req, res, next) {  

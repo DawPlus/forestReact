@@ -28,7 +28,7 @@ const ExcelDownload = ()=>{
 
     const onClick = ()=>{
 
-        callApi("/excelData/programList", {openday, endday}).then(({data : {sheet1, sheet2,sheet3, sheet4, sheet5 , sheet6 }})=>{
+        callApi("/excelData/programList", {openday, endday}).then(({data : {sheet1, sheet2,sheet3, sheet4, sheet5 ,sheet6,sheet7 ,sheet8, sheet9}})=>{
             
 
           
@@ -365,41 +365,104 @@ const ExcelDownload = ()=>{
 
 
 
-           // const sheet6Result = sheet6.map(obj => Object.values(obj))
+
             const sheet6Header =     [
-                ["구분",'프로그램효과성','프로그램효과성','프로그램효과성','프로그램효과성','프로그램효과성','프로그램효과성','자율신경검사효과성','자율신경검사효과성','자율신경검사효과성','자율신경검사효과성','자율신경검사효과성'],
-                ["",'예방효과(합계)','예방효과(평균)','상담치유효과(합계)','상담치유효과(평균)','힐링효과(합계)','힐링효과(평균)','자율신경활성도','자율신경균형도','스트레스저항도','스트레스지수','피로도'],
+                ['순번', '년도', '월', '일', '단체명' , '구분', '프로그램효과', '프로그램효과' ],
+                ['', '', '', '', '' , '', '힐링효과(합계)', '힐링효과(평균)' ],
             ]
+                // 병합할 셀 범위를 지정합니다.
+                const mergeRangeSheet6 = [
+                    { s: { r: 0, c: 0 }, e: { r: 1, c: 0 } }, // 순번
+                    { s: { r: 0, c: 1 }, e: { r: 1, c: 1 } }, // 년도
+                    { s: { r: 0, c: 2 }, e: { r: 1, c: 2 } }, // 월
+                    { s: { r: 0, c: 3 }, e: { r: 1, c: 3 } }, // 일
+                    { s: { r: 0, c: 4 }, e: { r: 1, c: 4 } }, // 단체명
+                    { s: { r: 0, c: 5 }, e: { r: 1, c: 5 } }, // 구분
+                    { s: { r: 0, c: 6 }, e: { r: 0, c: 7 } }, // 자율신경검사효과
+                    
+                ];
+    
             const _sheet6Header = sheet6Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
-
-            // 병합할 셀 범위를 지정합니다.
-            const mergeRangeSheet6 = [
-                { s: { r: 0, c: 0 }, e: { r: 1, c: 0 } }, // 구분
-                { s: { r: 0, c: 1 }, e: { r: 0, c: 6 } }, // 프로그램효과성
-                { s: { r: 0, c: 7 }, e: { r: 0, c: 11 } }, // 자율신경검사효과성
-            ];
-
-            const desiredOrder = [
-                'PV',
-                'preventSum',
-                'preventAvg',
-                'counselSum',
-                'counselAvg',
-                'healingTotalSum',
-                'healingAverageScore',
-                'hrvNum1',
-                'hrvNum2',
-                'hrvNum3',
-                'hrvNum4',
-                'hrvNum5'
-            ];
-            const _sheet6Data = sheet6.map(row => desiredOrder.map(key => ({ v: row[key] || '0', t: 's', s: defaultStyle })));
+            const sheet6Result = sheet6.map(obj => Object.values(obj))
+            const _sheet6Data = sheet6Result.map(values => values.map(value => ({ v: value|| "0", t: 's', s: defaultStyle })));
             // Create worksheet
             const sh6 = XLSX.utils.aoa_to_sheet([..._sheet6Header, ..._sheet6Data]);
             sh6['!merges'] = mergeRangeSheet6;
-            sh6['!cols'] =   [ {wch:16}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:13}];
+            sh6['!cols'] =   [ {wch:7}, {wch:12}, {wch:8}, {wch:8}, {wch:35}, {wch:12}, {wch:17}, {wch:17}];
             sh6['!rows'] = Array(sheet5Header.length).fill({ hpx: 23 }); 
-            XLSX.utils.book_append_sheet(wb, sh6, "효과성분석");
+            XLSX.utils.book_append_sheet(wb, sh6, "효과성분석(힐링효과)");
+            
+
+
+
+
+
+
+
+            const sheet7Header =     [
+                ['순번', '년도', '월', '일', '단체명' , '구분', '프로그램효과', '프로그램효과' ],
+                ['', '', '', '', '' , '', '예방효과(합계)', '예방효과(평균)' ],
+            ]
+
+            const _sheet7Header = sheet7Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
+            const sheet7Result = sheet7.map(obj => Object.values(obj))
+            const _sheet7Data = sheet7Result.map(values => values.map(value => ({ v: value|| "0", t: 's', s: defaultStyle })));
+            // Create worksheet
+            const sh7 = XLSX.utils.aoa_to_sheet([..._sheet7Header, ..._sheet7Data]);
+            sh7['!merges'] = mergeRangeSheet6;
+            sh7['!cols'] =   [ {wch:7}, {wch:12}, {wch:8}, {wch:8}, {wch:35}, {wch:12}, {wch:17}, {wch:17}];
+            sh7['!rows'] = Array(sheet5Header.length).fill({ hpx: 23 }); 
+            XLSX.utils.book_append_sheet(wb, sh7, "효과성분석(예방효과)");
+            
+
+
+
+
+            const sheet8Header =     [
+                ['순번', '년도', '월', '일', '단체명' , '구분', '프로그램효과', '프로그램효과' ],
+                ['', '', '', '', '' , '', '상담치유효과(합계)', '상담치유효과(평균)' ],
+            ]
+            
+            const _sheet8Header = sheet8Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
+            const sheet8Result = sheet8.map(obj => Object.values(obj))
+            const _sheet8Data = sheet8Result.map(values => values.map(value => ({ v: value|| "0", t: 's', s: defaultStyle })));
+            const _s8data = _sheet8Data.length === 0 ? [['조회된 데이터가 없습니다']] : _sheet8Data;
+
+            const sh8 = XLSX.utils.aoa_to_sheet([..._sheet8Header, ..._s8data]);
+            sh8['!merges'] = mergeRangeSheet6;
+            sh8['!cols'] =   [ {wch:7}, {wch:12}, {wch:8}, {wch:8}, {wch:35}, {wch:12}, {wch:25}, {wch:25}];
+            sh8['!rows'] = Array(sheet5Header.length).fill({ hpx: 23 }); 
+            XLSX.utils.book_append_sheet(wb, sh8, "효과성분석(상담치유)");
+
+
+            const sheet9Header =     [
+                ['순번', '년도', '월', '일', '단체명' , '구분', '자율신경검사효과성', '자율신경검사효과성', '자율신경검사효과성', '자율신경검사효과성', '자율신경검사효과성'],
+                ['', '', '', '', '' , '', '자율신경활성도', '자율신경균형도', '스트레스저항도' , '스트레스지수', '피로도'],
+            ]
+
+            // 병합할 셀 범위를 지정합니다.
+            const mergeRangeSheet9 = [
+                { s: { r: 0, c: 0 }, e: { r: 1, c: 0 } }, // 순번
+                { s: { r: 0, c: 1 }, e: { r: 1, c: 1 } }, // 년도
+                { s: { r: 0, c: 2 }, e: { r: 1, c: 2 } }, // 월
+                { s: { r: 0, c: 3 }, e: { r: 1, c: 3 } }, // 일
+                { s: { r: 0, c: 4 }, e: { r: 1, c: 4 } }, // 단체명
+                { s: { r: 0, c: 5 }, e: { r: 1, c: 5 } }, // 구분
+                { s: { r: 0, c: 6 }, e: { r: 0, c: 10 } }, // 자율신경검사효과
+                
+            ];
+
+
+            const _sheet9Header = sheet9Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
+            const sheet9Result = sheet9.map(obj => Object.values(obj))
+            const _sheet9Data = sheet9Result.map(values => values.map(value => ({ v: value|| "0", t: 's', s: defaultStyle })));
+            // Create worksheet
+            const sh9 = XLSX.utils.aoa_to_sheet([..._sheet9Header, ..._sheet9Data]);
+
+            sh9['!merges'] = mergeRangeSheet9;
+            sh9['!cols'] =   [ {wch:7}, {wch:12}, {wch:9}, {wch:9}, {wch:35}, {wch:12}, {wch:17}, {wch:17}, {wch:17}, {wch:17}, {wch:17}];
+            sh9['!rows'] = Array(sheet5Header.length).fill({ hpx: 23 }); 
+            XLSX.utils.book_append_sheet(wb, sh9, "효과성분석(자율신경효과성)");
             
 
 
@@ -569,9 +632,13 @@ const ExcelDownload = ()=>{
 
 
             //const sheet6Result = sheet6.map(obj => Object.values(obj))
+            // const sheet6Header =     [
+            //     ["구분",'프로그램효과성','프로그램효과성','프로그램효과성','프로그램효과성','프로그램효과성','프로그램효과성','자율신경검사효과성','자율신경검사효과성','자율신경검사효과성','자율신경검사효과성','자율신경검사효과성'],
+            //     ["",'예방효과(합계)','예방효과(평균)','상담치유효과(합계)','상담치유효과(평균)','힐링효과(합계)','힐링효과(평균)','자율신경활성도','자율신경균형도','스트레스저항도','스트레스지수','피로도'],
+            // ]
             const sheet6Header =     [
-                ["구분",'프로그램효과성','프로그램효과성','프로그램효과성','프로그램효과성','프로그램효과성','프로그램효과성','자율신경검사효과성','자율신경검사효과성','자율신경검사효과성','자율신경검사효과성','자율신경검사효과성'],
-                ["",'예방효과(합계)','예방효과(평균)','상담치유효과(합계)','상담치유효과(평균)','힐링효과(합계)','힐링효과(평균)','자율신경활성도','자율신경균형도','스트레스저항도','스트레스지수','피로도'],
+                ['순번', '년도', '월', '일', '' ],
+              
             ]
             const _sheet6Header = sheet6Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
 
@@ -629,8 +696,6 @@ const ExcelDownload = ()=>{
                     </Grid>
                     <Grid item md={4}>
                         <Button variant="contained" size="small" color="primary" onClick={onClick}  >신규엑셀데이터 다운로드</Button>
-                        <Button variant="contained" size="small" color="primary" onClick={onClick2} style={{marginLeft : "15px"}}>기존엑셀데이터 다운로드</Button>
-                        
                     </Grid>
                 
                 </Grid>

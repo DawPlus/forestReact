@@ -31,21 +31,21 @@ const InsertForm = ()=>{
         {name : 'SCORE9', label:"야외(문항9)" , type : "sNumber"},
         {name : 'SCORE10', label:"야외(문항10)" , type : "sNumber"},
      //   {name : 'FACILITY_OPINION', label:"기타의견" },
-        {name : 'SCORE11', label:"운영(문항1)" , type : "sNumber"},
-        {name : 'SCORE12', label:"운영(문항2)" , type : "sNumber"},
-        {name : 'SCORE13', label:"운영(문항3)" , type : "sNumber"},
-        {name : 'SCORE14', label:"식사(문항4)" , type : "sNumber"},
-        {name : 'SCORE15', label:"식사(문항5)" , type : "sNumber"},
-        {name : 'SCORE16', label:"식사(문항6)" , type : "sNumber"},
+        {name : 'SCORE11', label:"운영(문항11)" , type : "sNumber"},
+        {name : 'SCORE12', label:"운영(문항12)" , type : "sNumber"},
+        {name : 'SCORE13', label:"운영(문항13)" , type : "sNumber"},
+        {name : 'SCORE14', label:"식사(문항14)" , type : "sNumber"},
+        {name : 'SCORE15', label:"식사(문항15)" , type : "sNumber"},
+        {name : 'SCORE16', label:"식사(문항16)" , type : "sNumber"},
        // {name : 'OPERATION_OPINION', label:"기타의견" },
-        {name : 'SCORE17', label:"잠재적 관광수요(문항8)", type : "sNumber" },
-        {name : 'SCORE18', label:"잠재적 관광수요(문항9)", type : "sNumber" }
+        {name : 'SCORE17', label:"잠재적 관광수요(문항17)", type : "sNumber" },
+        {name : 'SCORE18', label:"잠재적 관광수요(문항18)", type : "sNumber" }
     ];
 
     
     const headerInfo = [
         ['선택', '성별', '연령', '거주지', '직업', '숙소', '숙소', '식당', '식당', '프로그램 장소', '프로그램 장소', '프로그램 장소', '야외', '야외', '야외', '운영', '운영', '운영', '식사', '식사', '식사', '잠재적 관광수요','잠재적 관광수요'],
-        ['', '', '', '', '', '문항1', '문항2', '문항3', '문항4', '문항5', '문항6', '문항7', '문항8', '문항9', '문항10',  '문항1', '문항2', '문항3', '문항4', '문항5', '문항6',  '문항8','문항9']        
+        ['', '', '', '', '', '문항1', '문항2', '문항3', '문항4', '문항5', '문항6', '문항7', '문항8', '문항9', '문항10',  '문항11', '문항12', '문항13', '문항14', '문항15', '문항16',  '문항17','문항18']        
     ]
     const { rows} = useSelector(s=> getState(s));
 

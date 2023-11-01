@@ -11,6 +11,7 @@ import useDownloadExcel from "utils/useDownloadExcel";
 import { generateMergeInfo } from "utils/utils";
 import { useLocation, useNavigate } from "react-router";
 
+import ExcelUpload from "ui-component/excelUploader";
 
 const Service = ()=>{
     // 1. useLocation 훅 취득
@@ -285,12 +286,17 @@ const Service = ()=>{
 
     }
 
+
+    const onChangeExcel = value =>{
+        dispatch(actions.setExcelData(value));
+    }
     return <>
         <MainCard style={{marginTop : "10px"}}>
             <SearchInfo/>
             <div style={{marginTop : "10px"}}>
                 <Button variant="contained" size="small" color="secondary" onClick={onSearch}>조회</Button>
                 <Button variant="contained" size="small" color="primary" onClick={onSave} style={{marginLeft : "5px"}}>전송</Button>
+                 <ExcelUpload onDataProcessed={onChangeExcel} startRow={3} type="counsel"/>
             </div>
         </MainCard>
         <MainCard style={{marginTop : "10px", minHeight: "400px"}}>
