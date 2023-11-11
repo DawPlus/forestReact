@@ -70,23 +70,50 @@ router.post('/getProgramListDetail', (req, res)=>{
                 ORDER BY ps.PROGRAM_NAME, ps.TEACHER, ps.BUNYA,
                     CASE WHEN ps.TYPE = '참여자' THEN 0 ELSE 1 END;
                 `
-
+    const sql4 = `
+        SELECT 
+            PROGRAM_NAME,
+            TEACHER,
+            BUNYA,
+            TYPE,
+            OPENDAY,
+            AGENCY,
+            COUNT(*) AS count
+        FROM dbstatistics.program_satisfaction
+        WHERE AGENCY = ? AND OPENDAY = ?
+        GROUP BY PROGRAM_NAME, TEACHER, BUNYA, TYPE, OPENDAY, AGENCY;
+    `
 
     Promise.all([
         maria(sql, [seq]),
         maria(sql2, [agency, openday]),
         maria(sql3, [agency, openday]),
-
+        maria(sql4, [agency, openday]),
     ])
     .then((results) => {
         let rows1 = results[0]; // the result from the first query
         let rows2 = results[1]; // the result from the second query
         let rows3 = results[2]; // the result from the second query
+        let rows4 = results[3]; // the result from the second query
         
+
+        const resultArray = rows3.map(item1 => {
+            const matchingItem = rows4.find(item2 => 
+                item1.PROGRAM_NAME === item2.PROGRAM_NAME &&
+                item1.TEACHER === item2.TEACHER &&
+                item1.BUNYA === item2.BUNYA &&
+                item1.type === item2.TYPE
+            );
+            
+            return matchingItem ? { ...item1, cnt: matchingItem.count } : item1;
+        });
+            
+
         res.json({
             basicInfo: rows1[0],
             serviceList : rows2,
-            programSaf : rows3,
+            programSaf : resultArray,
+            rows4,
         });
     })
     .catch((err) => {

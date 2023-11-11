@@ -7,6 +7,27 @@ const name ="serviceInsert/hrv";
 
 const key = "HRV_SEQ"
 
+const initRow =  {
+  idx : "1", 
+  chk : false, 
+  "HRV_SEQ" : "",
+  AGENCY  : "",
+  PV  : "",
+  NAME  : "",
+  AGE  : "",
+  SEX  : "",
+  ID  : "",
+  JUMIN  : "",
+  NUM1  : "",
+  NUM2  : "",
+  NUM3  : "",
+  NUM4  : "",
+  NUM5  : "",
+  NUM6  : "",
+  NUM7  : "",
+  NUM8  : ""
+}
+
 const initialState = {
     type : "hrv_service",
     deleteRow : [], 
@@ -128,6 +149,28 @@ export const {getState, reducer, actions} = createCustomSlice({
         JUMIN : i.jumin  
       }))
     },
+
+    setExcelData : (state, {payload})=>{
+      const _rows = payload.map(i=>({
+        ...initRow, 
+        idx : v4(), 
+
+        ID  : i.col1,
+        NAME  : i.col2,
+        JUMIN  : i.col3,
+        SEX  : i.col4,
+        AGE  : i.col5,
+        NUM1  : i.col6,
+        NUM2  : i.col7,
+        NUM3  : i.col8,
+        NUM4  : i.col9,
+        NUM5  : i.col10,
+        NUM6  : i.col11,
+        NUM7  : i.col12,
+        NUM8  : i.col13,
+      }))
+      state.rows = _rows;
+    }
 
   }
 });

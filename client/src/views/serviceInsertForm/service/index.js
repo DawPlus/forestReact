@@ -34,8 +34,14 @@ const Service = (props)=>{
         return ()=>{
             dispatch(actions.initState())
         }
-    },[])
+    },[location.state])
 
+    React.useEffect(()=>{
+        return ()=>{
+            dispatch(actions.initState())
+        }
+
+    },[])
 
     const {rows,  searchInfo} = useSelector(s=> getState(s));
     

@@ -11,6 +11,7 @@ import useDownloadExcel from "utils/useDownloadExcel";
 import { generateMergeInfo } from "utils/utils";
 import { useLocation, useNavigate } from "react-router";
 
+import ExcelUpload from "ui-component/excelUploader";
 
 const Service = ()=>{
  // 1. useLocation 훅 취득
@@ -33,6 +34,13 @@ const Service = ()=>{
         return ()=>{
             dispatch(actions.initState())
         }
+    },[location.state])
+
+    React.useEffect(()=>{
+        return ()=>{
+            dispatch(actions.initState())
+        }
+
     },[])
 
 
@@ -145,12 +153,13 @@ const Service = ()=>{
                             title: '확인',
                             text: "정상등록 되었습니다.",
                             }).then(()=>{
-                                downloadExcel()
-                                dispatch(actions.getListAfterSave({data : {
-                                    AGENCY  : searchInfo.AGENCY,
-                                    DATE : searchInfo.DATE,
-                                    PV : searchInfo.PV
-                                }, type}))
+                                dispatch(actions.initState())
+                              //  downloadExcel()
+                                // dispatch(actions.getListAfterSave({data : {
+                                //     AGENCY  : searchInfo.AGENCY,
+                                //     DATE : searchInfo.DATE,
+                                //     PV : searchInfo.PV
+                                // }, type}))
                             });  
                         }
                     }
@@ -170,12 +179,16 @@ const Service = ()=>{
         }, type }))
     }
 
+    const onChangeExcel = value =>{
+        dispatch(actions.setExcelData(value));
+    }
     return <>
         <MainCard style={{marginTop : "10px"}}>
             <SearchInfo/>
             <div style={{marginTop : "10px"}}>
                 <Button variant="contained" size="small" color="secondary" onClick={onSearch}>조회</Button>
                 <Button variant="contained" size="small" color="primary" onClick={onSave} style={{marginLeft : "5px"}}>전송</Button>
+                <ExcelUpload onDataProcessed={onChangeExcel} startRow={3} type="vibra"/>
             </div>
         </MainCard>
         <MainCard style={{marginTop : "10px", minHeight: "400px"}}>

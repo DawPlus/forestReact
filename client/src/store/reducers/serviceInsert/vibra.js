@@ -7,6 +7,28 @@ const name ="serviceInsert/vibra";
 
 const key = "VIBRA_SEQ"
 
+const initRow =   {
+  idx : "1", 
+  chk : false, 
+  "VIBRA_SEQ" : "",
+  ID:"",
+  NAME:"",
+  JUMIN:"",
+  SEX:"",
+  AGE:"",
+  NUM1:"",
+  NUM2:"",
+  NUM3:"",
+  NUM4:"",
+  NUM5:"",
+  NUM6:"",
+  NUM7:"",
+  NUM8:"",
+  NUM9:"",
+  NUM10:"",
+}
+
+
 const initialState = {
     type : "vibra_service",
     deleteRow : [], 
@@ -129,7 +151,29 @@ export const {getState, reducer, actions} = createCustomSlice({
       }))
     },
 
+    setExcelData : (state, {payload})=>{
+      const _rows = payload.map(i=>({
+        ...initRow, 
+        idx : v4(), 
 
+        ID  : i.col1,
+        NAME  : i.col2,
+        JUMIN  : i.col3,
+        SEX  : i.col4,
+        AGE  : i.col5,
+        NUM1  : i.col6,
+        NUM2  : i.col7,
+        NUM3  : i.col8,
+        NUM4  : i.col9,
+        NUM5  : i.col10,
+        NUM6  : i.col11,
+        NUM7  : i.col12,
+        NUM8  : i.col13,
+        NUM9  : i.col14,
+        NUM10  : i.col15,
+      }))
+      state.rows = _rows;
+    }
 
   }
 });

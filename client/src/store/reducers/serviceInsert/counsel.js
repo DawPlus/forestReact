@@ -333,7 +333,6 @@ export const {getState, reducer, actions} = createCustomSlice({
         SCORE60  : i.col66,
         SCORE61  : i.col67,
         SCORE62  : i.col68,
-        
       }))
       state.rows = _rows;
     }

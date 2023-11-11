@@ -63,6 +63,13 @@ const Service = ()=>{
         return ()=>{
             dispatch(actions.initState())
         }
+    },[location.state])
+
+    React.useEffect(()=>{
+        return ()=>{
+            dispatch(actions.initState())
+        }
+
     },[])
 
 
