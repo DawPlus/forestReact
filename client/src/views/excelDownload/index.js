@@ -18,7 +18,8 @@ import { useState } from "react";
 
 // 프로그램목록명
 //const sheet1Header = [["분야", "프로그램명", "강사명", "내부강사", "외부강사"]];
-const sheet2Header = [["순번", "년도", "월", "일", "사업구분", "목적구분", "단체명", "지역", "단체유형", "참여형태", "대상", "체류일", "참여인원", "연인원", "폐광지역", "OM", "지출금액"]];
+const sheet2Header = [["순번", "년도", "월", "일", "사업구분", "단체명", "지역", "단체유형", "참여형태", "연령대","참가자유형","서비스유형", "체류일", "참여인원", "연인원", "폐광지역", "OM", "지출금액"]];
+
 const sheet3Header = [["순번", "년도", "월", "일", "단체명", "분야", "프로그램명", "강사명", "참가인원","항목1", "항목2", "항목3", "항목4", "항목5", "항목6", "항목7", "항목8", "항목9"]];
 const sheet4Header = [ ['순번', '강사명', '프로그램명','횟수', '전문성',"성실성", "반응성", "평균", "체계성", "적합성", "흥미성", '평균', "학습성", "재참여", "추천", "평균", "총평균"] ];
 //const sheet5Header = [["구분", "건(사회공헌)", "실인원(사회공헌)", "연인원(사회공헌)", "건(수입구분)", "실인원(수입구분)", "연인원(수입구분)", "건(전체)", "실인원(전체)", "연인원(전체)"]];
@@ -178,13 +179,12 @@ const ExcelDownload = ()=>{
 
             // 운영현황
             // 운영현황 탭 
-            
             const sheet2Result = sheet2.map(({OPENDAY, ...rest})=> ({...rest})).map(obj => Object.values(obj))
             const _sheet2Header = sheet2Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
             const _sheet2Data = sheet2Result.map(values => values.map(value => ({ v: value|| "0", t: 's', s: defaultStyle })));
             // Create worksheet
             const sh2 = XLSX.utils.aoa_to_sheet([..._sheet2Header, ..._sheet2Data]);
-            sh2['!cols'] =   [ {wch:8}, {wch:10}, {wch:7}, {wch:7}, {wch:15}, {wch:25}, {wch:20}, {wch:15}, {wch:15}, {wch:17}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:11}, {wch:11}, {wch:11}, {wch:13}, {wch:13}, {wch:11}, {wch:13} ];
+            sh2['!cols'] =   [ {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:15}, {wch:45}, {wch:15},{wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:15}];
             sh2['!rows'] = Array(sheet2Header.length).fill({ hpx: 23 }); 
             XLSX.utils.book_append_sheet(wb, sh2, "운영현황");
             // 운영현황 끝 
@@ -214,13 +214,13 @@ const ExcelDownload = ()=>{
 
 
             // 프로그램현황 - 기존꺼 바꿔달라하여 바꿈 
-            //const sheet3Result = sheet3.map(obj => Object.values(obj))
-            const sheet3Result = sheet3TestData.map(obj => Object.values(obj))
+            const sheet3Result = sheet3.map(obj => Object.values(obj))
+           // const sheet3Result = sheet3TestData.map(obj => Object.values(obj))  -- 기존거
             const _sheet3Header = sheet3Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
-            const _sheet3Data = sheet3Result.map(values => values.map(value => ({ v: value|| "", t: 's', s: defaultStyle })));
+            const _sheet3Data = sheet3Result.map(values => values.map(value => ({ v: value|| "0", t: 's', s: defaultStyle })));
             // Create worksheet
             const sh3 = XLSX.utils.aoa_to_sheet([..._sheet3Header, ..._sheet3Data]);
-            sh3['!cols'] =   [ {wch:8}, {wch:8}, {wch:8}, {wch:8}, {wch:30}, {wch:20}, {wch:20}, {wch:20}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10} ];
+            sh3['!cols'] =   [ {wch:8}, {wch:8}, {wch:8}, {wch:8}, {wch:45}, {wch:16}, {wch:25}, {wch:15}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13} ];
             sh3['!rows'] = Array(sheet3Header.length).fill({ hpx: 23 }); 
             XLSX.utils.book_append_sheet(wb, sh3, "프로그램현황");
             // // 프로그램현황
@@ -319,12 +319,15 @@ const ExcelDownload = ()=>{
             ];
 
 
+            const sheet4Data = sheet4.map(obj => Object.values(obj))
+            
 
-            const _sheet4Data = sheet4Result.map(values => values.map(value => ({ v: value|| "", t: 's', s: defaultStyle })));
+            const _sheet4Data = sheet4Data.map(values => values.map(value => ({ v: value|| "0", t: 's', s: defaultStyle })));
+            //const _sheet4Data = sheet4Result.map(values => values.map(value => ({ v: value|| "", t: 's', s: defaultStyle })));
             // Create worksheet
             const sh4 = XLSX.utils.aoa_to_sheet([..._sheet4Header, ..._sheet4Data]);
             sh4['!merges'] = mergeRange;
-            sh4['!cols'] =   [ {wch:7}, {wch:10}, {wch:25}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}];
+            sh4['!cols'] =   [ {wch:7}, {wch:10}, {wch:25}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}];
             sh4['!rows'] = Array(sheet4Header.length).fill({ hpx: 23 }); 
             XLSX.utils.book_append_sheet(wb, sh4, "강사현황");
 
@@ -333,8 +336,8 @@ const ExcelDownload = ()=>{
             //const sheet4Result = sheet4.map(obj => Object.values(obj))
             const sheet5Result = sheet5.map(obj => Object.values(obj))
             const sheet5Header =     [
-                ['순번', '년도', '월', '일', '단체명','숙소','숙소','식당','식당','프로그램장소','프로그램장소','프로그램장소','숲(야외)','숲(야외)','숲(야외)','운영','운영','운영','식사','식사','식사', '평균'],
-                ['','','','','','편리성','청결도','편리성','청결도','편리성','청결도','적절성','편리성','청결도','적절성','운영방식','시간편성','직원친절','신선도','다양성','영양', ''],
+                ['순번', '년도', '월', '일', '단체명','참가인원','숙소','숙소','식당','식당','프로그램장소','프로그램장소','프로그램장소','숲(야외)','숲(야외)','숲(야외)','운영','운영','운영','식사','식사','식사', '평균'],
+                ['','','','','','','편리성','청결도','편리성','청결도','편리성','청결도','적절성','편리성','청결도','적절성','운영방식','시간편성','직원친절','신선도','다양성','영양', ''],
             ]
             const _sheet5Header = sheet5Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
 
@@ -345,13 +348,14 @@ const ExcelDownload = ()=>{
                 { s: { r: 0, c: 2 }, e: { r: 1, c: 2 } }, // 월
                 { s: { r: 0, c: 3 }, e: { r: 1, c: 3 } }, // 일
                 { s: { r: 0, c: 4 }, e: { r: 1, c: 4 } }, // 단체명
-                { s: { r: 0, c: 5 }, e: { r: 0, c: 6 } }, // 숙소
-                { s: { r: 0, c: 7 }, e: { r: 0, c: 8 } }, // 식당
-                { s: { r: 0, c: 9 }, e: { r: 0, c: 11 } }, // 프로그램장소
-                { s: { r: 0, c: 12 }, e: { r: 0, c: 14 } }, // 숲(야외)
-                { s: { r: 0, c: 15 }, e: { r: 0, c: 17 } }, // 운영
-                { s: { r: 0, c: 18 }, e: { r: 0, c: 20 } }, // 식사
-                { s: { r: 0, c: 21 }, e: { r: 1, c: 21 } }, // 평균
+                { s: { r: 0, c: 5 }, e: { r: 1, c: 5 } }, // 참가인원
+                { s: { r: 0, c: 6 }, e: { r: 0, c: 7 } }, // 숙소
+                { s: { r: 0, c: 8 }, e: { r: 0, c: 9 } }, // 식당
+                { s: { r: 0, c: 10 }, e: { r: 0, c: 12 } }, // 프로그램장소
+                { s: { r: 0, c: 13 }, e: { r: 0, c: 15 } }, // 숲(야외)
+                { s: { r: 0, c: 16 }, e: { r: 0, c: 18 } }, // 운영
+                { s: { r: 0, c: 19 }, e: { r: 0, c: 21 } }, // 식사
+                { s: { r: 0, c: 22 }, e: { r: 1, c: 22 } }, // 평균
             ];
 
 
@@ -359,16 +363,14 @@ const ExcelDownload = ()=>{
             // Create worksheet
             const sh5 = XLSX.utils.aoa_to_sheet([..._sheet5Header, ..._sheet5Data]);
             sh5['!merges'] = mergeRangeSheet5;
-            sh5['!cols'] =   [ {wch:8}, {wch:10}, {wch:10}, {wch:10}, {wch:25}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}];
+            sh5['!cols'] =   [ {wch:8}, {wch:10}, {wch:10}, {wch:10}, {wch:45}, {wch:10}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}];
             sh5['!rows'] = Array(sheet5Header.length).fill({ hpx: 23 }); 
             XLSX.utils.book_append_sheet(wb, sh5, "시설서비스만족도");
 
 
-
-
             const sheet6Header =     [
-                ['순번', '년도', '월', '일', '단체명' , '구분', '프로그램효과', '프로그램효과' ],
-                ['', '', '', '', '' , '', '힐링효과(합계)', '힐링효과(평균)' ],
+                ['순번', '년도', '월', '일', '단체명','참가인원', '구분', '프로그램효과', '프로그램효과' ],
+                ['', '', '', '', '' , '', '', '힐링효과(합계)', '힐링효과(평균)' ],
             ]
                 // 병합할 셀 범위를 지정합니다.
                 const mergeRangeSheet6 = [
@@ -377,8 +379,10 @@ const ExcelDownload = ()=>{
                     { s: { r: 0, c: 2 }, e: { r: 1, c: 2 } }, // 월
                     { s: { r: 0, c: 3 }, e: { r: 1, c: 3 } }, // 일
                     { s: { r: 0, c: 4 }, e: { r: 1, c: 4 } }, // 단체명
-                    { s: { r: 0, c: 5 }, e: { r: 1, c: 5 } }, // 구분
-                    { s: { r: 0, c: 6 }, e: { r: 0, c: 7 } }, // 자율신경검사효과
+                    { s: { r: 0, c: 5 }, e: { r: 1, c: 5 } }, // 참가인원
+
+                    { s: { r: 0, c: 6 }, e: { r: 1, c: 6 } }, // 구분
+                    { s: { r: 0, c: 7 }, e: { r: 0, c: 8 } }, // 자율신경검사효과
                     
                 ];
     
@@ -388,7 +392,7 @@ const ExcelDownload = ()=>{
             // Create worksheet
             const sh6 = XLSX.utils.aoa_to_sheet([..._sheet6Header, ..._sheet6Data]);
             sh6['!merges'] = mergeRangeSheet6;
-            sh6['!cols'] =   [ {wch:7}, {wch:12}, {wch:8}, {wch:8}, {wch:35}, {wch:12}, {wch:17}, {wch:17}];
+            sh6['!cols'] =   [ {wch:7}, {wch:12}, {wch:8}, {wch:8}, {wch:45}, {wch:12}, {wch:12}, {wch:17}, {wch:17}];
             sh6['!rows'] = Array(sheet5Header.length).fill({ hpx: 23 }); 
             XLSX.utils.book_append_sheet(wb, sh6, "효과성분석(힐링효과)");
             
@@ -400,8 +404,8 @@ const ExcelDownload = ()=>{
 
 
             const sheet7Header =     [
-                ['순번', '년도', '월', '일', '단체명' , '구분', '프로그램효과', '프로그램효과' ],
-                ['', '', '', '', '' , '', '예방효과(합계)', '예방효과(평균)' ],
+                ['순번', '년도', '월', '일','단체명','참가인원' ,'구분', '프로그램효과', '프로그램효과' ],
+                ['', '', '', '', '' , '', '', '예방효과(합계)', '예방효과(평균)' ],
             ]
 
             const _sheet7Header = sheet7Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
@@ -410,7 +414,7 @@ const ExcelDownload = ()=>{
             // Create worksheet
             const sh7 = XLSX.utils.aoa_to_sheet([..._sheet7Header, ..._sheet7Data]);
             sh7['!merges'] = mergeRangeSheet6;
-            sh7['!cols'] =   [ {wch:7}, {wch:12}, {wch:8}, {wch:8}, {wch:35}, {wch:12}, {wch:17}, {wch:17}];
+            sh7['!cols'] =   [ {wch:7}, {wch:12}, {wch:8}, {wch:8}, {wch:45}, {wch:12}, {wch:12}, {wch:17}, {wch:17}];
             sh7['!rows'] = Array(sheet5Header.length).fill({ hpx: 23 }); 
             XLSX.utils.book_append_sheet(wb, sh7, "효과성분석(예방효과)");
             
@@ -419,8 +423,8 @@ const ExcelDownload = ()=>{
 
 
             const sheet8Header =     [
-                ['순번', '년도', '월', '일', '단체명' , '구분', '프로그램효과', '프로그램효과' ],
-                ['', '', '', '', '' , '', '상담치유효과(합계)', '상담치유효과(평균)' ],
+                ['순번', '년도', '월', '일', '단체명', '참가인원', '구분', '프로그램효과', '프로그램효과' ],
+                ['', '', '', '', '' , '', '', '상담치유효과(합계)', '상담치유효과(평균)' ],
             ]
             
             const _sheet8Header = sheet8Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
@@ -430,14 +434,14 @@ const ExcelDownload = ()=>{
 
             const sh8 = XLSX.utils.aoa_to_sheet([..._sheet8Header, ..._s8data]);
             sh8['!merges'] = mergeRangeSheet6;
-            sh8['!cols'] =   [ {wch:7}, {wch:12}, {wch:8}, {wch:8}, {wch:35}, {wch:12}, {wch:25}, {wch:25}];
+            sh8['!cols'] =   [ {wch:7}, {wch:12}, {wch:8}, {wch:8}, {wch:45}, {wch:12}, {wch:12}, {wch:25}, {wch:25}];
             sh8['!rows'] = Array(sheet5Header.length).fill({ hpx: 23 }); 
             XLSX.utils.book_append_sheet(wb, sh8, "효과성분석(상담치유)");
 
 
             const sheet9Header =     [
-                ['순번', '년도', '월', '일', '단체명' , '구분', '자율신경검사효과성', '자율신경검사효과성', '자율신경검사효과성', '자율신경검사효과성', '자율신경검사효과성'],
-                ['', '', '', '', '' , '', '자율신경활성도', '자율신경균형도', '스트레스저항도' , '스트레스지수', '피로도'],
+                ['순번', '년도', '월', '일', '단체명', '참가인원' , '구분', '자율신경검사효과성', '자율신경검사효과성', '자율신경검사효과성', '자율신경검사효과성', '자율신경검사효과성'],
+                ['', '', '', '', '' , '', '', '자율신경활성도', '자율신경균형도', '스트레스저항도' , '스트레스지수', '피로도'],
             ]
 
             // 병합할 셀 범위를 지정합니다.
@@ -447,9 +451,10 @@ const ExcelDownload = ()=>{
                 { s: { r: 0, c: 2 }, e: { r: 1, c: 2 } }, // 월
                 { s: { r: 0, c: 3 }, e: { r: 1, c: 3 } }, // 일
                 { s: { r: 0, c: 4 }, e: { r: 1, c: 4 } }, // 단체명
-                { s: { r: 0, c: 5 }, e: { r: 1, c: 5 } }, // 구분
-                { s: { r: 0, c: 6 }, e: { r: 0, c: 10 } }, // 자율신경검사효과
                 
+                { s: { r: 0, c: 5 }, e: { r: 1, c: 5 } }, // 참가인원
+                { s: { r: 0, c: 6 }, e: { r: 1, c: 6 } }, // 구분
+                { s: { r: 0, c: 7 }, e: { r: 0, c: 11 } }, // 자율신경검사효과
             ];
 
 
@@ -460,7 +465,7 @@ const ExcelDownload = ()=>{
             const sh9 = XLSX.utils.aoa_to_sheet([..._sheet9Header, ..._sheet9Data]);
 
             sh9['!merges'] = mergeRangeSheet9;
-            sh9['!cols'] =   [ {wch:7}, {wch:12}, {wch:9}, {wch:9}, {wch:35}, {wch:12}, {wch:17}, {wch:17}, {wch:17}, {wch:17}, {wch:17}];
+            sh9['!cols'] =   [ {wch:7}, {wch:12}, {wch:9}, {wch:9}, {wch:45}, {wch:12}, {wch:12}, {wch:17}, {wch:17}, {wch:17}, {wch:17}, {wch:17}];
             sh9['!rows'] = Array(sheet5Header.length).fill({ hpx: 23 }); 
             XLSX.utils.book_append_sheet(wb, sh9, "효과성분석(자율신경효과성)");
             

@@ -54,12 +54,13 @@ router.post('/programList', (req, res)=>{
             DAYOFMONTH(STR_TO_DATE(bi.OPENDAY, '%Y-%m-%d')) AS 일,
             bi.OPENDAY,
             bi.BIZ_PURPOSE,
-            bi.SERVICE_TYPE,
             bi.AGENCY,
             bi.RESIDENCE,
             bi.ORG_NATURE,
             bi.PART_FORM,
             bi.AGE_TYPE,
+            bi.PART_TYPE,
+            bi.SERVICE_TYPE,
             bi.DAYS_TO_STAY,
             (bi.PART_MAN_CNT + bi.PART_WOMAN_CNT + bi.LEAD_MAN_CNT + bi.LEAD_WOMAN_CNT) AS CNT,
             (bi.PART_MAN_CNT + bi.PART_WOMAN_CNT + bi.LEAD_MAN_CNT + bi.LEAD_WOMAN_CNT) * bi.DAYS_TO_STAY AS REAL_CNT,
@@ -184,7 +185,7 @@ router.post('/programList', (req, res)=>{
         YEAR(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 년도,
         MONTH(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 월,
         DAY(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 일,
-        main.OPENDAY, 
+       -- main.OPENDAY, 
         main.agency,
         main.BUNYA,
         main.PROGRAM_NAME,
@@ -241,9 +242,8 @@ router.post('/programList', (req, res)=>{
             dbstatistics.program_satisfaction
         WHERE 1=1
             ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
-        GROUP BY
-            TEACHER,
-            PROGRAM_NAME
+        GROUP BY TEACHER, PROGRAM_NAME
+        ORDER BY TEACHER, PROGRAM_NAME
     `
     //  시설 서비스 만족도
     // const sheet5Sql = `
@@ -285,6 +285,7 @@ router.post('/programList', (req, res)=>{
                 MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 월,
                 DAY(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 일,
                 AGENCY,
+                COUNT(*) AS CNT , 
                 ifnull(ROUND(AVG(nullif(score1,0)),2),0) as score1,
                 ifnull(ROUND(AVG(nullif(score2,0)),2),0) as score2,
                 ifnull(ROUND(AVG(nullif(score3,0)),2),0) as score3,
@@ -338,6 +339,7 @@ router.post('/programList', (req, res)=>{
                 MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 월,
                 DAY(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 일,
                 AGENCY,
+                COUNT(*) AS CNT, 
                 PV,
                 IFNULL(SUM(SCORE1 + SCORE2 + SCORE3 + SCORE4 + SCORE5 + SCORE6 + SCORE7 + SCORE8 + SCORE9 + SCORE10 +
                     SCORE11 + SCORE12 + SCORE13 + SCORE14 + SCORE15 + SCORE16 + SCORE17 + SCORE18 + SCORE19 + SCORE20 +
@@ -363,6 +365,7 @@ router.post('/programList', (req, res)=>{
                 MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 월,
                 DAY(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 일,
                 AGENCY,
+                COUNT(*) AS CNT, 
                 PV,
             IFNULL(SUM(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
                     SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18),0) as sum,
@@ -386,6 +389,7 @@ router.post('/programList', (req, res)=>{
                 MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 월,
                 DAY(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 일,
                 AGENCY,
+                COUNT(*) AS CNT, 
                 PV,
             IFNULL(SUM(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
                     SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE18+
@@ -415,6 +419,7 @@ router.post('/programList', (req, res)=>{
             MONTH(STR_TO_DATE(DATE, '%Y-%m-%d')) AS 월,
             DAY(STR_TO_DATE(DATE, '%Y-%m-%d')) AS 일,
             AGENCY,
+            COUNT(*) AS CNT, 
             PV,
             IFNULL(ROUND(AVG(nullif(num1,0)),2),0) as num1, 
             IFNULL(ROUND(AVG(nullif(num2,0)),2),0) as num2,
@@ -429,48 +434,6 @@ router.post('/programList', (req, res)=>{
         ORDER BY AGENCY, PV;
 
     `;
-
- 
-    // let sheet6Sql_3 = `
-    //     select PV,  IFNULL(SUM(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
-    //         SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18),0) as sum,
-    //         IFNULL(ROUND(AVG(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
-    //         SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18)/18,2),0) as avg 
-    //     FROM prevent_service
-    //     WHERE PV IN ("사전", "사후")
-    //     ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
-    //     GROUP BY PV
-    // `;
-    // let sheet6Sql_4 = `
-            // SELECT 
-            //     '사전' as PV, 
-            //     IFNULL(ROUND(AVG(nullif(num1,0)),2),0) as num1, 
-            //     IFNULL(ROUND(AVG(nullif(num2,0)),2),0) as num2,
-            //     IFNULL(ROUND(AVG(nullif(num3,0)),2),0) as num3, 
-            //     IFNULL(ROUND(AVG(nullif(num4,0)),2),0) as num4, 
-            //     IFNULL(ROUND(AVG(nullif(num5,0)),2),0) as num5
-            // FROM hrv_service
-            // WHERE 1=1
-            // AND PV = '사전'
-            // ${openday ? `AND STR_TO_DATE(DATE, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
-
-            // UNION ALL
-
-            // SELECT 
-            //     '사후' as PV, 
-            //     IFNULL(ROUND(AVG(nullif(num1,0)),2),0) as num1, 
-            //     IFNULL(ROUND(AVG(nullif(num2,0)),2),0) as num2,
-            //     IFNULL(ROUND(AVG(nullif(num3,0)),2),0) as num3, 
-            //     IFNULL(ROUND(AVG(nullif(num4,0)),2),0) as num4, 
-            //     IFNULL(ROUND(AVG(nullif(num5,0)),2),0) as num5
-            // FROM hrv_service
-            // WHERE 1=1
-            // AND PV = '사후'
-            // ${openday ? `AND STR_TO_DATE(DATE, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
-    // `;
-
-
-
 
     const params = openday ? [openday, endday] : []; // 조건에 따라 파라미터 설정
     const params2 = openday ? [openday, endday, openday, endday] : []; // 조건에 따라 파라미터 설정
@@ -496,7 +459,7 @@ router.post('/programList', (req, res)=>{
         let sheet3 = results[2]; // the result from the second query
         let sheet4 = results[3]; // the result from the second query
         let sheet5 = results[4]; // the result from the second query
-        
+
         
         let sheet6 = results[5]; 
         let sheet7 = results[6]; 
