@@ -432,6 +432,31 @@ router.post('/programList', (req, res)=>{
         ${openday ? `AND STR_TO_DATE(DATE, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
         GROUP BY AGENCY, PV
         ORDER BY AGENCY, PV;
+    `;
+    // 강사 횟수 추가 
+    const sheet10ql = `
+        SELECT
+            TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 3), ',', -1)) AS Instructor,
+            TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 1), ',', -1)) AS ProgramName,
+            TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 2), ',', -1)) AS Field,
+            COUNT(*) AS Count
+        FROM 
+            basic_info,
+            (SELECT 1 AS n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5) AS Numbers
+        WHERE
+            n <= (LENGTH(PROGRAM_IN_OUT) - LENGTH(REPLACE(PROGRAM_IN_OUT, ',' , ''))) / LENGTH(',') + 1
+            AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 1), ',', -1)) NOT REGEXP '^[0-9]+$'
+            AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 1), ',', -1)) != ''
+            AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 2), ',', -1)) NOT REGEXP '^[0-9]+$'
+            AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 2), ',', -1)) != ''
+            AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 3), ',', -1)) NOT REGEXP '^[0-9]+$'
+            AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 3), ',', -1)) != ''
+            ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+        GROUP BY
+            ProgramName, Field, Instructor
+        ORDER BY
+            Instructor, Field, OPENDAY;
+
 
     `;
 
@@ -450,6 +475,8 @@ router.post('/programList', (req, res)=>{
         maria(sheet7Sql,params),
         maria(sheet8Sql,params),
         maria(sheet9Sql,params),
+
+        maria(sheet10ql,params),
        
     
     ])
@@ -465,6 +492,7 @@ router.post('/programList', (req, res)=>{
         let sheet7 = results[6]; 
         let sheet8 = results[7]; 
         let sheet9 = results[8]; 
+        let sheet10 = results[9]; 
      
         
 
@@ -547,7 +575,8 @@ router.post('/programList', (req, res)=>{
             sheet6, 
             sheet7, 
             sheet8, 
-            sheet9
+            sheet9,
+            sheet10,
         });
     })
     .catch((err) => {console.log(err); res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })});

@@ -7,13 +7,6 @@ import { defaultStyle, headerStyle } from "utils/utils";
 import DatePicker from "ui-component/inputs/datePicker";
 import { Button, Grid} from '@mui/material';
 import { useState } from "react";
-// 이 데이터를 변경해서  새로운 배열을 만드려해 
-// ["구분", "건(사회공헌)", "실인원(사회공헌)", "연인원(사회공헌)", "건(수입구분)", "실인원(수입구분)", "연인원(수입구분)", "건(전체)", "실인원(전체)", "연인원(전체)"]
-
-// 구분은 년도에 해당하고 1,2,3,4,5,.... 12월 까지 해서 만들꺼야  위 데이터에서 비어있는 달이 있다면 체워 넣어 0 을 입력하고싶어 
-
-// 각 BIZ_PURPOSE 에 따라 순서대로 
-
 
 
 // 프로그램목록명
@@ -29,7 +22,7 @@ const ExcelDownload = ()=>{
 
     const onClick = ()=>{
 
-        callApi("/excelData/programList", {openday, endday}).then(({data : {sheet1, sheet2,sheet3, sheet4, sheet5 ,sheet6,sheet7 ,sheet8, sheet9}})=>{
+        callApi("/excelData/programList", {openday, endday}).then(({data : {sheet1, sheet2,sheet3, sheet4, sheet5 ,sheet6,sheet7 ,sheet8, sheet9, sheet10}})=>{
             
 
           
@@ -471,11 +464,18 @@ const ExcelDownload = ()=>{
             
 
 
-
-
-
-
-
+            const sheet10Header = [["순번", "강사명", "프로그램명", "분야", "횟수"]];
+            // 강사현황횟수추가
+            // 강사현황횟수추가 탭 
+            const sheet10Result = sheet10.map((i, index)=> ({index : index+1,  ...i, })).map(obj => Object.values(obj))
+            const _sheet10Header = sheet10Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
+            const _sheet10Data = sheet10Result.map(values => values.map(value => ({ v: value|| "", t: 's', s: defaultStyle })));
+            // Create worksheet
+            const sh10 = XLSX.utils.aoa_to_sheet([..._sheet10Header, ..._sheet10Data]);
+            sh10['!cols'] =   [ {wch:8}, {wch:15}, {wch:45}, {wch:15}, {wch:15} ];
+            sh10['!rows'] = Array(_sheet10Header.length).fill({ hpx: 23 }); 
+            XLSX.utils.book_append_sheet(wb, sh10, "강사현황_횟수");
+            // 강사현황횟수추가 끝 
 
 
 
@@ -487,201 +487,6 @@ const ExcelDownload = ()=>{
         })
     }
 
-
-
-    
-    const onClick2 = ()=>{
-
-        callApi("/excelData/programList", {openday, endday}).then(({data : {sheet1, sheet2,sheet3, sheet4, sheet5, sheet6}})=>{
-            
-
-          
-
-            // Excel WorkBook 선언 
-            const wb = XLSX.utils.book_new();
-            const todayInfo = moment().format("YYYY-MM-DD");
-            
-            
-            // 프로그램 목록
-            // const sheet1Data = sheet1.map(i=> i.PROGRAM_IN_OUT).filter((i, idx)=> idx <30);
-            // const sheet1Result = sheet1Data.flatMap(row => {
-            //     const items = row.split(","); // 각 로우를 ,로 분리하여 배열로 변환
-            //     const subResult = [];
-            //     for (let i = 0; i < items.length; i += 5) {
-            //         subResult.push(items.slice(i, i + 5)); // 각 하위 배열을 추가
-            //     }
-            //     return subResult;
-            // });
-
-     
-
-            
-            // // 프로그램목록 탭 
-            // const _sheet1Header = sheet1Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
-            // const _sheet1Data = sheet1Result.map(values => values.map(value => ({ v: value, t: 's', s: defaultStyle })));
-            // // Create worksheet
-            // const sh1 = XLSX.utils.aoa_to_sheet([..._sheet1Header, ..._sheet1Data]);
-            
-            // sh1['!cols'] = [ {wch:25}, {wch:20}, {wch:20}, {wch:15}, {wch:15}];
-            // sh1['!rows'] = Array(sheet1Header.length).fill({ hpx: 23 }); 
-          // XLSX.utils.book_append_sheet(wb, sh1, "프로그램목록");
-            // 프로그램 목록 끝 
-
-          
-            // 운영현황
-            // 운영현황 탭 
-            const sheet2Result = sheet2.map(({OPENDAY, ...rest})=> ({...rest})).map(obj => Object.values(obj))
-            const _sheet2Header = sheet2Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
-            const _sheet2Data = sheet2Result.map(values => values.map(value => ({ v: value|| "", t: 's', s: defaultStyle })));
-            // Create worksheet
-            const sh2 = XLSX.utils.aoa_to_sheet([..._sheet2Header, ..._sheet2Data]);
-            sh2['!cols'] =   [ {wch:8}, {wch:10}, {wch:7}, {wch:7}, {wch:15}, {wch:25}, {wch:20}, {wch:15}, {wch:15}, {wch:17}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:11}, {wch:11}, {wch:11}, {wch:13}, {wch:13}, {wch:11}, {wch:13} ];
-            sh2['!rows'] = Array(sheet2Header.length).fill({ hpx: 23 }); 
-            XLSX.utils.book_append_sheet(wb, sh2, "운영현황");
-            // 운영현황 끝 
-
-            // 프로그램현황
-            //const sheet3Result = sheet3.map(obj => Object.values(obj))
-
-            const removeOpenday = sheet3.map(({OPENDAY, ...rest})=> ({...rest}))
-
-            const sheet3Result = removeOpenday.map(obj => Object.values(obj))
-            const _sheet3Header = sheet3Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
-            const _sheet3Data = sheet3Result.map(values => values.map(value => ({ v: value|| "", t: 's', s: defaultStyle })));
-            // Create worksheet
-            const sh3 = XLSX.utils.aoa_to_sheet([..._sheet3Header, ..._sheet3Data]);
-            sh3['!cols'] =   [ {wch:8}, {wch:8}, {wch:8}, {wch:8}, {wch:30}, {wch:20}, {wch:20}, {wch:20}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10} ];
-            sh3['!rows'] = Array(sheet3Header.length).fill({ hpx: 23 }); 
-            XLSX.utils.book_append_sheet(wb, sh3, "프로그램현황");
-            // 프로그램현황
-
-
-
-
-
-
-
-
-
-            // 강사현황
-            const sheet4Result = sheet4.map(obj => Object.values(obj))
-            
-            
-            
-            
-            // 표의 헤더를 정의합니다.
-            const sheet4Header2 = [
-                ['순번', '강사명', '프로그램명', '횟수', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도'],
-                ['', '', '', '', '강사', '강사', '강사', '강사', '내용구성', '내용구성', '내용구성', '내용구성', '효과성','효과성','효과성','효과성',  '평균'],
-                ['','','','', '전문성', '성실성', '반응성', '평균', '체계성', '적합성', '흥미성', '평균', '학습성', '재참여', '추천', '평균', '']
-            ];
-            const _sheet4Header = sheet4Header2.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
-
-            // 병합할 셀 범위를 지정합니다.
-            const mergeRange = [
-                { s: { r: 0, c: 0 }, e: { r: 2, c: 0 } }, // 순번
-                { s: { r: 0, c: 1 }, e: { r: 2, c: 1 } }, // 강사명
-                { s: { r: 0, c: 2 }, e: { r: 2, c: 2 } }, // 프로그램명
-                { s: { r: 0, c: 3 }, e: { r: 2, c: 3 } }, // 횟수
-                { s: { r: 0, c: 4 }, e: { r: 0, c: 16 } }, // 만족도
-
-                { s: { r: 1, c: 4 }, e: { r: 1, c: 7 } }, // 강사
-                { s: { r: 1, c: 8 }, e: { r: 1, c: 11 } }, // 내용구성
-                { s: { r: 1, c: 12 }, e: { r: 1, c: 15 } }, // 내용구성
-                { s: { r: 1, c: 16 }, e: { r: 2, c: 16 } }, // 평균
-            ];
-
-
-
-            const _sheet4Data = sheet4Result.map(values => values.map(value => ({ v: value|| "", t: 's', s: defaultStyle })));
-            // Create worksheet
-            const sh4 = XLSX.utils.aoa_to_sheet([..._sheet4Header, ..._sheet4Data]);
-            
-
-            sh4['!merges'] = mergeRange;
-            sh4['!cols'] =   [ {wch:7}, {wch:10}, {wch:25}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}];
-            sh4['!rows'] = Array(sheet4Header.length).fill({ hpx: 23 }); 
-            XLSX.utils.book_append_sheet(wb, sh4, "강사현황");
-            // 강사현황
-
-
-              //const sheet4Result = sheet4.map(obj => Object.values(obj))
-              const sheet5Result = sheet5.map(obj => Object.values(obj))
-              const sheet5Header =     [
-                  ["구분",'숙소','숙소','식당','식당','프로그램장소','프로그램장소','프로그램장소','숲(야외)','숲(야외)','숲(야외)','운영','운영','운영','식사','식사','식사', '평균'],
-                  ["",'편리성','청결도','편리성','청결도','편리성','청결도','적절성','편리성','청결도','적절성','운영방식','시간편성','직원친절','신선도','다양성','영양', ''],
-              ]
-              const _sheet5Header = sheet5Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
-  
-              // 병합할 셀 범위를 지정합니다.
-              const mergeRangeSheet5 = [
-                  { s: { r: 0, c: 0 }, e: { r: 1, c: 0 } }, // 구분
-                  { s: { r: 0, c: 1 }, e: { r: 0, c: 2 } }, // 숙소
-                  { s: { r: 0, c: 3 }, e: { r: 0, c: 4 } }, // 식당
-                  { s: { r: 0, c: 5 }, e: { r: 0, c: 7 } }, // 프로그램장소
-                  { s: { r: 0, c: 8 }, e: { r: 0, c: 10 } }, // 숲(야외)
-                  { s: { r: 0, c: 11 }, e: { r: 0, c: 13 } }, // 운영
-                  { s: { r: 0, c: 14 }, e: { r: 0, c: 16 } }, // 식사
-                  { s: { r: 0, c: 17 }, e: { r: 1, c: 17 } }, // 평균
-            ];
-
-
-            const _sheet5Data = sheet5Result.map(values => values.map(value => ({ v: value|| "", t: 's', s: defaultStyle })));
-            // Create worksheet
-            const sh5 = XLSX.utils.aoa_to_sheet([..._sheet5Header, ..._sheet5Data]);
-            sh5['!merges'] = mergeRangeSheet5;
-            sh5['!cols'] =   [ {wch:15}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}];
-            sh5['!rows'] = Array(sheet5Header.length).fill({ hpx: 23 }); 
-            XLSX.utils.book_append_sheet(wb, sh5, "시설서비스만족도");
-
-
-
-            //const sheet6Result = sheet6.map(obj => Object.values(obj))
-            // const sheet6Header =     [
-            //     ["구분",'프로그램효과성','프로그램효과성','프로그램효과성','프로그램효과성','프로그램효과성','프로그램효과성','자율신경검사효과성','자율신경검사효과성','자율신경검사효과성','자율신경검사효과성','자율신경검사효과성'],
-            //     ["",'예방효과(합계)','예방효과(평균)','상담치유효과(합계)','상담치유효과(평균)','힐링효과(합계)','힐링효과(평균)','자율신경활성도','자율신경균형도','스트레스저항도','스트레스지수','피로도'],
-            // ]
-            const sheet6Header =     [
-                ['순번', '년도', '월', '일', '' ],
-              
-            ]
-            const _sheet6Header = sheet6Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
-
-            // 병합할 셀 범위를 지정합니다.
-            const mergeRangeSheet6 = [
-                { s: { r: 0, c: 0 }, e: { r: 1, c: 0 } }, // 구분
-                { s: { r: 0, c: 1 }, e: { r: 0, c: 6 } }, // 프로그램효과성
-                { s: { r: 0, c: 7 }, e: { r: 0, c: 11 } }, // 자율신경검사효과성
-            ];
-                const desiredOrder = [
-                'PV',
-                'preventSum',
-                'preventAvg',
-                'counselSum',
-                'counselAvg',
-                'healingTotalSum',
-                'healingAverageScore',
-                'hrvNum1',
-                'hrvNum2',
-                'hrvNum3',
-                'hrvNum4',
-                'hrvNum5'
-            ];
-            const _sheet6Data = sheet6.map(row => desiredOrder.map(key => ({ v: row[key] || '0', t: 's', s: defaultStyle })));
-            //const _sheet6Data = sheet6Result.map(values => values.map(value => ({ v: value|| "0", t: 's', s: defaultStyle })));
-            // Create worksheet
-            const sh6 = XLSX.utils.aoa_to_sheet([..._sheet6Header, ..._sheet6Data]);
-            sh6['!merges'] = mergeRangeSheet6;
-            sh6['!cols'] =   [ {wch:16}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:20}, {wch:13}];
-            sh6['!rows'] = Array(sheet5Header.length).fill({ hpx: 23 }); 
-            XLSX.utils.book_append_sheet(wb, sh6, "효과성분석");
-
-
-            XLSX.writeFile(wb, `통계서비스_${todayInfo}.xlsx`);
-
-
-        })
-    }
 
 
 
