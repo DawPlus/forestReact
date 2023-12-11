@@ -8,36 +8,42 @@ const initialState = {
   openday : "",
   endday : "",
   partTypeList : {
-    count_addict :"",
+    
     count_adult :"",
     count_benefit :"",
     count_boy :"",
-    count_etc :"",
+    
+
+    count_general  : "",
     count_family :"",
     count_handicap :"",
+    count_multicultural :"",
+    
+    
     count_income_etc :"",
     count_income_green :"",
     count_income_voucher :"",
     count_kidboy :"",
-    count_lowincome :"",
     count_old :"",
     count_society :"",
-    count_teacher :"",
-    part_addict :"",
+    
     part_adult :"",
     part_benefit :"",
     part_boy :"",
-    part_etc :"",
+    
+
+    part_general :"",
     part_family :"",
     part_handicap :"",
+    part_multicultural :"",
+
+    
     part_income_etc :"",
     part_income_green :"",
     part_income_voucher :"",
     part_kidboy :"",
-    part_lowincome :"",
     part_old :"",
     part_society :"",
-    part_teacher :"",
     org_1 : "",
     org_2 : "",
     org_3 : "",

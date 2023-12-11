@@ -430,18 +430,16 @@ router.post('/getPartTypeList', (req, res)=>{
             IFNULL(SUM(case when AGE_TYPE ="청소년" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_boy,
             IFNULL(SUM(case when AGE_TYPE ="성인" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_adult,
             IFNULL(SUM(case when AGE_TYPE ="노인" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_old,
-            COUNT(case when PART_TYPE ="장애인" then 1 end ) as count_handicap,
-            COUNT(case when PART_TYPE ="저소득" then 1 end ) as count_lowincome,
-            COUNT(case when PART_TYPE ="가족" then 1 end ) as count_family,
-            COUNT(case when PART_TYPE ="교직원" then 1 end ) as count_teacher,
-            COUNT(case when PART_TYPE ="중독" then 1 end ) as count_addict,
-            COUNT(case when PART_TYPE ="기타" then 1 end ) as count_etc,
-            IFNULL(SUM(case when PART_TYPE ="장애인" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_handicap,
-            IFNULL(SUM(case when PART_TYPE ="저소득" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_lowincome,
-            IFNULL(SUM(case when PART_TYPE ="가족" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_family,
-            IFNULL(SUM(case when PART_TYPE ="교직원" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_teacher,
-            IFNULL(SUM(case when PART_TYPE ="중독" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_addict,
-            IFNULL(SUM(case when PART_TYPE ="기타" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_etc,
+         
+            COUNT(CASE WHEN PART_TYPE IN ( "저소득", "교직원", "중독", "기타") THEN 1 END) AS count_general,
+            COUNT(CASE WHEN PART_TYPE = "가족" THEN 1 END) AS count_family,
+            COUNT(CASE WHEN PART_TYPE = "장애인" THEN 1 END) AS count_handicap,
+            COUNT(CASE WHEN PART_TYPE = "다문화" THEN 1 END) AS count_multicultural,
+
+            IFNULL(SUM(CASE WHEN PART_TYPE IN ( "저소득", "교직원", "중독", "기타") THEN PART_MAN_CNT + PART_WOMAN_CNT + LEAD_MAN_CNT + LEAD_WOMAN_CNT END), 0) AS part_general,
+            IFNULL(SUM(CASE WHEN PART_TYPE = "가족" THEN PART_MAN_CNT + PART_WOMAN_CNT + LEAD_MAN_CNT + LEAD_WOMAN_CNT END), 0) AS part_family,
+            IFNULL(SUM(CASE WHEN PART_TYPE = "장애인" THEN PART_MAN_CNT + PART_WOMAN_CNT + LEAD_MAN_CNT + LEAD_WOMAN_CNT END), 0) AS part_handicap,
+            IFNULL(SUM(CASE WHEN PART_TYPE = "다문화" THEN PART_MAN_CNT + PART_WOMAN_CNT + LEAD_MAN_CNT + LEAD_WOMAN_CNT END), 0) AS part_multicultural,
          
             
             COUNT(case when PART_FORM ="단체" then 1 end ) as count_income_green,
