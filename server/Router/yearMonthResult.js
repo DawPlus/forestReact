@@ -444,12 +444,12 @@ router.post('/getPartTypeList', (req, res)=>{
             IFNULL(SUM(case when PART_TYPE ="기타" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_etc,
          
             
-            COUNT(case when PART_FORM ="단체" then 1 end ) as count_income_etc,
-            COUNT(case when PART_FORM ="개인" then 1 end ) as count_income_green,
-            COUNT(case when PART_FORM ="기타" then 1 end ) as count_income_voucher,
-            IFNULL(SUM(case when PART_FORM ="단체" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_income_etc,
-            IFNULL(SUM(case when PART_FORM ="개인" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_income_green,
-            IFNULL(SUM(case when PART_FORM ="기타" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_income_voucher,
+            COUNT(case when PART_FORM ="단체" then 1 end ) as count_income_green,
+            COUNT(case when PART_FORM ="개인" then 1 end ) as count_income_voucher,
+            COUNT(case when PART_FORM ="기타" then 1 end ) as count_income_etc,
+            IFNULL(SUM(case when PART_FORM ="단체" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_income_green,
+            IFNULL(SUM(case when PART_FORM ="개인" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_income_voucher,
+            IFNULL(SUM(case when PART_FORM ="기타" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_income_etc,
             
             COUNT(case when ORG_NATURE ="교육기관" then 1 end ) as org_1,
             COUNT(case when ORG_NATURE ="복지기관" then 1 end ) as org_2,

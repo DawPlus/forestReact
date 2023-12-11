@@ -75,6 +75,7 @@ router.post('/programList', (req, res)=>{
         LEFT JOIN
             dbstatistics.expense AS e ON bi.BASIC_INFO_SEQ = e.BASIC_INFO_SEQ
         WHERE 1=1
+            and	bi.PROGRESS_STATE = 'E'
             ${openday ? `AND STR_TO_DATE(bi.OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
         GROUP BY
             년도, 월, 일, bi.BASIC_INFO_SEQ
@@ -434,6 +435,12 @@ router.post('/programList', (req, res)=>{
         ORDER BY AGENCY, PV;
     `;
     // 강사 횟수 추가 
+     // AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 1), ',', -1)) NOT REGEXP '^[0-9]+$'
+    // AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 1), ',', -1)) != ''
+    // AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 2), ',', -1)) NOT REGEXP '^[0-9]+$'
+    // AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 2), ',', -1)) != ''
+    // AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 3), ',', -1)) NOT REGEXP '^[0-9]+$'
+    // AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 3), ',', -1)) != ''
     const sheet10ql = `
         SELECT
             TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 3), ',', -1)) AS Instructor,
@@ -445,12 +452,6 @@ router.post('/programList', (req, res)=>{
             (SELECT 1 AS n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5) AS Numbers
         WHERE
             n <= (LENGTH(PROGRAM_IN_OUT) - LENGTH(REPLACE(PROGRAM_IN_OUT, ',' , ''))) / LENGTH(',') + 1
-            AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 1), ',', -1)) NOT REGEXP '^[0-9]+$'
-            AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 1), ',', -1)) != ''
-            AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 2), ',', -1)) NOT REGEXP '^[0-9]+$'
-            AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 2), ',', -1)) != ''
-            AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 3), ',', -1)) NOT REGEXP '^[0-9]+$'
-            AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 3), ',', -1)) != ''
             ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
         GROUP BY
             ProgramName, Field, Instructor

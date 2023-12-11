@@ -159,7 +159,7 @@ const ExcelDownload = ()=>{
 
             
             // // 프로그램목록 탭 
-            // const _sheet1Header = sheet1Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
+            // const  = sheet1Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
             // const _sheet1Data = sheet1Result.map(values => values.map(value => ({ v: value, t: 's', s: defaultStyle })));
             // // Create worksheet
             // const sh1 = XLSX.utils.aoa_to_sheet([..._sheet1Header, ..._sheet1Data]);
@@ -207,31 +207,31 @@ const ExcelDownload = ()=>{
 
 
             // 프로그램현황 - 기존꺼 바꿔달라하여 바꿈 
-            const sheet3Result = sheet3.map(obj => Object.values(obj))
-           // const sheet3Result = sheet3TestData.map(obj => Object.values(obj))  -- 기존거
-            const _sheet3Header = sheet3Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
-            const _sheet3Data = sheet3Result.map(values => values.map(value => ({ v: value|| "0", t: 's', s: defaultStyle })));
-            // Create worksheet
-            const sh3 = XLSX.utils.aoa_to_sheet([..._sheet3Header, ..._sheet3Data]);
-            sh3['!cols'] =   [ {wch:8}, {wch:8}, {wch:8}, {wch:8}, {wch:45}, {wch:16}, {wch:25}, {wch:15}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13} ];
-            sh3['!rows'] = Array(sheet3Header.length).fill({ hpx: 23 }); 
-            XLSX.utils.book_append_sheet(wb, sh3, "프로그램현황");
+        //     const sheet3Result = sheet3.map(obj => Object.values(obj))
+        //    // const sheet3Result = sheet3TestData.map(obj => Object.values(obj))  -- 기존거
+        //     const _sheet3Header = sheet3Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
+        //     const _sheet3Data = sheet3Result.map(values => values.map(value => ({ v: value|| "0", t: 's', s: defaultStyle })));
+        //     // Create worksheet
+        //     const sh3 = XLSX.utils.aoa_to_sheet([..._sheet3Header, ..._sheet3Data]);
+        //     sh3['!cols'] =   [ {wch:8}, {wch:8}, {wch:8}, {wch:8}, {wch:45}, {wch:16}, {wch:25}, {wch:15}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13} ];
+        //     sh3['!rows'] = Array(sheet3Header.length).fill({ hpx: 23 }); 
+        //     XLSX.utils.book_append_sheet(wb, sh3, "프로그램현황");
             // // 프로그램현황
 
 
                  // 프로그램현황
-            //const sheet3Result = sheet3.map(obj => Object.values(obj))
+            // const sheet3Result = sheet3.map(obj => Object.values(obj))
 
-            // const removeOpenday = sheet3.map(({OPENDAY, ...rest})=> ({...rest}))
+            const removeOpenday = sheet3.map(({OPENDAY, ...rest})=> ({...rest}))
 
-            // const sheet3Result = removeOpenday.map(obj => Object.values(obj))
-            // const _sheet3Header = sheet3Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
-            // const _sheet3Data = sheet3Result.map(values => values.map(value => ({ v: value|| "", t: 's', s: defaultStyle })));
-            // // Create worksheet
-            // const sh3 = XLSX.utils.aoa_to_sheet([..._sheet3Header, ..._sheet3Data]);
-            // sh3['!cols'] =   [ {wch:8}, {wch:8}, {wch:8}, {wch:8}, {wch:30}, {wch:20}, {wch:20}, {wch:20}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10} ];
-            // sh3['!rows'] = Array(sheet3Header.length).fill({ hpx: 23 }); 
-            // XLSX.utils.book_append_sheet(wb, sh3, "프로그램현황");
+            const sheet3Result = removeOpenday.map(obj => Object.values(obj))
+            const _sheet3Header = sheet3Header.map(item => item.map( i => ({v : i, t : 's', s : headerStyle})) )
+            const _sheet3Data = sheet3Result.map(values => values.map(value => ({ v: value|| "", t: 's', s: defaultStyle })));
+            // Create worksheet
+            const sh3 = XLSX.utils.aoa_to_sheet([..._sheet3Header, ..._sheet3Data]);
+            sh3['!cols'] =   [ {wch:8}, {wch:8}, {wch:8}, {wch:8}, {wch:30}, {wch:20}, {wch:20}, {wch:20}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10} ];
+            sh3['!rows'] = Array(sheet3Header.length).fill({ hpx: 23 }); 
+            XLSX.utils.book_append_sheet(wb, sh3, "프로그램현황");
             // 프로그램현황
 
 
@@ -291,7 +291,7 @@ const ExcelDownload = ()=>{
             
             // 표의 헤더를 정의합니다.
             const sheet4Header2 = [
-                ['순번', '강사명', '프로그램명', '횟수', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도'],
+                ['순번', '강사명', '프로그램명', '설문참가인원', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도', '만족도'],
                 ['', '', '', '', '강사', '강사', '강사', '강사', '내용구성', '내용구성', '내용구성', '내용구성', '효과성','효과성','효과성','효과성',  '평균'],
                 ['','','','', '전문성', '성실성', '반응성', '평균', '체계성', '적합성', '흥미성', '평균', '학습성', '재참여', '추천', '평균', '']
             ];
@@ -302,7 +302,7 @@ const ExcelDownload = ()=>{
                 { s: { r: 0, c: 0 }, e: { r: 2, c: 0 } }, // 순번
                 { s: { r: 0, c: 1 }, e: { r: 2, c: 1 } }, // 강사명
                 { s: { r: 0, c: 2 }, e: { r: 2, c: 2 } }, // 프로그램명
-                { s: { r: 0, c: 3 }, e: { r: 2, c: 3 } }, // 횟수
+                { s: { r: 0, c: 3 }, e: { r: 2, c: 3 } }, // 설문참가인원
                 { s: { r: 0, c: 4 }, e: { r: 0, c: 16 } }, // 만족도
 
                 { s: { r: 1, c: 4 }, e: { r: 1, c: 7 } }, // 강사
@@ -320,7 +320,7 @@ const ExcelDownload = ()=>{
             // Create worksheet
             const sh4 = XLSX.utils.aoa_to_sheet([..._sheet4Header, ..._sheet4Data]);
             sh4['!merges'] = mergeRange;
-            sh4['!cols'] =   [ {wch:7}, {wch:10}, {wch:25}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}];
+            sh4['!cols'] =   [ {wch:7}, {wch:10}, {wch:25}, {wch:20}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}, {wch:13}];
             sh4['!rows'] = Array(sheet4Header.length).fill({ hpx: 23 }); 
             XLSX.utils.book_append_sheet(wb, sh4, "강사현황");
 
@@ -464,7 +464,7 @@ const ExcelDownload = ()=>{
             
 
 
-            const sheet10Header = [["순번", "강사명", "프로그램명", "분야", "횟수"]];
+            const sheet10Header = [["순번", "강사명", "프로그램명", "분야", "강의횟수"]];
             // 강사현황횟수추가
             // 강사현황횟수추가 탭 
             const sheet10Result = sheet10.map((i, index)=> ({index : index+1,  ...i, })).map(obj => Object.values(obj))
@@ -474,11 +474,11 @@ const ExcelDownload = ()=>{
             const sh10 = XLSX.utils.aoa_to_sheet([..._sheet10Header, ..._sheet10Data]);
             sh10['!cols'] =   [ {wch:8}, {wch:15}, {wch:45}, {wch:15}, {wch:15} ];
             sh10['!rows'] = Array(_sheet10Header.length).fill({ hpx: 23 }); 
-            XLSX.utils.book_append_sheet(wb, sh10, "강사현황_횟수");
+            XLSX.utils.book_append_sheet(wb, sh10, "강의횟수");
             // 강사현황횟수추가 끝 
 
 
-
+       
 
 
             XLSX.writeFile(wb, `통계서비스_${todayInfo}.xlsx`);
