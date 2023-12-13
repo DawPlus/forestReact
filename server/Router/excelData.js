@@ -457,9 +457,88 @@ router.post('/programList', (req, res)=>{
             ProgramName, Field, Instructor
         ORDER BY
             Instructor, Field, OPENDAY;
-
-
     `;
+
+
+
+
+
+    const sheet11sql = `
+        SELECT
+            ROW_NUMBER() OVER (ORDER BY YEAR(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) DESC,
+                                        MONTH(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) DESC,
+                                        DAY(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) DESC) AS 순번,
+            YEAR(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 년도,
+            MONTH(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 월,
+            DAY(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 일,
+            main.AGENCY,
+            main.BUNYA,
+            main.PROGRAM_NAME,
+            main.TEACHER,
+            (
+                SELECT COUNT(*)
+                FROM dbstatistics.program_satisfaction AS sub
+                WHERE 1=1
+                    ${openday ? `AND STR_TO_DATE(sub.OPENDAY, '%Y-%m-%d') BETWEEN ? AND ? ` : ''}
+                AND sub.agency = main.agency
+                AND sub.OPENDAY = main.OPENDAY
+                AND sub.BUNYA = main.BUNYA
+                AND sub.PROGRAM_NAME = main.PROGRAM_NAME
+                AND sub.TEACHER = main.TEACHER
+            ) AS row_count,
+            ROUND(AVG(CASE WHEN ps.SCORE1 > 0 THEN ps.SCORE1 ELSE NULL END), 2) AS avg_score1,
+            ROUND(AVG(CASE WHEN ps.SCORE2 > 0 THEN ps.SCORE2 ELSE NULL END), 2) AS avg_score2,
+            ROUND(AVG(CASE WHEN ps.SCORE3 > 0 THEN ps.SCORE3 ELSE NULL END), 2) AS avg_score3,
+            ROUND(AVG(CASE WHEN ps.SCORE4 > 0 THEN ps.SCORE4 ELSE NULL END), 2) AS avg_score4,
+            ROUND(AVG(CASE WHEN ps.SCORE5 > 0 THEN ps.SCORE5 ELSE NULL END), 2) AS avg_score5,
+            ROUND(AVG(CASE WHEN ps.SCORE6 > 0 THEN ps.SCORE6 ELSE NULL END), 2) AS avg_score6,
+            ROUND(AVG(CASE WHEN ps.SCORE7 > 0 THEN ps.SCORE7 ELSE NULL END), 2) AS avg_score7,
+            ROUND(AVG(CASE WHEN ps.SCORE8 > 0 THEN ps.SCORE8 ELSE NULL END), 2) AS avg_score8,
+            ROUND(AVG(CASE WHEN ps.SCORE9 > 0 THEN ps.SCORE9 ELSE NULL END), 2) AS avg_score9
+        FROM (
+            SELECT AGENCY, OPENDAY, BUNYA, PROGRAM_NAME, TEACHER 
+                FROM (
+                SELECT
+                    T1.AGENCY,
+                    T1.OPENDAY,
+                    SUBSTRING_INDEX(SUBSTRING_INDEX(T1.PROGRAM_IN_OUT, ',', (numbers.n - 1) * 5 + 1), ',', -1) AS PROGRAM_NAME,
+                    SUBSTRING_INDEX(SUBSTRING_INDEX(T1.PROGRAM_IN_OUT, ',', (numbers.n - 1) * 5 + 2), ',', -1) AS BUNYA,
+                    SUBSTRING_INDEX(SUBSTRING_INDEX(T1.PROGRAM_IN_OUT, ',', (numbers.n - 1) * 5 + 3), ',', -1) AS TEACHER
+                FROM (
+                    SELECT DISTINCT AGENCY, PROGRAM_IN_OUT, OPENDAY
+                    FROM basic_info
+                    WHERE 
+                ) AS T1
+                CROSS JOIN (
+                    SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+                ) AS numbers
+                WHERE (numbers.n - 1) * 5 + 1 <= LENGTH(T1.PROGRAM_IN_OUT) - LENGTH(REPLACE(T1.PROGRAM_IN_OUT, ',', '')) + 1
+                ) AS Subquery
+                where 1=1 
+                ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+            GROUP BY AGENCY, OPENDAY, BUNYA, PROGRAM_NAME, TEACHER
+        ) AS main
+        LEFT OUTER JOIN program_satisfaction ps
+            ON main.AGENCY = ps.AGENCY
+            AND main.OPENDAY = ps.OPENDAY
+            AND main.BUNYA = ps.BUNYA
+            AND main.PROGRAM_NAME = ps.PROGRAM_NAME
+            AND main.TEACHER = ps.TEACHER
+        GROUP BY
+            main.AGENCY,
+            main.BUNYA,
+            main.PROGRAM_NAME,
+            main.TEACHER,
+            main.OPENDAY;
+  
+    `;
+
+
+
+
+
+
+
 
     const params = openday ? [openday, endday] : []; // 조건에 따라 파라미터 설정
     const params2 = openday ? [openday, endday, openday, endday] : []; // 조건에 따라 파라미터 설정
@@ -478,6 +557,8 @@ router.post('/programList', (req, res)=>{
         maria(sheet9Sql,params),
 
         maria(sheet10ql,params),
+
+        maria(sheet11sql,params2),
        
     
     ])
@@ -494,6 +575,7 @@ router.post('/programList', (req, res)=>{
         let sheet8 = results[7]; 
         let sheet9 = results[8]; 
         let sheet10 = results[9]; 
+        let sheet11 = results[10]; 
      
         
 
@@ -578,6 +660,7 @@ router.post('/programList', (req, res)=>{
             sheet8, 
             sheet9,
             sheet10,
+            sheet11,
         });
     })
     .catch((err) => {console.log(err); res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })});

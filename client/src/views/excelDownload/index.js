@@ -22,7 +22,7 @@ const ExcelDownload = ()=>{
 
     const onClick = ()=>{
 
-        callApi("/excelData/programList", {openday, endday}).then(({data : {sheet1, sheet2,sheet3, sheet4, sheet5 ,sheet6,sheet7 ,sheet8, sheet9, sheet10}})=>{
+        callApi("/excelData/programList", {openday, endday}).then(({data : {sheet1, sheet2,sheet3, sheet4, sheet5 ,sheet6,sheet7 ,sheet8, sheet9, sheet10, sheet11}})=>{
             
 
           
@@ -229,10 +229,28 @@ const ExcelDownload = ()=>{
             const _sheet3Data = sheet3Result.map(values => values.map(value => ({ v: value|| "", t: 's', s: defaultStyle })));
             // Create worksheet
             const sh3 = XLSX.utils.aoa_to_sheet([..._sheet3Header, ..._sheet3Data]);
-            sh3['!cols'] =   [ {wch:8}, {wch:8}, {wch:8}, {wch:8}, {wch:30}, {wch:20}, {wch:20}, {wch:20}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10} ];
+            sh3['!cols'] =   [ {wch:8}, {wch:8}, {wch:8}, {wch:8}, {wch:40}, {wch:20}, {wch:20}, {wch:20}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10} ];
             sh3['!rows'] = Array(sheet3Header.length).fill({ hpx: 23 }); 
             XLSX.utils.book_append_sheet(wb, sh3, "프로그램현황");
+
+
+            // 프로그램현황- 미실행 포함
+            const removeOpenday_2 = sheet11.map(({OPENDAY, ...rest})=> ({...rest}))
+
+            const sheet3Result_2 = removeOpenday_2.map(obj => Object.values(obj))
+            const _sheet3Data_2 = sheet3Result_2.map(values => values.map(value => ({ v: value|| "", t: 's', s: defaultStyle })));
+            // Create worksheet
+            const sh3_2 = XLSX.utils.aoa_to_sheet([..._sheet3Header, ..._sheet3Data_2]);
+            sh3_2['!cols'] =   [ {wch:8}, {wch:8}, {wch:8}, {wch:8}, {wch:40}, {wch:20}, {wch:20}, {wch:20}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10} ];
+            sh3_2['!rows'] = Array(sheet3Header.length).fill({ hpx: 23 }); 
+            XLSX.utils.book_append_sheet(wb, sh3_2, "프로그램현황(미실행포함)");
             // 프로그램현황
+
+
+
+
+
+
 
 
 

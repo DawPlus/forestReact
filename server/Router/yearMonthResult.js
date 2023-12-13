@@ -247,6 +247,8 @@ router.post('/programManage', (req, res)=>{
             AND OPENDAY BETWEEN ? AND ?
     `;
 
+
+
     let sql2 = `
             SELECT
                 bunya,
@@ -258,18 +260,45 @@ router.post('/programManage', (req, res)=>{
 			group by bunya
     `;
 
+    let sql3 = `
+        SELECT
+            T1.AGENCY,
+            T1.OPENDAY,
+            SUBSTRING_INDEX(SUBSTRING_INDEX(T1.PROGRAM_IN_OUT, ',', (numbers.n - 1) * 5 + 2), ',', -1) AS BUNYA,
+            SUBSTRING_INDEX(SUBSTRING_INDEX(T1.PROGRAM_IN_OUT, ',', (numbers.n - 1) * 5 + 1), ',', -1) AS PROGRAM_NAME,
+            SUBSTRING_INDEX(SUBSTRING_INDEX(T1.PROGRAM_IN_OUT, ',', (numbers.n - 1) * 5 + 3), ',', -1) AS TEACHER,
+            SUBSTRING_INDEX(SUBSTRING_INDEX(T1.PROGRAM_IN_OUT, ',', (numbers.n - 1) * 5 + 4), ',', -1) AS inCnt,
+            SUBSTRING_INDEX(SUBSTRING_INDEX(T1.PROGRAM_IN_OUT, ',', (numbers.n - 1) * 5 + 5), ',', -1) AS outCnt
+        FROM (
+            SELECT DISTINCT AGENCY, PROGRAM_IN_OUT, OPENDAY
+            FROM basic_info
+            WHERE PROGRESS_STATE ="E"
+            AND OPENDAY BETWEEN ? AND ?
+        
+        ) AS T1
+        CROSS JOIN (
+            SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+        ) AS numbers
+        WHERE (numbers.n - 1) * 5 + 1 <= LENGTH(T1.PROGRAM_IN_OUT) - LENGTH(REPLACE(T1.PROGRAM_IN_OUT, ',', '')) + 1
+        GROUP BY AGENCY, OPENDAY, BUNYA, PROGRAM_NAME, TEACHER
+    `
+
+
     Promise.all([
         maria(sql, [openday, endday]),
         maria(sql2, [openday, endday]),
+        maria(sql3, [openday, endday]),
     
     ])
     .then((results) => {
         let rows1 = results[0]; // the result from the first query
         let rows2 = results[1]; // the result from the second query
+        let rows3 = results[2]; // the result from the second query
     
         res.json({
             manage: rows1,
             bunya : rows2,
+            manage_cnt : rows3,
             
         });
     })

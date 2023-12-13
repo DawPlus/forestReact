@@ -75,6 +75,7 @@ const initialState = {
   programManage: {
     manage : [],
     bunya  : [], 
+    manage_cnt : [], 
   },
   serList : {
     score1: 0,
@@ -254,7 +255,8 @@ export const {getState, reducer, actions} = createCustomSlice({
     },
 
     // 프로그램운영-만족도
-    programManage_SUCCESS :(state, {payload : {data : {manage, bunya }}})=>{
+    programManage_SUCCESS :(state, {payload : {data : {manage, bunya, manage_cnt }}})=>{
+      
       let categories = ['산림교육', '예방교육', '산림치유', '아트','릴렉싱','에너제틱', '쿠킹', '이벤트'];
       let results = [
           { type : '프로그램(개)' },
@@ -298,7 +300,7 @@ export const {getState, reducer, actions} = createCustomSlice({
       }
       state.programManage.manage = results;
 
-
+      state.programManage.manage_cnt = manage_cnt;
 
 
     let result2 = [
