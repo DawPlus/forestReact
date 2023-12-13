@@ -507,7 +507,7 @@ router.post('/programList', (req, res)=>{
                 FROM (
                     SELECT DISTINCT AGENCY, PROGRAM_IN_OUT, OPENDAY
                     FROM basic_info
-                    WHERE 
+                    WHERE PROGRESS_STATE = 'E'
                 ) AS T1
                 CROSS JOIN (
                     SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
