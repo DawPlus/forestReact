@@ -1,9 +1,6 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const maria = require("../maria");
-
-
-
 
 const sheet5Sql = `
     SELECT
@@ -30,21 +27,18 @@ const sheet5Sql = `
         년도, 월, BIZ_PURPOSE
     ORDER BY
         년도 DESC, 월 DESC, BIZ_PURPOSE;
-`
-//TODO 
+`;
+//TODO
 //프로그램 목록조회
-router.post('/programList', (req, res)=>{ 
+router.post("/programList", (req, res) => {
+  const { openday, endday } = req.body;
 
-    const {openday, endday} = req.body;
-
-
-
-
-
-    // 프로그램목록
-    const sheet1Sql = `SELECT * FROM basic_info  WHERE 1=1 ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}`;
-    // 운영현황
-    const sheet2Sql = `
+  // 프로그램목록
+  const sheet1Sql = `SELECT * FROM basic_info  WHERE 1=1 ${
+    openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ""
+  }`;
+  // 운영현황
+  const sheet2Sql = `
         SELECT
             ROW_NUMBER() OVER (ORDER BY YEAR(STR_TO_DATE(bi.OPENDAY, '%Y-%m-%d')) DESC, 
                                     MONTH(STR_TO_DATE(bi.OPENDAY, '%Y-%m-%d')) DESC, 
@@ -76,109 +70,112 @@ router.post('/programList', (req, res)=>{
             dbstatistics.expense AS e ON bi.BASIC_INFO_SEQ = e.BASIC_INFO_SEQ
         WHERE 1=1
             and	bi.PROGRESS_STATE = 'E'
-            ${openday ? `AND STR_TO_DATE(bi.OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+            ${
+              openday
+                ? `AND STR_TO_DATE(bi.OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?`
+                : ""
+            }
         GROUP BY
             년도, 월, 일, bi.BASIC_INFO_SEQ
         ORDER BY
             순번;
 
-    `
+    `;
 
-    // const sheet3Sql = `
+  // const sheet3Sql = `
 
-    //     SELECT
-    //         ROW_NUMBER() OVER (ORDER BY YEAR(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC, 
-    //                             MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC,
-    //                             DAY(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC) AS 순번,
-    //         YEAR(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 년도,
-    //         MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 월,
-    //         DAY(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 일,
-    //         OPENDAY, 
-    //         agency,
-    //         BUNYA,
-    //         PROGRAM_NAME,
-    //         TEACHER,
-    //         (
-    //             SELECT COUNT(*)
-    //             FROM dbstatistics.program_satisfaction AS sub
-    //             WHERE 1=1
-    //                 ${openday ? `AND STR_TO_DATE(sub.OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
-    //             AND sub.agency = main.agency
-    //             AND sub.OPENDAY = main.OPENDAY
-    //             AND sub.BUNYA = main.BUNYA
-    //             AND sub.PROGRAM_NAME = main.PROGRAM_NAME
-    //             AND sub.TEACHER = main.TEACHER
-    //         ) AS row_count,
-    //         ROUND(AVG(CASE WHEN SCORE1 > 0 THEN SCORE1 ELSE NULL END), 2) AS avg_score1,
-    //         ROUND(AVG(CASE WHEN SCORE2 > 0 THEN SCORE2 ELSE NULL END), 2) AS avg_score2,
-    //         ROUND(AVG(CASE WHEN SCORE3 > 0 THEN SCORE3 ELSE NULL END), 2) AS avg_score3,
-    //         ROUND(AVG(CASE WHEN SCORE4 > 0 THEN SCORE4 ELSE NULL END), 2) AS avg_score4,
-    //         ROUND(AVG(CASE WHEN SCORE5 > 0 THEN SCORE5 ELSE NULL END), 2) AS avg_score5,
-    //         ROUND(AVG(CASE WHEN SCORE6 > 0 THEN SCORE6 ELSE NULL END), 2) AS avg_score6,
-    //         ROUND(AVG(CASE WHEN SCORE7 > 0 THEN SCORE7 ELSE NULL END), 2) AS avg_score7,
-    //         ROUND(AVG(CASE WHEN SCORE8 > 0 THEN SCORE8 ELSE NULL END), 2) AS avg_score8,
-    //         ROUND(AVG(CASE WHEN SCORE9 > 0 THEN SCORE9 ELSE NULL END), 2) AS avg_score9
-    //         FROM
-    //         dbstatistics.program_satisfaction
-    //         WHERE 1=1
-    //             ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
-    //         GROUP BY
-    //         agency,
-    //         openday,
-    //         BUNYA,
-    //         PROGRAM_NAME,
-    //         TEACHER;
+  //     SELECT
+  //         ROW_NUMBER() OVER (ORDER BY YEAR(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC,
+  //                             MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC,
+  //                             DAY(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC) AS 순번,
+  //         YEAR(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 년도,
+  //         MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 월,
+  //         DAY(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) AS 일,
+  //         OPENDAY,
+  //         agency,
+  //         BUNYA,
+  //         PROGRAM_NAME,
+  //         TEACHER,
+  //         (
+  //             SELECT COUNT(*)
+  //             FROM dbstatistics.program_satisfaction AS sub
+  //             WHERE 1=1
+  //                 ${openday ? `AND STR_TO_DATE(sub.OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+  //             AND sub.agency = main.agency
+  //             AND sub.OPENDAY = main.OPENDAY
+  //             AND sub.BUNYA = main.BUNYA
+  //             AND sub.PROGRAM_NAME = main.PROGRAM_NAME
+  //             AND sub.TEACHER = main.TEACHER
+  //         ) AS row_count,
+  //         ROUND(AVG(CASE WHEN SCORE1 > 0 THEN SCORE1 ELSE NULL END), 2) AS avg_score1,
+  //         ROUND(AVG(CASE WHEN SCORE2 > 0 THEN SCORE2 ELSE NULL END), 2) AS avg_score2,
+  //         ROUND(AVG(CASE WHEN SCORE3 > 0 THEN SCORE3 ELSE NULL END), 2) AS avg_score3,
+  //         ROUND(AVG(CASE WHEN SCORE4 > 0 THEN SCORE4 ELSE NULL END), 2) AS avg_score4,
+  //         ROUND(AVG(CASE WHEN SCORE5 > 0 THEN SCORE5 ELSE NULL END), 2) AS avg_score5,
+  //         ROUND(AVG(CASE WHEN SCORE6 > 0 THEN SCORE6 ELSE NULL END), 2) AS avg_score6,
+  //         ROUND(AVG(CASE WHEN SCORE7 > 0 THEN SCORE7 ELSE NULL END), 2) AS avg_score7,
+  //         ROUND(AVG(CASE WHEN SCORE8 > 0 THEN SCORE8 ELSE NULL END), 2) AS avg_score8,
+  //         ROUND(AVG(CASE WHEN SCORE9 > 0 THEN SCORE9 ELSE NULL END), 2) AS avg_score9
+  //         FROM
+  //         dbstatistics.program_satisfaction
+  //         WHERE 1=1
+  //             ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+  //         GROUP BY
+  //         agency,
+  //         openday,
+  //         BUNYA,
+  //         PROGRAM_NAME,
+  //         TEACHER;
 
+  // `;
 
-    // `;
+  // const sheet3Sql = `
 
-    // const sheet3Sql = `
-
-    // SELECT
-    //     ROW_NUMBER() OVER (ORDER BY YEAR(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) DESC, 
-    //                                 MONTH(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) DESC,
-    //                                 DAY(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) DESC) AS 순번,
-    //     YEAR(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 년도,
-    //     MONTH(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 월,
-    //     DAY(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 일,
-    //     main.OPENDAY, 
-    //     main.agency,
-    //     main.BUNYA,
-    //     main.PROGRAM_NAME,
-    //     main.TEACHER,
-    //     (
-    //         SELECT COUNT(*)
-    //         FROM dbstatistics.program_satisfaction AS sub
-    //         WHERE 1=1
-    //         ${openday ? `AND STR_TO_DATE(sub.OPENDAY, '%Y-%m-%d') BETWEEN ? AND ? ` : ''}
-    //         AND sub.agency = main.agency
-    //         AND sub.OPENDAY = main.OPENDAY
-    //         AND sub.BUNYA = main.BUNYA
-    //         AND sub.PROGRAM_NAME = main.PROGRAM_NAME
-    //         AND sub.TEACHER = main.TEACHER
-    //     ) AS row_count,   
-    //     main.SCORE1,
-    //     main.SCORE2,
-    //     main.SCORE3,
-    //     main.SCORE4,
-    //     main.SCORE5,
-    //     main.SCORE6,
-    //     main.SCORE7,
-    //     main.SCORE8,
-    //     main.SCORE9
-    // FROM
-    //     dbstatistics.program_satisfaction AS main
-    // WHERE 1=1
-    //     ${openday ? `AND STR_TO_DATE(main.OPENDAY, '%Y-%m-%d') BETWEEN ? AND ? ` : ''}
-    // GROUP BY
-    //     main.agency,
-    //     main.OPENDAY,
-    //     main.BUNYA,
-    //     main.PROGRAM_NAME,
-    //     main.TEACHER;
-    // `;
-    // 평균나오는거 수정 - 
-    const sheet3Sql = `
+  // SELECT
+  //     ROW_NUMBER() OVER (ORDER BY YEAR(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) DESC,
+  //                                 MONTH(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) DESC,
+  //                                 DAY(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) DESC) AS 순번,
+  //     YEAR(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 년도,
+  //     MONTH(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 월,
+  //     DAY(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 일,
+  //     main.OPENDAY,
+  //     main.agency,
+  //     main.BUNYA,
+  //     main.PROGRAM_NAME,
+  //     main.TEACHER,
+  //     (
+  //         SELECT COUNT(*)
+  //         FROM dbstatistics.program_satisfaction AS sub
+  //         WHERE 1=1
+  //         ${openday ? `AND STR_TO_DATE(sub.OPENDAY, '%Y-%m-%d') BETWEEN ? AND ? ` : ''}
+  //         AND sub.agency = main.agency
+  //         AND sub.OPENDAY = main.OPENDAY
+  //         AND sub.BUNYA = main.BUNYA
+  //         AND sub.PROGRAM_NAME = main.PROGRAM_NAME
+  //         AND sub.TEACHER = main.TEACHER
+  //     ) AS row_count,
+  //     main.SCORE1,
+  //     main.SCORE2,
+  //     main.SCORE3,
+  //     main.SCORE4,
+  //     main.SCORE5,
+  //     main.SCORE6,
+  //     main.SCORE7,
+  //     main.SCORE8,
+  //     main.SCORE9
+  // FROM
+  //     dbstatistics.program_satisfaction AS main
+  // WHERE 1=1
+  //     ${openday ? `AND STR_TO_DATE(main.OPENDAY, '%Y-%m-%d') BETWEEN ? AND ? ` : ''}
+  // GROUP BY
+  //     main.agency,
+  //     main.OPENDAY,
+  //     main.BUNYA,
+  //     main.PROGRAM_NAME,
+  //     main.TEACHER;
+  // `;
+  // 평균나오는거 수정 -
+  const sheet3Sql = `
     SELECT
         ROW_NUMBER() OVER (ORDER BY YEAR(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) DESC, 
                                     MONTH(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) DESC,
@@ -195,7 +192,11 @@ router.post('/programList', (req, res)=>{
             SELECT COUNT(*)
             FROM dbstatistics.program_satisfaction AS sub
             WHERE 1=1
-            ${openday ? `AND STR_TO_DATE(sub.OPENDAY, '%Y-%m-%d') BETWEEN ? AND ? ` : ''}
+            ${
+              openday
+                ? `AND STR_TO_DATE(sub.OPENDAY, '%Y-%m-%d') BETWEEN ? AND ? `
+                : ""
+            }
             AND sub.agency = main.agency
             AND sub.OPENDAY = main.OPENDAY
             AND sub.BUNYA = main.BUNYA
@@ -214,7 +215,11 @@ router.post('/programList', (req, res)=>{
     FROM
         dbstatistics.program_satisfaction AS main
     WHERE 1=1
-        ${openday ? `AND STR_TO_DATE(main.OPENDAY, '%Y-%m-%d') BETWEEN ? AND ? ` : ''}
+        ${
+          openday
+            ? `AND STR_TO_DATE(main.OPENDAY, '%Y-%m-%d') BETWEEN ? AND ? `
+            : ""
+        }
     GROUP BY
         main.agency,
         main.OPENDAY,
@@ -224,8 +229,8 @@ router.post('/programList', (req, res)=>{
         
 
     `;
-    // TODO 평균 에 소수점 제외 , 0 제외 기능 추가 필요 
-    const sheet4Sql = `
+  // TODO 평균 에 소수점 제외 , 0 제외 기능 추가 필요
+  const sheet4Sql = `
         SELECT
             TEACHER,
             PROGRAM_NAME,
@@ -242,42 +247,46 @@ router.post('/programList', (req, res)=>{
         FROM
             dbstatistics.program_satisfaction
         WHERE 1=1
-            ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+            ${
+              openday
+                ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?`
+                : ""
+            }
         GROUP BY TEACHER, PROGRAM_NAME
         ORDER BY TEACHER, PROGRAM_NAME
-    `
-    //  시설 서비스 만족도
-    // const sheet5Sql = `
-    //     SELECT 
-    //         '구분',
-    //         ifnull(ROUND(AVG(nullif(score1,0)),2),0) as score1,    ifnull(ROUND(AVG(nullif(score2,0)),2),0) as score2,   ifnull(ROUND(AVG(nullif(score3,0)),2),0) as score3,   ifnull(ROUND(AVG(nullif(score4,0)),2),0) as score4,   ifnull(ROUND(AVG(nullif(score5,0)),2),0) as score5,
-    //         ifnull(ROUND(AVG(nullif(score6,0)),2),0) as score6,    ifnull(ROUND(AVG(nullif(score7,0)),2),0) as score7,   ifnull(ROUND(AVG(nullif(score8,0)),2),0) as score8,   ifnull(ROUND(AVG(nullif(score9,0)),2),0) as score9,   ifnull(ROUND(AVG(nullif(score10,0)),2),0) as score10,
-    //         ifnull(ROUND(AVG(nullif(score11,0)),2),0) as score11,  ifnull(ROUND(AVG(nullif(score12,0)),2),0) as score12, ifnull(ROUND(AVG(nullif(score13,0)),2),0) as score13, ifnull(ROUND(AVG(nullif(score14,0)),2),0) as score14, ifnull(ROUND(AVG(nullif(score15,0)),2),0) as score15, 
-    //         ifnull(ROUND(AVG(nullif(score16,0)),2),0) as score16,
-    //         ifnull(ROUND(
-    //         (AVG(nullif(score1, 0)) +
-    //             AVG(nullif(score2, 0)) +
-    //             AVG(nullif(score3, 0)) +
-    //             AVG(nullif(score4, 0)) +
-    //             AVG(nullif(score5, 0)) +
-    //             AVG(nullif(score6, 0)) +
-    //             AVG(nullif(score7, 0)) +
-    //             AVG(nullif(score8, 0)) +
-    //             AVG(nullif(score9, 0)) +
-    //             AVG(nullif(score10, 0)) +
-    //             AVG(nullif(score11, 0)) +
-    //             AVG(nullif(score12, 0)) +
-    //             AVG(nullif(score13, 0)) +
-    //             AVG(nullif(score14, 0)) +
-    //             AVG(nullif(score15, 0)) +
-    //             AVG(nullif(score16, 0))
-    //         ) / 16, 2),0) as total_average
-    //     FROM service_env_satisfaction
-    //     WHERE 1=1
-    //         ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
-    // `
+    `;
+  //  시설 서비스 만족도
+  // const sheet5Sql = `
+  //     SELECT
+  //         '구분',
+  //         ifnull(ROUND(AVG(nullif(score1,0)),2),0) as score1,    ifnull(ROUND(AVG(nullif(score2,0)),2),0) as score2,   ifnull(ROUND(AVG(nullif(score3,0)),2),0) as score3,   ifnull(ROUND(AVG(nullif(score4,0)),2),0) as score4,   ifnull(ROUND(AVG(nullif(score5,0)),2),0) as score5,
+  //         ifnull(ROUND(AVG(nullif(score6,0)),2),0) as score6,    ifnull(ROUND(AVG(nullif(score7,0)),2),0) as score7,   ifnull(ROUND(AVG(nullif(score8,0)),2),0) as score8,   ifnull(ROUND(AVG(nullif(score9,0)),2),0) as score9,   ifnull(ROUND(AVG(nullif(score10,0)),2),0) as score10,
+  //         ifnull(ROUND(AVG(nullif(score11,0)),2),0) as score11,  ifnull(ROUND(AVG(nullif(score12,0)),2),0) as score12, ifnull(ROUND(AVG(nullif(score13,0)),2),0) as score13, ifnull(ROUND(AVG(nullif(score14,0)),2),0) as score14, ifnull(ROUND(AVG(nullif(score15,0)),2),0) as score15,
+  //         ifnull(ROUND(AVG(nullif(score16,0)),2),0) as score16,
+  //         ifnull(ROUND(
+  //         (AVG(nullif(score1, 0)) +
+  //             AVG(nullif(score2, 0)) +
+  //             AVG(nullif(score3, 0)) +
+  //             AVG(nullif(score4, 0)) +
+  //             AVG(nullif(score5, 0)) +
+  //             AVG(nullif(score6, 0)) +
+  //             AVG(nullif(score7, 0)) +
+  //             AVG(nullif(score8, 0)) +
+  //             AVG(nullif(score9, 0)) +
+  //             AVG(nullif(score10, 0)) +
+  //             AVG(nullif(score11, 0)) +
+  //             AVG(nullif(score12, 0)) +
+  //             AVG(nullif(score13, 0)) +
+  //             AVG(nullif(score14, 0)) +
+  //             AVG(nullif(score15, 0)) +
+  //             AVG(nullif(score16, 0))
+  //         ) / 16, 2),0) as total_average
+  //     FROM service_env_satisfaction
+  //     WHERE 1=1
+  //         ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+  // `
 
-    const sheet5Sql = `
+  const sheet5Sql = `
             SELECT 
                 ROW_NUMBER() OVER (ORDER BY YEAR(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC, 
                                             MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC,
@@ -323,15 +332,17 @@ router.post('/programList', (req, res)=>{
                 ) / 16, 2),0) as total_average
             FROM dbstatistics.service_env_satisfaction
             WHERE 1=1
-            ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+            ${
+              openday
+                ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?`
+                : ""
+            }
             GROUP BY AGENCY, OPENDAY ;
 
-    `
+    `;
 
-
-
-    //  효과성분석 - 힐링서비스
-    const sheet6Sql = `
+  //  효과성분석 - 힐링서비스
+  const sheet6Sql = `
         SELECT 
             ROW_NUMBER() OVER (ORDER BY YEAR(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC,
                                             MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC,
@@ -351,13 +362,16 @@ router.post('/programList', (req, res)=>{
             FROM 
                 dbstatistics.healing_service
             WHERE PV IN ('사전', '사후')
-            ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+            ${
+              openday
+                ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?`
+                : ""
+            }
             GROUP BY AGENCY, PV;
     `;
 
-
-    //  효과성분석 - 예방효과
-    const sheet7Sql = `
+  //  효과성분석 - 예방효과
+  const sheet7Sql = `
         SELECT 
             ROW_NUMBER() OVER (ORDER BY YEAR(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC,
                                             MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC,
@@ -375,13 +389,16 @@ router.post('/programList', (req, res)=>{
             FROM 
                 dbstatistics.prevent_service
             WHERE PV IN ('사전', '사후')
-            ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+            ${
+              openday
+                ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?`
+                : ""
+            }
             GROUP BY AGENCY, PV;
     `;
 
-
-    //  효과성분석 - 상담치유
-    const sheet8Sql = `
+  //  효과성분석 - 상담치유
+  const sheet8Sql = `
         SELECT 
             ROW_NUMBER() OVER (ORDER BY YEAR(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC,
                                             MONTH(STR_TO_DATE(OPENDAY, '%Y-%m-%d')) DESC,
@@ -409,11 +426,15 @@ router.post('/programList', (req, res)=>{
             FROM 
                 dbstatistics.counsel_service
             WHERE PV IN ('사전', '사후')
-            ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+            ${
+              openday
+                ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?`
+                : ""
+            }
             GROUP BY AGENCY, PV;
     `;
-    //  효과성분석 - 상담치유
-    const sheet9Sql = `
+  //  효과성분석 - 상담치유
+  const sheet9Sql = `
         SELECT 
             ROW_NUMBER() OVER (ORDER BY AGENCY, PV) AS 순번,
             YEAR(STR_TO_DATE(DATE, '%Y-%m-%d')) AS 년도,
@@ -430,18 +451,18 @@ router.post('/programList', (req, res)=>{
         FROM 
             dbstatistics.hrv_service
         WHERE PV IN ('사전', '사후')
-        ${openday ? `AND STR_TO_DATE(DATE, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+        ${openday ? `AND STR_TO_DATE(DATE, '%Y-%m-%d') BETWEEN ? AND ?` : ""}
         GROUP BY AGENCY, PV
         ORDER BY AGENCY, PV;
     `;
-    // 강사 횟수 추가 
-     // AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 1), ',', -1)) NOT REGEXP '^[0-9]+$'
-    // AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 1), ',', -1)) != ''
-    // AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 2), ',', -1)) NOT REGEXP '^[0-9]+$'
-    // AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 2), ',', -1)) != ''
-    // AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 3), ',', -1)) NOT REGEXP '^[0-9]+$'
-    // AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 3), ',', -1)) != ''
-    const sheet10ql = `
+  // 강사 횟수 추가
+  // AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 1), ',', -1)) NOT REGEXP '^[0-9]+$'
+  // AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 1), ',', -1)) != ''
+  // AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 2), ',', -1)) NOT REGEXP '^[0-9]+$'
+  // AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 2), ',', -1)) != ''
+  // AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 3), ',', -1)) NOT REGEXP '^[0-9]+$'
+  // AND TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 3), ',', -1)) != ''
+  const sheet10ql = `
         SELECT
             TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 3), ',', -1)) AS Instructor,
             TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(PROGRAM_IN_OUT, ',', (n - 1) * 3 + 1), ',', -1)) AS ProgramName,
@@ -452,53 +473,57 @@ router.post('/programList', (req, res)=>{
             (SELECT 1 AS n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5) AS Numbers
         WHERE
             n <= (LENGTH(PROGRAM_IN_OUT) - LENGTH(REPLACE(PROGRAM_IN_OUT, ',' , ''))) / LENGTH(',') + 1
-            ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
+            ${
+              openday
+                ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?`
+                : ""
+            }
         GROUP BY
             ProgramName, Field, Instructor
         ORDER BY
             Instructor, Field, OPENDAY;
     `;
 
-
-
-
-
-    const sheet11sql = `
-        SELECT
-            ROW_NUMBER() OVER (ORDER BY YEAR(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) DESC,
-                                        MONTH(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) DESC,
-                                        DAY(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) DESC) AS 순번,
-            YEAR(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 년도,
-            MONTH(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 월,
-            DAY(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 일,
-            main.AGENCY,
-            main.BUNYA,
-            main.PROGRAM_NAME,
-            main.TEACHER,
-            (
-                SELECT COUNT(*)
-                FROM dbstatistics.program_satisfaction AS sub
-                WHERE 1=1
-                    ${openday ? `AND STR_TO_DATE(sub.OPENDAY, '%Y-%m-%d') BETWEEN ? AND ? ` : ''}
-                AND sub.agency = main.agency
-                AND sub.OPENDAY = main.OPENDAY
-                AND sub.BUNYA = main.BUNYA
-                AND sub.PROGRAM_NAME = main.PROGRAM_NAME
-                AND sub.TEACHER = main.TEACHER
-            ) AS row_count,
-            ROUND(AVG(CASE WHEN ps.SCORE1 > 0 THEN ps.SCORE1 ELSE NULL END), 2) AS avg_score1,
-            ROUND(AVG(CASE WHEN ps.SCORE2 > 0 THEN ps.SCORE2 ELSE NULL END), 2) AS avg_score2,
-            ROUND(AVG(CASE WHEN ps.SCORE3 > 0 THEN ps.SCORE3 ELSE NULL END), 2) AS avg_score3,
-            ROUND(AVG(CASE WHEN ps.SCORE4 > 0 THEN ps.SCORE4 ELSE NULL END), 2) AS avg_score4,
-            ROUND(AVG(CASE WHEN ps.SCORE5 > 0 THEN ps.SCORE5 ELSE NULL END), 2) AS avg_score5,
-            ROUND(AVG(CASE WHEN ps.SCORE6 > 0 THEN ps.SCORE6 ELSE NULL END), 2) AS avg_score6,
-            ROUND(AVG(CASE WHEN ps.SCORE7 > 0 THEN ps.SCORE7 ELSE NULL END), 2) AS avg_score7,
-            ROUND(AVG(CASE WHEN ps.SCORE8 > 0 THEN ps.SCORE8 ELSE NULL END), 2) AS avg_score8,
-            ROUND(AVG(CASE WHEN ps.SCORE9 > 0 THEN ps.SCORE9 ELSE NULL END), 2) AS avg_score9
-        FROM (
-            SELECT AGENCY, OPENDAY, BUNYA, PROGRAM_NAME, TEACHER 
-                FROM (
-                SELECT
+  const sheet11sql = `
+            SELECT
+                ROW_NUMBER() OVER (ORDER BY YEAR(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) DESC,
+                                            MONTH(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) DESC,
+                                            DAY(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) DESC) AS 순번,
+                YEAR(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 년도,
+                MONTH(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 월,
+                DAY(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 일,
+                main.AGENCY,
+                main.BUNYA,
+                main.PROGRAM_NAME,
+                main.TEACHER,
+                ps.PLACE,
+                ps.PLACE,
+                          (
+                              SELECT COUNT(*)
+                              FROM dbstatistics.program_satisfaction AS sub
+                              WHERE 1=1
+                                  ${
+                                    openday
+                                      ? `AND STR_TO_DATE(sub.OPENDAY, '%Y-%m-%d') BETWEEN ? AND ? `
+                                      : ""
+                                  }
+                              AND sub.agency = main.agency
+                              AND sub.OPENDAY = main.OPENDAY
+                              AND sub.BUNYA = main.BUNYA
+                              AND sub.PROGRAM_NAME = main.PROGRAM_NAME
+                              AND sub.TEACHER = main.TEACHER
+                          ) AS row_count,
+                CASE WHEN ps.SCORE1 > 0 THEN ps.SCORE1 ELSE NULL END AS SCORE1,
+                CASE WHEN ps.SCORE2 > 0 THEN ps.SCORE2 ELSE NULL END AS SCORE2,
+                CASE WHEN ps.SCORE3 > 0 THEN ps.SCORE3 ELSE NULL END AS SCORE3,
+                CASE WHEN ps.SCORE4 > 0 THEN ps.SCORE4 ELSE NULL END AS SCORE4,
+                CASE WHEN ps.SCORE5 > 0 THEN ps.SCORE5 ELSE NULL END AS SCORE5,
+                CASE WHEN ps.SCORE6 > 0 THEN ps.SCORE6 ELSE NULL END AS SCORE6,
+                CASE WHEN ps.SCORE7 > 0 THEN ps.SCORE7 ELSE NULL END AS SCORE7,
+                CASE WHEN ps.SCORE8 > 0 THEN ps.SCORE8 ELSE NULL END AS SCORE8,
+                CASE WHEN ps.SCORE9 > 0 THEN ps.SCORE9 ELSE NULL END AS SCORE9
+              FROM (
+                SELECT 
                     T1.AGENCY,
                     T1.OPENDAY,
                     SUBSTRING_INDEX(SUBSTRING_INDEX(T1.PROGRAM_IN_OUT, ',', (numbers.n - 1) * 5 + 1), ',', -1) AS PROGRAM_NAME,
@@ -513,158 +538,248 @@ router.post('/programList', (req, res)=>{
                     SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
                 ) AS numbers
                 WHERE (numbers.n - 1) * 5 + 1 <= LENGTH(T1.PROGRAM_IN_OUT) - LENGTH(REPLACE(T1.PROGRAM_IN_OUT, ',', '')) + 1
-                ) AS Subquery
-                where 1=1 
-                ${openday ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?` : ''}
-            GROUP BY AGENCY, OPENDAY, BUNYA, PROGRAM_NAME, TEACHER
-        ) AS main
-        LEFT OUTER JOIN program_satisfaction ps
-            ON main.AGENCY = ps.AGENCY
-            AND main.OPENDAY = ps.OPENDAY
-            AND main.BUNYA = ps.BUNYA
-            AND main.PROGRAM_NAME = ps.PROGRAM_NAME
-            AND main.TEACHER = ps.TEACHER
-        GROUP BY
-            main.AGENCY,
-            main.BUNYA,
-            main.PROGRAM_NAME,
-            main.TEACHER,
-            main.OPENDAY;
+                and 1=1
+                  ${
+                    openday
+                      ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ? `
+                      : ""
+                  }
+              ) AS main
+              LEFT OUTER JOIN program_satisfaction ps
+                ON main.AGENCY = ps.AGENCY
+                AND main.OPENDAY = ps.OPENDAY
+                AND main.BUNYA = ps.BUNYA
+                AND main.PROGRAM_NAME = ps.PROGRAM_NAME
+                AND main.TEACHER = ps.TEACHER
+              ORDER BY
+                년도 DESC, 월 DESC, 일 DESC;
+
   
     `;
 
+  // const sheet11sql = `
+  //       SELECT
+  //           ROW_NUMBER() OVER (ORDER BY YEAR(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) DESC,
+  //                                       MONTH(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) DESC,
+  //                                       DAY(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) DESC) AS 순번,
+  //           YEAR(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 년도,
+  //           MONTH(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 월,
+  //           DAY(STR_TO_DATE(main.OPENDAY, '%Y-%m-%d')) AS 일,
+  //           main.AGENCY,
+  //           main.BUNYA,
+  //           main.PROGRAM_NAME,
+  //           main.TEACHER,
+  //           ps.PLACE,
+  //           (
+  //               SELECT COUNT(*)
+  //               FROM dbstatistics.program_satisfaction AS sub
+  //               WHERE 1=1
+  //                   ${
+  //                     openday
+  //                       ? `AND STR_TO_DATE(sub.OPENDAY, '%Y-%m-%d') BETWEEN ? AND ? `
+  //                       : ""
+  //                   }
+  //               AND sub.agency = main.agency
+  //               AND sub.OPENDAY = main.OPENDAY
+  //               AND sub.BUNYA = main.BUNYA
+  //               AND sub.PROGRAM_NAME = main.PROGRAM_NAME
+  //               AND sub.TEACHER = main.TEACHER
+  //           ) AS row_count,
+  //           ROUND(AVG(CASE WHEN ps.SCORE1 > 0 THEN ps.SCORE1 ELSE NULL END), 2) AS avg_score1,
+  //           ROUND(AVG(CASE WHEN ps.SCORE2 > 0 THEN ps.SCORE2 ELSE NULL END), 2) AS avg_score2,
+  //           ROUND(AVG(CASE WHEN ps.SCORE3 > 0 THEN ps.SCORE3 ELSE NULL END), 2) AS avg_score3,
+  //           ROUND(AVG(CASE WHEN ps.SCORE4 > 0 THEN ps.SCORE4 ELSE NULL END), 2) AS avg_score4,
+  //           ROUND(AVG(CASE WHEN ps.SCORE5 > 0 THEN ps.SCORE5 ELSE NULL END), 2) AS avg_score5,
+  //           ROUND(AVG(CASE WHEN ps.SCORE6 > 0 THEN ps.SCORE6 ELSE NULL END), 2) AS avg_score6,
+  //           ROUND(AVG(CASE WHEN ps.SCORE7 > 0 THEN ps.SCORE7 ELSE NULL END), 2) AS avg_score7,
+  //           ROUND(AVG(CASE WHEN ps.SCORE8 > 0 THEN ps.SCORE8 ELSE NULL END), 2) AS avg_score8,
+  //           ROUND(AVG(CASE WHEN ps.SCORE9 > 0 THEN ps.SCORE9 ELSE NULL END), 2) AS avg_score9
+  //       FROM (
+  //           SELECT AGENCY, OPENDAY, BUNYA, PROGRAM_NAME, TEACHER
+  //               FROM (
+  //               SELECT
+  //                   T1.AGENCY,
+  //                   T1.OPENDAY,
+  //                   SUBSTRING_INDEX(SUBSTRING_INDEX(T1.PROGRAM_IN_OUT, ',', (numbers.n - 1) * 5 + 1), ',', -1) AS PROGRAM_NAME,
+  //                   SUBSTRING_INDEX(SUBSTRING_INDEX(T1.PROGRAM_IN_OUT, ',', (numbers.n - 1) * 5 + 2), ',', -1) AS BUNYA,
+  //                   SUBSTRING_INDEX(SUBSTRING_INDEX(T1.PROGRAM_IN_OUT, ',', (numbers.n - 1) * 5 + 3), ',', -1) AS TEACHER
+  //               FROM (
+  //                   SELECT DISTINCT AGENCY, PROGRAM_IN_OUT, OPENDAY
+  //                   FROM basic_info
+  //                   WHERE PROGRESS_STATE = 'E'
+  //               ) AS T1
+  //               CROSS JOIN (
+  //                   SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+  //               ) AS numbers
+  //               WHERE (numbers.n - 1) * 5 + 1 <= LENGTH(T1.PROGRAM_IN_OUT) - LENGTH(REPLACE(T1.PROGRAM_IN_OUT, ',', '')) + 1
+  //               ) AS Subquery
+  //               where 1=1
+  //               ${
+  //                 openday
+  //                   ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?`
+  //                   : ""
+  //               }
+  //        --   GROUP BY AGENCY, OPENDAY, BUNYA, PROGRAM_NAME, TEACHER
+  //       ) AS main
+  //       LEFT OUTER JOIN program_satisfaction ps
+  //           ON main.AGENCY = ps.AGENCY
+  //           AND main.OPENDAY = ps.OPENDAY
+  //           AND main.BUNYA = ps.BUNYA
+  //           AND main.PROGRAM_NAME = ps.PROGRAM_NAME
+  //           AND main.TEACHER = ps.TEACHER
+  //       GROUP BY
+  //           main.AGENCY,
+  //           main.BUNYA,
+  //           main.PROGRAM_NAME,
+  //           main.TEACHER,
+  //           main.OPENDAY;
 
+  //   `;
 
+  const params = openday ? [openday, endday] : []; // 조건에 따라 파라미터 설정
+  const params2 = openday ? [openday, endday, openday, endday] : []; // 조건에 따라 파라미터 설정
 
+  Promise.all([
+    maria(sheet1Sql, params),
+    maria(sheet2Sql, params),
+    maria(sheet3Sql, params2),
+    maria(sheet4Sql, params),
+    maria(sheet5Sql, params),
 
+    maria(sheet6Sql, params),
+    maria(sheet7Sql, params),
+    maria(sheet8Sql, params),
+    maria(sheet9Sql, params),
 
+    maria(sheet10ql, params),
 
-
-    const params = openday ? [openday, endday] : []; // 조건에 따라 파라미터 설정
-    const params2 = openday ? [openday, endday, openday, endday] : []; // 조건에 따라 파라미터 설정
-
-    Promise.all([
-        maria(sheet1Sql, params),
-        maria(sheet2Sql, params),
-        maria(sheet3Sql,params2),
-        maria(sheet4Sql,params),
-        maria(sheet5Sql,params),
-
-
-        maria(sheet6Sql,params),
-        maria(sheet7Sql,params),
-        maria(sheet8Sql,params),
-        maria(sheet9Sql,params),
-
-        maria(sheet10ql,params),
-
-        maria(sheet11sql,params2),
-       
-    
-    ])
+    maria(sheet11sql, params2),
+  ])
     .then((results) => {
-        let sheet1 = results[0]; // the result from the first query
-        let sheet2 = results[1]; // the result from the second query
-        let sheet3 = results[2]; // the result from the second query
-        let sheet4 = results[3]; // the result from the second query
-        let sheet5 = results[4]; // the result from the second query
+      let sheet1 = results[0]; // the result from the first query
+      let sheet2 = results[1]; // the result from the second query
+      let sheet3 = results[2]; // the result from the second query
+      let sheet4 = results[3]; // the result from the second query
+      let sheet5 = results[4]; // the result from the second query
 
-        
-        let sheet6 = results[5]; 
-        let sheet7 = results[6]; 
-        let sheet8 = results[7]; 
-        let sheet9 = results[8]; 
-        let sheet10 = results[9]; 
-        let sheet11 = results[10]; 
-     
-        
+      let sheet6 = results[5];
+      let sheet7 = results[6];
+      let sheet8 = results[7];
+      let sheet9 = results[8];
+      let sheet10 = results[9];
+      let sheet11 = results[10];
 
+      sheet4 = sheet4.map((i, idx) => {
+        const avgScore1 =
+          i.avg_score1 !== null && i.avg_score1 !== 0
+            ? Number(i.avg_score1)
+            : 0;
+        const avgScore2 =
+          i.avg_score2 !== null && i.avg_score2 !== 0
+            ? Number(i.avg_score2)
+            : 0;
+        const avgScore3 =
+          i.avg_score3 !== null && i.avg_score3 !== 0
+            ? Number(i.avg_score3)
+            : 0;
+        const avgScore4 =
+          i.avg_score4 !== null && i.avg_score4 !== 0
+            ? Number(i.avg_score4)
+            : 0;
+        const avgScore5 =
+          i.avg_score5 !== null && i.avg_score5 !== 0
+            ? Number(i.avg_score5)
+            : 0;
+        const avgScore6 =
+          i.avg_score6 !== null && i.avg_score6 !== 0
+            ? Number(i.avg_score6)
+            : 0;
+        const avgScore7 =
+          i.avg_score7 !== null && i.avg_score7 !== 0
+            ? Number(i.avg_score7)
+            : 0;
+        const avgScore8 =
+          i.avg_score8 !== null && i.avg_score8 !== 0
+            ? Number(i.avg_score8)
+            : 0;
+        const avgScore9 =
+          i.avg_score9 !== null && i.avg_score9 !== 0
+            ? Number(i.avg_score9)
+            : 0;
 
+        const avg1Sum = avgScore1 + avgScore2 + avgScore3;
+        const avg2Sum = avgScore4 + avgScore5 + avgScore6;
+        const avg3Sum = avgScore7 + avgScore8 + avgScore9;
 
+        let avg_avg1, avg_avg2, avg_avg3, total_avg;
 
+        if (avg1Sum !== 0) {
+          avg_avg1 = (avg1Sum / 3).toFixed(2);
+        } else {
+          avg_avg1 = "N/A";
+        }
 
-        sheet4 = sheet4.map((i, idx) => {
-            const avgScore1 = i.avg_score1 !== null && i.avg_score1 !== 0 ? Number(i.avg_score1) : 0;
-            const avgScore2 = i.avg_score2 !== null && i.avg_score2 !== 0 ? Number(i.avg_score2) : 0;
-            const avgScore3 = i.avg_score3 !== null && i.avg_score3 !== 0 ? Number(i.avg_score3) : 0;
-            const avgScore4 = i.avg_score4 !== null && i.avg_score4 !== 0 ? Number(i.avg_score4) : 0;
-            const avgScore5 = i.avg_score5 !== null && i.avg_score5 !== 0 ? Number(i.avg_score5) : 0;
-            const avgScore6 = i.avg_score6 !== null && i.avg_score6 !== 0 ? Number(i.avg_score6) : 0;
-            const avgScore7 = i.avg_score7 !== null && i.avg_score7 !== 0 ? Number(i.avg_score7) : 0;
-            const avgScore8 = i.avg_score8 !== null && i.avg_score8 !== 0 ? Number(i.avg_score8) : 0;
-            const avgScore9 = i.avg_score9 !== null && i.avg_score9 !== 0 ? Number(i.avg_score9) : 0;
-        
-            const avg1Sum = avgScore1 + avgScore2 + avgScore3;
-            const avg2Sum = avgScore4 + avgScore5 + avgScore6;
-            const avg3Sum = avgScore7 + avgScore8 + avgScore9;
-        
-            let avg_avg1, avg_avg2, avg_avg3, total_avg;
-        
-            if (avg1Sum !== 0) {
-                avg_avg1 = (avg1Sum / 3).toFixed(2);
-            } else {
-                avg_avg1 = 'N/A';
-            }
-        
-            if (avg2Sum !== 0) {
-                avg_avg2 = (avg2Sum / 3).toFixed(2);
-            } else {
-                avg_avg2 = 'N/A';
-            }
-        
-            if (avg3Sum !== 0) {
-                avg_avg3 = (avg3Sum / 3).toFixed(2);
-            } else {
-                avg_avg3 = 'N/A';
-            }
-        
-            const totalSum = avg1Sum + avg2Sum + avg3Sum;
-        
-            if (totalSum !== 0) {
-                total_avg = (totalSum / 9).toFixed(2);
-            } else {
-                total_avg = 'N/A';
-            }
-        
-            return {
-                idx: idx + 1,
-                TEACHER: i.TEACHER,
-                PROGRAM_NAME: i.PROGRAM_NAME,
-                CNT: i.CNT,
-                avg_score1: i.avg_score1,
-                avg_score2: i.avg_score2,
-                avg_score3: i.avg_score3,
-                avg_avg1,
-                avg_score4: i.avg_score4,
-                avg_score5: i.avg_score5,
-                avg_score6: i.avg_score6,
-                avg_avg2,
-                avg_score7: i.avg_score7,
-                avg_score8: i.avg_score8,
-                avg_score9: i.avg_score9,
-                avg_avg3,
-                total_avg,
-            };
-        });
-        
+        if (avg2Sum !== 0) {
+          avg_avg2 = (avg2Sum / 3).toFixed(2);
+        } else {
+          avg_avg2 = "N/A";
+        }
 
+        if (avg3Sum !== 0) {
+          avg_avg3 = (avg3Sum / 3).toFixed(2);
+        } else {
+          avg_avg3 = "N/A";
+        }
 
-        res.json({
-            sheet1, 
-            sheet2, 
-            sheet3,
-            sheet4,
-            sheet5, 
-            sheet6, 
-            sheet7, 
-            sheet8, 
-            sheet9,
-            sheet10,
-            sheet11,
-        });
+        const totalSum = avg1Sum + avg2Sum + avg3Sum;
+
+        if (totalSum !== 0) {
+          total_avg = (totalSum / 9).toFixed(2);
+        } else {
+          total_avg = "N/A";
+        }
+
+        return {
+          idx: idx + 1,
+          TEACHER: i.TEACHER,
+          PROGRAM_NAME: i.PROGRAM_NAME,
+          CNT: i.CNT,
+          avg_score1: i.avg_score1,
+          avg_score2: i.avg_score2,
+          avg_score3: i.avg_score3,
+          avg_avg1,
+          avg_score4: i.avg_score4,
+          avg_score5: i.avg_score5,
+          avg_score6: i.avg_score6,
+          avg_avg2,
+          avg_score7: i.avg_score7,
+          avg_score8: i.avg_score8,
+          avg_score9: i.avg_score9,
+          avg_avg3,
+          total_avg,
+        };
+      });
+
+      res.json({
+        sheet1,
+        sheet2,
+        sheet3,
+        sheet4,
+        sheet5,
+        sheet6,
+        sheet7,
+        sheet8,
+        sheet9,
+        sheet10,
+        sheet11,
+      });
     })
-    .catch((err) => {console.log(err); res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })});
+    .catch((err) => {
+      console.log(err);
+      res
+        .status(500)
+        .json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " });
+    });
 });
-
 
 module.exports = router;

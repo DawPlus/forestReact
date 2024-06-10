@@ -190,13 +190,16 @@ export const {getState, reducer, actions} = createCustomSlice({
           extraList.push(item);
         }
       });
-      
+
       sortedList.sort((a, b) => order.indexOf(a.EXPENSE_TYPE) - order.indexOf(b.EXPENSE_TYPE));
       
       state.teacherList= sortedList.filter(i=> i.EXPENSE_TYPE.includes("강사"))
       state.teacherExtraList= extraList.filter(i=> i.EXPENSE_TYPE.includes("강사"))
+      
       state.customList= sortedList.filter(i=> i.EXPENSE_TYPE.includes("고객"))
-      state.incomeExtraList= extraList.filter(i=> i.EXPENSE_TYPE.includes("고객"))
+      state.customExtraList= extraList.filter(i=> i.EXPENSE_TYPE.includes("고객"))
+
+      // state.incomeExtraList= extraList.filter(i=> i.EXPENSE_TYPE.includes("고객"))
 
       // 수입금액 
       const seenTypes2 = new Set();

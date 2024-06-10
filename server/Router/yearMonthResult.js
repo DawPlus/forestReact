@@ -1,15 +1,14 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const maria = require("../maria");
 
+// 프로그램 시행개요
 
-// 프로그램 시행개요 
+//수입 지출 분석
+router.post("/getExIncomeList", (req, res) => {
+  const { openday, endday } = req.body;
 
-//수입 지출 분석 
-router.post('/getExIncomeList', (req, res)=>{
-    const { openday, endday} = req.body;
-    
-    let sql = `
+  let sql = `
     SELECT ic.expense_type as type, group_concat(expense_price) as price1 
 		
 		FROM dbstatistics.expense ic
@@ -19,8 +18,8 @@ router.post('/getExIncomeList', (req, res)=>{
 		group by ic.expense_type
 		order by type asc;
     `;
-    
-    let sql2 = `
+
+  let sql2 = `
         SELECT ic.INCOME_TYPE as type,group_concat(INCOME_PRICE) as price1
         
         FROM dbstatistics.income ic
@@ -30,8 +29,8 @@ router.post('/getExIncomeList', (req, res)=>{
         group by ic.INCOME_TYPE
         order by type asc;
     `;
-    
-    let sql3 = `
+
+  let sql3 = `
         select res.income_type, Round(sum(res.sum),0) as sum
         from (SELECT ic.income_type as income_type, (sum(ic.income_price) * 
         (100 - (select income_price from income where basic_info_seq = b.BASIC_INFO_SEQ and income_type = "할인율" group by BASIC_INFO_SEQ) ) / 100)  as sum
@@ -42,35 +41,35 @@ router.post('/getExIncomeList', (req, res)=>{
         group by res.income_type;
     `;
 
-    Promise.all([
-        maria(sql, [openday, endday]),
-        maria(sql2, [openday, endday]),
-        maria(sql3, [openday, endday]),
-
-    ])
+  Promise.all([
+    maria(sql, [openday, endday]),
+    maria(sql2, [openday, endday]),
+    maria(sql3, [openday, endday]),
+  ])
     .then((results) => {
-        let rows1 = results[0]; // the result from the first query
-        let rows2 = results[1]; // the result from the second query
-        let rows3 = results[2]; // the result from the second query
+      let rows1 = results[0]; // the result from the first query
+      let rows2 = results[1]; // the result from the second query
+      let rows3 = results[2]; // the result from the second query
 
-        res.json({
-            expend: rows1,
-            income : rows2,
-            incomeTotal : rows3,
-
-        });
+      res.json({
+        expend: rows1,
+        income: rows2,
+        incomeTotal: rows3,
+      });
     })
     .catch((err) => {
-        console.log(err)
-        res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
+      console.log(err);
+      res
+        .status(500)
+        .json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " });
     });
 });
 
-//효과성 분석 
-router.post('/getProgramEffect', (req, res)=>{
-    const { openday, endday} = req.body;
-    console.log(openday, endday)
-    let sql = `
+//효과성 분석
+router.post("/getProgramEffect", (req, res) => {
+  const { openday, endday } = req.body;
+  console.log(openday, endday);
+  let sql = `
         SELECT 
             PV,
             IFNULL(SUM(SCORE1 + SCORE2 + SCORE3 + SCORE4 + SCORE5 + SCORE6 + SCORE7 + SCORE8 + SCORE9 + SCORE10 +
@@ -85,8 +84,8 @@ router.post('/getProgramEffect', (req, res)=>{
             AND OPENDAY BETWEEN ? AND ?
         GROUP BY PV;
     `;
-    
-    let sql2 = `
+
+  let sql2 = `
         SELECT 
             '사전' as PV,
             IFNULL(SUM(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
@@ -132,7 +131,7 @@ router.post('/getProgramEffect', (req, res)=>{
         AND OPENDAY BETWEEN ? AND ?
     `;
 
-    let sql3 = `
+  let sql3 = `
         select PV,  IFNULL(SUM(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
             SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18),0) as sum,
         IFNULL(ROUND(AVG(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
@@ -142,7 +141,7 @@ router.post('/getProgramEffect', (req, res)=>{
         AND OPENDAY BETWEEN ? AND ?
         GROUP BY PV
     `;
-    let sql4 = `
+  let sql4 = `
             SELECT 
                 '사전' as PV, 
                 IFNULL(ROUND(AVG(nullif(num1,0)),2),0) as num1, 
@@ -167,59 +166,61 @@ router.post('/getProgramEffect', (req, res)=>{
 
     `;
 
-    Promise.all([
-        maria(sql, [openday, endday]),
-        maria(sql2, [openday, endday,openday, endday]),
-        maria(sql3, [openday, endday]),
-        maria(sql4, [openday, endday,openday, endday]),
-    ])
+  Promise.all([
+    maria(sql, [openday, endday]),
+    maria(sql2, [openday, endday, openday, endday]),
+    maria(sql3, [openday, endday]),
+    maria(sql4, [openday, endday, openday, endday]),
+  ])
     .then((results) => {
-        let rows1 = results[0]; // the result from the first query
-        let rows2 = results[1]; // the result from the second query
-        let rows3 = results[2]; // the result from the third query
-        let rows4 = results[3]; // the result from the third query
+      let rows1 = results[0]; // the result from the first query
+      let rows2 = results[1]; // the result from the second query
+      let rows3 = results[2]; // the result from the third query
+      let rows4 = results[3]; // the result from the third query
 
-        res.json({
-            healing: rows1,
-            counsel : rows2,
-            prevent: rows3,
-            hrv : rows4
-        });
+      res.json({
+        healing: rows1,
+        counsel: rows2,
+        prevent: rows3,
+        hrv: rows4,
+      });
     })
     .catch((err) => {
-        console.log(err)
-        res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
+      console.log(err);
+      res
+        .status(500)
+        .json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " });
     });
 });
 
-
-    router.post('/getIsCloseMine', (req, res)=>{
-        const { openday, endday} = req.body;
-        let sql = `
+router.post("/getIsCloseMine", (req, res) => {
+  const { openday, endday } = req.body;
+  let sql = `
             select count(*) as CNT
             from dbstatistics.basic_info b  
             where b.ISCLOSEMINE = 1  
             AND b.PROGRESS_STATE = "E"    
-                ${openday ? `AND b.OPENDAY BETWEEN ? AND ?` : ''} 
+                ${openday ? `AND b.OPENDAY BETWEEN ? AND ?` : ""} 
         `;
-        
-        const params = openday ? [openday, endday] : []; // 조건에 따라 파라미터 설정
-        maria(sql, params).then((rows) => {  
-            res.json(rows[0])
-        })
-        .catch((err) => {
-            console.log(err)
 
-            res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
-        });
+  const params = openday ? [openday, endday] : []; // 조건에 따라 파라미터 설정
+  maria(sql, params)
+    .then((rows) => {
+      res.json(rows[0]);
+    })
+    .catch((err) => {
+      console.log(err);
+
+      res
+        .status(500)
+        .json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " });
     });
-
-
+});
 
 // 시설서비스 만족도
-router.post('/getSerList', (req, res)=>{
-    const { openday, endday} = req.body;
-    let sql = `
+router.post("/getSerList", (req, res) => {
+  const { openday, endday } = req.body;
+  let sql = `
         SELECT 
             ifnull(ROUND(AVG(nullif(score1,0)),2),0) as score1,    ifnull(ROUND(AVG(nullif(score2,0)),2),0) as score2,   ifnull(ROUND(AVG(nullif(score3,0)),2),0) as score3,   ifnull(ROUND(AVG(nullif(score4,0)),2),0) as score4,   ifnull(ROUND(AVG(nullif(score5,0)),2),0) as score5,
             ifnull(ROUND(AVG(nullif(score6,0)),2),0) as score6,    ifnull(ROUND(AVG(nullif(score7,0)),2),0) as score7,   ifnull(ROUND(AVG(nullif(score8,0)),2),0) as score8,   ifnull(ROUND(AVG(nullif(score9,0)),2),0) as score9,   ifnull(ROUND(AVG(nullif(score10,0)),2),0) as score10,
@@ -228,17 +229,20 @@ router.post('/getSerList', (req, res)=>{
         FROM service_env_satisfaction
         WHERE OPENDAY BETWEEN ? AND ?
     `;
-    maria(sql,[openday, endday]).then((rows) => {  
-        res.json(rows)
+  maria(sql, [openday, endday])
+    .then((rows) => {
+      res.json(rows);
     })
     .catch((err) => {
-        res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
+      res
+        .status(500)
+        .json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " });
     });
 });
 // 프로그램운영
-router.post('/programManage', (req, res)=>{
-    const { openday, endday} = req.body;
-    let sql = `
+router.post("/programManage", (req, res) => {
+  const { openday, endday } = req.body;
+  let sql = `
         SELECT 
             PROGRAM_IN_OUT as PROGRAM_IN_OUT2
         FROM 
@@ -247,9 +251,7 @@ router.post('/programManage', (req, res)=>{
             AND OPENDAY BETWEEN ? AND ?
     `;
 
-
-
-    let sql2 = `
+  let sql2 = `
             SELECT
                 bunya,
                 ROUND(sum(SCORE1+SCORE2+SCORE3)/(count(Case WHEN SCORE1 != 0 then 1 END)+count(CASE WHEN SCORE2 !=0 then 1 END)+count(Case WHen SCORE3 !=0 then 1 END)),2)as program,
@@ -260,7 +262,7 @@ router.post('/programManage', (req, res)=>{
 			group by bunya
     `;
 
-    let sql3 = `
+  let sql3 = `
         SELECT
             T1.AGENCY,
             T1.OPENDAY,
@@ -281,37 +283,35 @@ router.post('/programManage', (req, res)=>{
         ) AS numbers
         WHERE (numbers.n - 1) * 5 + 1 <= LENGTH(T1.PROGRAM_IN_OUT) - LENGTH(REPLACE(T1.PROGRAM_IN_OUT, ',', '')) + 1
         GROUP BY AGENCY, OPENDAY, BUNYA, PROGRAM_NAME, TEACHER
-    `
+    `;
 
-
-    Promise.all([
-        maria(sql, [openday, endday]),
-        maria(sql2, [openday, endday]),
-        maria(sql3, [openday, endday]),
-    
-    ])
+  Promise.all([
+    maria(sql, [openday, endday]),
+    maria(sql2, [openday, endday]),
+    maria(sql3, [openday, endday]),
+  ])
     .then((results) => {
-        let rows1 = results[0]; // the result from the first query
-        let rows2 = results[1]; // the result from the second query
-        let rows3 = results[2]; // the result from the second query
-    
-        res.json({
-            manage: rows1,
-            bunya : rows2,
-            manage_cnt : rows3,
-            
-        });
+      let rows1 = results[0]; // the result from the first query
+      let rows2 = results[1]; // the result from the second query
+      let rows3 = results[2]; // the result from the second query
+
+      res.json({
+        manage: rows1,
+        bunya: rows2,
+        manage_cnt: rows3,
+      });
     })
     .catch((err) => {
-        res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
+      res
+        .status(500)
+        .json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " });
     });
 });
 
-
-//지원사항 , 서비스유형 
-router.post('/getAllPrograms', (req, res)=>{
-    const { openday, endday} = req.body;
-    let sql = `
+//지원사항 , 서비스유형
+router.post("/getAllPrograms", (req, res) => {
+  const { openday, endday } = req.body;
+  let sql = `
     SELECT
         BIZ_PURPOSE,
         SUM(CASE WHEN FIND_IN_SET('프로그램', REPLACE(SUPPORT, ' ', '')) > 0 THEN 1 ELSE 0 END) AS count_program,
@@ -333,8 +333,8 @@ router.post('/getAllPrograms', (req, res)=>{
     GROUP BY
         BIZ_PURPOSE;
     `;
-    
-    let sql2 = `
+
+  let sql2 = `
         SELECT
             BIZ_PURPOSE,
             SUM(CASE WHEN BIZ_PURPOSE = '수익사업' THEN PART_MAN_CNT ELSE 0 END) AS part_man,
@@ -354,7 +354,7 @@ router.post('/getAllPrograms', (req, res)=>{
             BIZ_PURPOSE;
     `;
 
-    let sql3 = `
+  let sql3 = `
         SELECT 
             SUM(ROOM_PART_PEOPLE) as room_part_people, SUM(ROOM_LEAD_PEOPLE) as room_lead_people, SUM(ROOM_ETC_PEOPLE) as room_etc_people,
             SUM(ROOM_PART_ROOM) as room_part_room, SUM(ROOM_LEAD_ROOM) as room_lead_room, SUM(ROOM_ETC_PEOPLE) as room_etc_room,
@@ -365,8 +365,8 @@ router.post('/getAllPrograms', (req, res)=>{
             AND OPENDAY BETWEEN ? AND ?  
             AND PROGRESS_STATE = "E"
     `;
-    
-    let sql4 = `
+
+  let sql4 = `
     SELECT BIZ_PURPOSE, 
         SUM((IFNULL(PART_MAN_CNT,0) + IFNULL(PART_WOMAN_CNT,0) + IFNULL(LEAD_MAN_CNT,0) + IFNULL(LEAD_WOMAN_CNT,0)) * IFNULL(DAYS_TO_STAY,0)) as grand_total
     FROM basic_info
@@ -374,39 +374,38 @@ router.post('/getAllPrograms', (req, res)=>{
         AND OPENDAY BETWEEN ? AND ?  
     GROUP BY BIZ_PURPOSE;
 
-    `
+    `;
 
-    Promise.all([
-        maria(sql, [openday, endday]),
-        maria(sql2, [openday, endday]),
-        maria(sql3, [openday, endday]),
-        maria(sql4, [openday, endday])
-    ])
+  Promise.all([
+    maria(sql, [openday, endday]),
+    maria(sql2, [openday, endday]),
+    maria(sql3, [openday, endday]),
+    maria(sql4, [openday, endday]),
+  ])
     .then((results) => {
-        let rows1 = results[0]; // the result from the first query
-        let rows2 = results[1]; // the result from the second query
-        let rows3 = results[2]; // the result from the third query
-        let rows4 = results[3]; // the result from the third query
+      let rows1 = results[0]; // the result from the first query
+      let rows2 = results[1]; // the result from the second query
+      let rows3 = results[2]; // the result from the third query
+      let rows4 = results[3]; // the result from the third query
 
-        res.json({
-            people: rows1,
-            pTotal : rows4,
-            service: rows2,
-            room : rows3
-        });
+      res.json({
+        people: rows1,
+        pTotal: rows4,
+        service: rows2,
+        room: rows3,
+      });
     })
     .catch((err) => {
-        res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
+      res
+        .status(500)
+        .json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " });
     });
 });
 
-
-
-
 // 지역별 통계
-router.post('/getResidenceList', (req, res)=>{
-    const { openday, endday} = req.body;
-    let sql = `
+router.post("/getResidenceList", (req, res) => {
+  const { openday, endday } = req.body;
+  let sql = `
         SELECT 
             r.RESIDENCE,
             COUNT(b.RESIDENCE) AS count,
@@ -438,18 +437,20 @@ router.post('/getResidenceList', (req, res)=>{
         GROUP BY 
             r.RESIDENCE;
     `;
-    maria(sql,[openday, endday]).then((rows) => {  
-        res.json(rows)
+  maria(sql, [openday, endday])
+    .then((rows) => {
+      res.json(rows);
     })
     .catch((err) => {
-        res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
+      res
+        .status(500)
+        .json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " });
     });
 });
 
-router.post('/getPartTypeList', (req, res)=>{
-
-    const { openday , endday} = req.body;
-    let sql = `
+router.post("/getPartTypeList", (req, res) => {
+  const { openday, endday } = req.body;
+  let sql = `
         SELECT 
             COUNT(case when AGE_TYPE ="아동청소년" then 1 end ) as count_kidboy,
             COUNT(case when AGE_TYPE ="청소년" then 1 end ) as count_boy,
@@ -460,12 +461,12 @@ router.post('/getPartTypeList', (req, res)=>{
             IFNULL(SUM(case when AGE_TYPE ="성인" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_adult,
             IFNULL(SUM(case when AGE_TYPE ="노인" then PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT else 0 end),0) as part_old,
          
-            COUNT(CASE WHEN PART_TYPE IN ( "저소득", "교직원", "중독", "기타") THEN 1 END) AS count_general,
+            COUNT(CASE WHEN PART_TYPE IN ( "저소득", "교직원", "중독", "기타", "일반") THEN 1 END) AS count_general,
             COUNT(CASE WHEN PART_TYPE = "가족" THEN 1 END) AS count_family,
             COUNT(CASE WHEN PART_TYPE = "장애인" THEN 1 END) AS count_handicap,
             COUNT(CASE WHEN PART_TYPE = "다문화" THEN 1 END) AS count_multicultural,
 
-            IFNULL(SUM(CASE WHEN PART_TYPE IN ( "저소득", "교직원", "중독", "기타") THEN PART_MAN_CNT + PART_WOMAN_CNT + LEAD_MAN_CNT + LEAD_WOMAN_CNT END), 0) AS part_general,
+            IFNULL(SUM(CASE WHEN PART_TYPE IN ( "저소득", "교직원", "중독", "기타", "일반") THEN PART_MAN_CNT + PART_WOMAN_CNT + LEAD_MAN_CNT + LEAD_WOMAN_CNT END), 0) AS part_general,
             IFNULL(SUM(CASE WHEN PART_TYPE = "가족" THEN PART_MAN_CNT + PART_WOMAN_CNT + LEAD_MAN_CNT + LEAD_WOMAN_CNT END), 0) AS part_family,
             IFNULL(SUM(CASE WHEN PART_TYPE = "장애인" THEN PART_MAN_CNT + PART_WOMAN_CNT + LEAD_MAN_CNT + LEAD_WOMAN_CNT END), 0) AS part_handicap,
             IFNULL(SUM(CASE WHEN PART_TYPE = "다문화" THEN PART_MAN_CNT + PART_WOMAN_CNT + LEAD_MAN_CNT + LEAD_WOMAN_CNT END), 0) AS part_multicultural,
@@ -497,13 +498,15 @@ router.post('/getPartTypeList', (req, res)=>{
         WHERE OPENDAY BETWEEN ? AND ? AND PROGRESS_STATE ="E"
     `;
 
-    maria(sql,[openday, endday]).then((rows) => {
-        res.json(rows)
+  maria(sql, [openday, endday])
+    .then((rows) => {
+      res.json(rows);
     })
-    .catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));
-
+    .catch((err) =>
+      res
+        .status(500)
+        .json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
+    );
 });
-
-
 
 module.exports = router;
