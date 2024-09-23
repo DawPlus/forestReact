@@ -1,33 +1,36 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const maria = require("../maria");
 
-
 // 프로그램 리스트 조회
-router.post('/getProgramList', (req, res)=>{
-    const { openDay, endDay } = req.body;
-    let sql = `SELECT * FROM basic_info WHERE PROGRESS_STATE = "E"`;
+router.post("/getProgramList", (req, res) => {
+  const { openDay, endDay } = req.body;
+  let sql = `SELECT * FROM basic_info WHERE PROGRESS_STATE = "E"`;
 
-    if (openDay && endDay) {
-        sql += ` AND OPENDAY BETWEEN '${openDay}' AND '${endDay}'`;
-    }
+  if (openDay && endDay) {
+    sql += ` AND OPENDAY BETWEEN '${openDay}' AND '${endDay}'`;
+  }
 
-    sql += ` ORDER BY OPENDAY DESC`;
+  sql += ` ORDER BY OPENDAY DESC`;
 
-    maria(sql).then((rows) => {
-        res.json(rows)
+  maria(sql)
+    .then((rows) => {
+      res.json(rows);
     })
-    .catch((err) => res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " }));
+    .catch((err) =>
+      res
+        .status(500)
+        .json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
+    );
 });
 
+// 상세
+router.post("/getProgramListDetail", (req, res) => {
+  const { seq, agency, openday } = req.body;
 
-// 상세 
-router.post('/getProgramListDetail', (req, res)=>{
-    const {seq, agency, openday} = req.body;
-    
-    const sql = `SELECT * FROM basic_info WHERE PROGRESS_STATE ="E" and BASIC_INFO_SEQ = ?`;
+  const sql = `SELECT * FROM basic_info WHERE PROGRESS_STATE ="E" and BASIC_INFO_SEQ = ?`;
 
-    const sql2 = `SELECT 
+  const sql2 = `SELECT 
                             IFNULL(ROUND(AVG(score1), 2), 0) as score1,
                             IFNULL(ROUND(AVG(score2), 2), 0) as score2,
                             IFNULL(ROUND(AVG(score3), 2), 0) as score3,
@@ -47,9 +50,9 @@ router.post('/getProgramListDetail', (req, res)=>{
                             IFNULL(ROUND(AVG(score17), 2), 0) as score17,
                             IFNULL(ROUND(AVG(score18), 2), 0) as score18
                         FROM service_env_satisfaction
-                        WHERE AGENCY = ? AND OPENDAY = ?`
+                        WHERE AGENCY = ? AND OPENDAY = ?`;
 
-    const sql3 = `SELECT ps.PROGRAM_NAME, ps.TEACHER, ps.BUNYA, ps.type, 
+  const sql3 = `SELECT ps.PROGRAM_NAME, ps.TEACHER, ps.BUNYA, ps.type, 
                     IFNULL(ROUND(AVG(nullif(ps.score1, 0)), 2), 0) as score1,
                     IFNULL(ROUND(AVG(nullif(ps.score2, 0)), 2), 0) as score2,
                     IFNULL(ROUND(AVG(nullif(ps.score3, 0)), 2), 0) as score3,
@@ -69,8 +72,8 @@ router.post('/getProgramListDetail', (req, res)=>{
                 GROUP BY ps.PROGRAM_NAME, ps.TEACHER, ps.BUNYA, ps.TYPE
                 ORDER BY ps.PROGRAM_NAME, ps.TEACHER, ps.BUNYA,
                     CASE WHEN ps.TYPE = '참여자' THEN 0 ELSE 1 END;
-                `
-    const sql4 = `
+                `;
+  const sql4 = `
         SELECT 
             PROGRAM_NAME,
             TEACHER,
@@ -82,51 +85,52 @@ router.post('/getProgramListDetail', (req, res)=>{
         FROM dbstatistics.program_satisfaction
         WHERE AGENCY = ? AND OPENDAY = ?
         GROUP BY PROGRAM_NAME, TEACHER, BUNYA, TYPE, OPENDAY, AGENCY;
-    `
+    `;
 
-    Promise.all([
-        maria(sql, [seq]),
-        maria(sql2, [agency, openday]),
-        maria(sql3, [agency, openday]),
-        maria(sql4, [agency, openday]),
-    ])
+  Promise.all([
+    maria(sql, [seq]),
+    maria(sql2, [agency, openday]),
+    maria(sql3, [agency, openday]),
+    maria(sql4, [agency, openday]),
+  ])
     .then((results) => {
-        let rows1 = results[0]; // the result from the first query
-        let rows2 = results[1]; // the result from the second query
-        let rows3 = results[2]; // the result from the second query
-        let rows4 = results[3]; // the result from the second query
-        
+      let rows1 = results[0]; // the result from the first query
+      let rows2 = results[1]; // the result from the second query
+      let rows3 = results[2]; // the result from the second query
+      let rows4 = results[3]; // the result from the second query
 
-        const resultArray = rows3.map(item1 => {
-            const matchingItem = rows4.find(item2 => 
-                item1.PROGRAM_NAME === item2.PROGRAM_NAME &&
-                item1.TEACHER === item2.TEACHER &&
-                item1.BUNYA === item2.BUNYA &&
-                item1.type === item2.TYPE
-            );
-            
-            return matchingItem ? { ...item1, cnt: matchingItem.count } : item1;
-        });
-            
+      const resultArray = rows3.map((item1) => {
+        const matchingItem = rows4.find(
+          (item2) =>
+            item1.PROGRAM_NAME === item2.PROGRAM_NAME &&
+            item1.TEACHER === item2.TEACHER &&
+            item1.BUNYA === item2.BUNYA &&
+            item1.type === item2.TYPE
+        );
 
-        res.json({
-            basicInfo: rows1[0],
-            serviceList : rows2,
-            programSaf : resultArray,
-            rows4,
-        });
+        return matchingItem ? { ...item1, cnt: matchingItem.count } : item1;
+      });
+
+      res.json({
+        basicInfo: rows1[0],
+        serviceList: rows2,
+        programSaf: resultArray,
+        rows4,
+      });
     })
     .catch((err) => {
-        console.log(err)
-        res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
+      console.log(err);
+      res
+        .status(500)
+        .json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " });
     });
 });
 
-// 상세 
-router.post('/getProgramListDetailEffect', (req, res)=>{
-    const {agency, openday} = req.body;
-    // 프로그램 효과 
-    const sql1 = `SELECT 
+// 상세
+router.post("/getProgramListDetailEffect", (req, res) => {
+  const { agency, openday } = req.body;
+  // 프로그램 효과
+  const sql1 = `SELECT 
                     '사전' AS type,
                     IFNULL(SUM(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
                         SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+SCORE19+SCORE20), 0) AS sum1,
@@ -145,8 +149,8 @@ router.post('/getProgramListDetailEffect', (req, res)=>{
                     SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+SCORE19+SCORE20)/20, 2), 0) AS avg2
                 FROM prevent_service
                 WHERE AGENCY = ? AND OPENDAY = ? AND AGE != 0 and PV= "사후"
-                `
-    const sql2 = `SELECT
+                `;
+  const sql2 = `SELECT
                     '사전' AS pv,
                     IFNULL(SUM(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
                         SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE18
@@ -186,8 +190,8 @@ router.post('/getProgramListDetailEffect', (req, res)=>{
                         + SCORE58+ SCORE59+ SCORE60+ SCORE61+ SCORE62)/62,2),0) AS avg2 
                 FROM counsel_service
                 WHERE AGENCY = ? AND OPENDAY = ? AND PV ="사후" AND AGE !=0
-                `
-    const sql3 = `
+                `;
+  const sql3 = `
                 SELECT 
                     '사전' AS pv,
                     IFNULL(SUM(SCORE1 + SCORE2 + SCORE3 + SCORE4 + SCORE5 + SCORE6 + SCORE7 + SCORE8 + SCORE9 + SCORE10 +
@@ -211,8 +215,8 @@ router.post('/getProgramListDetailEffect', (req, res)=>{
                         SCORE21 + SCORE22) / 22, 2), 0) AS avg2
                 FROM healing_service
                 WHERE AGENCY = ? AND OPENDAY = ? AND PV = "사후" AND AGE != 0;
-                `
-    const sql4 = `
+                `;
+  const sql4 = `
                 SELECT
                     '사전' AS pv,
                     IFNULL(ROUND(AVG(nullif(num1,0)),2),0) as num1,
@@ -235,66 +239,59 @@ router.post('/getProgramListDetailEffect', (req, res)=>{
                 FROM hrv_service
                 WHERE AGENCY = ? AND DATE = ? AND PV = "사후";
 
-                `
+                `;
 
-    Promise.all([
-        maria(sql1,[agency, openday,agency, openday]),
-        maria(sql2, [agency, openday,agency, openday]),
-        maria(sql3, [agency, openday,agency, openday]),
-        maria(sql4, [agency, openday,agency, openday]),
-        
-
-    ])
+  Promise.all([
+    maria(sql1, [agency, openday, agency, openday]),
+    maria(sql2, [agency, openday, agency, openday]),
+    maria(sql3, [agency, openday, agency, openday]),
+    maria(sql4, [agency, openday, agency, openday]),
+  ])
     .then((results) => {
-        let rows1 = results[0]; // the result from the first query
-        let rows2 = results[1]; // the result from the second query
-        let rows3 = results[2]; // the result from the second query
-        let rows4 = results[3]; // the result from the second query
-        
+      let rows1 = results[0]; // the result from the first query
+      let rows2 = results[1]; // the result from the second query
+      let rows3 = results[2]; // the result from the second query
+      let rows4 = results[3]; // the result from the second query
 
-        res.json({
-            prevent : rows1,
-            counsel : rows2, 
-            healing : rows3,
-            hrv : rows4,
-        });
+      res.json({
+        prevent: rows1,
+        counsel: rows2,
+        healing: rows3,
+        hrv: rows4,
+      });
     })
     .catch((err) => {
-        console.log(err)
-        res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
+      console.log(err);
+      res
+        .status(500)
+        .json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " });
     });
 });
 
+// 투두 수입금액 지출금액
+router.post("/getProgramListDetailInEx", (req, res) => {
+  const { seq } = req.body;
+  // 프로그램 효과
 
-// 투두 수입금액 지출금액  
-router.post('/getProgramListDetailInEx', (req, res)=>{
-    const {seq} = req.body;
-    // 프로그램 효과 
+  const sql1 = `select * from income where BASIC_INFO_SEQ = ?`;
+  const sql2 = `select * from expense where BASIC_INFO_SEQ = ?`;
 
-    
-    const sql1 = `select * from income where BASIC_INFO_SEQ = ?`
-    const sql2 = `select * from expense where BASIC_INFO_SEQ = ?`
-    
-
-    Promise.all([
-        maria(sql1,[seq]),
-        maria(sql2, [seq]),
-    ])
+  Promise.all([maria(sql1, [seq]), maria(sql2, [seq])])
     .then((results) => {
-        let rows1 = results[0]; // the result from the first query
-        let rows2 = results[1]; // the result from the second query
-        
-        res.json({
-            income : rows1,
-            expense : rows2
-        });
+      let rows1 = results[0]; // the result from the first query
+      let rows2 = results[1]; // the result from the second query
+
+      res.json({
+        income: rows1,
+        expense: rows2,
+      });
     })
     .catch((err) => {
-        console.log(err)
-        res.status(500).json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " })
+      console.log(err);
+      res
+        .status(500)
+        .json({ error: "오류가 발생하였습니다. 관리자에게 문의하세요 " });
     });
 });
-
-
 
 module.exports = router;
