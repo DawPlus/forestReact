@@ -5,9 +5,9 @@ import { useSelector } from 'react-redux';
 
 //프로그램 만족도
 const ProgramSatisfaction = () => {
-  const programSaf = useSelector((s) => getState(s).programSaf);
   const { PROGRAM_IN_OUT } = useSelector((s) => getState(s).detailInfo);
 
+  const programSaf = useSelector((s) => getState(s).programSaf);
   const _programList = PROGRAM_IN_OUT.split(',').reduce((acc, curr, idx) => {
     const rowNumber = Math.floor(idx / 5);
     if (!acc[rowNumber]) {
@@ -30,6 +30,18 @@ const ProgramSatisfaction = () => {
     return average.toFixed(2);
   };
 
+  const sortedProgramSaf = [...programSaf].sort((a, b) => {
+    if (a.PROGRAM_NAME < b.PROGRAM_NAME) return -1;
+    if (a.PROGRAM_NAME > b.PROGRAM_NAME) return 1;
+    return 0;
+  });
+
+  const sortedProgramList = [..._programList].sort((a, b) => {
+    if (a.programName < b.programName) return -1;
+    if (a.programName > b.programName) return 1;
+    return 0;
+  });
+
   return (
     <>
       <TableContainer style={{ marginTop: '20px' }}>
@@ -46,8 +58,15 @@ const ProgramSatisfaction = () => {
               <TableCell className="table-header" align="center" rowSpan={2}>
                 강사명
               </TableCell>
-              <TableCell className="table-header" align="center" rowSpan={2}>
-                참여구분
+              <TableCell
+                className="table-header"
+                align="center"
+                rowSpan={2}
+                style={{ lineHeight: '13px' }}
+              >
+                참여
+                <br />
+                구분
               </TableCell>
               <TableCell className="table-header" align="center" colSpan={4}>
                 강사
@@ -62,12 +81,23 @@ const ProgramSatisfaction = () => {
                 className="table-header"
                 align="center"
                 rowSpan={2}
-                style={{ width: '100px' }}
+                style={{ lineHeight: '13px' }}
               >
-                설문참가인원
+                설문
+                <br />
+                참가
+                <br />
+                인원
               </TableCell>
-              <TableCell className="table-header" align="center" rowSpan={2}>
-                전체평균
+              <TableCell
+                className="table-header"
+                align="center"
+                rowSpan={2}
+                style={{ lineHeight: '13px' }}
+              >
+                전체
+                <br />
+                평균
               </TableCell>
             </TableRow>
             <TableRow>
@@ -110,13 +140,13 @@ const ProgramSatisfaction = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {programSaf.length === 0 ? (
-              _programList.length === 0 ? (
+            {sortedProgramSaf.length === 0 ? (
+              sortedProgramList.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={17}>조회된 정보가 없습니다.</TableCell>
                 </TableRow>
               ) : (
-                _programList.map((item, index) => (
+                sortedProgramList.map((item, index) => (
                   <TableRow key={index}>
                     <TableCell>{item.programName}</TableCell>
                     <TableCell>{item.col1}</TableCell>
@@ -135,66 +165,84 @@ const ProgramSatisfaction = () => {
                     <TableCell></TableCell>
                     <TableCell></TableCell>
                     <TableCell></TableCell>
+                    <TableCell></TableCell>
                   </TableRow>
                 ))
               )
-            ) : null}
-            {programSaf.map((i, key) => (
-              <TableRow key={key}>
-                {/* {key % 2 === 0 ? <TableCell rowSpan={2}>{i.PROGRAM_NAME}</TableCell> : null}
-                {key % 2 === 0 ? <TableCell rowSpan={2}>{i.BUNYA}</TableCell> : null}
-                {key % 2 === 0 ? <TableCell rowSpan={2}>{i.TEACHER}</TableCell> : null} */}
-                <TableCell>{i.PROGRAM_NAME}</TableCell>
-                <TableCell>{i.BUNYA}</TableCell>
-                <TableCell>{i.TEACHER}</TableCell>
+            ) : (
+              <></>
+            )}
+            {sortedProgramSaf.map((i, key, arr) => {
+              // 현재 항목과 이전 항목 비교
+              const prev = arr[key - 1];
+              const isSameProgram = prev && prev.PROGRAM_NAME === i.PROGRAM_NAME;
+              const isSameBunya = prev && prev.BUNYA === i.BUNYA;
+              const isSameTeacher = prev && prev.TEACHER === i.TEACHER;
 
-                <TableCell>{i.type}</TableCell>
-                <TableCell>{i.score1}</TableCell>
-                <TableCell>{i.score2}</TableCell>
-                <TableCell>{i.score3}</TableCell>
-                <TableCell>
-                  {calculateAverage({
-                    score1: i.score1,
-                    score2: i.score2,
-                    score3: i.score3,
-                  })}
-                </TableCell>
-                <TableCell>{i.score4}</TableCell>
-                <TableCell>{i.score5}</TableCell>
-                <TableCell>{i.score6}</TableCell>
-                <TableCell>
-                  {calculateAverage({
-                    score1: i.score4,
-                    score2: i.score5,
-                    score3: i.score6,
-                  })}
-                </TableCell>
-                <TableCell>{i.score7}</TableCell>
-                <TableCell>{i.score8}</TableCell>
-                <TableCell>{i.score9}</TableCell>
-                <TableCell>
-                  {calculateAverage({
-                    score1: i.score7,
-                    score2: i.score8,
-                    score3: i.score9,
-                  })}
-                </TableCell>
-                <TableCell>{i.cnt}</TableCell>
-                <TableCell>
-                  {calculateAverage({
-                    score1: i.score1,
-                    score2: i.score2,
-                    score3: i.score3,
-                    score4: i.score4,
-                    score5: i.score5,
-                    score6: i.score6,
-                    score7: i.score7,
-                    score8: i.score8,
-                    score9: i.score9,
-                  })}
-                </TableCell>
-              </TableRow>
-            ))}
+              // RowSpan을 설정하여 각 항목의 동일한 값 개수를 계산
+              const programRowSpanCount = arr.filter(
+                (item, idx) => idx >= key && item.PROGRAM_NAME === i.PROGRAM_NAME,
+              ).length;
+
+              const bunyaRowSpanCount = arr.filter(
+                (item, idx) => idx >= key && item.BUNYA === i.BUNYA,
+              ).length;
+
+              const teacherRowSpanCount = arr.filter(
+                (item, idx) => idx >= key && item.TEACHER === i.TEACHER,
+              ).length;
+
+              return (
+                <TableRow key={key}>
+                  {/* PROGRAM_NAME cell */}
+                  {!isSameProgram && (
+                    <TableCell rowSpan={programRowSpanCount}>{i.PROGRAM_NAME}</TableCell>
+                  )}
+
+                  {/* BUNYA cell */}
+                  {!isSameBunya && <TableCell rowSpan={bunyaRowSpanCount}>{i.BUNYA}</TableCell>}
+
+                  {/* TEACHER cell */}
+                  {!isSameTeacher && (
+                    <TableCell rowSpan={teacherRowSpanCount}>{i.TEACHER}</TableCell>
+                  )}
+
+                  <TableCell>{i.type}</TableCell>
+                  <TableCell>{i.score1}</TableCell>
+                  <TableCell>{i.score2}</TableCell>
+                  <TableCell>{i.score3}</TableCell>
+                  <TableCell>
+                    {calculateAverage({ score1: i.score1, score2: i.score2, score3: i.score3 })}
+                  </TableCell>
+                  <TableCell>{i.score4}</TableCell>
+                  <TableCell>{i.score5}</TableCell>
+                  <TableCell>{i.score6}</TableCell>
+                  <TableCell>
+                    {calculateAverage({ score1: i.score4, score2: i.score5, score3: i.score6 })}
+                  </TableCell>
+                  <TableCell>{i.score7}</TableCell>
+                  <TableCell>{i.score8}</TableCell>
+                  <TableCell>{i.score9}</TableCell>
+                  <TableCell>
+                    {calculateAverage({ score1: i.score7, score2: i.score8, score3: i.score9 })}
+                  </TableCell>
+                  <TableCell>{i.cnt}</TableCell>
+                  <TableCell>
+                    {calculateAverage({
+                      score1: i.score1,
+                      score2: i.score2,
+                      score3: i.score3,
+                      score4: i.score4,
+                      score5: i.score5,
+                      score6: i.score6,
+                      score7: i.score7,
+                      score8: i.score8,
+                      score9: i.score9,
+                    })}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>

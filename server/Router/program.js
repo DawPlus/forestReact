@@ -67,7 +67,7 @@ router.post("/getProgramListDetail", (req, res) => {
                 LEFT JOIN dbstatistics.basic_info bi ON ps.OPENDAY = bi.OPENDAY AND ps.AGENCY = bi.AGENCY
                 WHERE 1=1 
                     AND ps.AGENCY = ?
-                    AND ps.OPENDAY = ? AND ps.AGE != 0 
+                    AND ps.OPENDAY = ?  
                     AND (ps.TYPE = "참여자" OR ps.TYPE = "인솔자")
                 GROUP BY ps.PROGRAM_NAME, ps.TEACHER, ps.BUNYA, ps.TYPE
                 ORDER BY ps.PROGRAM_NAME, ps.TEACHER, ps.BUNYA,
