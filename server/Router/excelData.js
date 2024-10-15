@@ -523,7 +523,7 @@ router.post("/programList", (req, res) => {
   //               CASE WHEN ps.SCORE8 > 0 THEN ps.SCORE8 ELSE NULL END AS SCORE8,
   //               CASE WHEN ps.SCORE9 > 0 THEN ps.SCORE9 ELSE NULL END AS SCORE9
   //             FROM (
-  //               SELECT 
+  //               SELECT
   //                   T1.AGENCY,
   //                   T1.OPENDAY,
   //                   SUBSTRING_INDEX(SUBSTRING_INDEX(T1.PROGRAM_IN_OUT, ',', (numbers.n - 1) * 5 + 1), ',', -1) AS PROGRAM_NAME,
@@ -554,7 +554,6 @@ router.post("/programList", (req, res) => {
   //             ORDER BY
   //               년도 DESC, 월 DESC, 일 DESC;
 
-  
   //   `;
 
   const sheet11sql = `
@@ -595,25 +594,23 @@ router.post("/programList", (req, res) => {
             ROUND(AVG(CASE WHEN ps.SCORE8 > 0 THEN ps.SCORE8 ELSE NULL END), 2) AS avg_score8,
             ROUND(AVG(CASE WHEN ps.SCORE9 > 0 THEN ps.SCORE9 ELSE NULL END), 2) AS avg_score9
         FROM (
-            SELECT AGENCY, OPENDAY, BUNYA, PROGRAM_NAME, TEACHER
-                FROM (
-                SELECT
-                    T1.AGENCY,
-                    T1.OPENDAY,
-                    SUBSTRING_INDEX(SUBSTRING_INDEX(T1.PROGRAM_IN_OUT, ',', (numbers.n - 1) * 5 + 1), ',', -1) AS PROGRAM_NAME,
-                    SUBSTRING_INDEX(SUBSTRING_INDEX(T1.PROGRAM_IN_OUT, ',', (numbers.n - 1) * 5 + 2), ',', -1) AS BUNYA,
-                    SUBSTRING_INDEX(SUBSTRING_INDEX(T1.PROGRAM_IN_OUT, ',', (numbers.n - 1) * 5 + 3), ',', -1) AS TEACHER
-                FROM (
-                    SELECT DISTINCT AGENCY, PROGRAM_IN_OUT, OPENDAY
-                    FROM basic_info
-                    WHERE PROGRESS_STATE = 'E'
-                ) AS T1
-                CROSS JOIN (
-                    SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
-                ) AS numbers
-                WHERE (numbers.n - 1) * 5 + 1 <= LENGTH(T1.PROGRAM_IN_OUT) - LENGTH(REPLACE(T1.PROGRAM_IN_OUT, ',', '')) + 1
-                ) AS Subquery
-                where 1=1
+              SELECT
+                  T1.AGENCY,
+                  T1.OPENDAY,
+                  SUBSTRING_INDEX(SUBSTRING_INDEX(T1.PROGRAM_IN_OUT, ',', (numbers.n - 1) * 5 + 1), ',', -1) AS PROGRAM_NAME,
+                  SUBSTRING_INDEX(SUBSTRING_INDEX(T1.PROGRAM_IN_OUT, ',', (numbers.n - 1) * 5 + 2), ',', -1) AS BUNYA,
+                  SUBSTRING_INDEX(SUBSTRING_INDEX(T1.PROGRAM_IN_OUT, ',', (numbers.n - 1) * 5 + 3), ',', -1) AS TEACHER
+              FROM (
+                  SELECT DISTINCT AGENCY, PROGRAM_IN_OUT, OPENDAY
+                  FROM basic_info
+                  WHERE PROGRESS_STATE = 'E'
+                    
+              ) AS T1
+              CROSS JOIN (
+                  SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+              ) AS numbers
+              WHERE (numbers.n - 1) * 5 + 1 <= LENGTH(T1.PROGRAM_IN_OUT) - LENGTH(REPLACE(T1.PROGRAM_IN_OUT, ',', '')) + 1
+
                 ${
                   openday
                     ? `AND STR_TO_DATE(OPENDAY, '%Y-%m-%d') BETWEEN ? AND ?`
